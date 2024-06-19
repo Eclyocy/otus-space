@@ -1,0 +1,6 @@
+@SessionController_HostAddress = http://localhost:5022
+
+GET {{SessionController_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
