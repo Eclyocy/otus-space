@@ -1,0 +1,13 @@
+services:
+  rabbitmq:
+    container_name: rabbitmq_otus
+    build: .
+    hostname: rabbitmq-otus
+    ports:
+    - 15672:15672
+    - 5672:5672
+    volumes:
+    - rabbitmq_otus_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq_otus_data:
