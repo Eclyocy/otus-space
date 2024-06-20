@@ -1,0 +1,91 @@
+{
+    "rabbit_version": "3.13.3",
+    "rabbitmq_version": "3.13.3",
+    "product_name": "RabbitMQ",
+    "product_version": "3.13.3",
+    "users": [
+        {
+            "name": "game-controller",
+            "password_hash": "FEzi0pGdODcVVaXUOSmEwn5PfJjrQlgjEaOs/oY99qcy66Qc",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [
+                "monitoring"
+            ],
+            "limits": {}
+        },
+        {
+            "name": "space-ship",
+            "password_hash": "W+dws/Z270hLHXckKRbAawzwMXuFjaM4ENHaiKNRPB9TrrEG",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [
+                "monitoring"
+            ],
+            "limits": {}
+        },
+        {
+            "name": "guest",
+            "password_hash": "euOCByY8FAUVJba+6/r7nyeAcm2U4tZopkrCmYSQSKxxxabK",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [
+                "administrator"
+            ],
+            "limits": {}
+        },
+        {
+            "name": "problem-generator",
+            "password_hash": "RsrD6laJQ04eKoX1DRsQw5NLW5M3ZVcq9gSICvAIHOuZo3kQ",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [
+                "monitoring"
+            ],
+            "limits": {}
+        }
+    ],
+    "vhosts": [
+        {
+            "name": "/"
+        }
+    ],
+    "permissions": [
+        {
+            "user": "game-controller",
+            "vhost": "/",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        },
+        {
+            "user": "problem-generator",
+            "vhost": "/",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        },
+        {
+            "user": "guest",
+            "vhost": "/",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        },
+        {
+            "user": "space-ship",
+            "vhost": "/",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        }
+    ],
+    "topic_permissions": [],
+    "parameters": [],
+    "global_parameters": [
+        {
+            "name": "internal_cluster_id",
+            "value": "rabbitmq-cluster-id-ciP7da71GBqBG_yCtXL4qQ"
+        }
+    ],
+    "policies": [],
+    "queues": [],
+    "exchanges": [],
+    "bindings": []
+}
