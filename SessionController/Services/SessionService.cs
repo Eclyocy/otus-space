@@ -26,13 +26,13 @@ namespace SessionController.Services
         /// <inheritdoc/>
         public void CreateUserSession(Guid userId)
         {
-            _logger.LogInformation("Create session for user {userId}.", userId);
+            _logger.LogInformation("Create session for user {userId}", userId);
         }
 
         /// <inheritdoc/>
         public List<Guid> GetUserSessions(Guid userId)
         {
-            _logger.LogInformation("Get sessions of user {userId}.", userId);
+            _logger.LogInformation("Get sessions of user {userId}", userId);
 
             return new();
         }
@@ -40,7 +40,7 @@ namespace SessionController.Services
         /// <inheritdoc/>
         public int GetUserSessionInformation(Guid userId, Guid sessionId)
         {
-            _logger.LogInformation("Get information on session {sessionId} of user {userId}.",
+            _logger.LogInformation("Get information on session {sessionId} of user {userId}",
                 sessionId,
                 userId);
 

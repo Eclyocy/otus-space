@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SessionController.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SessionController.Controllers
 {
     /// <summary>
-    /// Контроллер для действий с игровыми сессиями (создание, получение).
+    /// Controller for actions with user's game sessions (create, get).
     /// </summary>
     [ApiController]
-    [Route("/api/users/{userId:guid}")]
+    [Route("/api/users/{userId:guid}/sessions")]
     public class SessionController : ControllerBase
     {
         #region private fields
@@ -30,6 +31,7 @@ namespace SessionController.Controllers
 
         [HttpPost]
         [Route("")]
+        [SwaggerOperation("Создание пользовательской игровой сессии")]
         public void CreateUserSession(Guid userId)
         {
             _sessionService.CreateUserSession(userId);
