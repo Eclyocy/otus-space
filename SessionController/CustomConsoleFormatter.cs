@@ -21,11 +21,6 @@ namespace SessionController
         /// <summary>
         /// Log a formatted message.
         /// </summary>
-        /// <typeparam name="TState"></typeparam>
-        /// <param name="logEntry"></param>
-        /// <param name="scopeProvider"></param>
-        /// <param name="textWriter"></param>
-        /// <exception cref="NotImplementedException"></exception>
         public override void Write<TState>(
             in LogEntry<TState> logEntry,
             IExternalScopeProvider? scopeProvider,

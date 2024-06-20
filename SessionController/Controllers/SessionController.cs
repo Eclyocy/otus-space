@@ -8,7 +8,7 @@ namespace SessionController.Controllers
     /// Controller for actions with user's game sessions (create, get).
     /// </summary>
     [ApiController]
-    [Route("/api/users/{userId:guid}/sessions")]
+    [Route("/api/users/{userId}/sessions")]
     public class SessionController : ControllerBase
     {
         #region private fields
