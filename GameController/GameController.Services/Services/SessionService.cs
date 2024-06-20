@@ -1,4 +1,6 @@
-﻿namespace GameController.Services
+﻿using Microsoft.Extensions.Logging;
+
+namespace GameController.Services
 {
     /// <summary>
     /// Class for working with game sessions.

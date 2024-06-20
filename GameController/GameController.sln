@@ -1,12 +1,16 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameController.Database", "GameController.Database\GameController.Database.csproj", "{B9A87555-A977-43FB-AF82-136FF66F1A2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameController.Services", "GameController.Services\GameController.Services.csproj", "{B55733D2-3BE0-4161-9077-7CB36CCF7A52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameController.Services", "GameController.Services\GameController.Services.csproj", "{B55733D2-3BE0-4161-9077-7CB36CCF7A52}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B9A87555-A977-43FB-AF82-136FF66F1A2D} = {B9A87555-A977-43FB-AF82-136FF66F1A2D}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameController.API", "GameController.API\GameController.API.csproj", "{BAB241D2-B8B5-4471-A7C6-DDEBC83F41EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameController.API", "GameController.API\GameController.API.csproj", "{BAB241D2-B8B5-4471-A7C6-DDEBC83F41EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
