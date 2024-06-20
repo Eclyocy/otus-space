@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SessionController.Services;
+﻿using GameController.Services;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace SessionController.Controllers

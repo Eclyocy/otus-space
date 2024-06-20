@@ -1,4 +1,4 @@
-﻿using SessionController.Services;
+﻿using GameController.Services;
 
 namespace SessionController
 {

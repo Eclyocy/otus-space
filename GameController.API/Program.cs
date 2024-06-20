@@ -1,3 +1,5 @@
+using GameController.API.Helpers;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging.Console;
 
 namespace SessionController
@@ -26,14 +28,14 @@ namespace SessionController
         #region private methods
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
                 .ConfigureLogging(logging =>
                 {
                     logging
                         .AddConsole(options => options.FormatterName = nameof(CustomConsoleFormatter))
                         .AddConsoleFormatter<CustomConsoleFormatter, ConsoleFormatterOptions>();
-                        //.AddConsole();
+                    //.AddConsole();
                 });
 
         #endregion

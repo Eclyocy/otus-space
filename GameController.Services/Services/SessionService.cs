@@ -1,8 +1,7 @@
-﻿
-namespace SessionController.Services
+﻿namespace GameController.Services
 {
     /// <summary>
-    /// Класс для работы с игровыми сессиями.
+    /// Class for working with game sessions.
     /// </summary>
     public class SessionService : ISessionService
     {
@@ -14,6 +13,9 @@ namespace SessionController.Services
 
         #region constructor
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SessionService(ILogger<SessionService> logger)
         {
             _logger = logger;
