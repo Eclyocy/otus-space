@@ -1,33 +1,72 @@
-
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using SpaceShip.Service.Interfaces;
+using SpaceShip.Service;
 
 namespace WebAPI.Controllers;
 
-public static class SpaceShipController
+/// <summary>
+/// Публичный API для работы с сущностями типа "Корабль"
+/// </summary>
+[ApiController]
+[Route("api/v1/spaceship")]
+public class SpaceShipController:ControllerBase
 {
-    public static void ConfigureApi(this WebApplication app)
+    /// <summary>
+    /// Контроллер для работы с кораблем
+    /// </summary>
+    #region private fields
+    public readonly IShipService _service;
+    
+    #endregion
+
+    /// <summary>
+    /// Кнструктор, в качестве праметра передаем сервис для работы с сущностью корабля
+    /// </summary>
+    /// <param name="service"></param>
+    #region constructor
+    
+    public SpaceShipController(IShipService service) => _service = service;
+    
+    #endregion
+
+    /// <summary>
+    /// Получение структуры описания корабля по id 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    
+    [HttpGet("{id}")]
+    public IResult Get(int id) => Results.Ok(id);
+
+    /// <summary>
+    /// Создать новый корабль
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public IResult Create() 
     {
-        app.MapGet("/Ship/{id:int}", Get);
-        app.MapPost("Ship", Create);
-        app.MapPut("/Ship", Edit);
-        app.MapDelete("/Ship", Delete);
+        return Results.Ok(_service.CreateShip());
     }
 
-    public static IResult Get(int id) => Results.Ok();
+    /// <summary>
+    /// Обновить существующий корабль
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    
+    [HttpPut("{id}")]
+    public IResult Edit(int id) => Results.Ok();
 
-    public static IResult Create() 
-    {
-        return Results.Ok(Guid.NewGuid());
-    }
-
-
-    public static IResult Edit(int id) => Results.Ok();
-
-    public static IResult Delete(int id) => Results.Ok();
+    /// <summary>
+    /// Удалить корабль по id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    
+    [HttpDelete("{id}")]
+    public IResult Delete(int id) => Results.Ok();
 }

@@ -3,11 +3,15 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <ProjectReference Include="..\SpaceShip.Service\SpaceShip.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\mock\MockSpaceShip.Service\MockSpaceShip.Service.csproj" />
   </ItemGroup>
 
 </Project>
