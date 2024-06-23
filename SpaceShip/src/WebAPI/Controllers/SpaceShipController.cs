@@ -45,11 +45,12 @@ public class SpaceShipController:ControllerBase
     /// <summary>
     /// Создать новый корабль
     /// </summary>
-    /// <returns></returns>
+    /// <returns>201</returns>
     [HttpPost]
+    [ProducesResponseType<Guid>(StatusCodes.Status201Created)]
     public IResult Create() 
     {
-        return Results.Ok(_service.CreateShip());
+        return Results.Created("api/v1/spaceship",_service.CreateShip());
     }
 
     /// <summary>
