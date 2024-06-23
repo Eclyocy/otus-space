@@ -25,7 +25,7 @@ namespace SessionController
         #endregion
 
         #region private methods
-        //for commit
+ 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
