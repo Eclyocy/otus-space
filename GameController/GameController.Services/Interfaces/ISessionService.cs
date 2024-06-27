@@ -1,4 +1,6 @@
-﻿namespace GameController.Services
+﻿using GameController.Services.Models.Session;
+
+namespace GameController.Services.Interfaces
 {
     /// <summary>
     /// Interface for working with game sessions.
@@ -6,23 +8,21 @@
     public interface ISessionService
     {
         /// <summary>
-        /// Create new game session for user <paramref name="userId"/>.
+        /// Create a game session for user <paramref name="userId"/>
+        /// with ship ID <paramref name="shipId"/> and
+        /// generator ID <paramref name="generatorId"/>.
         /// </summary>
-        public void CreateUserSession(Guid userId);
+        public SessionDto CreateUserSession(Guid userId, Guid shipId, Guid generatorId);
 
         /// <summary>
-        /// Get list of game sessions <see cref="Guid"/> for user <paramref name="userId"/>.
+        /// Get list of game sessions of user <paramref name="userId"/>.
         /// </summary>
-        public List<Guid> GetUserSessions(Guid userId);
+        public List<SessionDto> GetUserSessions(Guid userId);
 
         /// <summary>
-        /// Get information on session <paramref name="sessionId"/>
+        /// Get information on game session <paramref name="sessionId"/>
         /// of user <paramref name="userId"/>.
         /// </summary>
-        /// <remarks>
-        /// TODO: information received from the ShipService: metrics and current turn.
-        /// Currently it is a stub with an integer.
-        /// </remarks>
-        public int GetUserSessionInformation(Guid userId, Guid sessionId);
+        public SessionDto GetUserSession(Guid userId, Guid sessionId);
     }
 }

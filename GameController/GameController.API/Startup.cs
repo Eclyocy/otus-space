@@ -1,4 +1,9 @@
-﻿using GameController.Services;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using GameController.API.Mappers;
+using GameController.API.Validators.User;
+using GameController.Services.Interfaces;
+using GameController.Services.Services;
 
 namespace SessionController
 {
@@ -55,9 +60,20 @@ namespace SessionController
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
+            services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
+
+            services.AddTransient<IGeneratorService, GeneratorService>();
             services.AddTransient<ISessionService, SessionService>();
+            services.AddTransient<IShipService, ShipService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddControllers();
+
+            services
+                .AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
+            services.AddValidatorsFromAssemblyContaining<CreateUserModelValidator>();
 
             services.AddSwaggerGen(options =>
             {

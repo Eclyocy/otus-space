@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using GameController.Services.Interfaces;
+using GameController.Services.Models.Session;
+using Microsoft.Extensions.Logging;
 
-namespace GameController.Services
+namespace GameController.Services.Services
 {
     /// <summary>
     /// Class for working with game sessions.
@@ -18,7 +20,8 @@ namespace GameController.Services
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SessionService(ILogger<SessionService> logger)
+        public SessionService(
+            ILogger<SessionService> logger)
         {
             _logger = logger;
         }
@@ -28,27 +31,62 @@ namespace GameController.Services
         #region public methods
 
         /// <inheritdoc/>
-        public void CreateUserSession(Guid userId)
+        public SessionDto CreateUserSession(Guid userId, Guid shipId, Guid generatorId)
         {
-            _logger.LogInformation("Create session for user {userId}", userId);
+            _logger.LogInformation(
+                "Create session for user {userId} with ship {shipId} and generator {generatorId}",
+                userId,
+                shipId,
+                generatorId);
+
+            return new()
+            {
+                UserId = userId,
+                SessionId = Guid.NewGuid(),
+                ShipId = shipId,
+                GeneratorId = generatorId
+            };
         }
 
         /// <inheritdoc/>
-        public List<Guid> GetUserSessions(Guid userId)
+        public List<SessionDto> GetUserSessions(Guid userId)
         {
             _logger.LogInformation("Get sessions of user {userId}", userId);
 
-            return new();
+            return new List<SessionDto>()
+            {
+                new()
+                {
+                    UserId = userId,
+                    SessionId = Guid.NewGuid(),
+                    ShipId = Guid.NewGuid(),
+                    GeneratorId = Guid.NewGuid()
+                },
+                new()
+                {
+                    UserId = userId,
+                    SessionId = Guid.NewGuid(),
+                    ShipId = Guid.NewGuid(),
+                    GeneratorId = Guid.NewGuid()
+                }
+            };
         }
 
         /// <inheritdoc/>
-        public int GetUserSessionInformation(Guid userId, Guid sessionId)
+        public SessionDto GetUserSession(Guid userId, Guid sessionId)
         {
-            _logger.LogInformation("Get information on session {sessionId} of user {userId}",
+            _logger.LogInformation(
+                "Get information on session {sessionId} of user {userId}",
                 sessionId,
                 userId);
 
-            return new();
+            return new()
+            {
+                UserId = userId,
+                SessionId = sessionId,
+                ShipId = Guid.NewGuid(),
+                GeneratorId = Guid.NewGuid()
+            };
         }
 
         #endregion
