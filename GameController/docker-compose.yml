@@ -1,9 +1,0 @@
-services:
-  game_controller_api:
-    container_name: game_controller_api_otus
-    build: .
-    ports:
-    - 7070:7196
-    environment:
-    - ASPNETCORE_ENVIRONMENT=Production
-    - ASPNETCORE_URLS=https://+:7196

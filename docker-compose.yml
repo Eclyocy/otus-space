@@ -1,0 +1,22 @@
+services:
+  game_controller_api:
+    container_name: game_controller_api_otus
+    build: GameController
+    ports:
+    - 7070:7196
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_URLS=https://+:7196
+
+  rabbitmq:
+    container_name: rabbitmq_otus
+    build: RabbitMQ
+    hostname: rabbitmq-otus
+    ports:
+    - 15672:15672
+    - 5672:5672
+    volumes:
+    - rabbitmq_otus_data:/var/lib/rabbitmq
+
+volumes:
+  rabbitmq_otus_data:
