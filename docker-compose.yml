@@ -11,6 +11,9 @@ services:
     - RABBITMQ_PORT=5672
     - RABBITMQ_USERNAME=game-controller
     - RABBITMQ_PASSWORD=Gc1234
+    - RABBITMQ_VIRTUALHOST=/
+    - EXCHANGENAME_NEWDAY=x_new_day
+
     - QUEUENAME_NEWDAY_GENERATOR=q_new_day_generator
     - QUEUENAME_NEWDAY_SHIP=q_new_day_ship
 
