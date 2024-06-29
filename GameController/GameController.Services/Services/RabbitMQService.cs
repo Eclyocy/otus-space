@@ -19,9 +19,6 @@ namespace GameController.Services.Services
         private const string NewDayExchangeName = "x_new_day";
         private const string NewDayExchangeType = "fanout";
 
-        private const string NewDayGeneratorQueueName = "q_generator_new_day";
-        private const string NewDayShipQueueName = "q_ship_new_day";
-
         #endregion
 
         #region private fields
@@ -30,6 +27,9 @@ namespace GameController.Services.Services
         private readonly int _rabbitMQPort;
         private readonly string _rabbitMQUsername;
         private readonly string _rabbitMQPassword;
+
+        private readonly string _newDayGeneratorQueueName;
+        private readonly string _newDayShipQueueName;
 
         private readonly ILogger<RabbitMQService> _logger;
 
@@ -50,6 +50,9 @@ namespace GameController.Services.Services
             _rabbitMQPort = int.Parse(configuration["RABBITMQ_PORT"]);
             _rabbitMQUsername = configuration["RABBITMQ_USERNAME"];
             _rabbitMQPassword = configuration["RABBITMQ_PASSWORD"];
+
+            _newDayGeneratorQueueName = configuration["QUEUENAME_NEWDAY_GENERATOR"];
+            _newDayShipQueueName = configuration["QUEUENAME_NEWDAY_SHIP"];
         }
 
         #endregion
@@ -92,8 +95,8 @@ namespace GameController.Services.Services
         {
             ExchangeDeclare(connectionFactory, NewDayExchangeName);
 
-            QueueDeclareAndBind(connectionFactory, NewDayGeneratorQueueName, NewDayExchangeName);
-            QueueDeclareAndBind(connectionFactory, NewDayShipQueueName, NewDayExchangeName);
+            QueueDeclareAndBind(connectionFactory, _newDayGeneratorQueueName, NewDayExchangeName);
+            QueueDeclareAndBind(connectionFactory, _newDayShipQueueName, NewDayExchangeName);
         }
 
         private void ExchangeDeclare(
