@@ -76,6 +76,14 @@ namespace SessionController.Controllers
             return _mapper.Map<SessionModel>(sessionDto);
         }
 
+        [HttpPost]
+        [Route("{sessionId}/make-move")]
+        [SwaggerOperation("Сделать следующий ход в пользовательской игровой сессии")]
+        public void MakeMove(Guid userId, Guid sessionId)
+        {
+            _sessionService.MakeMove(userId, sessionId);
+        }
+
         #endregion
 
         #region private methods

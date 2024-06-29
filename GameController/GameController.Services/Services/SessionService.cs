@@ -1,4 +1,6 @@
-﻿using GameController.Services.Interfaces;
+﻿using AutoMapper;
+using GameController.Services.Interfaces;
+using GameController.Services.Models.Message;
 using GameController.Services.Models.Session;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +13,10 @@ namespace GameController.Services.Services
     {
         #region private fields
 
+        private readonly IRabbitMQService _rabbitmqService;
+
         private readonly ILogger<SessionService> _logger;
+        private readonly IMapper _mapper;
 
         #endregion
 
@@ -21,9 +26,14 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public SessionService(
-            ILogger<SessionService> logger)
+            IRabbitMQService rabbitMQService,
+            ILogger<SessionService> logger,
+            IMapper mapper)
         {
+            _rabbitmqService = rabbitMQService;
+
             _logger = logger;
+            _mapper = mapper;
         }
 
         #endregion
@@ -87,6 +97,21 @@ namespace GameController.Services.Services
                 ShipId = Guid.NewGuid(),
                 GeneratorId = Guid.NewGuid()
             };
+        }
+
+        /// <inheritdoc/>
+        public void MakeMove(Guid userId, Guid sessionId)
+        {
+            _logger.LogInformation(
+                "Make move in session {sessionId} of user {userId}",
+                sessionId,
+                userId);
+
+            SessionDto sessionDto = GetUserSession(userId, sessionId);
+
+            NewDayMessage newDayMessage = _mapper.Map<NewDayMessage>(sessionDto);
+
+            _rabbitmqService.SendNewDayMessage(newDayMessage);
         }
 
         #endregion
