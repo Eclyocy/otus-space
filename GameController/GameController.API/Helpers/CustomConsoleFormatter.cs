@@ -30,9 +30,8 @@ namespace GameController.API.Helpers
             DateTime timestamp = DateTime.UtcNow;
             textWriter.Write(timestamp);
 
-            // Log log level.
-            string logLevel = $" [{logEntry.LogLevel}] ";
-            textWriter.Write(logLevel);
+            // Log log level and category.
+            textWriter.Write($" [{logEntry.LogLevel}] <{logEntry.Category}> ");
 
             // Log actual message.
             textWriter.Write(logEntry.State);
