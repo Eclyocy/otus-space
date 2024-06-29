@@ -1,5 +1,6 @@
 ﻿using GameController.Services.Interfaces;
 using GameController.Services.Models.Message;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
@@ -23,7 +24,12 @@ namespace GameController.Services.Services
 
         #endregion
 
-        #region private methods
+        #region private fields
+
+        private readonly string _rabbitMQHostname;
+        private readonly int _rabbitMQPort;
+        private readonly string _rabbitMQUsername;
+        private readonly string _rabbitMQPassword;
 
         private readonly ILogger<RabbitMQService> _logger;
 
@@ -35,9 +41,15 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public RabbitMQService(
-            ILogger<RabbitMQService> logger)
+            ILogger<RabbitMQService> logger,
+            IConfiguration configuration)
         {
             _logger = logger;
+
+            _rabbitMQHostname = configuration["RABBITMQ_HOSTNAME"];
+            _rabbitMQPort = int.Parse(configuration["RABBITMQ_PORT"]);
+            _rabbitMQUsername = configuration["RABBITMQ_USERNAME"];
+            _rabbitMQPassword = configuration["RABBITMQ_PASSWORD"];
         }
 
         #endregion
@@ -51,9 +63,10 @@ namespace GameController.Services.Services
 
             ConnectionFactory connectionFactory = new()
             {
-                HostName = "localhost",
-                UserName = "game-controller",
-                Password = "Gc1234"
+                HostName = _rabbitMQHostname,
+                Port = _rabbitMQPort,
+                UserName = _rabbitMQUsername,
+                Password = _rabbitMQPassword
             };
 
             SetupExchange(connectionFactory);

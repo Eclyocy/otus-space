@@ -36,6 +36,11 @@ namespace GameController.API.Helpers
             // Log actual message.
             textWriter.Write(logEntry.State);
 
+            if (logEntry.Exception != null)
+            {
+                textWriter.Write(logEntry.Exception);
+            }
+
             textWriter.WriteLine();
         }
 

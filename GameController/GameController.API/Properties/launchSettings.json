@@ -15,7 +15,11 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7196;http://localhost:5140",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "RABBITMQ_HOSTNAME": "localhost",
+        "RABBITMQ_PORT": "5672",
+        "RABBITMQ_USERNAME": "game-controller",
+        "RABBITMQ_PASSWORD": "Gc1234"
       }
     },
     "IIS Express": {

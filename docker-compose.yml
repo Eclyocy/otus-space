@@ -7,6 +7,10 @@ services:
     environment:
     - ASPNETCORE_ENVIRONMENT=Production
     - ASPNETCORE_URLS=https://+:7196
+    - RABBITMQ_HOSTNAME=rabbitmq
+    - RABBITMQ_PORT=5672
+    - RABBITMQ_USERNAME=game-controller
+    - RABBITMQ_PASSWORD=Gc1234
 
   rabbitmq:
     container_name: rabbitmq_otus
