@@ -1,0 +1,6 @@
+@Spaceship_HostAddress = http://localhost:5082
+
+GET {{Spaceship_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
