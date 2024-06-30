@@ -34,6 +34,7 @@ public class StepEventProvider : IHostedService
                                     Password = _password};
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
+        _logger.LogInformation("Succesfully connectedd to host {_host}",_host);
         
     }
     
