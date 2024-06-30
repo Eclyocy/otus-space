@@ -16,15 +16,15 @@ namespace GameController.Services.Services
     {
         #region private fields
 
-        private readonly string _rabbitMQHostname;
-        private readonly int _rabbitMQPort;
-        private readonly string _rabbitMQUsername;
-        private readonly string _rabbitMQPassword;
-        private readonly string _rabbitMQVirtualHost;
+        private readonly string? _rabbitMQHostname;
+        private readonly int? _rabbitMQPort;
+        private readonly string? _rabbitMQUsername;
+        private readonly string? _rabbitMQPassword;
+        private readonly string? _rabbitMQVirtualHost;
 
-        private readonly string _newDayExchangeName;
-        private readonly string _newDayGeneratorQueueName;
-        private readonly string _newDayShipQueueName;
+        private readonly string? _newDayExchangeName;
+        private readonly string? _newDayGeneratorQueueName;
+        private readonly string? _newDayShipQueueName;
 
         private readonly ILogger<RabbitMQService> _logger;
 
@@ -42,7 +42,9 @@ namespace GameController.Services.Services
             _logger = logger;
 
             _rabbitMQHostname = configuration["RABBITMQ_HOSTNAME"];
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             _rabbitMQPort = int.Parse(configuration["RABBITMQ_PORT"]);
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             _rabbitMQUsername = configuration["RABBITMQ_USERNAME"];
             _rabbitMQPassword = configuration["RABBITMQ_PASSWORD"];
             _rabbitMQVirtualHost = configuration["RABBITMQ_VIRTUALHOST"];
@@ -64,7 +66,7 @@ namespace GameController.Services.Services
             ConnectionFactory connectionFactory = new()
             {
                 HostName = _rabbitMQHostname,
-                Port = _rabbitMQPort,
+               // Port = _rabbitMQPort?.Value,
                 UserName = _rabbitMQUsername,
                 Password = _rabbitMQPassword,
                 VirtualHost = _rabbitMQVirtualHost
@@ -97,10 +99,13 @@ namespace GameController.Services.Services
         /// </summary>
         private void SetupNewDayExchange(IConnectionFactory connectionFactory)
         {
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             ExchangeDeclare(connectionFactory, _newDayExchangeName, "fanout");
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
 
             QueueDeclareAndBind(
                 connectionFactory,
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
                 _newDayGeneratorQueueName,
                 _newDayExchangeName,
                 routingKey: string.Empty);
@@ -190,7 +195,7 @@ namespace GameController.Services.Services
                     routingKey: routingKey);
             }
         }
-
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
         #endregion
     }
 }

@@ -1,5 +1,9 @@
-﻿using GameController.Services.Interfaces;
+﻿using AutoMapper;
+using GameController.Database.Interfaces;
+using GameController.Database.Models;
+using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace GameController.Services.Services
@@ -12,6 +16,8 @@ namespace GameController.Services.Services
         #region private fields
 
         private readonly ILogger<UserService> _logger;
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
         #endregion
 
@@ -21,9 +27,11 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public UserService(
-            ILogger<UserService> logger)
+            ILogger<UserService> logger, IUserRepository userRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _logger = logger;
+            _userRepository = userRepository;
         }
 
         #endregion
@@ -34,24 +42,17 @@ namespace GameController.Services.Services
         public UserDto CreateUser(CreateUserDto createUserDto)
         {
             _logger.LogInformation("Create user");
-
-            return new()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Test"
-            };
+            User user = _mapper.Map<User>(createUserDto);
+            User dbUser = _userRepository.CreateUser(user);
+            return _mapper.Map<UserDto>(dbUser);
         }
 
         /// <inheritdoc/>
         public UserDto GetUser(Guid userId)
         {
             _logger.LogInformation("Get user by ID {userId}", userId);
-
-            return new()
-            {
-                Id = userId,
-                Name = "Test"
-            };
+            User res = _userRepository.GetUser(userId);
+            return _mapper.Map<UserDto>(res);
         }
 
         /// <inheritdoc/>
