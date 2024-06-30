@@ -2,11 +2,9 @@ using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Diagnostics;
 using Microsoft.Extensions.Logging;
-using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Configuration;
+
 
 namespace SpaceShip.Services.Queue;
 
@@ -15,14 +13,25 @@ public class TroubleEventProvider : IHostedService
     private ILogger _logger;
     private IConnection _connection;
     private IModel _channel; 
-    
-    public TroubleEventProvider(ILogger<TroubleEventProvider> logger)
+
+    private readonly string _host;
+    private readonly string _user;
+    private readonly string _password;
+    private readonly string _queue;
+    public TroubleEventProvider(ILogger<TroubleEventProvider> logger, IConfiguration configuration)
     {
         _logger = logger;
+        _host = configuration["RABBITMQ_HOST"];
+        _user = configuration["RABBITMQ_USER"];
+        _password = configuration["RABBITMQ_PASSWORD"];
+        _queue = configuration["RABBITMQ_TROUBLES_QUEUE"];
+
+        _logger.LogInformation("Trying to connect to RabbitMQ using AMPQ on host {_host}",_host);
+
         var factory = new ConnectionFactory { 
-                                    HostName = "localhost", 
-                                    UserName = "space-ship", 
-                                    Password = "Ss1234"};
+                                    HostName = _host, 
+                                    UserName = _user, 
+                                    Password = _password};
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
 
@@ -40,7 +49,7 @@ public class TroubleEventProvider : IHostedService
         };
         try
         {
-            _channel.BasicConsume(queue: "troubles",
+            _channel.BasicConsume(queue: _queue,
                             autoAck: true,
                             consumer: consumer);
         }

@@ -11,3 +11,8 @@ services:
 
 volumes:
   rabbitmq_otus_data:
+
+networks:
+  otus-space:
+    external: true
+    name: otus-space

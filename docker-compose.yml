@@ -10,3 +10,14 @@ services:
       dockerfile: SpaceShip/Dockerfile
     ports:
       - 5216:5216
+    environment:
+      - RABBITMQ_HOST=rabbitmq-otus
+      - RABBITMQ_USER=spase-ship
+      - RABBITMQ_PASSWORD=Ss1234
+      - RABBITMQ_TROUBLES_QUEUE=troubles
+      - RABBITMQ_STEP_QUEUE=steps
+
+networks:
+  otus-space:
+    external: true
+    name: otus-space
