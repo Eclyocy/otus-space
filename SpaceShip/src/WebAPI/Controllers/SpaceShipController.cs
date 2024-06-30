@@ -29,8 +29,11 @@ public class SpaceShipController:ControllerBase
     /// <param name="service"></param>
     #region constructor
     
-    public SpaceShipController(IShipService service) => _service = service;
-    
+    public SpaceShipController(IShipService service)
+    {
+        _service = service;
+    }
+
     #endregion
 
     /// <summary>
@@ -38,9 +41,9 @@ public class SpaceShipController:ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    
+
     [HttpGet("{id}")]
-    public IResult Get(int id) => Results.Ok(id);
+    public IResult Get(Guid id) => Results.Ok();
 
     /// <summary>
     /// Создать новый корабль
@@ -60,7 +63,7 @@ public class SpaceShipController:ControllerBase
     /// <returns></returns>
     
     [HttpPut("{id}")]
-    public IResult Edit(int id) => Results.Ok();
+    public IResult Edit(Guid id) => Results.Ok();
 
     /// <summary>
     /// Удалить корабль по id
@@ -69,5 +72,5 @@ public class SpaceShipController:ControllerBase
     /// <returns></returns>
     
     [HttpDelete("{id}")]
-    public IResult Delete(int id) => Results.Ok();
+    public IResult Delete(Guid id) => Results.Ok();
 }

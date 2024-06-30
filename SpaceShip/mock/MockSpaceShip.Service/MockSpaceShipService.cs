@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using MockSpaceShip.Service.Models;
 
 namespace SpaceShip.Service;
 
@@ -17,6 +18,12 @@ public class MockSpaceShipService : IShipService
         //_logger.LogInformation("Spaceship with Id = {shipId} successfully created", shipId);
 
         return shipId;
+    }
+
+    public SpaceShipDto Get(Guid Id)
+    {
+        SpaceShipDto ship = new SpaceShipDto(Id);
+        return ship;
     }
 
 }

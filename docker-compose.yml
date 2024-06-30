@@ -7,6 +7,6 @@ services:
     image: webapi
     build:
       context: .
-      dockerfile: SpaceShip/src/WebAPI/Dockerfile
+      dockerfile: SpaceShip/Dockerfile
     ports:
       - 5216:5216
