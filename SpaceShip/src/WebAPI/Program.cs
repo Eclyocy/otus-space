@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SpaceShip.Service;
+using SpaceShip.Services.Queue;
 using WebAPI.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 builder.Services.AddControllers();
 builder.Services.AddTransient<IShipService,MockSpaceShipService>();
+builder.Services.AddHostedService<TroubleEventProvider>();
+builder.Services.AddHostedService<StepEventProvider>();
 var app = builder.Build();
 
 app.UseSwagger();
