@@ -1,24 +1,35 @@
 ﻿using GameController.Database.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-public class SessionDbContext : DbContext
+namespace GameController.Database
 {
-    public DbSet<User> users { get; set; }
-
-    public DbSet<Session> sessions { get; set; }
-
-    public SessionDbContext()
+    /// <summary>
+    /// SessionDbContext class.
+    /// </summary>
+    public class SessionDbContext : DbContext
     {
-        Database.EnsureCreated();
-    }
+        /// <summary>
+        /// SessionDbContext constructor.
+        /// </summary>
+        public SessionDbContext()
+        {
+            Database.EnsureCreated();
+        }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgresmaster");
+        /// <summary>
+        /// Users.
+        /// </summary>
+        public DbSet<User> Users { get; set; }
+
+        /// <summary>
+        /// Sessions.
+        /// </summary>
+        public DbSet<Session> Sessions { get; set; }
+
+        /// <inheritdoc/>
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgresmaster");
+        }
     }
 }

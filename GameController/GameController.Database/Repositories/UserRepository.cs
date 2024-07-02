@@ -4,54 +4,62 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameController.Database.Repositories
 {
-    public class UserRepository: IUserRepository
+    /// <summary>
+    /// UserRepository class.
+    /// </summary>
+    public class UserRepository : IUserRepository
     {
-        public UserRepository() 
+        /// <summary>
+        /// constructor.
+        /// </summary>
+        public UserRepository()
         {
         }
 
-       public User CreateUser(User user)
+        /// <inheritdoc/>
+        public User CreateUser(User user)
         {
             using (var dbContext = new SessionDbContext())
             {
-                    var res = dbContext.users.Add(user);
-                    dbContext.SaveChanges();
-                    return res.Entity;
+                var res = dbContext.Users.Add(user);
+                dbContext.SaveChanges();
+                return res.Entity;
             }
         }
 
+        /// <inheritdoc/>
         public User GetUser(Guid userId)
-        {  
-
+        {
             using (var dbContext = new SessionDbContext())
             {
-                var user =  dbContext.users
+                var user = dbContext.Users
                     .Include(u => u.Sessions)
                     .FirstOrDefault(u => u.UserId == userId);
 
                 if (user == null)
                 {
-                    throw new ArgumentException($"Пользователь с ID {userId} не найден."); 
+                    throw new ArgumentException($"Пользователь с ID {userId} не найден.");
                 }
 
-                return (user);
+                return user;
             }
         }
 
-        public User UpdateUser(User user) 
+        /// <inheritdoc/>
+        public User UpdateUser(User user)
         {
             using (var dbContext = new SessionDbContext())
             {
                 // Обновляем пользователя
-                var res = dbContext.users.Update(user);
+                var res = dbContext.Users.Update(user);
 
                 // Сохраняем изменения
-                 dbContext.SaveChanges();
+                dbContext.SaveChanges();
                 return res.Entity;
             }
         }
 
-      /*  public void DeleteUser(int userId, int sessionId) 
+      /*  public void DeleteUser(int userId, int sessionId)
         {
             using (var dbContext = new SessionDbContext())
             {
@@ -67,7 +75,8 @@ namespace GameController.Database.Repositories
                 await dbContext.SaveChangesAsync();
             }
         }*/
-        //crud
-        //получение сессий пользователя ???
+
+        // crud
+        // получение сессий пользователя ???
     }
 }

@@ -9,6 +9,7 @@
         /// User id.
         /// </summary>
         public Guid Id { get; set; }
+
         /// <summary>
         /// User name.
         /// </summary>

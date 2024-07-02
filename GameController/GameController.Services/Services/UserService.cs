@@ -3,7 +3,6 @@ using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace GameController.Services.Services

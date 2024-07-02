@@ -1,4 +1,4 @@
-using GameController.API.Helpers;
+﻿using GameController.API.Helpers;
 using Microsoft.Extensions.Logging.Console;
 
 namespace SessionController
@@ -27,7 +27,7 @@ namespace SessionController
         #endregion
 
         #region private methods
- 
+
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
