@@ -6,6 +6,7 @@ namespace GameController.Database.Models
     /// <summary>
     /// Session class.
     /// </summary>
+    [Table("sessions")]
     public class Session
     {
         /// <summary>

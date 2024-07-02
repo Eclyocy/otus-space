@@ -6,6 +6,7 @@ namespace GameController.Database.Models
     /// <summary>
     /// User class.
     /// </summary>
+    [Table("users")]
     public class User
     {
         /// <summary>
