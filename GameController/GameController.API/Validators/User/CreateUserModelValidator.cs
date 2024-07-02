@@ -3,8 +3,14 @@ using GameController.API.Models.User;
 
 namespace GameController.API.Validators.User
 {
+    /// <summary>
+    /// Validator for <see cref="CreateUserModel"/>.
+    /// </summary>
     public class CreateUserModelValidator : AbstractValidator<CreateUserModel>
     {
+        /// <summary>
+        /// Verify that required properties are provided.
+        /// </summary>
         public CreateUserModelValidator()
         {
             RuleFor(x => x.Name)

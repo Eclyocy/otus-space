@@ -12,11 +12,11 @@
         /// <summary>
         /// User name.
         /// </summary>
-        public required string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// User password hash.
         /// </summary>
-        public required string PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
     }
 }

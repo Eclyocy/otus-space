@@ -12,6 +12,10 @@ namespace GameController.API.Mappers
     {
         private const int SaltSize = 16;
         private const int HashSize = 20;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public UserMapper()
         {
             // Controller models -> Service models

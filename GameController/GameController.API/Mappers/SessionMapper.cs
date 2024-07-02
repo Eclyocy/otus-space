@@ -9,6 +9,9 @@ namespace GameController.API.Mappers
     /// </summary>
     public class SessionMapper : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SessionMapper()
         {
             // Service models -> Controller models

@@ -39,6 +39,9 @@ namespace GameController.API.Controllers
 
         #region public methods
 
+        /// <summary>
+        /// Create a new user.
+        /// </summary>
         [HttpPost]
         [Route("")]
         [SwaggerOperation("Создание пользователя")]
@@ -49,6 +52,9 @@ namespace GameController.API.Controllers
             return _mapper.Map<UserModel>(userDto);
         }
 
+        /// <summary>
+        /// Get the user.
+        /// </summary>
         [HttpGet]
         [Route("{userId}")]
         [SwaggerOperation("Получение информации о пользователе")]
@@ -58,6 +64,9 @@ namespace GameController.API.Controllers
             return _mapper.Map<UserModel>(userDto);
         }
 
+        /// <summary>
+        /// Update the user.
+        /// </summary>
         [HttpPatch]
         [Route("{userId}")]
         [SwaggerOperation("Обновление информации о пользователе")]
@@ -68,6 +77,9 @@ namespace GameController.API.Controllers
             return _mapper.Map<UserModel>(userDto);
         }
 
+        /// <summary>
+        /// Delete the user.
+        /// </summary>
         [HttpDelete]
         [Route("{userId}")]
         [SwaggerOperation("Удаление пользователя")]
