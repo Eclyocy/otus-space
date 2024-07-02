@@ -17,7 +17,9 @@ namespace GameController.API.Mappers
             // Controller models -> Service models
             CreateMap<CreateUserModel, CreateUserDto>()
                 .ForMember(x => x.PasswordHash, opt => opt.MapFrom(x => HashPassword(x.Password,5)));
-            CreateMap<UpdateUserModel, UpdateUserDto>();
+
+            CreateMap<UpdateUserModel, UpdateUserDto>()
+                .ForMember(x => x.PasswordHash, opt => opt.MapFrom(x => x.Password)); ;
 
             // Service models -> Controller models
             CreateMap<UserDto, UserModel>();

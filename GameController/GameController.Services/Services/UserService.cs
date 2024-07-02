@@ -63,11 +63,9 @@ namespace GameController.Services.Services
                 userId,
                 updateUserDto);
 
-            return new()
-            {
-                Id = userId,
-                Name = updateUserDto.Name
-            };
+            User user = _mapper.Map<User>(updateUserDto);
+            User dbUser = _userRepository.UpdateUser(user);
+            return _mapper.Map<UserDto>(dbUser);
         }
 
         /// <inheritdoc/>

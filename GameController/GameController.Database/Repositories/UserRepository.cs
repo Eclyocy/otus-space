@@ -38,18 +38,16 @@ namespace GameController.Database.Repositories
             }
         }
 
-        public void UpdateUser(User user, Session session) 
+        public User UpdateUser(User user) 
         {
             using (var dbContext = new SessionDbContext())
             {
                 // Обновляем пользователя
-                dbContext.users.Update(user);
-
-                // Обновляем сессию
-                dbContext.sessions.Update(session);
+                var res = dbContext.users.Update(user);
 
                 // Сохраняем изменения
                  dbContext.SaveChanges();
+                return res.Entity;
             }
         }
 

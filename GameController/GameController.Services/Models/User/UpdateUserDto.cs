@@ -6,6 +6,10 @@
     public record UpdateUserDto
     {
         /// <summary>
+        /// User id.
+        /// </summary>
+        public Guid Id { get; set; }
+        /// <summary>
         /// User name.
         /// </summary>
         public required string Name { get; set; }

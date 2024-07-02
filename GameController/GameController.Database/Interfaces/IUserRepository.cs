@@ -11,6 +11,6 @@ namespace GameController.Database.Interfaces
     {
         User CreateUser(User user);
         User GetUser(Guid userId);
-     //   void UpdateUser(User user, Session session);
+        User UpdateUser(User user);
     }
 }

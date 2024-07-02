@@ -22,7 +22,8 @@ namespace GameController.Services.Mappers
 
             CreateMap<UpdateUserDto, User>()
                .ForMember(x => x.NameUser, opt => opt.MapFrom(x => x.Name))
-               .ForMember(x => x.HashPass, opt => opt.MapFrom(x => x.PasswordHash));
+               .ForMember(x => x.HashPass, opt => opt.MapFrom(x => x.PasswordHash))
+               .ForMember(x => x.UserId, opt => opt.MapFrom(x => x.Id));
 
             CreateMap<User, UserDto>()
                         .ForMember(x => x.Name, opt => opt.MapFrom(x => x.NameUser))
