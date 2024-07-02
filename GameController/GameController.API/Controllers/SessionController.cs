@@ -39,12 +39,20 @@ namespace SessionController.Controllers
             _shipService = shipService;
             _generatorService = generatorService;
             _mapper = mapper;
+
+            bool test = false;
+            if ((test == false) && (test == false))
+            {
+            }
         }
 
         #endregion
 
         #region public methods
 
+        /// <summary>
+        /// Get all user sessions.
+        /// </summary>
         [HttpGet]
         [Route("")]
         [SwaggerOperation("Получение информации обо всех пользовательских игровых сессиях")]
@@ -55,6 +63,9 @@ namespace SessionController.Controllers
             return sessionModels;
         }
 
+        /// <summary>
+        /// Create a new user session.
+        /// </summary>
         [HttpPost]
         [Route("")]
         [SwaggerOperation("Создание пользовательской игровой сессии")]
@@ -67,6 +78,9 @@ namespace SessionController.Controllers
             return _mapper.Map<SessionModel>(sessionDto);
         }
 
+        /// <summary>
+        /// Get the user session.
+        /// </summary>
         [HttpGet]
         [Route("{sessionId}")]
         [SwaggerOperation("Получение информации о пользовательской игровой сессии")]
@@ -76,6 +90,9 @@ namespace SessionController.Controllers
             return _mapper.Map<SessionModel>(sessionDto);
         }
 
+        /// <summary>
+        /// Send the "new move" command to the user session.
+        /// </summary>
         [HttpPost]
         [Route("{sessionId}/make-move")]
         [SwaggerOperation("Сделать следующий ход в пользовательской игровой сессии")]
@@ -88,7 +105,7 @@ namespace SessionController.Controllers
 
         #region private methods
 
-        private async Task<(Guid shipId, Guid generatorId)> CreateExternalObjectsAsync()
+        private async Task<(Guid ShipId, Guid GeneratorId)> CreateExternalObjectsAsync()
         {
             Task<Guid> shipTask = _shipService.CreateShipAsync();
             Task<Guid> generatorTask = _generatorService.CreateGeneratorAsync();

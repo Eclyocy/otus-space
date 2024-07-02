@@ -1,11 +1,11 @@
-﻿using GameController.Services.Interfaces;
+﻿using System.Text;
+using System.Text.Json;
+using GameController.Services.Interfaces;
 using GameController.Services.Models.Message;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
-using System.Text;
-using System.Text.Json;
 
 namespace GameController.Services.Services
 {

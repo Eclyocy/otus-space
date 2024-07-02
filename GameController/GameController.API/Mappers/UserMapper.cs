@@ -9,6 +9,9 @@ namespace GameController.API.Mappers
     /// </summary>
     public class UserMapper : Profile
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public UserMapper()
         {
             // Controller models -> Service models

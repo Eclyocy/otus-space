@@ -8,7 +8,7 @@ namespace GameController.API.Helpers
     /// </summary>
     public sealed class CustomConsoleFormatter : ConsoleFormatter
     {
-        #region public methods
+        #region constructor
 
         /// <summary>
         /// Constructor.
@@ -18,9 +18,14 @@ namespace GameController.API.Helpers
         {
         }
 
+        #endregion
+
+        #region public methods
+
         /// <summary>
         /// Log a formatted message.
         /// </summary>
+        /// <typeparam name="TState"><inheritdoc/></typeparam>
         public override void Write<TState>(
             in LogEntry<TState> logEntry,
             IExternalScopeProvider? scopeProvider,
