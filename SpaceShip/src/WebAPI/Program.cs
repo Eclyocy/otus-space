@@ -1,9 +1,19 @@
+using DataLayer.EfCode;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SpaceShip.Service;
-using WebAPI.Controllers;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// получаем строку подключения из файла конфигурации
+var connection = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// добавляем контекст ApplicationContext в качестве сервиса в приложение/ Это поле сервиса которое будет жить всегда когда наше прилождение запустилось
+//в него можно накидывать разные полезные плюшки
+builder.Services.AddDbContext<EfCoreContext>(options => options.UseNpgsql(connection));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -30,4 +40,5 @@ app.UseEndpoints(endpoints =>
     {
         _ = endpoints.MapControllers();
     });
+app.MapControllers();
 app.Run();

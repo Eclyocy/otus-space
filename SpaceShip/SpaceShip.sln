@@ -5,19 +5,18 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "src\WebAPI\WebAPI.csproj", "{22B4E504-2A43-4141-B721-78B2C70F2CE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "src\WebAPI\WebAPI.csproj", "{22B4E504-2A43-4141-B721-78B2C70F2CE8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mock", "mock", "{9D32744A-73B1-4D9A-99D8-04FFF9F56129}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSpaceShip.Service", "mock\MockSpaceShip.Service\MockSpaceShip.Service.csproj", "{B42CB13A-4C68-417B-930E-BFE1B2ED432A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSpaceShip.Service", "mock\MockSpaceShip.Service\MockSpaceShip.Service.csproj", "{B42CB13A-4C68-417B-930E-BFE1B2ED432A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{FE09DC29-7CEC-45C9-A612-29635E4976EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{22B4E504-2A43-4141-B721-78B2C70F2CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -28,6 +27,13 @@ Global
 		{B42CB13A-4C68-417B-930E-BFE1B2ED432A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B42CB13A-4C68-417B-930E-BFE1B2ED432A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B42CB13A-4C68-417B-930E-BFE1B2ED432A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE09DC29-7CEC-45C9-A612-29635E4976EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE09DC29-7CEC-45C9-A612-29635E4976EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE09DC29-7CEC-45C9-A612-29635E4976EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE09DC29-7CEC-45C9-A612-29635E4976EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{22B4E504-2A43-4141-B721-78B2C70F2CE8} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
