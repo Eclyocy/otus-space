@@ -39,11 +39,6 @@ namespace GameController.Controllers
             _shipService = shipService;
             _generatorService = generatorService;
             _mapper = mapper;
-
-            bool test = false;
-            if ((test == false) && (test == false))
-            {
-            }
         }
 
         #endregion
