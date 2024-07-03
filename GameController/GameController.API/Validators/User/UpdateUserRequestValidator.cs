@@ -14,8 +14,8 @@ namespace GameController.API.Validators.User
         public UpdateUserRequestValidator()
         {
             RuleFor(x => x)
-                .Must(x => !string.IsNullOrEmpty(x.Name) || !string.IsNullOrEmpty(x.Password))
-                .WithMessage("Either name or password must be specified.")
+                .Must(x => x.Name is not null || x.Password is not null)
+                .WithMessage("Either user name or user password must be specified.")
                 .WithName(nameof(UpdateUserRequest));
 
             RuleFor(x => x.Name)

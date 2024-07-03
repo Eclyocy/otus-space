@@ -14,10 +14,10 @@ namespace GameController.API.Validators.User
         public CreateUserRequestValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("User name must be provided.");
+                .NotEmpty().WithMessage("User name must not be empty.");
 
             RuleFor(x => x.Password)
-                .NotEmpty().WithMessage("User password must be provided.");
+                .NotEmpty().WithMessage("User password must not be empty.");
         }
     }
 }
