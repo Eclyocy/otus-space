@@ -26,4 +26,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameController.Database\GameController.Database.csproj" />
+  </ItemGroup>
+
 </Project>

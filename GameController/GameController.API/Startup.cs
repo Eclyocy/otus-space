@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using GameController.API.Mappers;
+using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
+using GameController.Database;
 using GameController.Services;
 
 namespace GameController
@@ -37,6 +39,8 @@ namespace GameController
             IApplicationBuilder application,
             IWebHostEnvironment environment)
         {
+            application.UseExceptionHandler(x => x.UseCustomExceptionHandler());
+
             if (environment.IsDevelopment())
             {
                 application.UseSwagger();
@@ -59,6 +63,8 @@ namespace GameController
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureDatabase();
+
             services.ConfigureApplicationServices();
 
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));

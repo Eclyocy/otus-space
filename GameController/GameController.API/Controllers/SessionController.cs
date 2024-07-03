@@ -5,10 +5,10 @@ using GameController.Services.Models.Session;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace GameController.Controllers
+namespace GameController.API.Controllers
 {
     /// <summary>
-    /// Controller for actions with user's game sessions (create, get).
+    /// Controller for actions with user's game sessions.
     /// </summary>
     [ApiController]
     [Route("/api/users/{userId}/sessions")]
@@ -66,9 +66,10 @@ namespace GameController.Controllers
         [SwaggerOperation("Создание пользовательской игровой сессии")]
         public async Task<SessionResponse> CreateUserSessionAsync(Guid userId)
         {
-            (Guid shipId, Guid generatorId) = await CreateExternalObjectsAsync();
+            CreateSessionRequest sessionRequest = await CreateSessionRequestAsync(userId);
 
-            SessionDto sessionDto = _sessionService.CreateUserSession(userId, shipId, generatorId);
+            CreateSessionDto createSessionDto = _mapper.Map<CreateSessionDto>(sessionRequest);
+            SessionDto sessionDto = _sessionService.CreateUserSession(createSessionDto);
 
             return _mapper.Map<SessionResponse>(sessionDto);
         }
@@ -100,14 +101,19 @@ namespace GameController.Controllers
 
         #region private methods
 
-        private async Task<(Guid ShipId, Guid GeneratorId)> CreateExternalObjectsAsync()
+        private async Task<CreateSessionRequest> CreateSessionRequestAsync(Guid userId)
         {
             Task<Guid> shipTask = _shipService.CreateShipAsync();
             Task<Guid> generatorTask = _generatorService.CreateGeneratorAsync();
 
             await Task.WhenAll(shipTask, generatorTask);
 
-            return (shipTask.Result, generatorTask.Result);
+            return new()
+            {
+                UserId = userId,
+                ShipId = shipTask.Result,
+                GeneratorId = generatorTask.Result
+            };
         }
 
         #endregion

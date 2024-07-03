@@ -15,7 +15,7 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Retrieve the user by <paramref name="userId"/>.
         /// </summary>
-        UserDto GetUser(Guid userId);
+        UserDto? GetUser(Guid userId);
 
         /// <summary>
         /// Update the user with <paramref name="userId"/>.
@@ -25,6 +25,6 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Delete the user with <paramref name="userId"/>.
         /// </summary>
-        void DeleteUser(Guid userId);
+        bool DeleteUser(Guid userId);
     }
 }

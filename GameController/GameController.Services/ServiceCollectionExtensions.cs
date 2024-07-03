@@ -19,6 +19,8 @@ namespace GameController.Services
             this IServiceCollection services)
         {
             services.AddAutoMapper(x => x.AddProfile(typeof(RabbitMQMapper)));
+            services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
+            services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
 
             services.AddTransient<IGeneratorService, GeneratorService>();
             services.AddTransient<ISessionService, SessionService>();

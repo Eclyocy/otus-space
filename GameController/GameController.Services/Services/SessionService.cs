@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using GameController.Database.Interfaces;
+using GameController.Database.Models;
+using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Message;
 using GameController.Services.Models.Session;
@@ -13,9 +16,12 @@ namespace GameController.Services.Services
     {
         #region private fields
 
+        private readonly ISessionRepository _sessionRepository;
+
         private readonly IRabbitMQService _rabbitmqService;
 
         private readonly ILogger<SessionService> _logger;
+
         private readonly IMapper _mapper;
 
         #endregion
@@ -26,10 +32,13 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public SessionService(
+            ISessionRepository sessionRepository,
             IRabbitMQService rabbitMQService,
             ILogger<SessionService> logger,
             IMapper mapper)
         {
+            _sessionRepository = sessionRepository;
+
             _rabbitmqService = rabbitMQService;
 
             _logger = logger;
@@ -41,21 +50,14 @@ namespace GameController.Services.Services
         #region public methods
 
         /// <inheritdoc/>
-        public SessionDto CreateUserSession(Guid userId, Guid shipId, Guid generatorId)
+        public SessionDto CreateUserSession(CreateSessionDto createSessionDto)
         {
-            _logger.LogInformation(
-                "Create session for user {userId} with ship {shipId} and generator {generatorId}",
-                userId,
-                shipId,
-                generatorId);
+            _logger.LogInformation("Create session via request {createSessionDto}", createSessionDto);
 
-            return new()
-            {
-                UserId = userId,
-                SessionId = Guid.NewGuid(),
-                ShipId = shipId,
-                GeneratorId = generatorId
-            };
+            Session sessionRequest = _mapper.Map<Session>(createSessionDto);
+            Session session = _sessionRepository.Create(sessionRequest);
+
+            return _mapper.Map<SessionDto>(session);
         }
 
         /// <inheritdoc/>
@@ -63,23 +65,9 @@ namespace GameController.Services.Services
         {
             _logger.LogInformation("Get sessions of user {userId}", userId);
 
-            return new List<SessionDto>()
-            {
-                new()
-                {
-                    UserId = userId,
-                    SessionId = Guid.NewGuid(),
-                    ShipId = Guid.NewGuid(),
-                    GeneratorId = Guid.NewGuid()
-                },
-                new()
-                {
-                    UserId = userId,
-                    SessionId = Guid.NewGuid(),
-                    ShipId = Guid.NewGuid(),
-                    GeneratorId = Guid.NewGuid()
-                }
-            };
+            List<Session> sessions = _sessionRepository.GetAllByUserId(userId);
+
+            return _mapper.Map<List<SessionDto>>(sessions);
         }
 
         /// <inheritdoc/>
@@ -90,13 +78,27 @@ namespace GameController.Services.Services
                 sessionId,
                 userId);
 
-            return new()
+            Session? session = _sessionRepository.Get(sessionId);
+
+            if (session is null)
             {
-                UserId = userId,
-                SessionId = sessionId,
-                ShipId = Guid.NewGuid(),
-                GeneratorId = Guid.NewGuid()
-            };
+                _logger.LogInformation("Session with {sessionId} is not found.", sessionId);
+
+                throw new NotFoundException($"Session with {sessionId} is not found.");
+            }
+
+            if (session is not null && session.UserId != userId)
+            {
+                _logger.LogInformation(
+                    "Session with {sessionId} is linked to {sessionUserId}, but was requested for {userId}.",
+                    sessionId,
+                    session.UserId,
+                    userId);
+
+                throw new ConflictException($"Session {sessionId} is linked to another user.");
+            }
+
+            return _mapper.Map<SessionDto>(session);
         }
 
         /// <inheritdoc/>

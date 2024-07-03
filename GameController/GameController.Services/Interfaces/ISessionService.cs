@@ -8,11 +8,9 @@ namespace GameController.Services.Interfaces
     public interface ISessionService
     {
         /// <summary>
-        /// Create a game session for user <paramref name="userId"/>
-        /// with ship ID <paramref name="shipId"/> and
-        /// generator ID <paramref name="generatorId"/>.
+        /// Create a game session.
         /// </summary>
-        SessionDto CreateUserSession(Guid userId, Guid shipId, Guid generatorId);
+        SessionDto CreateUserSession(CreateSessionDto createSessionDto);
 
         /// <summary>
         /// Get list of game sessions of user <paramref name="userId"/>.

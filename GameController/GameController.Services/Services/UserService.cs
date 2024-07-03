@@ -1,4 +1,7 @@
-﻿using GameController.Services.Interfaces;
+﻿using AutoMapper;
+using GameController.Database.Interfaces;
+using GameController.Database.Models;
+using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +14,11 @@ namespace GameController.Services.Services
     {
         #region private fields
 
+        private readonly IUserRepository _userRepository;
+
         private readonly ILogger<UserService> _logger;
+
+        private readonly IMapper _mapper;
 
         #endregion
 
@@ -21,9 +28,15 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public UserService(
-            ILogger<UserService> logger)
+            IUserRepository userRepository,
+            ILogger<UserService> logger,
+            IMapper mapper)
         {
+            _userRepository = userRepository;
+
             _logger = logger;
+
+            _mapper = mapper;
         }
 
         #endregion
@@ -33,46 +46,46 @@ namespace GameController.Services.Services
         /// <inheritdoc/>
         public UserDto CreateUser(CreateUserDto createUserDto)
         {
-            _logger.LogInformation("Create user");
+            _logger.LogInformation("Create user via request {createUserDto}", createUserDto);
 
-            return new()
-            {
-                Id = Guid.NewGuid(),
-                Name = "Test"
-            };
+            User userRequest = _mapper.Map<User>(createUserDto);
+
+            User user = _userRepository.Create(userRequest);
+
+            return _mapper.Map<UserDto>(user);
         }
 
         /// <inheritdoc/>
-        public UserDto GetUser(Guid userId)
+        public UserDto? GetUser(Guid userId)
         {
             _logger.LogInformation("Get user by ID {userId}", userId);
 
-            return new()
-            {
-                Id = userId,
-                Name = "Test"
-            };
+            User? user = _userRepository.Get(userId);
+
+            return _mapper.Map<UserDto>(user);
         }
 
         /// <inheritdoc/>
         public UserDto UpdateUser(Guid userId, UpdateUserDto updateUserDto)
         {
             _logger.LogInformation(
-                "Update user with ID {userId} with request {updateUserDto}",
+                "Update user with ID {userId} via request {updateUserDto}",
                 userId,
                 updateUserDto);
 
-            return new()
-            {
-                Id = userId,
-                Name = updateUserDto.Name
-            };
+            User userRequest = _mapper.Map<User>(updateUserDto);
+
+            User user = _userRepository.Update(userId, userRequest);
+
+            return _mapper.Map<UserDto>(user);
         }
 
         /// <inheritdoc/>
-        public void DeleteUser(Guid userId)
+        public bool DeleteUser(Guid userId)
         {
             _logger.LogInformation("Delete user with ID {userId}", userId);
+
+            return _userRepository.Delete(userId);
         }
 
         #endregion
