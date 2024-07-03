@@ -1,7 +1,7 @@
-using GameController.API.Helpers;
+﻿using GameController.API.Helpers;
 using Microsoft.Extensions.Logging.Console;
 
-namespace SessionController
+namespace GameController
 {
     /// <summary>
     /// Web-service entry point.

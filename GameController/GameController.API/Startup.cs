@@ -2,11 +2,9 @@
 using FluentValidation.AspNetCore;
 using GameController.API.Mappers;
 using GameController.API.Validators.User;
-using GameController.Services.Interfaces;
-using GameController.Services.Mappers;
-using GameController.Services.Services;
+using GameController.Services;
 
-namespace SessionController
+namespace GameController
 {
     /// <summary>
     /// Main start up class.
@@ -57,19 +55,14 @@ namespace SessionController
         }
 
         /// <summary>
-        /// Configure service collection with DI.
+        /// Configure application service collection with DI.
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureApplicationServices();
+
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
-            services.AddAutoMapper(x => x.AddProfile(typeof(RabbitMQMapper)));
-
-            services.AddTransient<IGeneratorService, GeneratorService>();
-            services.AddTransient<ISessionService, SessionService>();
-            services.AddTransient<IShipService, ShipService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IRabbitMQService, RabbitMQService>();
 
             services.AddControllers();
 

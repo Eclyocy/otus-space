@@ -5,7 +5,7 @@ using GameController.Services.Models.Session;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace SessionController.Controllers
+namespace GameController.Controllers
 {
     /// <summary>
     /// Controller for actions with user's game sessions (create, get).
