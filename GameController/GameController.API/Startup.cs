@@ -69,7 +69,7 @@ namespace GameController
             services
                 .AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
-            services.AddValidatorsFromAssemblyContaining<CreateUserModelValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
 
             services.AddSwaggerGen(options =>
             {

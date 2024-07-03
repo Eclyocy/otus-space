@@ -51,10 +51,10 @@ namespace GameController.Controllers
         [HttpGet]
         [Route("")]
         [SwaggerOperation("Получение информации обо всех пользовательских игровых сессиях")]
-        public List<SessionModel> GetUserSessions(Guid userId)
+        public List<SessionResponse> GetUserSessions(Guid userId)
         {
             List<SessionDto> sessionDtos = _sessionService.GetUserSessions(userId);
-            List<SessionModel> sessionModels = _mapper.Map<List<SessionModel>>(sessionDtos);
+            List<SessionResponse> sessionModels = _mapper.Map<List<SessionResponse>>(sessionDtos);
             return sessionModels;
         }
 
@@ -64,13 +64,13 @@ namespace GameController.Controllers
         [HttpPost]
         [Route("")]
         [SwaggerOperation("Создание пользовательской игровой сессии")]
-        public async Task<SessionModel> CreateUserSessionAsync(Guid userId)
+        public async Task<SessionResponse> CreateUserSessionAsync(Guid userId)
         {
             (Guid shipId, Guid generatorId) = await CreateExternalObjectsAsync();
 
             SessionDto sessionDto = _sessionService.CreateUserSession(userId, shipId, generatorId);
 
-            return _mapper.Map<SessionModel>(sessionDto);
+            return _mapper.Map<SessionResponse>(sessionDto);
         }
 
         /// <summary>
@@ -79,10 +79,10 @@ namespace GameController.Controllers
         [HttpGet]
         [Route("{sessionId}")]
         [SwaggerOperation("Получение информации о пользовательской игровой сессии")]
-        public SessionModel CreateUserSession(Guid userId, Guid sessionId)
+        public SessionResponse CreateUserSession(Guid userId, Guid sessionId)
         {
             SessionDto sessionDto = _sessionService.GetUserSession(userId, sessionId);
-            return _mapper.Map<SessionModel>(sessionDto);
+            return _mapper.Map<SessionResponse>(sessionDto);
         }
 
         /// <summary>

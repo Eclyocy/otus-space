@@ -3,7 +3,7 @@
     /// <summary>
     /// Session model.
     /// </summary>
-    public record SessionModel
+    public record SessionResponse
     {
         /// <summary>
         /// User ID.

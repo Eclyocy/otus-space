@@ -16,17 +16,17 @@ namespace GameController.API.Mappers
         public UserMapper()
         {
             // Controller models -> Service models
-            CreateMap<CreateUserModel, CreateUserDto>()
+            CreateMap<CreateUserRequest, CreateUserDto>()
                 .ForMember(
                     x => x.PasswordHash,
                     opt => opt.MapFrom(x => PasswordConverter.ConvertToHash(x.Password)));
-            CreateMap<UpdateUserModel, UpdateUserDto>()
+            CreateMap<UpdateUserRequest, UpdateUserDto>()
                 .ForMember(
                     x => x.PasswordHash,
                     opt => opt.MapFrom(x => x.Password == null ? null : PasswordConverter.ConvertToHash(x.Password)));
 
             // Service models -> Controller models
-            CreateMap<UserDto, UserModel>();
+            CreateMap<UserDto, UserResponse>();
         }
     }
 }

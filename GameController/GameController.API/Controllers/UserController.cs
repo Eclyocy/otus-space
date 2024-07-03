@@ -45,11 +45,11 @@ namespace GameController.API.Controllers
         [HttpPost]
         [Route("")]
         [SwaggerOperation("Создание пользователя")]
-        public UserModel CreateUser(CreateUserModel createUserModel)
+        public UserResponse CreateUser(CreateUserRequest createUserModel)
         {
             CreateUserDto createUserDto = _mapper.Map<CreateUserDto>(createUserModel);
             UserDto userDto = _userService.CreateUser(createUserDto);
-            return _mapper.Map<UserModel>(userDto);
+            return _mapper.Map<UserResponse>(userDto);
         }
 
         /// <summary>
@@ -58,10 +58,10 @@ namespace GameController.API.Controllers
         [HttpGet]
         [Route("{userId}")]
         [SwaggerOperation("Получение информации о пользователе")]
-        public UserModel GetUser(Guid userId)
+        public UserResponse GetUser(Guid userId)
         {
             UserDto userDto = _userService.GetUser(userId);
-            return _mapper.Map<UserModel>(userDto);
+            return _mapper.Map<UserResponse>(userDto);
         }
 
         /// <summary>
@@ -70,11 +70,11 @@ namespace GameController.API.Controllers
         [HttpPatch]
         [Route("{userId}")]
         [SwaggerOperation("Обновление информации о пользователе")]
-        public UserModel UpdateUser(Guid userId, UpdateUserModel updateUserModel)
+        public UserResponse UpdateUser(Guid userId, UpdateUserRequest updateUserModel)
         {
             UpdateUserDto updateUserDto = _mapper.Map<UpdateUserDto>(updateUserModel);
             UserDto userDto = _userService.UpdateUser(userId, updateUserDto);
-            return _mapper.Map<UserModel>(userDto);
+            return _mapper.Map<UserResponse>(userDto);
         }
 
         /// <summary>

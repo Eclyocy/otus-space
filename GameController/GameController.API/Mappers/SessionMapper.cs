@@ -15,7 +15,7 @@ namespace GameController.API.Mappers
         public SessionMapper()
         {
             // Service models -> Controller models
-            CreateMap<SessionDto, SessionModel>();
+            CreateMap<SessionDto, SessionResponse>();
         }
     }
 }
