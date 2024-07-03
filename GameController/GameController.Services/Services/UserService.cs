@@ -41,8 +41,10 @@ namespace GameController.Services.Services
         public UserDto CreateUser(CreateUserDto createUserDto)
         {
             _logger.LogInformation("Create user");
+
             User user = _mapper.Map<User>(createUserDto);
-            User dbUser = _userRepository.CreateUser(user);
+            User dbUser = _userRepository.Create(user);
+
             return _mapper.Map<UserDto>(dbUser);
         }
 
@@ -50,8 +52,17 @@ namespace GameController.Services.Services
         public UserDto GetUser(Guid userId)
         {
             _logger.LogInformation("Get user by ID {userId}", userId);
-            User res = _userRepository.GetUser(userId);
-            return _mapper.Map<UserDto>(res);
+
+            User? user = _userRepository.Get(userId);
+
+            if (user == null)
+            {
+                throw new Exception($"User {userId} not found.");
+            }
+            else
+            {
+                return _mapper.Map<UserDto>(user);
+            }
         }
 
         /// <inheritdoc/>
@@ -63,7 +74,8 @@ namespace GameController.Services.Services
                 updateUserDto);
 
             User user = _mapper.Map<User>(updateUserDto);
-            User dbUser = _userRepository.UpdateUser(user);
+            User dbUser = _userRepository.Update(userId, user);
+
             return _mapper.Map<UserDto>(dbUser);
         }
 

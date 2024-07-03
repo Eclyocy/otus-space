@@ -2,13 +2,10 @@
 using FluentValidation.AspNetCore;
 using GameController.API.Mappers;
 using GameController.API.Validators.User;
-using GameController.Database.Interfaces;
-using GameController.Database.Repositories;
+using GameController.Database;
 using GameController.Services.Interfaces;
 using GameController.Services.Mappers;
 using GameController.Services.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace SessionController
 {
@@ -65,9 +62,7 @@ namespace SessionController
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddDbContext<DbContext>(options =>
-                options.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgresmaster"));
+            services.AddDatabase();
 
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));

@@ -4,17 +4,24 @@ using Microsoft.EntityFrameworkCore;
 namespace GameController.Database
 {
     /// <summary>
-    /// SessionDbContext class.
+    /// Database context for game controller application.
     /// </summary>
-    public class SessionDbContext : DbContext
+    public class DatabaseContext : DbContext
     {
+        #region constructor
+
         /// <summary>
-        /// SessionDbContext constructor.
+        /// Constructor.
         /// </summary>
-        public SessionDbContext()
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+            : base(options)
         {
             Database.EnsureCreated();
         }
+
+        #endregion
+
+        #region public properties
 
         /// <summary>
         /// Users.
@@ -26,10 +33,6 @@ namespace GameController.Database
         /// </summary>
         public DbSet<Session> Sessions { get; set; }
 
-        /// <inheritdoc/>
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=postgresmaster");
-        }
+        #endregion
     }
 }

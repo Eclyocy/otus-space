@@ -3,9 +3,9 @@
 namespace GameController.Database.Interfaces
 {
     /// <summary>
-    /// Interface for user repository.
+    /// Interface for session repository.
     /// </summary>
-    public interface IUserRepository : IRepository<User>
+    public interface ISessionRepository : IRepository<Session>
     {
     }
 }

@@ -1,10 +1,23 @@
-﻿namespace GameController.Database.Repositories
+﻿using GameController.Database.Interfaces;
+using GameController.Database.Models;
+
+namespace GameController.Database.Repositories
 {
     /// <summary>
-    /// SessionRepository class.
+    /// Session repository.
     /// </summary>
-    internal class SessionRepository
+    internal class SessionRepository : BaseRepository<Session>, ISessionRepository
     {
-        // создание и получение
+        #region constructor
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SessionRepository(DatabaseContext databaseContext)
+            : base(databaseContext)
+        {
+        }
+
+        #endregion
     }
 }
