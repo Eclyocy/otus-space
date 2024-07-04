@@ -19,10 +19,10 @@
         T? Get(Guid id);
 
         /// <summary>
-        /// Update entity with <paramref name="id"/>.
+        /// Update entity.
         /// </summary>
         /// <returns>Updated entity.</returns>
-        T Update(Guid id, T entity);
+        T Update(T entity);
 
         /// <summary>
         /// Delete entity by <paramref name="id"/>.

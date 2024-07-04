@@ -3,7 +3,7 @@
     /// <summary>
     /// User entity.
     /// </summary>
-    public class User
+    public class User : BaseEntity
     {
     }
 }

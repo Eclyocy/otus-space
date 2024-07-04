@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
+using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
 using Microsoft.Extensions.Logging;
@@ -56,11 +57,18 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
-        public UserDto? GetUser(Guid userId)
+        public UserDto GetUser(Guid userId)
         {
             _logger.LogInformation("Get user by ID {userId}", userId);
 
             User? user = _userRepository.Get(userId);
+
+            if (user == null)
+            {
+                _logger.LogInformation("User with {userId} is not found.", userId);
+
+                throw new NotFoundException($"User with ID {userId} not found.");
+            }
 
             return _mapper.Map<UserDto>(user);
         }
@@ -74,8 +82,9 @@ namespace GameController.Services.Services
                 updateUserDto);
 
             User userRequest = _mapper.Map<User>(updateUserDto);
+            userRequest.Id = userId;
 
-            User user = _userRepository.Update(userId, userRequest);
+            User user = _userRepository.Update(userRequest);
 
             return _mapper.Map<UserDto>(user);
         }

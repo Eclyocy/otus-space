@@ -23,7 +23,7 @@ namespace GameController.Database.Repositories
         }
 
         /// <inheritdoc/>
-        public User Update(Guid id, User entity)
+        public User Update(User entity)
         {
             return new();
         }

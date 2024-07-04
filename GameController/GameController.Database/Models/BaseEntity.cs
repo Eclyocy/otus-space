@@ -1,13 +1,13 @@
 ﻿namespace GameController.Database.Models
 {
     /// <summary>
-    /// Session model.
+    /// Base entity.
     /// </summary>
-    public class Session : BaseEntity
+    public abstract class BaseEntity
     {
         /// <summary>
-        /// User ID.
+        /// Entity ID.
         /// </summary>
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace GameController.Database.Repositories
         }
 
         /// <inheritdoc/>
-        public Session Update(Guid id, Session entity)
+        public Session Update(Session entity)
         {
             return new();
         }
