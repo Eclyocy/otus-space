@@ -13,7 +13,7 @@ namespace GameController.Services.Exceptions
         /// Constructor.
         /// </summary>
         public ConflictException(string message)
-            : base(HttpStatusCode.NotFound, message)
+            : base(HttpStatusCode.Conflict, message)
         {
         }
 
