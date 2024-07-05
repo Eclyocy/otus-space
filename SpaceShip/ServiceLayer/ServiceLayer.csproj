@@ -7,10 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="SpaceShipServices\" />
-    <Folder Include="ResourceTypeServices\" />
-    <Folder Include="ResourceServices\" />
-    <Folder Include="ProblemServices\" />
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\ServiceLayer.Abstractions\ServiceLayer.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Validations\ResourceTypeValidations\" />
+    <Folder Include="Validations\ResourceValidations\" />
+    <Folder Include="Validations\StarshipValidations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LinqKit" Version="1.3.0" />
   </ItemGroup>
 
 </Project>

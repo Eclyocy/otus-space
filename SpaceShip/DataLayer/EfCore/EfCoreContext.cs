@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Spaceship.DataLayer.EfClasses;
 
-namespace DataLayer.EfCode
+namespace DataLayer.EfCore
 {
     public class EfCoreContext : DbContext
     {
