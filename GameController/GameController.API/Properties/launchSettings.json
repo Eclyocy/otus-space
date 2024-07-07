@@ -1,0 +1,38 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:26067",
+      "sslPort": 44394
+    }
+  },
+  "profiles": {
+    "GameControllerAPI": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7196;http://localhost:5140",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "RABBITMQ_HOSTNAME": "localhost",
+        "RABBITMQ_PORT": "5672",
+        "RABBITMQ_USERNAME": "game-controller",
+        "RABBITMQ_PASSWORD": "Gc1234",
+        "RABBITMQ_VIRTUALHOST": "/",
+        "EXCHANGENAME_NEWDAY": "x_new_day",
+        "QUEUENAME_NEWDAY_GENERATOR": "q_new_day_generator_local",
+        "QUEUENAME_NEWDAY_SHIP": "q_new_day_ship_local"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
