@@ -17,9 +17,10 @@ namespace GameController.Database
             this IServiceCollection services)
         {
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=pg_pass;Database=test;"));
+                options.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=postgresmaster;Database=postgres;"));
 
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISessionRepository, SessionRepository>();
 
             return services;
         }

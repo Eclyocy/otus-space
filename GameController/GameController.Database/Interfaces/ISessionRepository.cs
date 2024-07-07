@@ -7,5 +7,9 @@ namespace GameController.Database.Interfaces
     /// </summary>
     public interface ISessionRepository : IRepository<Session>
     {
+        /// <summary>
+        /// Get all user sessions. <paramref name="userId"/>.
+        /// </summary>
+        List<Session> GetAll(Guid userId);
     }
 }

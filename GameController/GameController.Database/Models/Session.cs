@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameController.Database.Models
 {
@@ -7,15 +6,8 @@ namespace GameController.Database.Models
     /// Session class.
     /// </summary>
     [Table("sessions")]
-    public class Session
+    public class Session : BaseEntity
     {
-        /// <summary>
-        /// SessionId.
-        /// </summary>
-        [Key]
-        [Column("sessionid")]
-        public Guid SessionId { get; set; }
-
         /// <summary>
         /// UserId.
         /// </summary>
@@ -37,6 +29,6 @@ namespace GameController.Database.Models
         /// <summary>
         /// User.
         /// </summary>
-        public required User User { get; set; }
+        public User User { get; set; }
     }
 }

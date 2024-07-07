@@ -74,7 +74,8 @@ namespace GameController.Services.Services
                 updateUserDto);
 
             User user = _mapper.Map<User>(updateUserDto);
-            User dbUser = _userRepository.Update(userId, user);
+            user.Id = userId;
+            User dbUser = _userRepository.Update(user);
 
             return _mapper.Map<UserDto>(dbUser);
         }
@@ -83,6 +84,8 @@ namespace GameController.Services.Services
         public void DeleteUser(Guid userId)
         {
             _logger.LogInformation("Delete user with ID {userId}", userId);
+
+            _userRepository.Delete(userId);
         }
 
         #endregion

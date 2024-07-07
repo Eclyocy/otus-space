@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using GameController.Database.Interfaces;
+using GameController.Database.Models;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Message;
 using GameController.Services.Models.Session;
@@ -14,7 +16,7 @@ namespace GameController.Services.Services
         #region private fields
 
         private readonly IRabbitMQService _rabbitmqService;
-
+        private readonly ISessionRepository _sessionRepository;
         private readonly ILogger<SessionService> _logger;
         private readonly IMapper _mapper;
 
@@ -28,12 +30,14 @@ namespace GameController.Services.Services
         public SessionService(
             IRabbitMQService rabbitMQService,
             ILogger<SessionService> logger,
-            IMapper mapper)
+            IMapper mapper,
+            ISessionRepository sessionRepository)
         {
             _rabbitmqService = rabbitMQService;
 
             _logger = logger;
             _mapper = mapper;
+            _sessionRepository = sessionRepository;
         }
 
         #endregion
@@ -49,13 +53,15 @@ namespace GameController.Services.Services
                 shipId,
                 generatorId);
 
-            return new()
+            Session session = new()
             {
                 UserId = userId,
-                SessionId = Guid.NewGuid(),
                 ShipId = shipId,
-                GeneratorId = generatorId
+                GeneratorId = generatorId,
             };
+            Session dbSession = _sessionRepository.Create(session);
+
+            return _mapper.Map<SessionDto>(dbSession);
         }
 
         /// <inheritdoc/>
@@ -63,40 +69,21 @@ namespace GameController.Services.Services
         {
             _logger.LogInformation("Get sessions of user {userId}", userId);
 
-            return new List<SessionDto>()
-            {
-                new()
-                {
-                    UserId = userId,
-                    SessionId = Guid.NewGuid(),
-                    ShipId = Guid.NewGuid(),
-                    GeneratorId = Guid.NewGuid()
-                },
-                new()
-                {
-                    UserId = userId,
-                    SessionId = Guid.NewGuid(),
-                    ShipId = Guid.NewGuid(),
-                    GeneratorId = Guid.NewGuid()
-                }
-            };
+            List<Session> sessions = _sessionRepository.GetAll(userId);
+
+            return _mapper.Map<List<SessionDto>>(sessions);
         }
 
         /// <inheritdoc/>
         public SessionDto GetUserSession(Guid userId, Guid sessionId)
         {
             _logger.LogInformation(
-                "Get information on session {sessionId} of user {userId}",
-                sessionId,
-                userId);
+                "Get information on session {sessionId}",
+                sessionId);
 
-            return new()
-            {
-                UserId = userId,
-                SessionId = sessionId,
-                ShipId = Guid.NewGuid(),
-                GeneratorId = Guid.NewGuid()
-            };
+            Session? session = _sessionRepository.Get(sessionId);
+
+            return _mapper.Map<SessionDto>(session);
         }
 
         /// <inheritdoc/>

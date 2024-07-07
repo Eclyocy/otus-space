@@ -10,13 +10,6 @@ namespace GameController.Database.Repositories
     internal abstract class BaseRepository<T> : IRepository<T>
         where T : class
     {
-        #region private fields
-
-        private readonly DbContext _context;
-        private readonly DbSet<T> _entitySet;
-
-        #endregion
-
         #region constructor
 
         /// <summary>
@@ -24,9 +17,23 @@ namespace GameController.Database.Repositories
         /// </summary>
         protected BaseRepository(DatabaseContext databaseContext)
         {
-            _context = databaseContext;
-            _entitySet = _context.Set<T>();
+            Context = databaseContext;
+            EntitySet = Context.Set<T>();
         }
+
+        #endregion
+
+        #region protected fields
+
+        /// <summary>
+        /// Context.
+        /// </summary>
+        protected DbContext Context { get; }
+
+        /// <summary>
+        /// EntitySet.
+        /// </summary>
+        protected DbSet<T> EntitySet { get; }
 
         #endregion
 
@@ -35,8 +42,8 @@ namespace GameController.Database.Repositories
         /// <inheritdoc/>
         public virtual T Create(T entity)
         {
-            var entityEntry = _entitySet.Add(entity);
-            _context.SaveChanges();
+            var entityEntry = EntitySet.Add(entity);
+            Context.SaveChanges();
 
             return entityEntry.Entity;
         }
@@ -44,19 +51,29 @@ namespace GameController.Database.Repositories
         /// <inheritdoc/>
         public virtual T? Get(Guid id)
         {
-            return _entitySet.Find(id);
+            return EntitySet.Find(id);
         }
 
         /// <inheritdoc/>
-        public T Update(Guid id, T entity)
+        public T Update(T entity)
         {
-            throw new NotImplementedException();
+            Context.Entry(entity).State = EntityState.Modified;
+            Context.SaveChanges();
+            return entity;
         }
 
         /// <inheritdoc/>
         public bool Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var obj = EntitySet.Find(id);
+            if (obj == null)
+            {
+                return false;
+            }
+
+            EntitySet.Remove(obj);
+            Context.SaveChanges();
+            return true;
         }
 
         #endregion

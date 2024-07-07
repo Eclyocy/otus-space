@@ -84,7 +84,7 @@ namespace SessionController.Controllers
         [HttpGet]
         [Route("{sessionId}")]
         [SwaggerOperation("Получение информации о пользовательской игровой сессии")]
-        public SessionModel CreateUserSession(Guid userId, Guid sessionId)
+        public SessionModel GetUserSession(Guid userId, Guid sessionId)
         {
             SessionDto sessionDto = _sessionService.GetUserSession(userId, sessionId);
             return _mapper.Map<SessionModel>(sessionDto);

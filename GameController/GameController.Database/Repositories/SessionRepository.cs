@@ -19,5 +19,18 @@ namespace GameController.Database.Repositories
         }
 
         #endregion
+
+        #region public methods
+
+        /// <inheritdoc/>
+        public List<Session> GetAll(Guid userId)
+        {
+            var res = Context.Set<Session>()
+                .Where(x => x.UserId == userId)
+                .ToList();
+            return res;
+        }
+
+        #endregion
     }
 }

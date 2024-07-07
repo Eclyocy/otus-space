@@ -6,11 +6,6 @@
     public class UpdateUserModel
     {
         /// <summary>
-        /// User id.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// User name.
         /// </summary>
         public string? Name { get; set; }
