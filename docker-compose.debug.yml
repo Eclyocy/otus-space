@@ -7,7 +7,7 @@ services:
     image: webapi
     build:
       context: .
-      dockerfile: SpaceShip/src/WebAPI/Dockerfile
+      dockerfile: ./SpaceShip/Dockerfile
       args:
         - configuration=Debug
     ports:

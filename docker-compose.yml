@@ -16,8 +16,9 @@ services:
       - RABBITMQ_PASSWORD=Ss1234
       - RABBITMQ_TROUBLES_QUEUE=troubles
       - RABBITMQ_STEP_QUEUE=steps
+    networks:
+      - otus-space
 
 networks:
   otus-space:
-    external: true
     name: otus-space
