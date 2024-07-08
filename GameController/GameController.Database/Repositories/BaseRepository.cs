@@ -7,7 +7,7 @@ namespace GameController.Database.Repositories
     /// Base repository.
     /// </summary>
     /// <typeparam name="T">Repository entity.</typeparam>
-    internal abstract class BaseRepository<T> : IRepository<T>
+    public abstract class BaseRepository<T> : IRepository<T>
         where T : class
     {
         #region constructor

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
+using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
 using Microsoft.Extensions.Logging;
@@ -14,8 +15,10 @@ namespace GameController.Services.Services
     {
         #region private fields
 
-        private readonly ILogger<UserService> _logger;
         private readonly IUserRepository _userRepository;
+
+        private readonly ILogger<UserService> _logger;
+
         private readonly IMapper _mapper;
 
         #endregion
@@ -26,11 +29,15 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public UserService(
-            ILogger<UserService> logger, IUserRepository userRepository, IMapper mapper)
+            IUserRepository userRepository,
+            ILogger<UserService> logger,
+            IMapper mapper)
         {
-            _mapper = mapper;
-            _logger = logger;
             _userRepository = userRepository;
+
+            _logger = logger;
+
+            _mapper = mapper;
         }
 
         #endregion
@@ -40,12 +47,13 @@ namespace GameController.Services.Services
         /// <inheritdoc/>
         public UserDto CreateUser(CreateUserDto createUserDto)
         {
-            _logger.LogInformation("Create user");
+            _logger.LogInformation("Create user via request {createUserDto}", createUserDto);
 
-            User user = _mapper.Map<User>(createUserDto);
-            User dbUser = _userRepository.Create(user);
+            User userRequest = _mapper.Map<User>(createUserDto);
 
-            return _mapper.Map<UserDto>(dbUser);
+            User user = _userRepository.Create(userRequest);
+
+            return _mapper.Map<UserDto>(user);
         }
 
         /// <inheritdoc/>
@@ -57,35 +65,36 @@ namespace GameController.Services.Services
 
             if (user == null)
             {
-                throw new Exception($"User {userId} not found.");
+                _logger.LogInformation("User with {userId} is not found.", userId);
+
+                throw new NotFoundException($"User with ID {userId} not found.");
             }
-            else
-            {
-                return _mapper.Map<UserDto>(user);
-            }
+
+            return _mapper.Map<UserDto>(user);
         }
 
         /// <inheritdoc/>
         public UserDto UpdateUser(Guid userId, UpdateUserDto updateUserDto)
         {
             _logger.LogInformation(
-                "Update user with ID {userId} with request {updateUserDto}",
+                "Update user with ID {userId} via request {updateUserDto}",
                 userId,
                 updateUserDto);
 
-            User user = _mapper.Map<User>(updateUserDto);
-            user.Id = userId;
-            User dbUser = _userRepository.Update(user);
+            User userRequest = _mapper.Map<User>(updateUserDto);
+            userRequest.Id = userId;
 
-            return _mapper.Map<UserDto>(dbUser);
+            User user = _userRepository.Update(userRequest);
+
+            return _mapper.Map<UserDto>(user);
         }
 
         /// <inheritdoc/>
-        public void DeleteUser(Guid userId)
+        public bool DeleteUser(Guid userId)
         {
             _logger.LogInformation("Delete user with ID {userId}", userId);
 
-            _userRepository.Delete(userId);
+            return _userRepository.Delete(userId);
         }
 
         #endregion

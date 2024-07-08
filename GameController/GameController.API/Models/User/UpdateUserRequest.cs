@@ -1,18 +1,18 @@
 ﻿namespace GameController.API.Models.User
 {
     /// <summary>
-    /// Model for user creation.
+    /// Model for user update.
     /// </summary>
-    public record CreateUserModel
+    public class UpdateUserRequest
     {
         /// <summary>
         /// User name.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// User password.
         /// </summary>
-        public required string Password { get; set; }
+        public string? Password { get; set; }
     }
 }

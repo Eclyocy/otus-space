@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using GameController.API.Mappers;
+using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
 using GameController.Database;
-using GameController.Services.Interfaces;
-using GameController.Services.Mappers;
-using GameController.Services.Services;
+using GameController.Services;
 
-namespace SessionController
+namespace GameController
 {
     /// <summary>
     /// Main start up class.
@@ -40,6 +39,8 @@ namespace SessionController
             IApplicationBuilder application,
             IWebHostEnvironment environment)
         {
+            application.UseExceptionHandler(x => x.UseCustomExceptionHandler());
+
             if (environment.IsDevelopment())
             {
                 application.UseSwagger();
@@ -58,29 +59,23 @@ namespace SessionController
         }
 
         /// <summary>
-        /// Configure service collection with DI.
+        /// Configure application service collection with DI.
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDatabase();
+            services.ConfigureDatabase();
+
+            services.ConfigureApplicationServices();
 
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
-            services.AddAutoMapper(x => x.AddProfile(typeof(RabbitMQMapper)));
-            services.AddAutoMapper(x => x.AddProfile(typeof(RepositoryMapper)));
-
-            services.AddTransient<IGeneratorService, GeneratorService>();
-            services.AddTransient<ISessionService, SessionService>();
-            services.AddTransient<IShipService, ShipService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IRabbitMQService, RabbitMQService>();
 
             services.AddControllers();
 
             services
                 .AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
-            services.AddValidatorsFromAssemblyContaining<CreateUserModelValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
 
             services.AddSwaggerGen(options =>
             {

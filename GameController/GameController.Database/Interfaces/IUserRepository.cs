@@ -3,7 +3,7 @@
 namespace GameController.Database.Interfaces
 {
     /// <summary>
-    /// Interface for user repository.
+    /// Interface for <see cref="User"/> repository.
     /// </summary>
     public interface IUserRepository : IRepository<User>
     {

@@ -10,10 +10,12 @@ namespace GameController.Database
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+        #region public methods
+
         /// <summary>
-        /// Register database services.
+        /// Configure project-specific service collection with DI.
         /// </summary>
-        public static IServiceCollection AddDatabase(
+        public static IServiceCollection ConfigureDatabase(
             this IServiceCollection services)
         {
             services.AddDbContext<DatabaseContext>(options =>
@@ -24,5 +26,7 @@ namespace GameController.Database
 
             return services;
         }
+
+        #endregion
     }
 }

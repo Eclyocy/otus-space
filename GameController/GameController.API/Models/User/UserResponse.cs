@@ -3,7 +3,7 @@
     /// <summary>
     /// User model.
     /// </summary>
-    public class UserModel
+    public class UserResponse
     {
         /// <summary>
         /// User ID.

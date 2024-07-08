@@ -2,7 +2,7 @@
 using System.Text.Json;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Message;
-using Microsoft.Extensions.Configuration;
+using GameController.Services.Settings;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
@@ -16,16 +16,7 @@ namespace GameController.Services.Services
     {
         #region private fields
 
-        private readonly string? _rabbitMQHostname;
-
-        // private readonly int? _rabbitMQPort;
-        private readonly string? _rabbitMQUsername;
-        private readonly string? _rabbitMQPassword;
-        private readonly string? _rabbitMQVirtualHost;
-
-        private readonly string? _newDayExchangeName;
-        private readonly string? _newDayGeneratorQueueName;
-        private readonly string? _newDayShipQueueName;
+        private readonly RabbitMQSettings _rabbitMQSettings;
 
         private readonly ILogger<RabbitMQService> _logger;
 
@@ -37,21 +28,11 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public RabbitMQService(
-            ILogger<RabbitMQService> logger,
-            IConfiguration configuration)
+            ILogger<RabbitMQService> logger)
         {
             _logger = logger;
 
-            _rabbitMQHostname = configuration["RABBITMQ_HOSTNAME"];
-
-            // _rabbitMQPort = int.Parse(configuration["RABBITMQ_PORT"]);
-            _rabbitMQUsername = configuration["RABBITMQ_USERNAME"];
-            _rabbitMQPassword = configuration["RABBITMQ_PASSWORD"];
-            _rabbitMQVirtualHost = configuration["RABBITMQ_VIRTUALHOST"];
-
-            _newDayExchangeName = configuration["EXCHANGENAME_NEWDAY"];
-            _newDayGeneratorQueueName = configuration["QUEUENAME_NEWDAY_GENERATOR"];
-            _newDayShipQueueName = configuration["QUEUENAME_NEWDAY_SHIP"];
+            _rabbitMQSettings = new RabbitMQSettings();
         }
 
         #endregion
@@ -65,12 +46,11 @@ namespace GameController.Services.Services
 
             ConnectionFactory connectionFactory = new()
             {
-                HostName = _rabbitMQHostname,
-
-                // Port = _rabbitMQPort?.Value,
-                UserName = _rabbitMQUsername,
-                Password = _rabbitMQPassword,
-                VirtualHost = _rabbitMQVirtualHost
+                HostName = _rabbitMQSettings.Hostname,
+                Port = _rabbitMQSettings.Port,
+                UserName = _rabbitMQSettings.Username,
+                Password = _rabbitMQSettings.Password,
+                VirtualHost = _rabbitMQSettings.VirtualHost
             };
 
             SetupNewDayExchange(connectionFactory);
@@ -84,7 +64,7 @@ namespace GameController.Services.Services
             basicProperties.Persistent = true;
 
             channel.BasicPublish(
-                exchange: _newDayExchangeName,
+                exchange: _rabbitMQSettings.NewDayExchange,
                 routingKey: string.Empty,
                 mandatory: false,
                 basicProperties: basicProperties,
@@ -100,21 +80,18 @@ namespace GameController.Services.Services
         /// </summary>
         private void SetupNewDayExchange(IConnectionFactory connectionFactory)
         {
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-            ExchangeDeclare(connectionFactory, _newDayExchangeName, "fanout");
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+            ExchangeDeclare(connectionFactory, _rabbitMQSettings.NewDayExchange, "fanout");
 
             QueueDeclareAndBind(
                 connectionFactory,
-#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
-                _newDayGeneratorQueueName,
-                _newDayExchangeName,
+                _rabbitMQSettings.NewDayQueueGenerator,
+                _rabbitMQSettings.NewDayExchange,
                 routingKey: string.Empty);
 
             QueueDeclareAndBind(
                 connectionFactory,
-                _newDayShipQueueName,
-                _newDayExchangeName,
+                _rabbitMQSettings.NewDayQueueShip,
+                _rabbitMQSettings.NewDayExchange,
                 routingKey: string.Empty);
         }
 
@@ -196,7 +173,7 @@ namespace GameController.Services.Services
                     routingKey: routingKey);
             }
         }
-#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+
         #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿using GameController.API.Helpers;
 using Microsoft.Extensions.Logging.Console;
 
-namespace SessionController
+namespace GameController
 {
     /// <summary>
     /// Web-service entry point.
@@ -15,12 +15,6 @@ namespace SessionController
         /// </summary>
         public static void Main(string[] args)
         {
-            /*
-            var config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
-            */
-
             CreateHostBuilder(args).Build().Run();
         }
 

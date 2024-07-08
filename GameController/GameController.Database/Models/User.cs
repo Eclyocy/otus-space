@@ -3,7 +3,7 @@
 namespace GameController.Database.Models
 {
     /// <summary>
-    /// User class.
+    /// User model.
     /// </summary>
     [Table("users")]
     public class User : BaseEntity

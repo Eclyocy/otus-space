@@ -3,13 +3,13 @@
 namespace GameController.Database.Interfaces
 {
     /// <summary>
-    /// Interface for session repository.
+    /// Interface for <see cref="Session"/> repository.
     /// </summary>
     public interface ISessionRepository : IRepository<Session>
     {
         /// <summary>
-        /// Get all user sessions. <paramref name="userId"/>.
+        /// Get all sessions of a specific user.
         /// </summary>
-        List<Session> GetAll(Guid userId);
+        List<Session> GetAllByUserId(Guid userId);
     }
 }

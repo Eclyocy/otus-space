@@ -6,7 +6,7 @@ namespace GameController.Database.Repositories
     /// <summary>
     /// Session repository.
     /// </summary>
-    internal class SessionRepository : BaseRepository<Session>, ISessionRepository
+    public class SessionRepository : BaseRepository<Session>, ISessionRepository
     {
         #region constructor
 
@@ -23,7 +23,7 @@ namespace GameController.Database.Repositories
         #region public methods
 
         /// <inheritdoc/>
-        public List<Session> GetAll(Guid userId)
+        public List<Session> GetAllByUserId(Guid userId)
         {
             var res = Context.Set<Session>()
                 .Where(x => x.UserId == userId)

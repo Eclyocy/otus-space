@@ -3,13 +3,13 @@
 namespace GameController.Database.Models
 {
     /// <summary>
-    /// Session class.
+    /// Session model.
     /// </summary>
     [Table("sessions")]
     public class Session : BaseEntity
     {
         /// <summary>
-        /// UserId.
+        /// User ID.
         /// </summary>
         [Column("userid")]
         public Guid UserId { get; set; }

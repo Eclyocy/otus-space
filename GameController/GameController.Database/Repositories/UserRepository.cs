@@ -4,9 +4,9 @@ using GameController.Database.Models;
 namespace GameController.Database.Repositories
 {
     /// <summary>
-    /// UserRepository class.
+    /// User repository.
     /// </summary>
-    internal class UserRepository : BaseRepository<User>, IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         #region constructor
 

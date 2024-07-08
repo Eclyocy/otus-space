@@ -25,6 +25,6 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Delete the user with <paramref name="userId"/>.
         /// </summary>
-        void DeleteUser(Guid userId);
+        bool DeleteUser(Guid userId);
     }
 }
