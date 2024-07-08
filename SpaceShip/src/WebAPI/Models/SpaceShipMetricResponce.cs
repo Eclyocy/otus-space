@@ -1,16 +1,17 @@
+using System;
 using System.Collections.Generic;
 
-namespace WebAPI.Models;
+namespace SpaceShip.WebAPI.Models;
 
 /// <summary>
 /// Модель ответа о состоянии корабля
 /// </summary>
-public class SpaceShip
+public class SpaceShipMetricResponse
 {
     /// <summary>
     /// Id корабля
     /// </summary>
-    public int Id {get;set;}
+    public Guid Id {get;set;}
     
     /// <summary>
     /// Номер хода

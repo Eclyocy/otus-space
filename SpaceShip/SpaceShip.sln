@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSpaceShip.Service", "mo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaseShip.Service.EventsProvider", "src\SpaseShip.Service.EventsProvider\SpaseShip.Service.EventsProvider.csproj", "{ACF54AA2-74AD-4010-A8A1-D21512F47A93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceShip.Service", "src\SpaceShip.Service\SpaceShip.Service.csproj", "{DB649135-A9FF-499F-AF5C-00B791CE40B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSpaceShip.Repository", "mock\MockSpaceShip.Repository\MockSpaceShip.Repository.csproj", "{00CD1C4F-03B5-4D6B-8575-B3F1C1A3E113}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +35,14 @@ Global
 		{ACF54AA2-74AD-4010-A8A1-D21512F47A93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACF54AA2-74AD-4010-A8A1-D21512F47A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACF54AA2-74AD-4010-A8A1-D21512F47A93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB649135-A9FF-499F-AF5C-00B791CE40B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB649135-A9FF-499F-AF5C-00B791CE40B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB649135-A9FF-499F-AF5C-00B791CE40B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB649135-A9FF-499F-AF5C-00B791CE40B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00CD1C4F-03B5-4D6B-8575-B3F1C1A3E113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00CD1C4F-03B5-4D6B-8575-B3F1C1A3E113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00CD1C4F-03B5-4D6B-8575-B3F1C1A3E113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00CD1C4F-03B5-4D6B-8575-B3F1C1A3E113}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,5 +51,7 @@ Global
 		{22B4E504-2A43-4141-B721-78B2C70F2CE8} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
 		{B42CB13A-4C68-417B-930E-BFE1B2ED432A} = {9D32744A-73B1-4D9A-99D8-04FFF9F56129}
 		{ACF54AA2-74AD-4010-A8A1-D21512F47A93} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
+		{DB649135-A9FF-499F-AF5C-00B791CE40B5} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
+		{00CD1C4F-03B5-4D6B-8575-B3F1C1A3E113} = {9D32744A-73B1-4D9A-99D8-04FFF9F56129}
 	EndGlobalSection
 EndGlobal

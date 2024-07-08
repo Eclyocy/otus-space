@@ -1,4 +1,6 @@
-namespace WebAPI.Models;
+using System;
+
+namespace SpaceShip.WebAPI.Models;
 
 /// <summary>
 /// Модель ресурса корабля
@@ -8,7 +10,7 @@ public class Resource
     /// <summary>
     /// Id ресурса
     /// </summary>
-    public int? Id {get; set;}
+    public Guid Id {get; set;}
     
     /// <summary>
     /// Наименованеи ресурса
@@ -18,6 +20,6 @@ public class Resource
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)
     /// </summary>
-    public string? State {get; set;} 
+    public required string State {get; set;} = "спит";
 
 }

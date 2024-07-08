@@ -1,7 +1,8 @@
 using Microsoft.Extensions.Logging;
 using MockSpaceShip.Service.Models;
+using SpaceShip.Service.Abstractions;
 
-namespace SpaceShip.Service;
+namespace MockSpaceShip.Service;
 
 public class MockSpaceShipService : IShipService
 {

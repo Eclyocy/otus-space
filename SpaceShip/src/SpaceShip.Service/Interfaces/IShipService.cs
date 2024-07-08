@@ -1,4 +1,4 @@
-namespace SpaceShip.Service;
+namespace SpaceShip.Service.Abstractions;
 
 public interface IShipService
 {
