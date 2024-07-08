@@ -1,23 +1,25 @@
-using SpaceShip.Service.Abstractions;
-using SpaceShip.Service.Models;
-
+using SpaceShip.Service.Interfaces;
+using SpaceShip.Service.Contracts;
 
 namespace SpaceShip.Service.Implementation;
 
-public class ShipService : IShipService
+public class SpaceShipService : IShipService
 {
-    public ShipService()
-    {
 
-    }
-
+    public SpaceShipService()
+    {}
+    
     /// <summary>
     /// Создать новый корабль с ресурсами
     /// </summary>
     /// <returns>ID корабля</returns>
-    public Guid CreateShip() // <--- Тупо отдать ID или всю структуру?
+    public SpaceShipDTO CreateShip() // <--- Тупо отдать ID или всю структуру?
     {
-        return Guid.NewGuid();
+        return new SpaceShipDTO
+        {
+            Id = Guid.NewGuid(),
+            Step = 0
+        };
     }
 
     /// <summary>
@@ -25,9 +27,12 @@ public class ShipService : IShipService
     /// </summary>
     /// <param name="id">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public Ship GetSpaceShip(Guid id)
+    public SpaceShipDTO Get(Guid id)
     {
-        return new Ship();
+        return new SpaceShipDTO
+        {
+            Id = Guid.NewGuid(),
+            Step = 0
+        }; //TODO Mapper
     }
-
 }

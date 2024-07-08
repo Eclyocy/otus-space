@@ -1,6 +1,6 @@
-namespace MockSpaceShip.Service.Models
-{
-    public class ResourceDto
+    
+    namespace SpaceShip.Service.Contracts;
+    public class ResourceDTO
     {
         /// <summary>
         /// Id ресурса
@@ -18,4 +18,3 @@ namespace MockSpaceShip.Service.Models
         public required string State { get; set; }
 
     }
-}

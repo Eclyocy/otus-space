@@ -1,7 +1,11 @@
-namespace SpaceShip.Service.Abstractions;
+using SpaceShip.Service.Contracts;
+
+namespace SpaceShip.Service.Interfaces;
 
 public interface IShipService
 {
 
-    public Guid CreateShip();
+    public SpaceShipDTO CreateShip();
+
+    public SpaceShipDTO Get(Guid id);
 }

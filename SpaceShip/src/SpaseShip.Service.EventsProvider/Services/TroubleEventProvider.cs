@@ -32,9 +32,17 @@ public class TroubleEventProvider : IHostedService
                                     HostName = _host, 
                                     UserName = _user, 
                                     Password = _password};
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
-        _logger.LogInformation("Succesfully connectedd to host {_host}",_host);
+        try 
+        {
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
+        }
+        catch 
+        {
+            _logger.LogError("Fail to connect RabbitMQ host {_host}",_host);
+        }
+        
+        _logger.LogInformation("Succesfully connected to host {_host}",_host);
 
     }
     

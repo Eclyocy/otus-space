@@ -32,9 +32,16 @@ public class StepEventProvider : IHostedService
                                     HostName = _host, 
                                     UserName = _user, 
                                     Password = _password};
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
-        _logger.LogInformation("Succesfully connectedd to host {_host}",_host);
+        try{
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
+            _logger.LogInformation("Succesfully connectedd to host {_host}",_host);
+        }
+        catch
+        {
+            _logger.LogError("Fail to connect RabbitMQ host {_host}",_host);
+        }                      
+        
         
     }
     

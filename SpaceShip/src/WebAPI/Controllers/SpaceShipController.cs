@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SpaceShip.Service;
 using AutoMapper;
-using SpaceShip.Service.Abstractions;
+using SpaceShip.Service.Interfaces;
 using SpaceShip.WebAPI.Models;
 
 namespace SpaceShip.WebAPI.Controllers;
@@ -47,7 +47,11 @@ public class SpaceShipController:ControllerBase
     [HttpGet("{id}")]
     [Produces("application/json")]
     [ProducesResponseType<SpaceShipMetricResponse>(StatusCodes.Status200OK)]
-    public IResult Get(Guid id) => Results.Ok();
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IResult Get(Guid id)
+    {
+        return Results.Ok(_mapper.Map<SpaceShipMetricResponse>(_service.Get(id)));
+    }
 
     /// <summary>
     /// Создать новый корабль
@@ -58,7 +62,7 @@ public class SpaceShipController:ControllerBase
     [ProducesResponseType<SpaceShipCreateResponse>(StatusCodes.Status201Created)]
     public IResult Create() 
     {
-        return Results.Created("api/v1/spaceship",_service.CreateShip());
+        return Results.Created("api/v1/spaceship",_mapper.Map<SpaceShipCreateResponse>(_service.CreateShip()));
     }
 
     /// <summary>

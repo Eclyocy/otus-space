@@ -6,13 +6,14 @@ using Microsoft.Extensions.Hosting;
 using MockSpaceShip.Service;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Services.Queue;
-using SpaceShip.Service.Abstractions;
+using SpaceShip.Service.Interfaces;
 using SpaceShip.WebAPI.Controllers;
 using SpaceShip.WebAPI.Models;
 using SpaceShip.WebAPI.Settings;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using System;
+using SpaceShip.WebAPI.Mappers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,7 +43,7 @@ builder.Services.AddHostedService<StepEventProvider>();
 // Automapper:
 builder.Services.AddSingleton<IMapper>(
     new Mapper(new MapperConfiguration(
-                    static cfg => cfg.CreateMap<SpaceShipMetricResponse, SpaceShipDTO>())));
+                    static cfg => cfg.AddProfile<SpaceShipMappingProfile>())));
 
 // RabbitMQ:
 // ToDo
@@ -55,7 +56,6 @@ app.UseSwaggerUI(options =>
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
-
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();

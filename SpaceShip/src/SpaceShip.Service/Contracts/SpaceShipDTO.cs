@@ -12,4 +12,9 @@ public class SpaceShipDTO
     /// </summary>
     public short Step {get;set;}
 
+    /// <summary>
+    /// Коллекция ресурсов корабля
+    /// </summary>
+    public List<ResourceDTO>? Resources {get;set;}
+
 }
