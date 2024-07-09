@@ -15,7 +15,6 @@ using Microsoft.OpenApi.Models;
 using System;
 using SpaceShip.WebAPI.Mappers;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -56,6 +55,7 @@ app.UseSwaggerUI(options =>
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();

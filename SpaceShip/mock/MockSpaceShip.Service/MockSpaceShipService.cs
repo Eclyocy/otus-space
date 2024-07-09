@@ -5,6 +5,7 @@ using SpaceShip.Service.Contracts;
 
 namespace MockSpaceShip.Service;
 
+
 public class MockSpaceShipService : IShipService
 {
     public MockSpaceShipService()
@@ -32,9 +33,6 @@ public class MockSpaceShipService : IShipService
                 new() {Id = Guid.NewGuid(),Name = "Body",State = "Normal"},
             ]
         };
-
-        return ship;
-    }
 
 }
 
