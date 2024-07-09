@@ -25,6 +25,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\DataLayer\DataLayer.csproj" />
     <ProjectReference Include="..\..\mock\MockSpaceShip.Service\MockSpaceShip.Service.csproj" />
+    <ProjectReference Include="..\..\ServiceLayer.Abstractions\ServiceLayer.Abstractions.csproj" />
+    <ProjectReference Include="..\..\ServiceLayer\ServiceLayer.csproj" />
   </ItemGroup>
 
 </Project>

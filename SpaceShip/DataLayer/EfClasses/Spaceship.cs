@@ -8,5 +8,6 @@ namespace Spaceship.DataLayer.EfClasses
         public SpaceshipState State { get; set; }
         public int ThisDay { get; set; }
 
+        public virtual ICollection<Resource> Resources { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿
-
-using FluentValidation;
+﻿using FluentValidation;
 using Spaceship.DataLayer.EfClasses;
 
 namespace ServiceLayer.Validations.ProblemValidations

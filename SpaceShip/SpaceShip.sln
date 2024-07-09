@@ -11,11 +11,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mock", "mock", "{9D32744A-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSpaceShip.Service", "mock\MockSpaceShip.Service\MockSpaceShip.Service.csproj", "{B42CB13A-4C68-417B-930E-BFE1B2ED432A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{FE09DC29-7CEC-45C9-A612-29635E4976EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{FE09DC29-7CEC-45C9-A612-29635E4976EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B2A1B390-4B7B-4953-A15F-9E2701D10D87} = {B2A1B390-4B7B-4953-A15F-9E2701D10D87}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{3CB90381-4A1D-4E02-9A86-4116BCB96892}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{3CB90381-4A1D-4E02-9A86-4116BCB96892}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer.Abstractions", "ServiceLayer.Abstractions\ServiceLayer.Abstractions.csproj", "{B2A1B390-4B7B-4953-A15F-9E2701D10D87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer.Abstractions", "ServiceLayer.Abstractions\ServiceLayer.Abstractions.csproj", "{B2A1B390-4B7B-4953-A15F-9E2701D10D87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

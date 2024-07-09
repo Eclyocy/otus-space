@@ -11,7 +11,7 @@ namespace Spaceship.DataLayer.EfClasses
         public int Amount { get; set; }
 
         public virtual Spaceship Spaceship { get; set; }
-        public virtual ICollection<ResourceType> ResourcesType { get; set; }
+        public virtual ResourceType ResourceType { get; set; }
 
     }
 }
