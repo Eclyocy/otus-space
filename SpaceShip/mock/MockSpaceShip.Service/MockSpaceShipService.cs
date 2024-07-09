@@ -1,6 +1,10 @@
 using Microsoft.Extensions.Logging;
+using SpaceShip.Service.Interfaces;
+using SpaceShip.Service.Contracts;
 
-namespace SpaceShip.Service;
+
+namespace MockSpaceShip.Service;
+
 
 public class MockSpaceShipService : IShipService
 {
@@ -9,15 +13,26 @@ public class MockSpaceShipService : IShipService
 
     }
 
-    public Guid CreateShip()
+    public SpaceShipDTO CreateShip()
     {
-        //_logger.LogInformation("New request to create spaceship");
-
-        var shipId = Guid.NewGuid();
-        //_logger.LogInformation("Spaceship with Id = {shipId} successfully created", shipId);
-
-        return shipId;
+        return new SpaceShipDTO
+        {
+            Id = Guid.NewGuid(),
+            Step = 0
+        };
     }
+
+    public SpaceShipDTO Get(Guid Id)
+    {
+        SpaceShipDTO ship = new SpaceShipDTO
+        {
+            Id = Id,
+            Step = 0,
+            Resources = [
+                new() {Id = Guid.NewGuid(),Name = "Engine",State = "Normal"},
+                new() {Id = Guid.NewGuid(),Name = "Body",State = "Normal"},
+            ]
+        };
 
 }
 
