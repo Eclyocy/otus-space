@@ -33,6 +33,8 @@ public class MockSpaceShipService : IShipService
                 new() {Id = Guid.NewGuid(),Name = "Body",State = "Normal"},
             ]
         };
+        return ship;
+    }
 
 }
 
