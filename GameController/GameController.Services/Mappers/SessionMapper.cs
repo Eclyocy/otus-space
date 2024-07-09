@@ -18,7 +18,8 @@ namespace GameController.Services.Mappers
             CreateMap<CreateSessionDto, Session>();
 
             // Database models -> Service models
-            CreateMap<Session, SessionDto>();
+            CreateMap<Session, SessionDto>()
+                .ForMember(x => x.SessionId, opt => opt.MapFrom(x => x.Id));
         }
     }
 }

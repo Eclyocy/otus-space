@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Cryptography;
+using AutoMapper;
 using GameController.API.Helpers;
 using GameController.API.Models.User;
 using GameController.Services.Models.User;

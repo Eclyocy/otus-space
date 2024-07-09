@@ -50,11 +50,12 @@ namespace GameController.Services.Services
         #region public methods
 
         /// <inheritdoc/>
-        public SessionDto CreateUserSession(CreateSessionDto createSessionDto)
+        public SessionDto CreateUserSession(Guid userId, CreateSessionDto createSessionDto)
         {
             _logger.LogInformation("Create session via request {createSessionDto}", createSessionDto);
 
             Session sessionRequest = _mapper.Map<Session>(createSessionDto);
+            sessionRequest.UserId = userId;
             Session session = _sessionRepository.Create(sessionRequest);
 
             return _mapper.Map<SessionDto>(session);
