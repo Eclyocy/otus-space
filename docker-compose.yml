@@ -16,6 +16,19 @@ services:
     - QUEUENAME_NEWDAY_GENERATOR=q_new_day_generator
     - QUEUENAME_NEWDAY_SHIP=q_new_day_ship
 
+  spaceship_webapi:
+    image: webapi
+    build: SpaceShip
+    ports:
+    - 5051:5216
+    - 7071:7196
+    environment:
+    - RABBITMQ_HOST=rabbitmq-otus
+    - RABBITMQ_USER=space-ship
+    - RABBITMQ_PASSWORD=Ss1234
+    - RABBITMQ_TROUBLES_QUEUE=troubles
+    - RABBITMQ_STEP_QUEUE=steps
+
   rabbitmq:
     container_name: rabbitmq_otus
     build: RabbitMQ
