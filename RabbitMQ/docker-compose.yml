@@ -8,6 +8,12 @@ services:
     - 5672:5672
     volumes:
     - rabbitmq_otus_data:/var/lib/rabbitmq
+    networks:
+    - otus-space
 
 volumes:
   rabbitmq_otus_data:
+
+networks:
+  otus-space:
+    name: otus-space

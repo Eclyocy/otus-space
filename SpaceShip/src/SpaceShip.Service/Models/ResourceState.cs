@@ -1,0 +1,1 @@
+namespace SpaceShip.Service.Models;
