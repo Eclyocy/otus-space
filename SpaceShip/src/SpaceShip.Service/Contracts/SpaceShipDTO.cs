@@ -16,5 +16,4 @@ public class SpaceShipDTO
     /// Коллекция ресурсов корабля
     /// </summary>
     public List<ResourceDTO>? Resources {get;set;}
-
 }
