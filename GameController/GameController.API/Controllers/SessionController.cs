@@ -39,6 +39,11 @@ namespace GameController.API.Controllers
             _shipService = shipService;
             _generatorService = generatorService;
             _mapper = mapper;
+
+            bool test = false;
+            if ((test == false) && (test == false))
+            {
+            }
         }
 
         #endregion
@@ -69,7 +74,7 @@ namespace GameController.API.Controllers
             CreateSessionRequest sessionRequest = await CreateSessionRequestAsync(userId);
 
             CreateSessionDto createSessionDto = _mapper.Map<CreateSessionDto>(sessionRequest);
-            SessionDto sessionDto = _sessionService.CreateUserSession(createSessionDto);
+            SessionDto sessionDto = _sessionService.CreateUserSession(userId, createSessionDto);
 
             return _mapper.Map<SessionResponse>(sessionDto);
         }
