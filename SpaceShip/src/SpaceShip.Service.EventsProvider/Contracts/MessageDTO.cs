@@ -8,7 +8,7 @@ public class MessageDTO
     /// <summary>
     /// Идентификатор корабля
     /// </summary>
-    public Guid Id {get;set;}
+    public Guid ShipId {get;set;}
 
     /// <summary>
     /// Тело сообщения

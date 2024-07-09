@@ -5,13 +5,13 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "src\WebAPI\WebAPI.csproj", "{22B4E504-2A43-4141-B721-78B2C70F2CE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceShip.WebAPI", "src\SpaceShip.WebAPI\WebAPI.csproj", "{22B4E504-2A43-4141-B721-78B2C70F2CE8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mock", "mock", "{9D32744A-73B1-4D9A-99D8-04FFF9F56129}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSpaceShip.Service", "mock\MockSpaceShip.Service\MockSpaceShip.Service.csproj", "{B42CB13A-4C68-417B-930E-BFE1B2ED432A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaseShip.Service.EventsProvider", "src\SpaseShip.Service.EventsProvider\SpaseShip.Service.EventsProvider.csproj", "{ACF54AA2-74AD-4010-A8A1-D21512F47A93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceShip.Service.EventsProvider", "src\SpaceShip.Service.EventsProvider\SpaceShip.Service.EventsProvider.csproj", "{ACF54AA2-74AD-4010-A8A1-D21512F47A93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceShip.Service", "src\SpaceShip.Service\SpaceShip.Service.csproj", "{DB649135-A9FF-499F-AF5C-00B791CE40B5}"
 EndProject

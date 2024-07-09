@@ -8,12 +8,12 @@ USER app
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG configuration=Release
 WORKDIR /src
-COPY ["/src/WebAPI/WebAPI.csproj", "/src/WebAPI/"]
-RUN dotnet restore "/src/WebAPI/WebAPI.csproj"
+COPY ["/src/SpaceShip.WebAPI/WebAPI.csproj", "/src/SpaceShip.WebAPI/"]
+RUN dotnet restore "/src/SpaceShip.WebAPI/WebAPI.csproj"
 COPY . .
 RUN dotnet dev-certs https
 
-WORKDIR /src/src/WebAPI
+WORKDIR /src/src/SpaceShip.WebAPI
 RUN dotnet build "WebAPI.csproj" -c $configuration -o /app/build
 
 FROM build AS publish

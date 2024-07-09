@@ -1,19 +1,14 @@
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using MockSpaceShip.Service;
-using SpaceShip.Service.Contracts;
-using SpaceShip.Services.Queue;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using SpaceShip.Service.Interfaces;
-using SpaceShip.WebAPI.Controllers;
-using SpaceShip.WebAPI.Models;
-using SpaceShip.WebAPI.Settings;
-using System.Reflection;
-using Microsoft.OpenApi.Models;
-using System;
+using SpaceShip.Service.Queue;
 using SpaceShip.WebAPI.Mappers;
+using System;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +27,14 @@ builder.Services.AddSwaggerGen(static options =>
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
-builder.Services.AddControllers();
+
+builder.Services.AddControllers().AddNewtonsoftJson(static options =>
+{
+    options.SerializerSettings.Converters.Add(new StringEnumConverter
+    {
+        NamingStrategy = new CamelCaseNamingStrategy()
+    });
+});
 
 // SpaceShip services registration:
 builder.Services.AddTransient<IShipService, MockSpaceShipService>();

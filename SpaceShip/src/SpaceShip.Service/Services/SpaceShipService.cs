@@ -13,7 +13,7 @@ public class SpaceShipService : IShipService
     /// Создать новый корабль с ресурсами
     /// </summary>
     /// <returns>ID корабля</returns>
-    public SpaceShipDTO CreateShip() // <--- Тупо отдать ID или всю структуру?
+    public SpaceShipDTO CreateShip() 
     {
         return new SpaceShipDTO
         {

@@ -8,13 +8,13 @@
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Наименованеи ресурса
+        /// Наименование ресурса
         /// </summary>
-        public string ? Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Состояние ресурса (спит, норма, проблема)
         /// </summary>
-        public required string State { get; set; }
+        public required ResourceStateDTO State { get; set; }
 
     }

@@ -20,6 +20,6 @@ public class Resource
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)
     /// </summary>
-    public required string State {get; set;} = "спит";
+    public required ResourceState State {get; set;} = ResourceState.Sleep;
 
 }

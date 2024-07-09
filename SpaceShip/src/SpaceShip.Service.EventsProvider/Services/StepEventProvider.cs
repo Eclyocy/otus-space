@@ -5,10 +5,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 
+namespace SpaceShip.Service.Queue;
 
-namespace SpaceShip.Services.Queue;
-
-public class TroubleEventProvider : IHostedService
+public class StepEventProvider : IHostedService
 {
     private ILogger _logger;
     private IConnection _connection;
@@ -18,13 +17,14 @@ public class TroubleEventProvider : IHostedService
     private readonly string _user;
     private readonly string _password;
     private readonly string _queue;
-    public TroubleEventProvider(ILogger<TroubleEventProvider> logger, IConfiguration configuration)
+    
+    public StepEventProvider(ILogger<TroubleEventProvider> logger, IConfiguration configuration)
     {
         _logger = logger;
         _host = configuration["RABBITMQ_HOST"];
         _user = configuration["RABBITMQ_USER"];
         _password = configuration["RABBITMQ_PASSWORD"];
-        _queue = configuration["RABBITMQ_TROUBLES_QUEUE"];
+        _queue = configuration["RABBITMQ_STEP_QUEUE"];
 
         _logger.LogInformation("Trying to connect to RabbitMQ using AMPQ on host {_host}",_host);
 
@@ -32,18 +32,17 @@ public class TroubleEventProvider : IHostedService
                                     HostName = _host, 
                                     UserName = _user, 
                                     Password = _password};
-        try 
-        {
+        try{
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
+            _logger.LogInformation("Succesfully connectedd to host {_host}",_host);
         }
-        catch 
+        catch
         {
             _logger.LogError("Fail to connect RabbitMQ host {_host}",_host);
-        }
+        }                      
         
-        _logger.LogInformation("Succesfully connected to host {_host}",_host);
-
+        
     }
     
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -54,8 +53,9 @@ public class TroubleEventProvider : IHostedService
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            _logger.LogInformation("[TroubleProvider] Received new message: {message}",message);
+            _logger.LogInformation("[GameStepProvider] Received new message: {message}",message);
         };
+
         try
         {
             _channel.BasicConsume(queue: _queue,
@@ -64,13 +64,14 @@ public class TroubleEventProvider : IHostedService
         }
         catch
         {
-            _logger.LogError("[TroubleProvider] Error while trying to consume new message");
+            _logger.LogError("[GameStepProvider] Error while try to consume new message");
         }
+
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("[TroubleProvider] Provider finishing");
+        _logger.LogInformation("[GameStepProvider] Provider finishing");
         _channel.Close();
         _connection.Close();
         return Task.CompletedTask;

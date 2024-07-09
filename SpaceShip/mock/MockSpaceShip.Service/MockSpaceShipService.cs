@@ -1,10 +1,7 @@
-using Microsoft.Extensions.Logging;
-using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Contracts;
-
+using SpaceShip.Service.Interfaces;
 
 namespace MockSpaceShip.Service;
-
 
 public class MockSpaceShipService : IShipService
 {
@@ -29,12 +26,11 @@ public class MockSpaceShipService : IShipService
             Id = Id,
             Step = 0,
             Resources = [
-                new() {Id = Guid.NewGuid(),Name = "Engine",State = "Normal"},
-                new() {Id = Guid.NewGuid(),Name = "Body",State = "Normal"},
+                new() {Id = Guid.NewGuid(),Name = "Engine",State = ResourceStateDTO.Normal},
+                new() {Id = Guid.NewGuid(),Name = "Body",State = ResourceStateDTO.Normal},
             ]
         };
         return ship;
     }
 
 }
-
