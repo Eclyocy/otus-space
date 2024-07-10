@@ -11,15 +11,15 @@ public class SpaceShipMetricResponse
     /// <summary>
     /// Id корабля
     /// </summary>
-    public Guid Id {get;set;}
-    
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Номер хода
     /// </summary>
-    public int Step {get;set;}
+    public int Step { get; set; }
 
     /// <summary>
     /// Коллекция ресурсов корабля
     /// </summary>
-    public List<Resource>? Resources {get;set;}
+    public List<ResourceResponse>? Resources { get; set; }
 }

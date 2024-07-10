@@ -1,5 +1,8 @@
-
 namespace SpaceShip.Service.Contracts;
+
+/// <summary>
+/// Ресурс корабля
+/// </summary>
 public class ResourceDTO
 {
     /// <summary>
@@ -15,5 +18,5 @@ public class ResourceDTO
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)
     /// </summary>
-    public required ResourceStateDTO State { get; set; }
+    required public ResourceStateDTO State { get; set; }
 }

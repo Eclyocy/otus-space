@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,32 +9,32 @@ using Newtonsoft.Json.Serialization;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Queue;
 using SpaceShip.WebAPI.Mappers;
-using System;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
+
+#pragma warning disable SA1118 // ParameterMustNotSpanMultipleLines
 builder.Services.AddSwaggerGen(static options =>
     {
         options.SwaggerDoc(
             name: "v1",
-            info: new()
+            info: new ()
             {
                 Title = "Spaceship controller API",
                 Version = "v1",
-                Description = "Публичный API для работы c кораблем и его ресурсами"
-            }
-        );
+                Description = "Публичный API для работы c кораблем и его ресурсами",
+            });
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
     });
+#pragma warning restore SA1118 // ParameterMustNotSpanMultipleLines
 
 builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 {
     options.SerializerSettings.Converters.Add(new StringEnumConverter
     {
-        NamingStrategy = new CamelCaseNamingStrategy()
+        NamingStrategy = new CamelCaseNamingStrategy(),
     });
 });
 
@@ -46,9 +48,8 @@ builder.Services.AddSingleton<IMapper>(
     new Mapper(new MapperConfiguration(
                     static cfg => cfg.AddProfile<SpaceShipMappingProfile>())));
 
-// RabbitMQ:
-// ToDo
-
+// RabbitMQ --> TODO
+//
 var app = builder.Build();
 
 app.UseSwagger();

@@ -22,9 +22,11 @@ services:
     build: SpaceShip
     ports:
     - 5051:5216
-    - 7071:7196
+    - 7071:7141
     environment:
-    - RABBITMQ_HOST=rabbitmq-otus
+    - ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_URLS=https://+:7141;http://+:5216
+    - RABBITMQ_HOST=rabbitmq
     - RABBITMQ_USER=space-ship
     - RABBITMQ_PASSWORD=Ss1234
     - RABBITMQ_TROUBLES_QUEUE=q_troubles

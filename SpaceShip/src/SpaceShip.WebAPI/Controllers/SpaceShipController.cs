@@ -1,9 +1,9 @@
+using System;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.WebAPI.Models;
-using System;
 
 namespace SpaceShip.WebAPI.Controllers;
 
@@ -12,7 +12,7 @@ namespace SpaceShip.WebAPI.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/v1/spaceships")]
-public class SpaceShipController:ControllerBase
+public class SpaceShipController : ControllerBase
 {
     #region private fields
     private readonly IShipService _service;
@@ -22,10 +22,10 @@ public class SpaceShipController:ControllerBase
     /// <summary>
     /// Конструктор, в качестве праметра передаем сервис для работы с сущностью корабля
     /// </summary>
-    /// <param name="service"></param>
-    /// <param name="mapper"></param>
+    /// <param name="service">Сервис работы с сущностью корабль</param>
+    /// <param name="mapper">Маппер ответа сервиса</param>
     #region constructor
-  public SpaceShipController(IShipService service, IMapper mapper)
+    public SpaceShipController(IShipService service, IMapper mapper)
     {
         _service = service;
         _mapper = mapper;
@@ -34,11 +34,10 @@ public class SpaceShipController:ControllerBase
     #endregion
 
     /// <summary>
-    /// Получение состояния корабля 
+    /// Получение состояния корабля
     /// </summary>
     /// <param name="id">ID корабля</param>
-    /// <returns></returns>
-
+    /// <returns>Метрики корабля</returns>
     [HttpGet("{id}")]
     [Produces("application/json")]
     [ProducesResponseType<SpaceShipMetricResponse>(StatusCodes.Status200OK)]
@@ -55,17 +54,16 @@ public class SpaceShipController:ControllerBase
     [HttpPost(Name = "Создать новый корабль")]
     [Produces("application/json")]
     [ProducesResponseType<SpaceShipCreateResponse>(StatusCodes.Status201Created)]
-    public IResult Create() 
+    public IResult Create()
     {
-        return Results.Created("api/v1/spaceship",_mapper.Map<SpaceShipCreateResponse>(_service.CreateShip()));
+        return Results.Created("api/v1/spaceship", _mapper.Map<SpaceShipCreateResponse>(_service.CreateShip()));
     }
 
     /// <summary>
     /// Обновить существующий корабль
     /// </summary>
     /// <param name="id">ID корабля</param>
-    /// <returns></returns>
-    
+    /// <returns>200</returns>
     [HttpPut("{id}")]
     [Produces("application/json")]
     [Obsolete]
@@ -75,8 +73,7 @@ public class SpaceShipController:ControllerBase
     /// Удалить корабль по id
     /// </summary>
     /// <param name="id">ID корабля</param>
-    /// <returns></returns>
-    
+    /// <returns>200</returns>
     [HttpDelete("{id}")]
     [Obsolete]
     public IResult Delete(Guid id) => Results.Ok();

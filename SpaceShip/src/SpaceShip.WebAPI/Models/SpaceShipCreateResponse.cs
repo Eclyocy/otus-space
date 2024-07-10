@@ -10,6 +10,5 @@ public class SpaceShipCreateResponse
     /// <summary>
     /// Id корабля
     /// </summary>
-    public Guid Id {get;set;}
-    
+    public Guid Id { get; set; }
 }

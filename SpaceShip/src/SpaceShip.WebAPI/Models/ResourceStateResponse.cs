@@ -3,15 +3,15 @@ namespace SpaceShip.WebAPI.Models;
 /// <summary>
 /// Возможные состояния ресурсов
 /// </summary>
-public enum ResourceState
+public enum ResourceStateResponse
 {
     /// <summary>
     /// Спящий режим, не потребляет другие ресурсы
     /// </summary>
     Sleep,
-    
+
     /// <summary>
-    /// Активен, норма
+    /// Активен, норма.
     /// </summary>
     Normal,
 

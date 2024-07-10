@@ -470,6 +470,8 @@ dotnet_diagnostic.SA1640.severity = none
 dotnet_diagnostic.SA1641.severity = none
 # ConstructorSummaryDocumentationMustBeginWithStandardText
 dotnet_diagnostic.SA1642.severity = none
+# DocumentationTextMustEndWithAPeriod
+dotnet_diagnostic.SA1629.severity = none
 
 # Asynchronous method names should end with Async
 dotnet_diagnostic.ASYNC0001.severity = silent
