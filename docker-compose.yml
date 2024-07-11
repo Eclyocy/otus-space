@@ -39,10 +39,9 @@ services:
     build: SpaceShip
     ports:
     - 5051:5216
-    - 7071:7141
     environment:
     - ASPNETCORE_ENVIRONMENT=Production
-    - ASPNETCORE_URLS=https://+:7141;http://+:5216
+    - ASPNETCORE_URLS=http://+:5216
     - RABBITMQ_HOST=rabbitmq
     - RABBITMQ_USER=space-ship
     - RABBITMQ_PASSWORD=Ss1234

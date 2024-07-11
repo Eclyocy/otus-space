@@ -1,6 +1,9 @@
-﻿using GameController.Services.Helpers;
-using GameController.Services.Interfaces;
+﻿using GameController.Services.Interfaces;
+using GameController.Services.Models.Ship;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RestSharp;
+using RestSharp.Serializers.NewtonsoftJson;
 
 namespace GameController.Services.Services
 {
@@ -13,6 +16,8 @@ namespace GameController.Services.Services
 
         private readonly ILogger<ShipService> _logger;
 
+        private readonly RestClient _restClient;
+
         #endregion
 
         #region constructor
@@ -24,6 +29,10 @@ namespace GameController.Services.Services
             ILogger<ShipService> logger)
         {
             _logger = logger;
+
+            _restClient = new RestClient(
+                "http://localhost:5051/api/v1/spaceships",
+                configureSerialization: cfg => cfg.UseNewtonsoftJson(new JsonSerializerSettings()));
         }
 
         #endregion
@@ -35,11 +44,29 @@ namespace GameController.Services.Services
         {
             _logger.LogInformation("Create space ship");
 
-            Guid shipId = await GuidGenerator.GenerateGuidAsync();
+            RestRequest request = new();
+            RestResponse<ShipDto> shipResponse = await _restClient.ExecutePostAsync<ShipDto>(request);
 
-            _logger.LogInformation("Created space ship with ID {shipId}", shipId);
+            if (!shipResponse.IsSuccessful)
+            {
+                _logger.LogError(
+                    "Unable to send request for space ship creation:\n{errorException}\n{errorMessage}",
+                    shipResponse.ErrorException,
+                    shipResponse.ErrorMessage);
 
-            return shipId;
+                throw new Exception("Unable to send request for space ship creation.");
+            }
+
+            if (shipResponse.Data == null)
+            {
+                _logger.LogError("Unable to retrieve ship model.");
+
+                throw new Exception("Unable to retrieve ship model.");
+            }
+
+            _logger.LogInformation("Created space ship with ID {shipId}", shipResponse.Data.Id);
+
+            return shipResponse.Data.Id;
         }
 
         #endregion
