@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Copy solution and projects files
 COPY *.sln .
+COPY ./src/SpaceShip.Domain/*.csproj ./src/SpaceShip.Domain/
 COPY ./src/SpaceShip.WebAPI/*.csproj ./src/SpaceShip.WebAPI/
 COPY ./src/SpaceShip.Service/*.csproj ./src/SpaceShip.Service/
 COPY ./src/SpaceShip.Service.EventsProvider/*.csproj ./src/SpaceShip.Service.EventsProvider/
