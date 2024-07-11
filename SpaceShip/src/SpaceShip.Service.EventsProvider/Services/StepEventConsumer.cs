@@ -10,7 +10,7 @@ namespace SpaceShip.Service.Queue;
 /// <summary>
 /// Провайдер для сообщения нового игрового дня (шага) от игрового контроллера
 /// </summary>
-public class StepEventProvider : IHostedService
+public class StepEventConsumer : IHostedService
 {
     private readonly ILogger _logger;
     private readonly IConnection _connection;
@@ -25,7 +25,7 @@ public class StepEventProvider : IHostedService
     /// </summary>
     /// <param name="logger">логер</param>
     /// <param name="configuration">конфигурация для доступа к переменным окружения</param>
-    public StepEventProvider(ILogger<TroubleEventProvider> logger, IConfiguration configuration)
+    public StepEventConsumer(ILogger<TroubleEventConsumer> logger, IConfiguration configuration)
     {
         _logger = logger;
         _host = configuration["RABBITMQ_HOST"];

@@ -40,8 +40,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 
 // SpaceShip services registration:
 builder.Services.AddTransient<IShipService, MockSpaceShipService>();
-builder.Services.AddHostedService<TroubleEventProvider>();
-builder.Services.AddHostedService<StepEventProvider>();
+builder.Services.AddHostedService<TroubleEventConsumer>();
+builder.Services.AddHostedService<StepEventConsumer>();
 
 // Automapper:
 builder.Services.AddSingleton<IMapper>(

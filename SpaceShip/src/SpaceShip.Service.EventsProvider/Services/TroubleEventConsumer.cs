@@ -10,7 +10,7 @@ namespace SpaceShip.Service.Queue;
 /// <summary>
 /// Сервис провайдер сообщений от генератора событий
 /// </summary>
-public class TroubleEventProvider : IHostedService
+public class TroubleEventConsumer : IHostedService
 {
     private readonly ILogger _logger;
     private readonly IConnection _connection;
@@ -26,7 +26,7 @@ public class TroubleEventProvider : IHostedService
     /// </summary>
     /// <param name="logger">логер</param>
     /// <param name="configuration">конфигурация для доступа к переменным окружения</param>
-    public TroubleEventProvider(ILogger<TroubleEventProvider> logger, IConfiguration configuration)
+    public TroubleEventConsumer(ILogger<TroubleEventConsumer> logger, IConfiguration configuration)
     {
         _logger = logger;
         _host = configuration["RABBITMQ_HOST"];
