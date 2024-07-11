@@ -16,6 +16,22 @@ services:
     - QUEUENAME_NEWDAY_GENERATOR=q_new_day_generator
     - QUEUENAME_NEWDAY_SHIP=q_new_day_ship
 
+  spaceship_webapi:
+    image: spaceship-webapi
+    container_name: spaceship_webapi_otus
+    build: SpaceShip
+    ports:
+    - 5051:5216
+    - 7071:7141
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_URLS=https://+:7141;http://+:5216
+    - RABBITMQ_HOST=rabbitmq
+    - RABBITMQ_USER=space-ship
+    - RABBITMQ_PASSWORD=Ss1234
+    - RABBITMQ_TROUBLES_QUEUE=q_troubles
+    - RABBITMQ_STEP_QUEUE=q_new_day_ship
+
   rabbitmq:
     container_name: rabbitmq_otus
     build: RabbitMQ
