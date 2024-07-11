@@ -1,7 +1,9 @@
 ﻿
 using DataLayer.Abstrations;
+using DataLayer.DTO;
 using DataLayer.EfCore;
-using Spaceship.DataLayer.EfClasses.State;
+using Spaceship.DataLayer.EfClasses;
+
 
 namespace DataLayer.Implementation
 {
@@ -14,9 +16,36 @@ namespace DataLayer.Implementation
             _context = context;
         }
 
-        public int Create(int id, ResourceState state, string name, int amount)
+        public bool FindById(int id)
         {
-            throw new NotImplementedException();
+            var resources = _context.Resources
+              .Where(resources => resources.Id == id);
+
+            if (resources == null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public ResourceDataDTO Create(int id)
+        {
+            var check = FindById(id);
+
+            if (!check)
+            {
+                var newResource = new Resource();
+                var newDTO = new ResourceDataDTO();
+
+                _context.Add(newResource);
+                _context.SaveChanges();
+
+                return newDTO;
+            }
+
+            throw new Exception("This resource is already in the database");
         }
     }
+    
 }

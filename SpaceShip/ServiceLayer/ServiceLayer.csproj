@@ -15,10 +15,4 @@
     <PackageReference Include="LinqKit" Version="1.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ResourceServices\Concrete\" />
-    <Folder Include="ResourceTypeServices\Concrete\" />
-    <Folder Include="SpaceShipServices\Concrete\" />
-  </ItemGroup>
-
 </Project>

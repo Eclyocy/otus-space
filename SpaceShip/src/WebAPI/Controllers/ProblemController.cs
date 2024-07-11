@@ -6,7 +6,7 @@ namespace WebAPI.Controllers
 {
     [ApiController]
     [Route("api/v1/spaceship")]
-    public class ProblemController
+    public class ProblemController : ControllerBase
     {
         private readonly IProblemService _iProblemService;
 

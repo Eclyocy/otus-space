@@ -22,10 +22,6 @@ namespace DataLayer.Implementation
 
             if (problem == null) 
             {
-                var newProblem = new Problem() { Name = name };
-
-                _context.Add(newProblem);
-                _context.SaveChanges();
                 return true;
             }
 
@@ -43,6 +39,7 @@ namespace DataLayer.Implementation
 
                 _context.Add(newProblem);
                 _context.SaveChanges();
+
                 return newDTO;
             }
 

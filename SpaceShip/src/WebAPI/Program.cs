@@ -9,7 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ServiceLayer.ProblemServices;
 using ServiceLayer.ProblemServices.Concrete;
-using SpaceShip.Service;
+using ServiceLayer.ResourceServices.Concrete;
+using ServiceLayer.ResourceTypeServices;
+using ServiceLayer.ResourceTypeServices.Concrete;
+using ServiceLayer.SpaceshipServices;
+using ServiceLayer.SpaceshipServices.Concrete;
+using System.ComponentModel.Design;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,8 +30,13 @@ builder.Services
     .AddTransient<IProblemRepository, ProblemRepository>()
     .AddTransient<IResourceRepository, ResourceRepository>()
     .AddTransient<IResourceTypeRepository, ResourceTypeRepository>()
-    .AddTransient<ISpaceshipRepository, SpaceRepository>()
-    .AddTransient<IProblemService, ProblemService>();
+    .AddTransient<ISpaceshipRepository, SpaceshipRepository>()
+    .AddTransient<IProblemService, ProblemService>()
+    .AddTransient<ServiceLayer.ResourceServices.IResourceService, ResourceService>()
+    .AddTransient<IResourceTypeService, ResourceTypeService>()
+    .AddTransient<ISpaceshipService, SpaceshipService>();
+    
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

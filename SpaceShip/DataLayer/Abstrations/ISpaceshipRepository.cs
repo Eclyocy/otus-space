@@ -1,10 +1,12 @@
 ﻿
-using Spaceship.DataLayer.EfClasses.State;
+using Spaceship.DataLayer.EfClasses;
+
 
 namespace DataLayer.Abstrations
 {
     public interface ISpaceshipRepository
     {
-        public int Create(int id, SpaceshipState state, string name, int thisDay);
+        public SpaceshipDataDTO Create(Guid id);
+        public bool FindById(Guid id);
     }
 }

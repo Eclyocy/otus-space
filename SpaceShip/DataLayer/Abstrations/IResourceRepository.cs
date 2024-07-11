@@ -1,11 +1,10 @@
-﻿
-
-using Spaceship.DataLayer.EfClasses.State;
+﻿using Spaceship.DataLayer.EfClasses;
 
 namespace DataLayer.Abstrations
 {
     public interface IResourceRepository
     {
-        public int Create(int id, ResourceState state, string name,int amount);
+        public ResourceDataDTO Create(int id);
+        public bool FindById(int id);
     }
 }
