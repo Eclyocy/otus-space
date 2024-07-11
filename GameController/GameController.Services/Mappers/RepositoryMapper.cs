@@ -1,23 +1,24 @@
 ﻿using AutoMapper;
 using GameController.Database.Models;
 using GameController.Services.Models.Session;
+using GameController.Services.Models.User;
 
 namespace GameController.Services.Mappers
 {
     /// <summary>
-    /// Mappers for session models.
+    /// Mappings for RepositoryModels.
     /// </summary>
-    public class SessionMapper : Profile
+    public class RepositoryMapper : Profile
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public SessionMapper()
+        public RepositoryMapper()
         {
-            // Service models -> Database models
-            CreateMap<CreateSessionDto, Session>();
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
 
-            // Database models -> Service models
+            CreateMap<User, UserDto>();
             CreateMap<Session, SessionDto>()
                 .ForMember(x => x.SessionId, opt => opt.MapFrom(x => x.Id));
         }

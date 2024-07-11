@@ -10,7 +10,7 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Create a game session.
         /// </summary>
-        SessionDto CreateUserSession(CreateSessionDto createSessionDto);
+        SessionDto CreateUserSession(Guid userId, CreateSessionDto createSessionDto);
 
         /// <summary>
         /// Get list of game sessions of user <paramref name="userId"/>.

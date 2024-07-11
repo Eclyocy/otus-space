@@ -23,7 +23,12 @@
         "RABBITMQ_VIRTUALHOST": "/",
         "EXCHANGENAME_NEWDAY": "x_new_day",
         "QUEUENAME_NEWDAY_GENERATOR": "q_new_day_generator_local",
-        "QUEUENAME_NEWDAY_SHIP": "q_new_day_ship_local"
+        "QUEUENAME_NEWDAY_SHIP": "q_new_day_ship_local",
+        "DATABASE_HOSTNAME": "localhost",
+        "DATABASE_PORT": "5050",
+        "DATABASE_NAME": "game_controller",
+        "DATABASE_USER": "postgres",
+        "DATABASE_PASSWORD": "pg_pass"
       }
     },
     "IIS Express": {

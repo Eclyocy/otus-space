@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace GameController.Database
 {
     /// <summary>
-    /// Extensions for <see cref="IServiceCollection"/> for services.
+    /// Extensions for <see cref="IServiceCollection"/> for database.
     /// </summary>
     public static class ServiceCollectionExtensions
     {
@@ -17,8 +17,10 @@ namespace GameController.Database
         public static IServiceCollection ConfigureDatabase(
             this IServiceCollection services)
         {
-            services.AddTransient<ISessionRepository, SessionRepository>();
+            services.AddDbContext<DatabaseContext>();
+
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISessionRepository, SessionRepository>();
 
             return services;
         }

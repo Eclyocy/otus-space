@@ -6,32 +6,16 @@ namespace GameController.Database.Repositories
     /// <summary>
     /// User repository.
     /// </summary>
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        #region public methods
+        #region constructor
 
-        /// <inheritdoc/>
-        public User Create(User entity)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public UserRepository(DatabaseContext databaseContext)
+            : base(databaseContext)
         {
-            return new();
-        }
-
-        /// <inheritdoc/>
-        public User? Get(Guid id)
-        {
-            return new();
-        }
-
-        /// <inheritdoc/>
-        public User Update(User entity)
-        {
-            return new();
-        }
-
-        /// <inheritdoc/>
-        public bool Delete(Guid id)
-        {
-            return true;
         }
 
         #endregion
