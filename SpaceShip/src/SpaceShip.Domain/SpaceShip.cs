@@ -1,9 +1,7 @@
-﻿using System.Diagnostics;
-
-namespace SpaceShip.Domain;
+﻿namespace SpaceShip.Domain;
 
 /// <summary>
-/// Класс описывающий сущность корабля
+/// Класс, описывающий сущность корабля
 /// </summary>
 public class SpaceShip
 {

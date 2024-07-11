@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -45,8 +45,9 @@ builder.Services.AddHostedService<StepEventConsumer>();
 
 // Automapper:
 builder.Services.AddSingleton<IMapper>(
-    new Mapper(new MapperConfiguration(
-                    static cfg => cfg.AddProfile<SpaceShipMappingProfile>())));
+    new Mapper(
+        new MapperConfiguration(
+            static cfg => cfg.AddProfile<SpaceShipMappingProfile>())));
 
 // RabbitMQ --> TODO
 //

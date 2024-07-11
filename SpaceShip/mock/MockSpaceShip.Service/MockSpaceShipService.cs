@@ -1,10 +1,10 @@
-using SpaceShip.Service.Contracts;
+﻿using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
 namespace MockSpaceShip.Service;
 
 /// <summary>
-/// Заглушка сервиса создания корабля, для отлдаки без БД
+/// Заглушка сервиса создания корабля, для отладки без БД
 /// </summary>
 public class MockSpaceShipService : IShipService
 {
@@ -41,12 +41,11 @@ public class MockSpaceShipService : IShipService
             new () { Id = Guid.NewGuid(), Name = "Body", State = ResourceStateDTO.Normal }
         };
 
-        SpaceShipDTO ship = new SpaceShipDTO
+        return new SpaceShipDTO
         {
             Id = id,
             Step = 0,
             Resources = value
         };
-        return ship;
     }
 }

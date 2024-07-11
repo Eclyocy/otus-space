@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace SpaceShip.WebAPI.Models;
 
@@ -13,7 +13,7 @@ public class ResourceResponse
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Наименованеи ресурса.
+    /// Наименование ресурса.
     /// </summary>
     public string? Name { get; set; }
 
