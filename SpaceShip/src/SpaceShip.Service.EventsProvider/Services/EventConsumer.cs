@@ -35,7 +35,7 @@ public abstract class EventConsumer : IHostedService
         _user = configuration["RABBITMQ_USER"];
         _password = configuration["RABBITMQ_PASSWORD"];
 
-        _logger.LogInformation("Trying to connect to RabbitMQ using AMPQ on host {_host}", _host);
+        _logger.LogInformation("Trying to connect to RabbitMQ using AMQP on host {_host}", _host);
 
         var factory = new ConnectionFactory
         {
