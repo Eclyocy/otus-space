@@ -15,6 +15,23 @@ services:
     - EXCHANGENAME_NEWDAY=x_new_day
     - QUEUENAME_NEWDAY_GENERATOR=q_new_day_generator
     - QUEUENAME_NEWDAY_SHIP=q_new_day_ship
+    - DATABASE_HOSTNAME=game_controller_db
+    - DATABASE_PORT=5432
+    - DATABASE_NAME=game_controller
+    - DATABASE_USER=postgres
+    - DATABASE_PASSWORD=pg_data
+
+  game_controller_db:
+    container_name: game_controller_db_otus
+    image: postgres
+    ports:
+    - 5050:5432
+    environment:
+    - POSTGRES_DB=game_controller
+    - POSTGRES_PASSWORD=pg_pass
+    - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+    - game_controller_otus_pg_data:/var/lib/postgresql/data/pgdata
 
   rabbitmq:
     container_name: rabbitmq_otus
@@ -28,3 +45,4 @@ services:
 
 volumes:
   rabbitmq_otus_data:
+  game_controller_otus_pg_data:
