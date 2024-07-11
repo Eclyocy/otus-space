@@ -15,17 +15,11 @@ namespace GameController.Services.Mappers
         public UserMapper()
         {
             // Service models -> Database models
-            CreateMap<CreateUserDto, User>()
-                .ForMember(x => x.NameUser, opt => opt.MapFrom(x => x.Name))
-                .ForMember(x => x.HashPass, opt => opt.MapFrom(x => x.PasswordHash));
-
-            CreateMap<UpdateUserDto, User>()
-                .ForMember(x => x.NameUser, opt => opt.MapFrom(x => x.Name))
-                .ForMember(x => x.HashPass, opt => opt.MapFrom(x => x.PasswordHash));
+            CreateMap<CreateUserDto, User>();
+            CreateMap<UpdateUserDto, User>();
 
             // Database models -> Service models
-            CreateMap<User, UserDto>()
-                .ForMember(x => x.Name, opt => opt.MapFrom(x => x.NameUser));
+            CreateMap<User, UserDto>();
         }
     }
 }

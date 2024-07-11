@@ -9,16 +9,16 @@ namespace GameController.Database.Models
     public class User : BaseEntity
     {
         /// <summary>
-        /// User NameUser.
+        /// User name.
         /// </summary>
-        [Column("nameuser")]
-        public required string NameUser { get; set; }
+        [Column("name")]
+        public required string Name { get; set; }
 
         /// <summary>
-        /// User HashPass.
+        /// User password hash.
         /// </summary>
-        [Column("hashpass")]
-        public required string HashPass { get; set; }
+        [Column("password_hash")]
+        public required string PasswordHash { get; set; }
 
         /// <summary>
         /// User Sessions.

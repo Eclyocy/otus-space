@@ -28,7 +28,7 @@
         "DATABASE_PORT": "5050",
         "DATABASE_NAME": "game_controller",
         "DATABASE_USER": "postgres",
-        "DATABASE_PASSWORD": "pg_data"
+        "DATABASE_PASSWORD": "pg_pass"
       }
     },
     "IIS Express": {

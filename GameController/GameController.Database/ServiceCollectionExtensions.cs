@@ -1,6 +1,5 @@
 ﻿using GameController.Database.Interfaces;
 using GameController.Database.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GameController.Database
@@ -18,8 +17,7 @@ namespace GameController.Database
         public static IServiceCollection ConfigureDatabase(
             this IServiceCollection services)
         {
-            services.AddDbContext<DatabaseContext>(options =>
-                options.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=postgresmaster;Database=postgres;"));
+            services.AddDbContext<DatabaseContext>();
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ISessionRepository, SessionRepository>();

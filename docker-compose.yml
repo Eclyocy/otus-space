@@ -19,7 +19,7 @@ services:
     - DATABASE_PORT=5432
     - DATABASE_NAME=game_controller
     - DATABASE_USER=postgres
-    - DATABASE_PASSWORD=pg_data
+    - DATABASE_PASSWORD=pg_pass
 
   game_controller_db:
     container_name: game_controller_db_otus
