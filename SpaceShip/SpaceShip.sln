@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mock", "mock", "{9D32744A-7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockSpaceShip.Service", "mock\MockSpaceShip.Service\MockSpaceShip.Service.csproj", "{B42CB13A-4C68-417B-930E-BFE1B2ED432A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceShip.Service.EventsProvider", "src\SpaceShip.Service.EventsProvider\SpaceShip.Service.EventsProvider.csproj", "{ACF54AA2-74AD-4010-A8A1-D21512F47A93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceShip.Service.EventsConsumer", "src\SpaceShip.Service.EventsProvider\SpaceShip.Service.EventsConsumer.csproj", "{ACF54AA2-74AD-4010-A8A1-D21512F47A93}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceShip.Service", "src\SpaceShip.Service\SpaceShip.Service.csproj", "{DB649135-A9FF-499F-AF5C-00B791CE40B5}"
 EndProject

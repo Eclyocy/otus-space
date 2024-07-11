@@ -25,7 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\mock\MockSpaceShip.Service\MockSpaceShip.Service.csproj" />
     <ProjectReference Include="..\SpaceShip.Service\SpaceShip.Service.csproj" />
-    <ProjectReference Include="..\SpaceShip.Service.EventsProvider\SpaceShip.Service.EventsProvider.csproj" />
+    <ProjectReference Include="..\SpaceShip.Service.EventsProvider\SpaceShip.Service.EventsConsumer.csproj" />
   </ItemGroup>
 
 </Project>
