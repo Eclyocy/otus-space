@@ -27,9 +27,13 @@ namespace GameController.Services
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
 
-            services.Configure<RabbitMQSettings>(x => configuration.GetSection("RabbitMQ").Bind(x));
+            IConfigurationSection rabbitMQSection = configuration.GetSection("RabbitMQ");
+            services.Configure<RabbitMQSettings>(rabbitMQSection.Bind);
+            SetupRabbitMQ(
+                rabbitMQSection.Get<RabbitMQSettings>() ??
+                throw new Exception("RabbitMQ settings are required"));
 
-            SetupRabbitMQ();
+            services.Configure<SpaceShipApiSettings>(x => configuration.GetSection("SpaceShipApi").Bind(x));
 
             services.AddTransient<IGeneratorService, GeneratorService>();
             services.AddTransient<ISessionService, SessionService>();
@@ -47,10 +51,8 @@ namespace GameController.Services
         /// <summary>
         /// Set up 'new day' events fanout exchange with two queues.
         /// </summary>
-        private static void SetupRabbitMQ()
+        private static void SetupRabbitMQ(RabbitMQSettings rabbitMQSettings)
         {
-            RabbitMQSettings rabbitMQSettings = new();
-
             ConnectionFactory connectionFactory = new()
             {
                 HostName = rabbitMQSettings.Hostname,

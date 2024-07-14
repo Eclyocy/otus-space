@@ -1,25 +1,30 @@
 services:
   game_controller_api:
     container_name: game_controller_api_otus
+    depends_on:
+      rabbitmq:
+        condition: service_started
     build: GameController
     ports:
     - 7070:7196
     environment:
     - ASPNETCORE_ENVIRONMENT=Production
     - ASPNETCORE_URLS=https://+:7196
-    - RABBITMQ_HOSTNAME=rabbitmq
-    - RABBITMQ_PORT=5672
-    - RABBITMQ_USERNAME=game-controller
-    - RABBITMQ_PASSWORD=Gc1234
-    - RABBITMQ_VIRTUALHOST=/
-    - EXCHANGENAME_NEWDAY=x_new_day
-    - QUEUENAME_NEWDAY_GENERATOR=q_new_day_generator
-    - QUEUENAME_NEWDAY_SHIP=q_new_day_ship
+    - RABBITMQ__HOSTNAME=rabbitmq
+    - RABBITMQ__PORT=5672
+    - RABBITMQ:USERNAME=game-controller
+    - RABBITMQ__PASSWORD=Gc1234
+    - RABBITMQ__VIRTUALHOST=/
+    - RABBITMQ__NEWDAYEXCHANGENAME=x_new_day
+    - RABBITMQ__NEWDAYQUEUENAMEGENERATOR=q_new_day_generator1
+    - RABBITMQ__NEWDAYQUEUENAMESHIP=q_new_day_ship
     - DATABASE_HOSTNAME=game_controller_db
     - DATABASE_PORT=5432
     - DATABASE_NAME=game_controller
     - DATABASE_USER=postgres
     - DATABASE_PASSWORD=pg_pass
+    - SPACESHIPAPI__HOSTNAME=spaceship_webapi
+    - SPACESHIPAPI__PORT=5216
 
   game_controller_db:
     container_name: game_controller_db_otus
@@ -36,6 +41,8 @@ services:
   spaceship_webapi:
     image: spaceship-webapi
     container_name: spaceship_webapi_otus
+    depends_on:
+    - game_controller_api
     build: SpaceShip
     ports:
     - 5051:5216

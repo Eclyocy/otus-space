@@ -17,8 +17,11 @@ namespace GameController.Services.Services
         #region private fields
 
         private readonly ISessionRepository _sessionRepository;
+        private readonly IUserRepository _userRepository;
 
+        private readonly IGeneratorService _generatorService;
         private readonly IRabbitMQService _rabbitmqService;
+        private readonly IShipService _shipService;
 
         private readonly ILogger<SessionService> _logger;
 
@@ -33,13 +36,19 @@ namespace GameController.Services.Services
         /// </summary>
         public SessionService(
             ISessionRepository sessionRepository,
+            IUserRepository userRepository,
+            IGeneratorService generatorService,
             IRabbitMQService rabbitMQService,
+            IShipService shipService,
             ILogger<SessionService> logger,
             IMapper mapper)
         {
             _sessionRepository = sessionRepository;
+            _userRepository = userRepository;
 
+            _generatorService = generatorService;
             _rabbitmqService = rabbitMQService;
+            _shipService = shipService;
 
             _logger = logger;
             _mapper = mapper;
@@ -50,9 +59,18 @@ namespace GameController.Services.Services
         #region public methods
 
         /// <inheritdoc/>
-        public SessionDto CreateUserSession(Guid userId, CreateSessionDto createSessionDto)
+        public async Task<SessionDto> CreateUserSessionAsync(Guid userId)
         {
-            _logger.LogInformation("Create session via request {createSessionDto}", createSessionDto);
+            _logger.LogInformation("Create session for user {userId}", userId);
+
+            if (_userRepository.Get(userId) == null)
+            {
+                _logger.LogError("User {userId} not found.", userId);
+
+                throw new NotFoundException($"User {userId} not found.");
+            }
+
+            CreateSessionDto createSessionDto = await CreateSessionRequestAsync();
 
             Session sessionRequest = _mapper.Map<Session>(createSessionDto);
             sessionRequest.UserId = userId;
@@ -115,6 +133,24 @@ namespace GameController.Services.Services
             NewDayMessage newDayMessage = _mapper.Map<NewDayMessage>(sessionDto);
 
             _rabbitmqService.SendNewDayMessage(newDayMessage);
+        }
+
+        #endregion
+
+        #region private methods
+
+        private async Task<CreateSessionDto> CreateSessionRequestAsync()
+        {
+            Task<Guid> shipTask = _shipService.CreateShipAsync();
+            Task<Guid> generatorTask = _generatorService.CreateGeneratorAsync();
+
+            await Task.WhenAll(shipTask, generatorTask);
+
+            return new()
+            {
+                ShipId = shipTask.Result,
+                GeneratorId = generatorTask.Result
+            };
         }
 
         #endregion

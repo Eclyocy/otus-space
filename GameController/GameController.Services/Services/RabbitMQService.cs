@@ -29,11 +29,11 @@ namespace GameController.Services.Services
         /// </summary>
         public RabbitMQService(
             ILogger<RabbitMQService> logger,
-            IOptions<RabbitMQSettings> configuration)
+            IOptions<RabbitMQSettings> options)
         {
             _logger = logger;
 
-            _rabbitMQSettings = configuration.Value;
+            _rabbitMQSettings = options.Value;
         }
 
         #endregion

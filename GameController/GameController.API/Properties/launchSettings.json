@@ -28,7 +28,9 @@
         "DATABASE_PORT": "5050",
         "DATABASE_NAME": "game_controller",
         "DATABASE_USER": "postgres",
-        "DATABASE_PASSWORD": "pg_pass"
+        "DATABASE_PASSWORD": "pg_pass",
+        "SPACESHIPAPI__HOSTNAME": "localhost",
+        "SPACESHIPAPI__PORT": "5051"
       }
     },
     "IIS Express": {

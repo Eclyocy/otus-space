@@ -17,8 +17,6 @@ namespace GameController.API.Controllers
         #region private fields
 
         private readonly ISessionService _sessionService;
-        private readonly IShipService _shipService;
-        private readonly IGeneratorService _generatorService;
 
         private readonly IMapper _mapper;
 
@@ -31,13 +29,10 @@ namespace GameController.API.Controllers
         /// </summary>
         public SessionController(
             ISessionService sessionService,
-            IShipService shipService,
-            IGeneratorService generatorService,
             IMapper mapper)
         {
             _sessionService = sessionService;
-            _shipService = shipService;
-            _generatorService = generatorService;
+
             _mapper = mapper;
         }
 
@@ -66,10 +61,7 @@ namespace GameController.API.Controllers
         [SwaggerOperation("Создание пользовательской игровой сессии")]
         public async Task<SessionResponse> CreateUserSessionAsync(Guid userId)
         {
-            CreateSessionRequest sessionRequest = await CreateSessionRequestAsync(userId);
-
-            CreateSessionDto createSessionDto = _mapper.Map<CreateSessionDto>(sessionRequest);
-            SessionDto sessionDto = _sessionService.CreateUserSession(userId, createSessionDto);
+            SessionDto sessionDto = await _sessionService.CreateUserSessionAsync(userId);
 
             return _mapper.Map<SessionResponse>(sessionDto);
         }
@@ -95,25 +87,6 @@ namespace GameController.API.Controllers
         public void MakeMove(Guid userId, Guid sessionId)
         {
             _sessionService.MakeMove(userId, sessionId);
-        }
-
-        #endregion
-
-        #region private methods
-
-        private async Task<CreateSessionRequest> CreateSessionRequestAsync(Guid userId)
-        {
-            Task<Guid> shipTask = _shipService.CreateShipAsync();
-            Task<Guid> generatorTask = _generatorService.CreateGeneratorAsync();
-
-            await Task.WhenAll(shipTask, generatorTask);
-
-            return new()
-            {
-                UserId = userId,
-                ShipId = shipTask.Result,
-                GeneratorId = generatorTask.Result
-            };
         }
 
         #endregion

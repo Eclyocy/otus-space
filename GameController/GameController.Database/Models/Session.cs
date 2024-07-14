@@ -11,24 +11,25 @@ namespace GameController.Database.Models
         /// <summary>
         /// User ID.
         /// </summary>
-        [Column("userid")]
+        [Column("user_id")]
         public Guid UserId { get; set; }
 
         /// <summary>
         /// ShipId.
         /// </summary>
-        [Column("shipid")]
+        [Column("ship_id")]
         public Guid ShipId { get; set; }
 
         /// <summary>
         /// GeneratorId.
         /// </summary>
-        [Column("generatorid")]
+        [Column("generator_id")]
         public Guid GeneratorId { get; set; }
 
         /// <summary>
         /// User.
         /// </summary>
+        [ForeignKey("UserId")]
         public User User { get; set; }
     }
 }

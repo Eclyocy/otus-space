@@ -1,6 +1,8 @@
 ﻿using GameController.Services.Interfaces;
 using GameController.Services.Models.Ship;
+using GameController.Services.Settings;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Serializers.NewtonsoftJson;
@@ -26,12 +28,13 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public ShipService(
-            ILogger<ShipService> logger)
+            ILogger<ShipService> logger,
+            IOptions<SpaceShipApiSettings> options)
         {
             _logger = logger;
 
             _restClient = new RestClient(
-                "http://localhost:5051/api/v1/spaceships",
+                $"http://{options.Value.Hostname}:{options.Value.Port}/api/v1/spaceships",
                 configureSerialization: cfg => cfg.UseNewtonsoftJson(new JsonSerializerSettings()));
         }
 
