@@ -14,16 +14,13 @@ public class SpaceShipService : IShipService
 
     private readonly IMapper _mapper;
 
-    private readonly IStepChange _stepProvider;
-
     /// <summary>
     /// Конструктор.
     /// </summary>
-    public SpaceShipService(IShipRepository repository, IStepChange stepProvider, IMapper mapper)
+    public SpaceShipService(IShipRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
-        _stepProvider = stepProvider;
     }
 
     /// <summary>
@@ -51,7 +48,7 @@ public class SpaceShipService : IShipService
     /// <param name="id">ID корабля</param>
     public void ProcessNewDay(Guid id)
     {
-        _stepProvider.NextDay(id);
+        _repository.NextDay(id);
         return;
     }
 }

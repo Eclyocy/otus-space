@@ -19,4 +19,11 @@ public interface IShipRepository
     /// <param name="id">Id корабля</param>
     /// <returns>DTO метрик корабля</returns>
     public SpaceShipModelDto FindById(Guid id);
+
+    /// <summary>
+    /// Метод переключающий шаг: тут списываются ресурсы и меняется номер текущего шага
+    /// </summary>
+    /// <param name="id">Id крабля</param>
+    /// <returns>DTO модели с метриками корабля</returns>
+    public SpaceShipModelDto NextDay(Guid id);
 }
