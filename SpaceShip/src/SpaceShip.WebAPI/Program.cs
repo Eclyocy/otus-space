@@ -44,6 +44,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 // SpaceShip services registration:
 builder.Services.AddTransient<IShipService, SpaceShipService>();
 builder.Services.AddSingleton<IShipRepository, MockSpaceShipRepository>();
+builder.Services.AddSingleton<IStepChange, MockSpaceShipRepository>();
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
 

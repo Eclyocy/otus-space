@@ -1,7 +1,5 @@
-
 using AutoMapper;
 using SpaceShip.Domain.Interfaces;
-using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
@@ -16,13 +14,16 @@ public class SpaceShipService : IShipService
 
     private readonly IMapper _mapper;
 
+    private readonly IStepChange _stepProvider;
+
     /// <summary>
     /// Конструктор.
     /// </summary>
-    public SpaceShipService(IShipRepository repository, IMapper mapper)
+    public SpaceShipService(IShipRepository repository, IStepChange stepProvider, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
+        _stepProvider = stepProvider;
     }
 
     /// <summary>
@@ -44,8 +45,13 @@ public class SpaceShipService : IShipService
         return _mapper.Map<SpaceShipDTO>(_repository.FindById(id));
     }
 
+    /// <summary>
+    /// Применить новый игровой день (новый шаг)
+    /// </summary>
+    /// <param name="id">ID корабля</param>
     public void ProcessNewDay(Guid id)
     {
+        _stepProvider.NextDay(id);
         return;
     }
 }

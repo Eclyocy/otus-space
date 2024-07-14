@@ -7,7 +7,7 @@ namespace MockSpaceShip.Repository;
 /// <summary>
 /// Заглушка репозитори корабля для работы без БД
 /// </summary>
-public class MockSpaceShipRepository : IShipRepository
+public class MockSpaceShipRepository : IShipRepository, IStepChange
 {
     /// <summary>
     /// Словарь для хранения кораблей

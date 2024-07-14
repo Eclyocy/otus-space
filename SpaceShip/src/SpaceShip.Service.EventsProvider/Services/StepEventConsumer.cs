@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SpaceShip.Service.Contracts;
 using SpaceShip.Service.EventsConsumer.Contracts;
 using SpaceShip.Service.Interfaces;
 
