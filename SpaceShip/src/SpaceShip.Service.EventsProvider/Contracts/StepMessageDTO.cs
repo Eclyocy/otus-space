@@ -2,8 +2,8 @@
 {
     public class StepMessageDTO
     {
-        public GeneratorDTO Generator { get; set; }
+        public Guid GeneratorId { get; set; }
 
-        public ShipDTO Ship { get; set; }
+        public Guid ShipId { get; set; }
     }
 }

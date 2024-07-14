@@ -57,6 +57,16 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
+        public List<UserDto> GetUsers()
+        {
+            _logger.LogInformation("Get all users");
+
+            List<User> users = _userRepository.GetAll();
+
+            return _mapper.Map<List<UserDto>>(users);
+        }
+
+        /// <inheritdoc/>
         public UserDto GetUser(Guid userId)
         {
             _logger.LogInformation("Get user by ID {userId}", userId);

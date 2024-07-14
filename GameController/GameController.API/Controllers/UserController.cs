@@ -53,6 +53,18 @@ namespace GameController.API.Controllers
         }
 
         /// <summary>
+        /// Get all users.
+        /// </summary>
+        [HttpGet]
+        [Route("")]
+        [SwaggerOperation("Получение информации обо всех пользователях")]
+        public List<UserResponse> GetUsers()
+        {
+            List<UserDto> userDtos = _userService.GetUsers();
+            return _mapper.Map<List<UserResponse>>(userDtos);
+        }
+
+        /// <summary>
         /// Get the user.
         /// </summary>
         [HttpGet]

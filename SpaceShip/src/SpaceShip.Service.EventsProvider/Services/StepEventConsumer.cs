@@ -34,6 +34,9 @@ public class StepEventConsumer : EventConsumer
             throw new Exception("Unable to parse step message.");
         }
 
-        _shipService.ProcessNewDay(stepMessage.Ship.Id);
+        Console.WriteLine(stepMessage);
+        Console.WriteLine(stepMessage.ShipId);
+
+        _shipService.ProcessNewDay(stepMessage.ShipId);
     }
 }

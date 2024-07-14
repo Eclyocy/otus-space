@@ -1,4 +1,6 @@
-﻿namespace GameController.Services.Models.Ship
+﻿using Newtonsoft.Json;
+
+namespace GameController.Services.Models.Ship
 {
     /// <summary>
     /// Model for space ship.
@@ -13,6 +15,7 @@
         /// <summary>
         /// Space ship current day.
         /// </summary>
+        [JsonProperty("step")]
         public int Day { get; set; }
 
         /// <summary>

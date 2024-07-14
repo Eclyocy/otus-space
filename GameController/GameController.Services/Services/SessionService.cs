@@ -131,7 +131,7 @@ namespace GameController.Services.Services
 
             SessionDto sessionDto = GetUserSession(userId, sessionId);
 
-            return await _shipService.GetShipAsync(sessionDto.SessionId);
+            return await _shipService.GetShipAsync(sessionDto.ShipId);
         }
 
         /// <inheritdoc/>

@@ -9,6 +9,8 @@ namespace MockSpaceShip.Repository;
 /// </summary>
 public class MockSpaceShipRepository : IShipRepository
 {
+    private readonly Guid hardcodedGuid = new Guid("9fd8ebd2-28c2-4839-aafc-4057b16970ed");
+
     /// <summary>
     /// Словарь для хранения кораблей
     /// Ключ - Id корабля
@@ -18,7 +20,10 @@ public class MockSpaceShipRepository : IShipRepository
     /// <summary>
     /// Конструктор <see cref="MockSpaceShipRepository"/> class.
     /// </summary>
-    public MockSpaceShipRepository() => _repository = new Dictionary<Guid, SpaceShipModelDto> { };
+    public MockSpaceShipRepository() => _repository = new Dictionary<Guid, SpaceShipModelDto>
+    {
+        { hardcodedGuid, CreateShip(hardcodedGuid) }
+    };
 
     /// <summary>
     /// Создание корабля (в минимальной конфигурации)
@@ -63,7 +68,7 @@ public class MockSpaceShipRepository : IShipRepository
         throw new KeyNotFoundException("Cannot find spaceship by given Id");
     }
 
-    private static SpaceShipModelDto CreateShip()
+    private static SpaceShipModelDto CreateShip(Guid? shipId = null)
     {
         List<ResourceModelDto> value = new List<ResourceModelDto>
         {
@@ -73,7 +78,7 @@ public class MockSpaceShipRepository : IShipRepository
 
         return new SpaceShipModelDto
         {
-            Id = Guid.NewGuid(),
+            Id = shipId ?? Guid.NewGuid(),
             Step = 0,
             Resources = value
         };

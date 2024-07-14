@@ -13,6 +13,11 @@ namespace GameController.Services.Interfaces
         UserDto CreateUser(CreateUserDto createUserDto);
 
         /// <summary>
+        /// Retrieve all users.
+        /// </summary>
+        List<UserDto> GetUsers();
+
+        /// <summary>
         /// Retrieve the user by <paramref name="userId"/>.
         /// </summary>
         UserDto GetUser(Guid userId);

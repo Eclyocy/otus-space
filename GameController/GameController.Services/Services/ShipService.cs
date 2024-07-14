@@ -77,10 +77,7 @@ namespace GameController.Services.Services
         {
             _logger.LogInformation("Get space ship {shipId}", shipId);
 
-            RestRequest request = new()
-            {
-                Resource = "/{shipId}"
-            };
+            RestRequest request = new("/{shipId}");
             request.AddUrlSegment("shipId", shipId);
             RestResponse<ShipDto> shipResponse = await _restClient.ExecuteGetAsync<ShipDto>(request);
 

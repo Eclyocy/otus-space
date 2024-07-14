@@ -49,6 +49,12 @@ namespace GameController.Database.Repositories
         }
 
         /// <inheritdoc/>
+        public virtual List<T> GetAll()
+        {
+            return EntitySet.ToList();
+        }
+
+        /// <inheritdoc/>
         public virtual T? Get(Guid id)
         {
             return EntitySet.Find(id);
