@@ -65,7 +65,7 @@ namespace GameController
         {
             services.ConfigureDatabase();
 
-            services.ConfigureApplicationServices();
+            services.ConfigureApplicationServices(Configuration);
 
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
