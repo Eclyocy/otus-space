@@ -1,9 +1,11 @@
+version: "2.1"
+
 services:
   game_controller_api:
     container_name: game_controller_api_otus
     depends_on:
       rabbitmq:
-        condition: service_started
+        condition: service_healthy
     build: GameController
     ports:
     - 7070:7196
@@ -64,6 +66,11 @@ services:
     - 5672:5672
     volumes:
     - rabbitmq_otus_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 volumes:
   rabbitmq_otus_data:
