@@ -3,7 +3,7 @@ namespace SpaceShip.Domain.DTO;
 /// <summary>
 /// Ресурс корабля
 /// </summary>
-public class ResourceDTO
+public class ResourceModelDto
 {
     /// <summary>
     /// Id ресурса
@@ -18,5 +18,5 @@ public class ResourceDTO
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)
     /// </summary>
-    required public ResourceStateDTO State { get; set; }
+    required public ResourceStateModelDto State { get; set; }
 }

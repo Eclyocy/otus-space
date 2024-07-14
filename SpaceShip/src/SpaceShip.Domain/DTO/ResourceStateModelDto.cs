@@ -6,7 +6,7 @@ namespace SpaceShip.Domain.DTO;
 /// - Normal - доступен, активен, потребляет ресурсы
 /// - Fail - неисправен, не потребляет ресурсы
 /// </summary>
-public enum ResourceStateDTO
+public enum ResourceStateModelDto
 {
     Sleep,
     Normal,

@@ -12,5 +12,5 @@ public interface IStepChange
     /// </summary>
     /// <param name="id">Id крабля</param>
     /// <returns>DTO модели с метриками корабля</returns>
-    public SpaceShipDto NextDay(Guid id);
+    public SpaceShipModelDto NextDay(Guid id);
 }
