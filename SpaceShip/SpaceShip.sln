@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceShip.Service", "src\Sp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceShip.Domain", "src\SpaceShip.Domain\SpaceShip.Domain.csproj", "{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockSpaceShip.Repository", "mock\MockSpaceShipRepository\MockSpaceShip.Repository.csproj", "{A8CF17C9-064B-4169-8044-DFDDEEAFD179}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8CF17C9-064B-4169-8044-DFDDEEAFD179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8CF17C9-064B-4169-8044-DFDDEEAFD179}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8CF17C9-064B-4169-8044-DFDDEEAFD179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8CF17C9-064B-4169-8044-DFDDEEAFD179}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +59,6 @@ Global
 		{ACF54AA2-74AD-4010-A8A1-D21512F47A93} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
 		{DB649135-A9FF-499F-AF5C-00B791CE40B5} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
 		{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
+		{A8CF17C9-064B-4169-8044-DFDDEEAFD179} = {9D32744A-73B1-4D9A-99D8-04FFF9F56129}
 	EndGlobalSection
 EndGlobal

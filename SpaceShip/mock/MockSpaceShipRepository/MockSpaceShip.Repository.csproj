@@ -13,4 +13,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SpaceShip.Domain\SpaceShip.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
