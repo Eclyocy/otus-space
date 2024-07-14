@@ -1,4 +1,5 @@
-﻿using SpaceShip.Service.Contracts;
+﻿using Microsoft.Extensions.Logging;
+using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
 namespace MockSpaceShip.Service;
@@ -8,11 +9,28 @@ namespace MockSpaceShip.Service;
 /// </summary>
 public class MockSpaceShipService : IShipService
 {
+    private readonly ILogger _logger;
+
+    private readonly List<SpaceShipDTO> _ships = new List<SpaceShipDTO>()
+    {
+        new SpaceShipDTO()
+        {
+            Id = Guid.NewGuid(),
+            Step = 3,
+            Resources = new List<ResourceDTO>()
+            {
+                new ResourceDTO() { Id = Guid.NewGuid(), Name = "Engine", State = ResourceStateDTO.Normal },
+                new ResourceDTO() { Id = Guid.NewGuid(), Name = "Body", State = ResourceStateDTO.Normal }
+            }
+        }
+    };
+
     /// <summary>
     /// Пустой конструктор
     /// </summary>
-    public MockSpaceShipService()
+    public MockSpaceShipService(ILogger<MockSpaceShipService> logger)
     {
+        _logger = logger;
     }
 
     /// <summary>
@@ -21,11 +39,17 @@ public class MockSpaceShipService : IShipService
     /// <returns>DTO метрик корабля</returns>
     public SpaceShipDTO CreateShip()
     {
-        return new SpaceShipDTO
+        _logger.LogInformation("Create ship");
+
+        SpaceShipDTO ship = new SpaceShipDTO()
         {
             Id = Guid.NewGuid(),
             Step = 0
         };
+
+        _ships.Add(ship);
+
+        return ship;
     }
 
     /// <summary>
@@ -33,19 +57,24 @@ public class MockSpaceShipService : IShipService
     /// </summary>
     /// <param name="id">Идентификатор корабля</param>
     /// <returns>DTO метрик корабля</returns>
-    public SpaceShipDTO Get(Guid id)
+    public SpaceShipDTO? Get(Guid id)
     {
-        List<ResourceDTO> value = new List<ResourceDTO>
-        {
-            new () { Id = Guid.NewGuid(), Name = "Engine", State = ResourceStateDTO.Normal },
-            new () { Id = Guid.NewGuid(), Name = "Body", State = ResourceStateDTO.Normal }
-        };
+        _logger.LogInformation("Get ship {shipId}", id);
 
-        return new SpaceShipDTO
+        return _ships.FirstOrDefault(x => x.Id == id);
+    }
+
+    public void ProcessNewDay(Guid id)
+    {
+        _logger.LogInformation("Process new day event for ship {shipId}", id);
+
+        SpaceShipDTO? ship = Get(id);
+
+        if (ship == null)
         {
-            Id = id,
-            Step = 0,
-            Resources = value
-        };
+            throw new Exception("No such ship");
+        }
+
+        ship.Step++;
     }
 }

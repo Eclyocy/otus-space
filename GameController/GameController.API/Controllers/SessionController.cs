@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using GameController.API.Models.Session;
+using GameController.Controllers.Models.Ship;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Session;
+using GameController.Services.Models.Ship;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -76,6 +78,18 @@ namespace GameController.API.Controllers
         {
             SessionDto sessionDto = _sessionService.GetUserSession(userId, sessionId);
             return _mapper.Map<SessionResponse>(sessionDto);
+        }
+
+        /// <summary>
+        /// Get the space ship of a particular user session.
+        /// </summary>
+        [HttpGet]
+        [Route("{sessionId}/ship")]
+        [SwaggerOperation("Получение информации о состоянии космического корабля в пользовательской игровой сессии")]
+        public async Task<ShipResponse> GetUserSessionShipAsync(Guid userId, Guid sessionId)
+        {
+            ShipDto shipDto = await _sessionService.GetUserSessionShipAsync(userId, sessionId);
+            return _mapper.Map<ShipResponse>(shipDto);
         }
 
         /// <summary>

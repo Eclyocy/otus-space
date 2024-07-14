@@ -5,6 +5,7 @@ using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Message;
 using GameController.Services.Models.Session;
+using GameController.Services.Models.Ship;
 using Microsoft.Extensions.Logging;
 
 namespace GameController.Services.Services
@@ -118,6 +119,19 @@ namespace GameController.Services.Services
             }
 
             return _mapper.Map<SessionDto>(session);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ShipDto> GetUserSessionShipAsync(Guid userId, Guid sessionId)
+        {
+            _logger.LogInformation(
+                "Get information on ship of session {sessionId} of user {userId}",
+                sessionId,
+                userId);
+
+            SessionDto sessionDto = GetUserSession(userId, sessionId);
+
+            return await _shipService.GetShipAsync(sessionDto.SessionId);
         }
 
         /// <inheritdoc/>

@@ -1,23 +1,23 @@
 ﻿namespace GameController.Services.Models.Ship
 {
     /// <summary>
-    /// Model for space ship.
+    /// Model for resource of <see cref="ShipDto"/>.
     /// </summary>
-    public class ShipDto
+    public class ShipResourceDto
     {
         /// <summary>
-        /// Space ship ID.
+        /// Resource ID.
         /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Space ship current day.
+        /// Resource name.
         /// </summary>
-        public int Day { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
-        /// Space ship resources.
+        /// Resource state.
         /// </summary>
-        public List<ShipResourceDto> Resources { get; set; }
+        public ShipResourceStateDto State { get; set; }
     }
 }

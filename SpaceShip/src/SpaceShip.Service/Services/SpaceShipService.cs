@@ -1,4 +1,4 @@
-using SpaceShip.Service.Contracts;
+﻿using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
 namespace SpaceShip.Service.Implementation;
@@ -33,12 +33,17 @@ public class SpaceShipService : IShipService
     /// </summary>
     /// <param name="id">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO Get(Guid id)
+    public SpaceShipDTO? Get(Guid id)
     {
         return new SpaceShipDTO
         {
             Id = Guid.NewGuid(),
             Step = 0
         }; // TODO Mapper
+    }
+
+    public void ProcessNewDay(Guid id)
+    {
+        return;
     }
 }

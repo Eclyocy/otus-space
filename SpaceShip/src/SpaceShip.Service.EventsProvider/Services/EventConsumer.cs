@@ -81,6 +81,8 @@ public abstract class EventConsumer : IHostedService
             var message = Encoding.UTF8.GetString(body);
 
             _logger.LogInformation("{consumer} received new message: {message}", ConsumerName, message);
+
+            HandleMessage(message);
         };
 
         try
@@ -105,4 +107,6 @@ public abstract class EventConsumer : IHostedService
 
         return Task.CompletedTask;
     }
+
+    protected abstract void HandleMessage(string message);
 }

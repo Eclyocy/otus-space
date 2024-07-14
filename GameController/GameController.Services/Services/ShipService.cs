@@ -72,6 +72,38 @@ namespace GameController.Services.Services
             return shipResponse.Data.Id;
         }
 
+        /// <inheritdoc/>
+        public async Task<ShipDto> GetShipAsync(Guid shipId)
+        {
+            _logger.LogInformation("Get space ship {shipId}", shipId);
+
+            RestRequest request = new()
+            {
+                Resource = "/{shipId}"
+            };
+            request.AddUrlSegment("shipId", shipId);
+            RestResponse<ShipDto> shipResponse = await _restClient.ExecuteGetAsync<ShipDto>(request);
+
+            if (!shipResponse.IsSuccessful)
+            {
+                _logger.LogError(
+                    "Unable to send request for space ship retrieval:\n{errorException}\n{errorMessage}",
+                    shipResponse.ErrorException,
+                    shipResponse.ErrorMessage);
+
+                throw new Exception("Unable to send request for space ship creation.");
+            }
+
+            if (shipResponse.Data == null)
+            {
+                _logger.LogError("Unable to retrieve ship model.");
+
+                throw new Exception("Unable to retrieve ship model.");
+            }
+
+            return shipResponse.Data;
+        }
+
         #endregion
     }
 }

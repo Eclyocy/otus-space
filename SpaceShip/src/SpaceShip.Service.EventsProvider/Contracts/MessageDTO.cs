@@ -1,4 +1,4 @@
-namespace SpaceShip.Service.Contracts;
+﻿namespace SpaceShip.Service.EventsConsumer.Contracts;
 
 /// <summary>
 /// Структура сообщения в очереди RabbitMQ

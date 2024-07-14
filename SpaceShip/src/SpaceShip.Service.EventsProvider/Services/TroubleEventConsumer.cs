@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace SpaceShip.Service.Queue;
@@ -15,5 +15,10 @@ public class TroubleEventConsumer : EventConsumer
     {
         QueueName = configuration["RABBITMQ_TROUBLES_QUEUE"];
         ConsumerName = nameof(TroubleEventConsumer);
+    }
+
+    protected override void HandleMessage(string message)
+    {
+        throw new NotImplementedException();
     }
 }
