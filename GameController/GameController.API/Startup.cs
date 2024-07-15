@@ -41,11 +41,8 @@ namespace GameController
         {
             application.UseExceptionHandler(x => x.UseCustomExceptionHandler());
 
-            if (true || environment.IsDevelopment())
-            {
-                application.UseSwagger();
-                application.UseSwaggerUI();
-            }
+            application.UseSwagger();
+            application.UseSwaggerUI();
 
             application.UseHttpsRedirection();
 
