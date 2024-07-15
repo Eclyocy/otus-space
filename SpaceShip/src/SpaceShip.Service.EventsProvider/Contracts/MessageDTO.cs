@@ -13,5 +13,5 @@ public class MessageDTO
     /// <summary>
     /// Тело сообщения
     /// </summary>
-    required public string Content { get; set; }
+    public required string Content { get; set; }
 }

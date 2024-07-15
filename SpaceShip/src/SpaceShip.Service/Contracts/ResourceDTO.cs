@@ -18,5 +18,5 @@ public class ResourceDTO
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)
     /// </summary>
-    required public ResourceStateDTO State { get; set; }
+    public required ResourceStateDTO State { get; set; }
 }
