@@ -1,5 +1,4 @@
-﻿// using SpaceShip.Domain.DTO;
-using SpaceShip.Domain.DTO;
+﻿using SpaceShip.Domain.DTO;
 using SpaceShip.Domain.Interfaces;
 
 namespace MockSpaceShip.Repository;
@@ -9,8 +8,6 @@ namespace MockSpaceShip.Repository;
 /// </summary>
 public class MockSpaceShipRepository : IShipRepository
 {
-    private readonly Guid hardcodedGuid = new Guid("9fd8ebd2-28c2-4839-aafc-4057b16970ed");
-
     /// <summary>
     /// Словарь для хранения кораблей
     /// Ключ - Id корабля
@@ -22,7 +19,6 @@ public class MockSpaceShipRepository : IShipRepository
     /// </summary>
     public MockSpaceShipRepository() => _repository = new Dictionary<Guid, SpaceShipModelDto>
     {
-        { hardcodedGuid, CreateShip(hardcodedGuid) }
     };
 
     /// <summary>
