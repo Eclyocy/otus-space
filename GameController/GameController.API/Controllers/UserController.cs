@@ -76,6 +76,7 @@ namespace GameController.API.Controllers
             return _mapper.Map<UserResponse>(userDto);
         }
 
+        /*
         /// <summary>
         /// Update the user.
         /// </summary>
@@ -88,6 +89,7 @@ namespace GameController.API.Controllers
             UserDto userDto = _userService.UpdateUser(userId, updateUserDto);
             return _mapper.Map<UserResponse>(userDto);
         }
+        */
 
         /// <summary>
         /// Delete the user.
