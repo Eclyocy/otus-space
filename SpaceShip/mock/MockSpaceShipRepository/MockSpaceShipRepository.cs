@@ -4,7 +4,7 @@ using SpaceShip.Domain.Interfaces;
 namespace MockSpaceShip.Repository;
 
 /// <summary>
-/// Заглушка репозитори корабля для работы без БД
+/// Заглушка репозитория корабля для работы без БД
 /// </summary>
 public class MockSpaceShipRepository : IShipRepository
 {
