@@ -14,7 +14,7 @@ services:
     - ASPNETCORE_URLS=https://+:7196
     - RABBITMQ__HOSTNAME=rabbitmq
     - RABBITMQ__PORT=5672
-    - RABBITMQ:USERNAME=game-controller
+    - RABBITMQ__USERNAME=game-controller
     - RABBITMQ__PASSWORD=Gc1234
     - RABBITMQ__VIRTUALHOST=/
     - RABBITMQ__NEWDAYEXCHANGENAME=x_new_day
