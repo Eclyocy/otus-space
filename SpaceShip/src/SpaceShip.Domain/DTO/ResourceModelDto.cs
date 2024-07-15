@@ -13,7 +13,7 @@ public class ResourceModelDto
     /// <summary>
     /// Наименование ресурса
     /// </summary>
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)
