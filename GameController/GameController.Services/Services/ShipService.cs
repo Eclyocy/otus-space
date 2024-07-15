@@ -1,4 +1,6 @@
-﻿using GameController.Services.Interfaces;
+﻿using System.Net;
+using GameController.Services.Exceptions;
+using GameController.Services.Interfaces;
 using GameController.Services.Models.Ship;
 using GameController.Services.Settings;
 using Microsoft.Extensions.Logging;
@@ -50,26 +52,9 @@ namespace GameController.Services.Services
             RestRequest request = new();
             RestResponse<ShipDto> shipResponse = await _restClient.ExecutePostAsync<ShipDto>(request);
 
-            if (!shipResponse.IsSuccessful)
-            {
-                _logger.LogError(
-                    "Unable to send request for space ship creation:\n{errorException}\n{errorMessage}",
-                    shipResponse.ErrorException,
-                    shipResponse.ErrorMessage);
+            ShipDto shipDto = ValidateResponse<ShipDto>(_restClient.BuildUri(request), shipResponse);
 
-                throw new Exception("Unable to send request for space ship creation.");
-            }
-
-            if (shipResponse.Data == null)
-            {
-                _logger.LogError("Unable to retrieve ship model.");
-
-                throw new Exception("Unable to retrieve ship model.");
-            }
-
-            _logger.LogInformation("Created space ship with ID {shipId}", shipResponse.Data.Id);
-
-            return shipResponse.Data.Id;
+            return shipDto.Id;
         }
 
         /// <inheritdoc/>
@@ -81,24 +66,43 @@ namespace GameController.Services.Services
             request.AddUrlSegment("shipId", shipId);
             RestResponse<ShipDto> shipResponse = await _restClient.ExecuteGetAsync<ShipDto>(request);
 
-            if (!shipResponse.IsSuccessful)
-            {
-                _logger.LogError(
-                    "Unable to send request for space ship retrieval:\n{errorException}\n{errorMessage}",
-                    shipResponse.ErrorException,
-                    shipResponse.ErrorMessage);
+            return ValidateResponse<ShipDto>(_restClient.BuildUri(request), shipResponse);
+        }
 
-                throw new Exception("Unable to send request for space ship creation.");
+        #endregion
+
+        #region private methods
+
+        private T ValidateResponse<T>(Uri uri, RestResponse<T> response)
+        {
+            if (response.IsSuccessful)
+            {
+                if (response.Data != null)
+                {
+                    return response.Data;
+                }
+
+                _logger.LogError("Unable to retrieve {modelType} model via request {uri}", typeof(T), uri);
+
+                throw new Exception($"Unable to retrieve {typeof(T).Name} model.");
             }
 
-            if (shipResponse.Data == null)
+            _logger.LogError(
+                "Unsuccessful request to {uri}: {errorStatusCode} {errorMessage}\n{errorException}",
+                uri,
+                response.StatusCode,
+                response.ErrorMessage,
+                response.ErrorException);
+
+            throw response.StatusCode switch
             {
-                _logger.LogError("Unable to retrieve ship model.");
-
-                throw new Exception("Unable to retrieve ship model.");
-            }
-
-            return shipResponse.Data;
+                HttpStatusCode.NotFound =>
+                    new NotFoundException($"Remote server responded with {typeof(T).Name} not found"),
+                HttpStatusCode.Conflict when response.ErrorMessage is not null =>
+                    new ConflictException(response.ErrorMessage),
+                _ =>
+                    new Exception("Remote server responded with an error."),
+            };
         }
 
         #endregion
