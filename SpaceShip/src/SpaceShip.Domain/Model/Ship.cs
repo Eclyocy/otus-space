@@ -1,26 +1,13 @@
-﻿namespace SpaceShip.Domain.Model;
+﻿using Spaceship.DataLayer.EfClasses.State;
 
-/// <summary>
-/// Класс, описывающий сущность корабля
-/// </summary>
-public class Ship
+namespace SpaceShip.Domain.Model
 {
-    /// <summary>
-    /// Публичный конструктор <see cref="Ship"/> class.
-    /// </summary>
-    public Ship()
+    public class Ship
     {
-        Id = Guid.NewGuid();
-        Step = 0;
+        public Guid Id { get; set; }
+        public SpaceshipState State { get; set; }
+        public short Step { get; set; }
+
+        public virtual ICollection<Resource> Resources { get; set; }
     }
-
-    /// <summary>
-    /// Идентификатор корабля
-    /// </summary>
-    public Guid Id { get; }
-
-    /// <summary>
-    /// Номер шага игры
-    /// </summary>
-    public short Step { get; set; }
 }

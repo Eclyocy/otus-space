@@ -1,4 +1,4 @@
-namespace SpaceShip.Service.Contracts;
+﻿namespace SpaceShip.Service.Contracts;
 
 public enum ResourceStateDTO
 {

@@ -3,14 +3,15 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using MockSpaceShip.Repository;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using SpaceShip.Domain.Implementation;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Mappers;
 using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Queue;
+using SpaceShip.Service.Services;
 using SpaceShip.WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,9 +44,17 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 
 // SpaceShip services registration:
 builder.Services.AddTransient<IShipService, SpaceShipService>();
-builder.Services.AddSingleton<IShipRepository, MockSpaceShipRepository>();
+
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
+builder.Services.AddTransient<IProblemRepository, ProblemRepository>();
+builder.Services.AddTransient<IResourceRepository, ResourceRepository>();
+builder.Services.AddTransient<IResourceTypeRepository, ResourceTypeRepository>();
+builder.Services.AddTransient<ISpaceshipRepository, SpaceshipRepository>();
+builder.Services.AddTransient<IProblemService, ProblemService>();
+builder.Services.AddTransient<IResourceService, ResourceService>();
+builder.Services.AddTransient<IResourceTypeService, ResourceTypeService>();
+builder.Services.AddTransient<IShipService, SpaceShipService>();
 
 // Automapper:
 builder.Services.AddSingleton<IMapper>(
