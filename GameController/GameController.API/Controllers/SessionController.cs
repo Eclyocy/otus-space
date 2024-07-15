@@ -47,7 +47,7 @@ namespace GameController.API.Controllers
         /// </summary>
         [HttpGet]
         [Route("")]
-        [SwaggerOperation("Получение информации обо всех пользовательских игровых сессиях")]
+        [SwaggerOperation("Получение списка всех игровых сессий пользователя")]
         public List<SessionResponse> GetUserSessions(Guid userId)
         {
             List<SessionDto> sessionDtos = _sessionService.GetUserSessions(userId);
@@ -101,6 +101,17 @@ namespace GameController.API.Controllers
         public void MakeMove(Guid userId, Guid sessionId)
         {
             _sessionService.MakeMove(userId, sessionId);
+        }
+
+        /// <summary>
+        /// Delete a particular user session.
+        /// </summary>
+        [HttpDelete]
+        [Route("{sessionId}")]
+        [SwaggerOperation("Удалить пользовательскую игровую сессию")]
+        public void DeleteUserSession(Guid userId, Guid sessionId)
+        {
+            _sessionService.DeleteUserSession(userId, sessionId);
         }
 
         #endregion

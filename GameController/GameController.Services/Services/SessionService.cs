@@ -135,6 +135,19 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
+        public void DeleteUserSession(Guid userId, Guid sessionId)
+        {
+            _logger.LogInformation(
+                "Delete session {sessionId} of user {userId}",
+                sessionId,
+                userId);
+
+            SessionDto sessionDto = GetUserSession(userId, sessionId);
+
+            _sessionRepository.Delete(sessionDto.SessionId);
+        }
+
+        /// <inheritdoc/>
         public void MakeMove(Guid userId, Guid sessionId)
         {
             _logger.LogInformation(

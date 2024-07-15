@@ -57,7 +57,7 @@ namespace GameController.API.Controllers
         /// </summary>
         [HttpGet]
         [Route("")]
-        [SwaggerOperation("Получение информации обо всех пользователях")]
+        [SwaggerOperation("Получение списка всех пользователей")]
         public List<UserResponse> GetUsers()
         {
             List<UserDto> userDtos = _userService.GetUsers();
