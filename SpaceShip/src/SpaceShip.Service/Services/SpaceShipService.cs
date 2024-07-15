@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
@@ -13,14 +14,19 @@ public class SpaceShipService : IShipService
     private readonly IShipRepository _repository;
 
     private readonly IMapper _mapper;
+    private readonly ILogger _logger;
 
     /// <summary>
     /// Конструктор.
     /// </summary>
-    public SpaceShipService(IShipRepository repository, IMapper mapper)
+    public SpaceShipService(
+        IShipRepository repository,
+        IMapper mapper,
+        ILogger<SpaceShipService> logger)
     {
         _repository = repository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     /// <summary>
@@ -29,6 +35,8 @@ public class SpaceShipService : IShipService
     /// <returns>ID корабля</returns>
     public SpaceShipDTO CreateShip()
     {
+        _logger.LogInformation("Create space ship");
+
         return _mapper.Map<SpaceShipDTO>(_repository.Create());
     }
 
@@ -39,6 +47,8 @@ public class SpaceShipService : IShipService
     /// <returns>Метрики корабля</returns>
     public SpaceShipDTO? Get(Guid id)
     {
+        _logger.LogInformation("Get space ship by id {id}", id);
+
         return _mapper.Map<SpaceShipDTO>(_repository.FindById(id));
     }
 
@@ -48,6 +58,8 @@ public class SpaceShipService : IShipService
     /// <param name="id">ID корабля</param>
     public void ProcessNewDay(Guid id)
     {
+        _logger.LogInformation("Process new day for ship with id {id}", id);
+
         _repository.NextDay(id);
         return;
     }
