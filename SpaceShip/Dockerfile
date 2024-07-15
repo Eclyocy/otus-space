@@ -9,6 +9,7 @@ COPY ./src/SpaceShip.WebAPI/*.csproj ./src/SpaceShip.WebAPI/
 COPY ./src/SpaceShip.Service/*.csproj ./src/SpaceShip.Service/
 COPY ./src/SpaceShip.Service.EventsProvider/*.csproj ./src/SpaceShip.Service.EventsProvider/
 COPY ./mock/MockSpaceShip.Service/*.csproj ./mock/MockSpaceShip.Service/
+COPY ./mock/MockSpaceShipRepository/*.csproj ./mock/MockSpaceShipRepository/
 
 # Restore packages
 RUN dotnet restore

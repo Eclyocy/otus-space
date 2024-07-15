@@ -3,9 +3,12 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using MockSpaceShip.Service;
+using MockSpaceShip.Repository;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using SpaceShip.Domain.Interfaces;
+using SpaceShip.Domain.Mappers;
+using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Queue;
 using SpaceShip.WebAPI.Mappers;
@@ -39,7 +42,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 });
 
 // SpaceShip services registration:
-builder.Services.AddTransient<IShipService, MockSpaceShipService>();
+builder.Services.AddTransient<IShipService, SpaceShipService>();
+builder.Services.AddSingleton<IShipRepository, MockSpaceShipRepository>();
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
 
@@ -47,7 +51,11 @@ builder.Services.AddHostedService<StepEventConsumer>();
 builder.Services.AddSingleton<IMapper>(
     new Mapper(
         new MapperConfiguration(
-            static cfg => cfg.AddProfile<SpaceShipMappingProfile>())));
+            static cfg =>
+            {
+                cfg.AddProfile<SpaceShipMappingProfile>();
+                cfg.AddProfile<SpaceShipModelMappingProfile>();
+            })));
 
 // RabbitMQ --> TODO
 //

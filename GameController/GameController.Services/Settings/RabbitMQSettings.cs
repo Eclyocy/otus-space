@@ -5,85 +5,47 @@
     /// </summary>
     public class RabbitMQSettings
     {
-        #region private constants
-
-        private const string ExceptionTemplate = "{0} environment variable must be specified";
-
-        #endregion
-
-        #region constructor
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public RabbitMQSettings()
-        {
-            Hostname = GetEnvironmentVariable("RABBITMQ_HOSTNAME");
-
-            string port = GetEnvironmentVariable("RABBITMQ_PORT");
-            Port = int.Parse(port);
-
-            Username = GetEnvironmentVariable("RABBITMQ_USERNAME");
-            Password = GetEnvironmentVariable("RABBITMQ_PASSWORD");
-            VirtualHost = GetEnvironmentVariable("RABBITMQ_VIRTUALHOST");
-            NewDayExchange = GetEnvironmentVariable("EXCHANGENAME_NEWDAY");
-            NewDayQueueGenerator = GetEnvironmentVariable("QUEUENAME_NEWDAY_GENERATOR");
-            NewDayQueueShip = GetEnvironmentVariable("QUEUENAME_NEWDAY_SHIP");
-        }
-
-        #endregion
-
         #region public properties
 
         /// <summary>
         /// Rabbit MQ service hostname.
         /// </summary>
-        public string Hostname { get; }
+        public string Hostname { get; set; }
 
         /// <summary>
         /// Rabbit MQ service port.
         /// </summary>
-        public int Port { get; }
+        public int Port { get; set; }
 
         /// <summary>
         /// Rabbit MQ service username.
         /// </summary>
-        public string Username { get; }
+        public string Username { get; set; }
 
         /// <summary>
         /// Rabbit MQ service password.
         /// </summary>
-        public string Password { get; }
+        public string Password { get; set; }
 
         /// <summary>
         /// Rabbit MQ virtual host.
         /// </summary>
-        public string VirtualHost { get; }
+        public string VirtualHost { get; set; }
 
         /// <summary>
         /// Rabbit MQ exchange name for "new day" messages.
         /// </summary>
-        public string NewDayExchange { get; }
+        public string NewDayExchangeName { get; set; }
 
         /// <summary>
         /// Rabbit MQ queue name for "new day" messages for generator.
         /// </summary>
-        public string NewDayQueueGenerator { get; }
+        public string NewDayQueueNameGenerator { get; set; }
 
         /// <summary>
         /// Rabbit MQ queue name for "new day" messages for ship.
         /// </summary>
-        public string NewDayQueueShip { get; }
-
-        #endregion
-
-        #region private methods
-
-        private static string GetEnvironmentVariable(string name)
-        {
-            return Environment.GetEnvironmentVariable(name)
-                ?? throw new Exception(string.Format(ExceptionTemplate, name));
-        }
+        public string NewDayQueueNameShip { get; set; }
 
         #endregion
     }

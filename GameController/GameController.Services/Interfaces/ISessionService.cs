@@ -1,4 +1,5 @@
 ﻿using GameController.Services.Models.Session;
+using GameController.Services.Models.Ship;
 
 namespace GameController.Services.Interfaces
 {
@@ -10,7 +11,7 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Create a game session.
         /// </summary>
-        SessionDto CreateUserSession(Guid userId, CreateSessionDto createSessionDto);
+        Task<SessionDto> CreateUserSessionAsync(Guid userId);
 
         /// <summary>
         /// Get list of game sessions of user <paramref name="userId"/>.
@@ -22,6 +23,18 @@ namespace GameController.Services.Interfaces
         /// of user <paramref name="userId"/>.
         /// </summary>
         SessionDto GetUserSession(Guid userId, Guid sessionId);
+
+        /// <summary>
+        /// Get information on ship associated with game session
+        /// <paramref name="sessionId"/> of user <paramref name="userId"/>.
+        /// </summary>
+        Task<ShipDto> GetUserSessionShipAsync(Guid userId, Guid sessionId);
+
+        /// <summary>
+        /// Delete game session <paramref name="sessionId"/>
+        /// of user <paramref name="userId"/>.
+        /// </summary>
+        void DeleteUserSession(Guid userId, Guid sessionId);
 
         /// <summary>
         /// Make move in game session <paramref name="sessionId"/>

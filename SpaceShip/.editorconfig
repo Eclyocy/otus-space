@@ -422,6 +422,8 @@ dotnet_analyzer_diagnostic.category-StyleCop.CSharp.OrderingRules.severity = err
 dotnet_diagnostic.SA1200.severity = none
 # StaticElementsMustAppearBeforeInstanceElements
 dotnet_diagnostic.SA1204.severity = silent
+# The 'required' modifier should appear before 'public'
+dotnet_diagnostic.SA1206.severity = none
 
 # Error for all naming rules (SA13xx)
 dotnet_analyzer_diagnostic.category-StyleCop.CSharp.NamingRules.severity = error

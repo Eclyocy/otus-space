@@ -1,9 +1,9 @@
-namespace SpaceShip.Service.Contracts;
+namespace SpaceShip.Domain.DTO;
 
 /// <summary>
 /// Ресурс корабля
 /// </summary>
-public class ResourceDTO
+public class ResourceModelDto
 {
     /// <summary>
     /// Id ресурса
@@ -13,10 +13,10 @@ public class ResourceDTO
     /// <summary>
     /// Наименование ресурса
     /// </summary>
-    public string? Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)
     /// </summary>
-    public required ResourceStateDTO State { get; set; }
+    public required ResourceStateModelDto State { get; set; }
 }

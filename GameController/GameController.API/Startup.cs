@@ -41,11 +41,8 @@ namespace GameController
         {
             application.UseExceptionHandler(x => x.UseCustomExceptionHandler());
 
-            if (environment.IsDevelopment())
-            {
-                application.UseSwagger();
-                application.UseSwaggerUI();
-            }
+            application.UseSwagger();
+            application.UseSwaggerUI();
 
             application.UseHttpsRedirection();
 
@@ -65,10 +62,11 @@ namespace GameController
         {
             services.ConfigureDatabase();
 
-            services.ConfigureApplicationServices();
+            services.ConfigureApplicationServices(Configuration);
 
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
+            services.AddAutoMapper(x => x.AddProfile(typeof(ShipMapper)));
 
             services.AddControllers();
 

@@ -1,6 +1,13 @@
-﻿using GameController.Services.Helpers;
+﻿using System.Net;
+using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
+using GameController.Services.Models.Ship;
+using GameController.Services.Settings;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using RestSharp;
+using RestSharp.Serializers.NewtonsoftJson;
 
 namespace GameController.Services.Services
 {
@@ -13,6 +20,8 @@ namespace GameController.Services.Services
 
         private readonly ILogger<ShipService> _logger;
 
+        private readonly RestClient _restClient;
+
         #endregion
 
         #region constructor
@@ -21,9 +30,14 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public ShipService(
-            ILogger<ShipService> logger)
+            ILogger<ShipService> logger,
+            IOptions<SpaceShipApiSettings> options)
         {
             _logger = logger;
+
+            _restClient = new RestClient(
+                $"http://{options.Value.Hostname}:{options.Value.Port}/api/v1/spaceships",
+                configureSerialization: cfg => cfg.UseNewtonsoftJson(new JsonSerializerSettings()));
         }
 
         #endregion
@@ -35,11 +49,60 @@ namespace GameController.Services.Services
         {
             _logger.LogInformation("Create space ship");
 
-            Guid shipId = await GuidGenerator.GenerateGuidAsync();
+            RestRequest request = new();
+            RestResponse<ShipDto> shipResponse = await _restClient.ExecutePostAsync<ShipDto>(request);
 
-            _logger.LogInformation("Created space ship with ID {shipId}", shipId);
+            ShipDto shipDto = ValidateResponse<ShipDto>(_restClient.BuildUri(request), shipResponse);
 
-            return shipId;
+            return shipDto.Id;
+        }
+
+        /// <inheritdoc/>
+        public async Task<ShipDto> GetShipAsync(Guid shipId)
+        {
+            _logger.LogInformation("Get space ship {shipId}", shipId);
+
+            RestRequest request = new("/{shipId}");
+            request.AddUrlSegment("shipId", shipId);
+            RestResponse<ShipDto> shipResponse = await _restClient.ExecuteGetAsync<ShipDto>(request);
+
+            return ValidateResponse<ShipDto>(_restClient.BuildUri(request), shipResponse);
+        }
+
+        #endregion
+
+        #region private methods
+
+        private T ValidateResponse<T>(Uri uri, RestResponse<T> response)
+        {
+            if (response.IsSuccessful)
+            {
+                if (response.Data != null)
+                {
+                    return response.Data;
+                }
+
+                _logger.LogError("Unable to retrieve {modelType} model via request {uri}", typeof(T), uri);
+
+                throw new Exception($"Unable to retrieve {typeof(T).Name} model.");
+            }
+
+            _logger.LogError(
+                "Unsuccessful request to {uri}: {errorStatusCode} {errorMessage}\n{errorException}",
+                uri,
+                response.StatusCode,
+                response.ErrorMessage,
+                response.ErrorException);
+
+            throw response.StatusCode switch
+            {
+                HttpStatusCode.NotFound =>
+                    new NotFoundException($"Remote server responded with {typeof(T).Name} not found"),
+                HttpStatusCode.Conflict when response.ErrorMessage is not null =>
+                    new ConflictException(response.ErrorMessage),
+                _ =>
+                    new Exception("Remote server responded with an error."),
+            };
         }
 
         #endregion

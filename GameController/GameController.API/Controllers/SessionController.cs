@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using GameController.API.Models.Session;
+using GameController.Controllers.Models.Ship;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Session;
+using GameController.Services.Models.Ship;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -17,8 +19,6 @@ namespace GameController.API.Controllers
         #region private fields
 
         private readonly ISessionService _sessionService;
-        private readonly IShipService _shipService;
-        private readonly IGeneratorService _generatorService;
 
         private readonly IMapper _mapper;
 
@@ -31,13 +31,10 @@ namespace GameController.API.Controllers
         /// </summary>
         public SessionController(
             ISessionService sessionService,
-            IShipService shipService,
-            IGeneratorService generatorService,
             IMapper mapper)
         {
             _sessionService = sessionService;
-            _shipService = shipService;
-            _generatorService = generatorService;
+
             _mapper = mapper;
         }
 
@@ -50,7 +47,7 @@ namespace GameController.API.Controllers
         /// </summary>
         [HttpGet]
         [Route("")]
-        [SwaggerOperation("Получение информации обо всех пользовательских игровых сессиях")]
+        [SwaggerOperation("Получение списка всех игровых сессий пользователя")]
         public List<SessionResponse> GetUserSessions(Guid userId)
         {
             List<SessionDto> sessionDtos = _sessionService.GetUserSessions(userId);
@@ -66,10 +63,7 @@ namespace GameController.API.Controllers
         [SwaggerOperation("Создание пользовательской игровой сессии")]
         public async Task<SessionResponse> CreateUserSessionAsync(Guid userId)
         {
-            CreateSessionRequest sessionRequest = await CreateSessionRequestAsync(userId);
-
-            CreateSessionDto createSessionDto = _mapper.Map<CreateSessionDto>(sessionRequest);
-            SessionDto sessionDto = _sessionService.CreateUserSession(userId, createSessionDto);
+            SessionDto sessionDto = await _sessionService.CreateUserSessionAsync(userId);
 
             return _mapper.Map<SessionResponse>(sessionDto);
         }
@@ -87,6 +81,18 @@ namespace GameController.API.Controllers
         }
 
         /// <summary>
+        /// Get the space ship of a particular user session.
+        /// </summary>
+        [HttpGet]
+        [Route("{sessionId}/ship")]
+        [SwaggerOperation("Получение информации о состоянии космического корабля в пользовательской игровой сессии")]
+        public async Task<ShipResponse> GetUserSessionShipAsync(Guid userId, Guid sessionId)
+        {
+            ShipDto shipDto = await _sessionService.GetUserSessionShipAsync(userId, sessionId);
+            return _mapper.Map<ShipResponse>(shipDto);
+        }
+
+        /// <summary>
         /// Send the "new move" command to the user session.
         /// </summary>
         [HttpPost]
@@ -97,23 +103,15 @@ namespace GameController.API.Controllers
             _sessionService.MakeMove(userId, sessionId);
         }
 
-        #endregion
-
-        #region private methods
-
-        private async Task<CreateSessionRequest> CreateSessionRequestAsync(Guid userId)
+        /// <summary>
+        /// Delete a particular user session.
+        /// </summary>
+        [HttpDelete]
+        [Route("{sessionId}")]
+        [SwaggerOperation("Удалить пользовательскую игровую сессию")]
+        public void DeleteUserSession(Guid userId, Guid sessionId)
         {
-            Task<Guid> shipTask = _shipService.CreateShipAsync();
-            Task<Guid> generatorTask = _generatorService.CreateGeneratorAsync();
-
-            await Task.WhenAll(shipTask, generatorTask);
-
-            return new()
-            {
-                UserId = userId,
-                ShipId = shipTask.Result,
-                GeneratorId = generatorTask.Result
-            };
+            _sessionService.DeleteUserSession(userId, sessionId);
         }
 
         #endregion

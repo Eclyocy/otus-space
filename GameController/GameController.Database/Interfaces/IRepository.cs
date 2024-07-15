@@ -13,6 +13,12 @@
         T Create(T entity);
 
         /// <summary>
+        /// Get all entities.
+        /// </summary>
+        /// <returns>List of entities.</returns>
+        List<T> GetAll();
+
+        /// <summary>
         /// Get entity by <paramref name="id"/>.
         /// </summary>
         /// <returns>Entity if found, otherwise null.</returns>

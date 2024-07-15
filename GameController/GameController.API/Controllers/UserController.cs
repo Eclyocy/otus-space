@@ -53,6 +53,18 @@ namespace GameController.API.Controllers
         }
 
         /// <summary>
+        /// Get all users.
+        /// </summary>
+        [HttpGet]
+        [Route("")]
+        [SwaggerOperation("Получение списка всех пользователей")]
+        public List<UserResponse> GetUsers()
+        {
+            List<UserDto> userDtos = _userService.GetUsers();
+            return _mapper.Map<List<UserResponse>>(userDtos);
+        }
+
+        /// <summary>
         /// Get the user.
         /// </summary>
         [HttpGet]
@@ -64,6 +76,7 @@ namespace GameController.API.Controllers
             return _mapper.Map<UserResponse>(userDto);
         }
 
+        /*
         /// <summary>
         /// Update the user.
         /// </summary>
@@ -76,6 +89,7 @@ namespace GameController.API.Controllers
             UserDto userDto = _userService.UpdateUser(userId, updateUserDto);
             return _mapper.Map<UserResponse>(userDto);
         }
+        */
 
         /// <summary>
         /// Delete the user.

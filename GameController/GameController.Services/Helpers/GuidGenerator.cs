@@ -11,7 +11,7 @@
         public static async Task<Guid> GenerateGuidAsync()
         {
             Random random = new();
-            await Task.Delay(TimeSpan.FromSeconds(random.Next(3, 20)));
+            await Task.Delay(TimeSpan.FromSeconds(random.Next(1, 3)));
 
             return Guid.NewGuid();
         }
