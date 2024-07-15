@@ -11,7 +11,6 @@ COPY ./src/SpaceShip.Service.EventsProvider/*.csproj ./src/SpaceShip.Service.Eve
 COPY ./mock/MockSpaceShip.Service/*.csproj ./mock/MockSpaceShip.Service/
 COPY ./mock/MockSpaceShipRepository/*.csproj ./mock/MockSpaceShipRepository/
 
-
 # Restore packages
 RUN dotnet restore
 
