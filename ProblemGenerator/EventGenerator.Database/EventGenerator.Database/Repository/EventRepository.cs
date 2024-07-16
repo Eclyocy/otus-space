@@ -1,6 +1,6 @@
-namespace EventGenerator.Database.Entity
+namespace EventGenerator.Database.Repository
 {
-    public class Event
+    public class EventRepository
     {
         public string Id { get; set; }
         public Guid IdShip { get; set; }

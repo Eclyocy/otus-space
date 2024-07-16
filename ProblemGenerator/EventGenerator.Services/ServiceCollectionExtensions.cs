@@ -1,5 +1,7 @@
 ﻿using EventGenerator.Services.Interfaces;
+using EventGenerator.Services.Mappers;
 using EventGenerator.Services.Services;
+
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,9 +16,7 @@ namespace EventGenerator.Services
         public static IServiceCollection ConfigureApplicationServices(
             this IServiceCollection services)
         {
-            services.AddAutoMapper(x => x.AddProfile(typeof(Eve)));
-            services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
-            services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
+            services.AddAutoMapper(x => x.AddProfile(typeof(EventMapper)));
 
             services.AddTransient<IGeneratorService, GeneratorService>();
            

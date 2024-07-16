@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EventGenerator.Services.Models;
-using EventGenerator.Da.Models;
+using EventGenerator.Services.Helpers;
 
 namespace EventGenerator.Services.Mappers
 {
@@ -9,11 +9,11 @@ namespace EventGenerator.Services.Mappers
         public EventMapper()
         {
             // Service models -> Database models
-            CreateMap<CreateEventDto, Event>();
+            //CreateMap<CreateEventDto, Shi>();
 
-            // Database models -> Service models
-            CreateMap<Event, CreateEventDto>()
-                .ForMember(x => x.ShipId, opt => opt.MapFrom(x => x.Id));
+            //// Database models -> Service models
+            //CreateMap<Event, CreateEventDto>()
+            //    .ForMember(x => x.ShipId, opt => opt.MapFrom(x => x.Id));
         }
     }
 }

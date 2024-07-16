@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventGenerator.Services.Models
+namespace EventGenerator.Services.Models.Event
 {
-    public class CreateEventDto
+    public record EventDto
     {
-        public Guid ShipId { get; set; }
+        public Guid EventId { get; set; }
     }
 }

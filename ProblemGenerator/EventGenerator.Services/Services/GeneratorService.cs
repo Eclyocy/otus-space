@@ -1,33 +1,40 @@
-﻿using EventGenerator.Services.Interfaces;
+﻿using AutoMapper;
+using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Helpers;
+using EventGenerator.Services.Models.Event;
+using EventGenerator.Database.Interfaces;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using EventGenerator.Database.Models;
 
 namespace EventGenerator.Services.Services
 {
     public class GeneratorService : IGeneratorService
     {
+        private readonly IEventRepository _eventRepository;
+        //private readonly IGeneratorService _generatorService;
         private readonly ILogger<GeneratorService> _logger;
 
-        public GeneratorService(
-            ILogger<GeneratorService> logger)
+        private readonly IMapper _mapper;
+
+        public GeneratorService(IEventRepository eventRepository, ILogger<GeneratorService> logger, IMapper mapper)
         {
+            _eventRepository = eventRepository;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        public async Task<Guid> CreateGeneratorAsync()
+        public CreateEventDto CreateEvent(Guid shipId)
         {
-            _logger.LogInformation("Create generator");
+            _logger.LogInformation("Create generator by Ship ID {shipId}", shipId);
 
-            Guid generatorId = await GuidGenerator.GenerateGuidAsync();
+            CreateEventDto createEventDto = new CreateEventDto();
 
-            _logger.LogInformation("Created generator with ID {generatorId}", generatorId);
+            Random random = new Random();
 
-            return generatorId;
+            createEventDto.ShipId = shipId;
+            createEventDto.troublecoint = random.Next(0, 10);
+
+            return _mapper.Map<CreateEventDto>(createEventDto);
         }
     }
 }
