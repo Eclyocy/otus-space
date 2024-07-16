@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MockSpaceShip.Repository;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using SpaceShip.Domain.EfCore;
@@ -54,10 +55,11 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 builder.Services
 .AddHostedService<TroubleEventConsumer>()
 .AddHostedService<StepEventConsumer>()
+.AddSingleton<IShipRepository, MockSpaceShipRepository>()
 .AddTransient<IProblemRepository, ProblemRepository>()
 .AddTransient<IResourceRepository, ResourceRepository>()
 .AddTransient<IResourceTypeRepository, ResourceTypeRepository>()
-.AddTransient<IShipRepository, ShipRepository>()
+.AddTransient<ISpaceshipRepository, SpaceshipRepository>()
 .AddTransient<IProblemService, ProblemService>()
 .AddTransient<IResourceService, ResourceService>()
 .AddTransient<IResourceTypeService, ResourceTypeService>()

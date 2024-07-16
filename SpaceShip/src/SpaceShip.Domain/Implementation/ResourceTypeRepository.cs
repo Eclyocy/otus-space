@@ -28,19 +28,12 @@ namespace SpaceShip.Domain.Implementation
 
         public ResourceType Create(string name)
         {
-            var check = FindByName(name);
+            var newResourceType = new ResourceType() { Name = name };
 
-            if (!check)
-            {
-                var newResourceType = new ResourceType() { Name = name };
+            _context.Add(newResourceType);
+            _context.SaveChanges();
 
-                _context.Add(newResourceType);
-                _context.SaveChanges();
-
-                return newResourceType;
-            }
-
-            throw new Exception("This ResourceType is already in the database");
+            return newResourceType;
         }
     }
 }

@@ -5,7 +5,7 @@ using SpaceShip.Service.Interfaces;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/v1/spaceship")]
+    [Route("api/v1/resourceType")]
     public class ResourceTypeController : ControllerBase
     {
         private readonly IResourceTypeService _resourceTypeService;

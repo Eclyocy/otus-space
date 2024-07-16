@@ -10,7 +10,7 @@ namespace SpaceShip.Domain.Implementation
 
         public ProblemRepository(EfCoreContext context)
         {
-                _context = context;
+            _context = context;
         }
 
         public bool FindByName(string name)
@@ -28,19 +28,12 @@ namespace SpaceShip.Domain.Implementation
 
         public Problem Create(string name)
         {
-            var check = FindByName(name);
+            var newProblem = new Problem() { Name = name };
 
-            if (!check)
-            {
-                var newProblem = new Problem() { Name = name };
+            _context.Add(newProblem);
+            _context.SaveChanges();
 
-                _context.Add(newProblem);
-                _context.SaveChanges();
-
-                return newProblem;
-            }
-
-            throw new Exception("This problem is already in the database");
+            return newProblem;
         }
     }
 }

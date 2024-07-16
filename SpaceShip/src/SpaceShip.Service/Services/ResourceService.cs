@@ -17,7 +17,13 @@ namespace SpaceShip.Service.Services
         {
             var resource = _resourceRepository.Create();
 
-            return default;
+            var newResourceDTO = new ResourceDTO()
+            {
+                State = model.State,
+                Name = model.Name
+            };
+
+            return newResourceDTO;
         }
     }
 }
