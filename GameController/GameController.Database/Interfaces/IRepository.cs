@@ -27,8 +27,7 @@
         /// <summary>
         /// Update entity.
         /// </summary>
-        /// <returns>Updated entity.</returns>
-        T Update(T entity);
+        void Update(T entity);
 
         /// <summary>
         /// Delete entity by <paramref name="id"/>.
