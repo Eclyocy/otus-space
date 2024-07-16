@@ -1,10 +1,9 @@
 using AutoMapper;
 using EventGenerator.API.Models;
 using EventGenerator.Services.Interfaces;
-using EventGenerator.Services.Models;
-using Microsoft.AspNetCore.Cors.Infrastructure;
+using EventGenerator.Services.Models.Event;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Swashbuckle.AspNetCore.Annotations;
 
 
 namespace EventGenerator.Controllers
@@ -13,18 +12,22 @@ namespace EventGenerator.Controllers
     [Route("/api/generators")]
     public class EventGeneratorController : Controller
     {
-        private readonly ILogger _logger;
-        private readonly IGeneratorService _service;
+        private readonly IGeneratorService _eventService;
+
         private readonly IMapper _mapper;
 
-        public EventGeneratorController(IGeneratorService service, ILogger<EventGeneratorController> logger, IMapper mapper)
+        public EventGeneratorController(IGeneratorService service, IMapper mapper)
         {
-            _service = service;
-            _logger = logger;
+            _eventService = service;
             _mapper = mapper;
-        }    
+        }
 
+        /// <summary>
+        /// Заглушка - Получение Guid корабля
+        /// </summary>
+        /// <returns>Guid корабля</returns>
         [HttpGet]
+        [SwaggerOperation("Получение Guid корабля - заглушка")]
         public CreateGeneratorRequest GetShip(CreateGeneratorRequest generatorRequest)
         {
             return new CreateGeneratorRequest()
@@ -34,14 +37,21 @@ namespace EventGenerator.Controllers
 
         }
 
+        /// <summary>
+        /// Создать новое событие
+        /// </summary>
+        /// <returns>200</returns>
         [HttpPost]
-        public CreateGeneratorResponse CreateGenerator(CreateGeneratorResponse createGeneratorResponse)
+        [Route("{shipId}")]
+        [SwaggerOperation("Создание нового события")]
+        public CreateGeneratorResponse CreateEvent(Guid shipId)
         {
-            return new CreateGeneratorResponse()
-            {
-                GeneratorId = Guid.NewGuid()
-            };
-
+            CreateEventDto createEventDto = _eventService.CreateEvent(shipId);
+            return _mapper.Map<CreateGeneratorResponse>(createEventDto);
+            //return new CreateGeneratorResponse()
+            //{
+            //    IdShip = Guid.NewGuid()
+            //};
         }
     }
 }

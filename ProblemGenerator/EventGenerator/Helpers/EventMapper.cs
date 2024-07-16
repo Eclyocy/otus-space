@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventGenerator.API.Models;
 using EventGenerator.Services.Models;
+using EventGenerator.Services.Models.Event;
 
 namespace EventGenerator.API.Helpers
 {
