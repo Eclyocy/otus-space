@@ -1,4 +1,4 @@
-namespace SpaceShip.Service.Contracts;
+﻿namespace SpaceShip.Service.Contracts;
 
 /// <summary>
 /// Ресурс корабля
@@ -13,7 +13,7 @@ public class ResourceDTO
     /// <summary>
     /// Наименование ресурса
     /// </summary>
-    public string? Name { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)

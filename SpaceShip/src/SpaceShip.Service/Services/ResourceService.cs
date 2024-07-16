@@ -19,8 +19,7 @@ namespace SpaceShip.Service.Services
 
             var newResourceDTO = new ResourceDTO()
             {
-                State = model.State,
-                Name = model.Name
+                State = (ResourceStateDTO)resource.State
             };
 
             return newResourceDTO;

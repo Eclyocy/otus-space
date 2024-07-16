@@ -17,7 +17,7 @@ namespace SpaceShip.Service.Services
         {
             var problem = _problemRepository.Create(problemDTO.Name);
 
-            return new ProblemDTO { Name = problemDTO.Name };
+            return new ProblemDTO { Name = problem.Name };
         }
     }
 }

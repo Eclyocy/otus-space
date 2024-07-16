@@ -17,7 +17,7 @@ namespace SpaceShip.Service.Services
         {
             var resourceType = _resourceTypeRepository.Create(model.Name);
 
-            return new ResourceTypeDTO { Name = model.Name };
+            return new ResourceTypeDTO { Name = resourceType.Name };
         }
     }
 }
