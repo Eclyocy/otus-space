@@ -84,11 +84,7 @@ namespace GameController.Services.Services
                 userId,
                 updateUserDto);
 
-            User user = GetRepositoryUser(userId);
-
-            UpdateAndValidateUser(user, updateUserDto); // updates "user" in-place
-
-            _userRepository.Update(user); // updates "user" in-place
+            User user = UpdateRepositoryUser(userId, updateUserDto);
 
             return _mapper.Map<UserDto>(user);
         }
@@ -115,20 +111,31 @@ namespace GameController.Services.Services
         {
             User? user = _userRepository.Get(userId);
 
-            if (user != null)
+            if (user == null)
             {
-                return user;
+                _logger.LogInformation("User with {userId} is not found.", userId);
+
+                throw new NotFoundException($"User with ID {userId} not found.");
             }
 
-            _logger.LogInformation("User with {userId} is not found.", userId);
-
-            throw new NotFoundException($"User with ID {userId} not found.");
+            return user;
         }
 
-        private static void UpdateAndValidateUser(
-            User currentUser,
+        /// <summary>
+        /// Update user in repository.
+        /// </summary>
+        /// <exception cref="NotFoundException">
+        /// In case the user is not found by the repository.
+        /// </exception>
+        /// <exception cref="NotModifiedException">
+        /// In case no changes are requested.
+        /// </exception>
+        private User UpdateRepositoryUser(
+            Guid userId,
             UpdateUserDto userRequest)
         {
+            User currentUser = GetRepositoryUser(userId);
+
             bool updateRequested = false;
 
             if (userRequest.Name != null && userRequest.Name != currentUser.Name)
@@ -147,6 +154,10 @@ namespace GameController.Services.Services
             {
                 throw new NotModifiedException();
             }
+
+            _userRepository.Update(currentUser); // updates entity in-place
+
+            return currentUser;
         }
 
         #endregion
