@@ -1,14 +1,15 @@
-﻿using SpaceShip.Domain.EfCore;
+﻿using SpaceShip.Domain.DTO;
+using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Model;
 
 namespace SpaceShip.Domain.Implementation
 {
-    public class SpaceshipRepository : ISpaceshipRepository
+    public class ShipRepository : IShipRepository
     {
         private EfCoreContext _context;
 
-        public SpaceshipRepository(EfCoreContext context)
+        public ShipRepository(EfCoreContext context)
         {
             _context = context;
         }
@@ -41,6 +42,21 @@ namespace SpaceShip.Domain.Implementation
             }
 
             throw new Exception("This spaceship is already in the database");
+        }
+
+        public SpaceShipModelDto Create()
+        {
+            throw new NotImplementedException();
+        }
+
+        SpaceShipModelDto IShipRepository.FindById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SpaceShipModelDto NextDay(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
