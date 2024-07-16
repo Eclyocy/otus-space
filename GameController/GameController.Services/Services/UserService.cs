@@ -71,14 +71,7 @@ namespace GameController.Services.Services
         {
             _logger.LogInformation("Get user by ID {userId}", userId);
 
-            User? user = _userRepository.Get(userId);
-
-            if (user == null)
-            {
-                _logger.LogInformation("User with {userId} is not found.", userId);
-
-                throw new NotFoundException($"User with ID {userId} not found.");
-            }
+            User user = GetRepositoryUser(userId);
 
             return _mapper.Map<UserDto>(user);
         }
@@ -91,10 +84,7 @@ namespace GameController.Services.Services
                 userId,
                 updateUserDto);
 
-            User userRequest = _mapper.Map<User>(updateUserDto);
-            userRequest.Id = userId;
-
-            User user = _userRepository.Update(userRequest);
+            User user = UpdateRepositoryUser(userId, updateUserDto);
 
             return _mapper.Map<UserDto>(user);
         }
@@ -105,6 +95,69 @@ namespace GameController.Services.Services
             _logger.LogInformation("Delete user with ID {userId}", userId);
 
             return _userRepository.Delete(userId);
+        }
+
+        #endregion
+
+        #region private methods
+
+        /// <summary>
+        /// Get user from repository.
+        /// </summary>
+        /// <exception cref="NotFoundException">
+        /// In case the user is not found by the repository.
+        /// </exception>
+        private User GetRepositoryUser(Guid userId)
+        {
+            User? user = _userRepository.Get(userId);
+
+            if (user == null)
+            {
+                _logger.LogInformation("User with {userId} is not found.", userId);
+
+                throw new NotFoundException($"User with ID {userId} not found.");
+            }
+
+            return user;
+        }
+
+        /// <summary>
+        /// Update user in repository.
+        /// </summary>
+        /// <exception cref="NotFoundException">
+        /// In case the user is not found by the repository.
+        /// </exception>
+        /// <exception cref="NotModifiedException">
+        /// In case no changes are requested.
+        /// </exception>
+        private User UpdateRepositoryUser(
+            Guid userId,
+            UpdateUserDto userRequest)
+        {
+            User currentUser = GetRepositoryUser(userId);
+
+            bool updateRequested = false;
+
+            if (userRequest.Name != null && userRequest.Name != currentUser.Name)
+            {
+                updateRequested = true;
+                currentUser.Name = userRequest.Name;
+            }
+
+            if (userRequest.PasswordHash != null && userRequest.PasswordHash != currentUser.PasswordHash)
+            {
+                updateRequested = true;
+                currentUser.PasswordHash = userRequest.PasswordHash;
+            }
+
+            if (!updateRequested)
+            {
+                throw new NotModifiedException();
+            }
+
+            _userRepository.Update(currentUser); // updates entity in-place
+
+            return currentUser;
         }
 
         #endregion
