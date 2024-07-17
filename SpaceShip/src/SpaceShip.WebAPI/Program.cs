@@ -15,6 +15,7 @@ using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Mappers;
 using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
 using SpaceShip.Service.Services;
 using SpaceShip.WebAPI.Mappers;
@@ -73,6 +74,7 @@ builder.Services.AddSingleton<IMapper>(
             {
                 cfg.AddProfile<SpaceShipMappingProfile>();
                 cfg.AddProfile<SpaceShipModelMappingProfile>();
+                cfg.AddProfile<ProblemModelMappingProfile>();
             })));
 
 // RabbitMQ --> TODO
@@ -89,7 +91,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

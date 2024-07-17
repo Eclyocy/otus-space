@@ -1,4 +1,5 @@
-﻿using SpaceShip.Domain.Interfaces;
+﻿using AutoMapper;
+using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
@@ -7,17 +8,17 @@ namespace SpaceShip.Service.Services
     public class ProblemService : IProblemService
     {
         private readonly IProblemRepository _problemRepository;
+        private readonly IMapper _mapper;
 
-        public ProblemService(IProblemRepository problemRepository)
+        public ProblemService(IProblemRepository problemRepository, IMapper mapper)
         {
             _problemRepository = problemRepository;
+            _mapper = mapper;
         }
 
         public ProblemDTO Create(ProblemDTO problemDTO)
         {
-            var problem = _problemRepository.Create(problemDTO.Name);
-
-            return new ProblemDTO { Name = problem.Name };
+            return _mapper.Map<ProblemDTO>(_problemRepository.Create(problemDTO.Name));
         }
     }
 }

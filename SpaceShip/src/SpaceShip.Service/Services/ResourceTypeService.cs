@@ -1,4 +1,5 @@
-﻿using SpaceShip.Domain.Interfaces;
+﻿using AutoMapper;
+using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
@@ -7,17 +8,17 @@ namespace SpaceShip.Service.Services
     public class ResourceTypeService : IResourceTypeService
     {
         private readonly IResourceTypeRepository _resourceTypeRepository;
+        private readonly IMapper _mapper;
 
-        public ResourceTypeService(IResourceTypeRepository resourceTypeRepository)
+        public ResourceTypeService(IResourceTypeRepository resourceTypeRepository, IMapper mapper)
         {
             _resourceTypeRepository = resourceTypeRepository;
+            _mapper = mapper;
         }
 
-        public ResourceTypeDTO Create(ResourceTypeDTO model)
+        public ResourceTypeDTO Create(ResourceTypeDTO resourceTypeDTO)
         {
-            var resourceType = _resourceTypeRepository.Create(model.Name);
-
-            return new ResourceTypeDTO { Name = resourceType.Name };
+            return _mapper.Map<ResourceTypeDTO>(_resourceTypeRepository.Create(resourceTypeDTO.Name));
         }
     }
 }
