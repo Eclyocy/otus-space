@@ -49,7 +49,7 @@ public class SpaceShipService : IShipService
     {
         _logger.LogInformation("Get space ship by id {id}", id);
 
-        return _mapper.Map<SpaceShipDTO>(_shipRepository.FindById(id));
+        return _mapper.Map<SpaceShipDTO>(_shipRepository.Get(id));
     }
 
     /// <summary>

@@ -28,6 +28,7 @@ public class MockSpaceShipRepository : ISpaceshipRepository
     public Ship Create()
     {
         var ship = new Ship();
+        ship.Id = Guid.NewGuid(); // какого??? это должно быть в репозитории!
         _repository.Add(ship.Id, ship);
         return ship;
     }
