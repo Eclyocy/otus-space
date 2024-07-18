@@ -56,11 +56,11 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 builder.Services
 .AddHostedService<TroubleEventConsumer>()
 .AddHostedService<StepEventConsumer>()
-.AddSingleton<IShipRepository, MockSpaceShipRepository>()
+.AddSingleton<ISpaceshipRepository, MockSpaceShipRepository>()
 .AddTransient<IProblemRepository, ProblemRepository>()
 .AddTransient<IResourceRepository, ResourceRepository>()
 .AddTransient<IResourceTypeRepository, ResourceTypeRepository>()
-.AddTransient<ISpaceshipRepository, SpaceshipRepository>()
+//.AddTransient<ISpaceshipRepository, SpaceshipRepository>()
 .AddTransient<IProblemService, ProblemService>()
 .AddTransient<IResourceService, ResourceService>()
 .AddTransient<IResourceTypeService, ResourceTypeService>()
