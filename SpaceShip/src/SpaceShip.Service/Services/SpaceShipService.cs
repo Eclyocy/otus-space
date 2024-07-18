@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using SpaceShip.Domain.Implementation;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Model;
 using SpaceShip.Service.Contracts;
