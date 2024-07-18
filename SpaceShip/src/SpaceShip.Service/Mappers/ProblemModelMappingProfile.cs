@@ -4,6 +4,9 @@ using SpaceShip.Service.Contracts;
 
 namespace SpaceShip.Service.Mappers
 {
+    /// <summary>
+    /// Профиль автомаппера модели проблем корабля из уровня БД.
+    /// </summary>
     public class ProblemModelMappingProfile : Profile
     {
         /// <summary>

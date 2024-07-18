@@ -26,7 +26,7 @@ namespace SpaceShip.Domain.Implementation
             return false;
         }
 
-        public Ship Create(Guid id)
+        public Ship Create()
         {
             var newSpaceship = new Ship();
 
@@ -34,6 +34,33 @@ namespace SpaceShip.Domain.Implementation
             _context.SaveChanges();
 
             return newSpaceship;
+        }
+
+        /// <summary>
+        /// Метод возвращает иформацию по существующему кораблю.
+        /// </summary>
+        /// <returns>Модель корабля</returns>
+        public Ship Get(Guid id)
+        {
+               return _context.Spaceships.Find(id) ?? throw new Exception("Spaceship not found");
+        }
+
+        /// <summary>
+        /// Обновить существующий корабль.
+        /// </summary>
+        /// <param name="ship">новая модель корабля</param>
+        /// <returns>обновленная модель корабля</returns>
+        /// <exception cref="Exception">Корабль не найден</exception>
+        public Ship Update(Ship ship)
+        {
+            if (!FindById(ship.Id))
+            {
+                throw new Exception("Spaceship not found");
+            }
+
+            _context.Spaceships.Update(ship);
+
+            return _context.Spaceships.Find(ship.Id) ?? throw new Exception("Spaceship not found");
         }
     }
 }

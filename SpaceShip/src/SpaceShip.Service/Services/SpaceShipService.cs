@@ -11,7 +11,7 @@ namespace SpaceShip.Service.Implementation;
 /// </summary>
 public class SpaceShipService : IShipService
 {
-    private readonly IShipRepository _repository;
+    private readonly ISpaceshipRepository _shipRepository;
 
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
@@ -20,11 +20,11 @@ public class SpaceShipService : IShipService
     /// Конструктор.
     /// </summary>
     public SpaceShipService(
-        IShipRepository repository,
+        ISpaceshipRepository shipRepository,
         IMapper mapper,
         ILogger<SpaceShipService> logger)
     {
-        _repository = repository;
+        _shipRepository = shipRepository;
         _mapper = mapper;
         _logger = logger;
     }
@@ -37,7 +37,7 @@ public class SpaceShipService : IShipService
     {
         _logger.LogInformation("Create space ship");
 
-        return _mapper.Map<SpaceShipDTO>(_repository.Create());
+        return _mapper.Map<SpaceShipDTO>(_shipRepository.Create());
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public class SpaceShipService : IShipService
     {
         _logger.LogInformation("Get space ship by id {id}", id);
 
-        return _mapper.Map<SpaceShipDTO>(_repository.FindById(id));
+        return _mapper.Map<SpaceShipDTO>(_shipRepository.FindById(id));
     }
 
     /// <summary>
@@ -60,7 +60,9 @@ public class SpaceShipService : IShipService
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
-        _repository.NextDay(id);
+        var ship = _shipRepository.Get(id);
+        ship.Step++;
+        _shipRepository.Update(ship);
         return;
     }
 }
