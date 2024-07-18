@@ -1,4 +1,4 @@
-﻿using Spaceship.DataLayer.EfClasses.State;
+﻿using SpaceShip.Domain.Model.State;
 
 namespace SpaceShip.Domain.Model
 {

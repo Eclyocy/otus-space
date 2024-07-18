@@ -13,6 +13,11 @@ namespace SpaceShip.Domain.Implementation
             _context = context;
         }
 
+        /// <summary>
+        /// Выборка корабля по id
+        /// </summary>
+        /// <param name="id">ID космического корабля</param>
+        /// <returns>true если корабль есть в БД</returns>
         public bool FindById(Guid id)
         {
             var spaceship = _context.Spaceships
@@ -26,6 +31,10 @@ namespace SpaceShip.Domain.Implementation
             return false;
         }
 
+        /// <summary>
+        /// Метод создания корабля.
+        /// </summary>
+        /// <returns>Корабль</returns>
         public Ship Create()
         {
             var newSpaceship = new Ship();

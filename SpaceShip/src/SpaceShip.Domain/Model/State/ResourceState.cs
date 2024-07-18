@@ -1,4 +1,4 @@
-﻿namespace Spaceship.DataLayer.EfClasses.State
+﻿namespace SpaceShip.Domain.Model.State
 {
     public enum ResourceState
     {

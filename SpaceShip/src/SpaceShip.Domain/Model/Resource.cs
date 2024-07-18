@@ -1,4 +1,4 @@
-﻿using Spaceship.DataLayer.EfClasses.State;
+﻿using SpaceShip.Domain.Model.State;
 
 namespace SpaceShip.Domain.Model
 {
@@ -8,6 +8,7 @@ namespace SpaceShip.Domain.Model
         public Guid SpaceshipId { get; set; }
         public int ResourceTypeId { get; set; }
         public ResourceState State { get; set; }
+        public string Name { get; set; }
         public int Amount { get; set; }
 
         public virtual Ship Spaceship { get; set; }

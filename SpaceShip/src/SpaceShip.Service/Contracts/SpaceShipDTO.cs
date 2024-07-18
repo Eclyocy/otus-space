@@ -1,3 +1,6 @@
+﻿using SpaceShip.Domain.Model;
+using SpaceShip.Domain.Model.State;
+
 namespace SpaceShip.Service.Contracts;
 
 /// <summary>
@@ -16,7 +19,12 @@ public class SpaceShipDTO
     public short Step { get; set; }
 
     /// <summary>
+    /// Состояние корабля
+    /// </summary>
+    public SpaceshipState State { get; set; }
+
+    /// <summary>
     /// Коллекция ресурсов корабля
     /// </summary>
-    public List<ResourceDTO> Resources { get; set; }
+    public ICollection<Resource> Resources { get; set; }
 }

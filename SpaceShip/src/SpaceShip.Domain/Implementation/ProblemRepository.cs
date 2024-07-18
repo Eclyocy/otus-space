@@ -13,10 +13,15 @@ namespace SpaceShip.Domain.Implementation
             _context = context;
         }
 
-        public bool FindByName(string name)
+        /// <summary>
+        /// Выборка проблемы по id
+        /// </summary>
+        /// <param name="id">ID проблемы</param>
+        /// <returns>true если корабль есть в БД</returns>
+        public bool FindById(int id)
         {
             var problem = _context.Problems
-              .Where(problem => problem.Name.ToUpper() == name.ToUpper());
+              .Where(prblm => prblm.Id == id);
 
             if (problem == null)
             {
@@ -26,6 +31,10 @@ namespace SpaceShip.Domain.Implementation
             return false;
         }
 
+        /// <summary>
+        /// Метод создания проблемы.
+        /// </summary>
+        /// <returns>Проблема</returns>
         public Problem Create(string name)
         {
             var newProblem = new Problem() { Name = name };
@@ -34,6 +43,33 @@ namespace SpaceShip.Domain.Implementation
             _context.SaveChanges();
 
             return newProblem;
+        }
+
+        /// <summary>
+        /// Метод возвращает иформацию по существующей проблеме.
+        /// </summary>
+        /// <returns>Модель проблемы</returns>
+        public Problem Get(int id)
+        {
+            return _context.Problems.Find(id) ?? throw new Exception("Spaceship not found");
+        }
+
+        /// <summary>
+        /// Обновить существующую проблему.
+        /// </summary>
+        /// <param name="problem">новая модель проблемы</param>
+        /// <returns>обновленная модель проблемы</returns>
+        /// <exception cref="Exception">Проблема не найдена</exception>
+        public Problem Update(Problem problem)
+        {
+            if (!FindById(problem.Id))
+            {
+                throw new Exception("Problem not found");
+            }
+
+            _context.Problems.Update(problem);
+
+            return _context.Problems.Find(problem.Id) ?? throw new Exception("Problem not found");
         }
     }
 }

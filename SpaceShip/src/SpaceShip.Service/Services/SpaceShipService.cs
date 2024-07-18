@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using SpaceShip.Domain.Implementation;
 using SpaceShip.Domain.Interfaces;
+using SpaceShip.Domain.Model;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
@@ -50,6 +52,21 @@ public class SpaceShipService : IShipService
         _logger.LogInformation("Get space ship by id {id}", id);
 
         return _mapper.Map<SpaceShipDTO>(_shipRepository.Get(id));
+    }
+
+    /// <summary>
+    /// Изменение метрик существующего корабля.
+    /// </summary>
+    /// <returns>Метрики корабля</returns>
+    public SpaceShipDTO Update(SpaceShipDTO spaceShipDTO)
+    {
+        return _mapper.Map<SpaceShipDTO>(_shipRepository.Update(new Ship()
+        {
+            Id = spaceShipDTO.Id,
+            State = spaceShipDTO.State,
+            Step = spaceShipDTO.Step,
+            Resources = spaceShipDTO.Resources
+        }));
     }
 
     /// <summary>
