@@ -38,7 +38,7 @@ services:
     - POSTGRES_PASSWORD=pg_pass
     - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-    - game_controller_otus_pg_data:/var/lib/postgresql/data/pgdata
+    - game_controller_otus_pg_data:/var/lib/postgresql/data
 
   spaceship_webapi:
     image: spaceship-webapi
