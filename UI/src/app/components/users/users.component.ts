@@ -4,7 +4,7 @@ import { ApiService } from "@app/services/api.service";
 
 @Component({
   selector: 'app-users-component',
-  templateUrl: 'users.component.html',
+  templateUrl: './users.component.html',
   styleUrls: []
 })
 export class UsersComponent {

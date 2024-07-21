@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
-import { UsersComponent } from './components/users/users.component';
+import { UsersComponent } from '@app/components/users/users.component';
+import { TempComponent } from '@app/components/temp/temp.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'users', pathMatch: 'full' },
   { path: 'users', component: UsersComponent },
+  { path: 'temp', component: TempComponent },
 ];
