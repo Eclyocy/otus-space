@@ -405,11 +405,11 @@ FodyWeavers.xsd
 /out-tsc
 /bazel-out
 
-# Miscellaneous
-/.angular/cache
+# UI
+UI/.angular/cache
 .sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
+UI/connect.lock
+UI/coverage
+UI/libpeerconnection.log
 testem.log
-/typings
+UI/typings
