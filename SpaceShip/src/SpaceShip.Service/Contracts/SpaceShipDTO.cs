@@ -1,5 +1,4 @@
-﻿using SpaceShip.Domain.Model;
-using SpaceShip.Domain.Model.State;
+﻿using SpaceShip.Domain.Model.State;
 
 namespace SpaceShip.Service.Contracts;
 
@@ -26,5 +25,5 @@ public class SpaceShipDTO
     /// <summary>
     /// Коллекция ресурсов корабля
     /// </summary>
-    public ICollection<Resource> Resources { get; set; }
+    public ICollection<ResourceDTO> Resources { get; set; }
 }

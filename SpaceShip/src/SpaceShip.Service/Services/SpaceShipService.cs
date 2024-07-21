@@ -63,8 +63,7 @@ public class SpaceShipService : IShipService
         {
             Id = spaceShipDTO.Id,
             State = spaceShipDTO.State,
-            Step = spaceShipDTO.Step,
-            Resources = spaceShipDTO.Resources
+            Step = spaceShipDTO.Step
         }));
     }
 
