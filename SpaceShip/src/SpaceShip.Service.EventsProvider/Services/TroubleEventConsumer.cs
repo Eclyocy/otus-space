@@ -14,6 +14,7 @@ public class TroubleEventConsumer : EventConsumer
         : base(logger, configuration)
     {
         QueueName = configuration["RABBITMQ_TROUBLES_QUEUE"];
+        ExchangeName = configuration["RABBITMQ_TROUBLES_EXCHANGE"];
         ConsumerName = nameof(TroubleEventConsumer);
     }
 

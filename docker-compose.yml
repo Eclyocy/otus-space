@@ -54,8 +54,10 @@ services:
     - RABBITMQ_HOST=rabbitmq
     - RABBITMQ_USER=space-ship
     - RABBITMQ_PASSWORD=Ss1234
-    - RABBITMQ_TROUBLES_QUEUE=q_troubles
+    - RABBITMQ_TROUBLES_QUEUE=q_troubles_ship
+    - RABBITMQ_TROUBLE_EXCHANGE=x_trouble
     - RABBITMQ_STEP_QUEUE=q_new_day_ship
+    - RABBITMQ_STEP_EXCHANGE=x_new_day
 
   rabbitmq:
     container_name: rabbitmq_otus

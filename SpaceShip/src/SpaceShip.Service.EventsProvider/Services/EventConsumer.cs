@@ -60,6 +60,11 @@ public abstract class EventConsumer : IHostedService
     #region public properties
 
     /// <summary>
+    /// Имя exchange в который приходят сообщения.
+    /// </summary>
+    public string ExchangeName { get; protected set; }
+
+    /// <summary>
     /// Имя очереди, сообщения из которой принимаем.
     /// </summary>
     public string QueueName { get; protected set; }
@@ -73,6 +78,31 @@ public abstract class EventConsumer : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        try
+        {
+            // создаем Exchange:
+            _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout, durable: true);
+
+            // создаем и подключаем очередь:
+            _channel.QueueDeclare(
+                queue: QueueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false);
+
+            _channel.QueueBind(
+                  queue: QueueName,
+                  exchange: ExchangeName,
+                  routingKey: string.Empty);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot bind queue {queue} with exchange {exchange}", QueueName, ExchangeName);
+            return;
+        }
+
+        _logger.LogInformation("Queue {queueName} connected to exchange {exchangeName}. Ready to consume new messages", QueueName, ExchangeName);
+
         var consumer = new EventingBasicConsumer(_channel);
 
         consumer.Received += (model, ea) =>
@@ -95,6 +125,7 @@ public abstract class EventConsumer : IHostedService
         catch (Exception e)
         {
             _logger.LogError(e, "{consumer} failed to consume new message", ConsumerName);
+            return;
         }
     }
 
