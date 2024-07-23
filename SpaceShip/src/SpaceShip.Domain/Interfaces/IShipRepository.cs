@@ -5,7 +5,7 @@ namespace SpaceShip.Domain.Interfaces;
 /// <summary>
 /// Интерфейс для работы с сущностью корабля (CrUD)
 /// </summary>
-public interface IShipRepository
+public interface IShipRepository : IRepository<SpaceShipModelDto>
 {
     /// <summary>
     /// Метод создания корабля

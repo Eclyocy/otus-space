@@ -10,7 +10,7 @@ public class ResourceDTO
     /// <summary>
     /// Id ресурса
     /// </summary>
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Наименование ресурса
@@ -30,7 +30,7 @@ public class ResourceDTO
     /// <summary>
     /// Id типа ресурса
     /// </summary>
-    public int ResourceTypeId { get; set; }
+    public Guid ResourceTypeId { get; set; }
 
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема)

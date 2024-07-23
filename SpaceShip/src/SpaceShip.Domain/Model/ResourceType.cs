@@ -1,8 +1,18 @@
 ﻿namespace SpaceShip.Domain.Model
 {
-    public class ResourceType
+    /// <summary>
+    /// Типы ресурсов.
+    /// </summary>
+    public class ResourceType : BaseEntity
     {
-        public int Id { get; set; }
+        /// <summary>
+        /// ResourceType ID.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Имя типа ресурса.
+        /// </summary>
         public string Name { get; set; }
     }
 }

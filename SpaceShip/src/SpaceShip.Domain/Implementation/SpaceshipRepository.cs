@@ -4,7 +4,7 @@ using SpaceShip.Domain.Model;
 
 namespace SpaceShip.Domain.Implementation
 {
-    public class SpaceshipRepository : ISpaceshipRepository
+    public class SpaceshipRepository : BaseRepository<Ship>, ISpaceshipRepository
     {
         private EfCoreContext _context;
 

@@ -7,7 +7,7 @@ namespace SpaceShip.Service.Contracts
         /// <summary>
         /// Id проблемы
         /// </summary>
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Наименование проблемы

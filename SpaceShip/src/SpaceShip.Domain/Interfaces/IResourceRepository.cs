@@ -5,7 +5,7 @@ namespace SpaceShip.Domain.Interfaces
     /// <summary>
     /// Интерфейс репозитория ресурсов.
     /// </summary>
-    public interface IResourceRepository
+    public interface IResourceRepository : IRepository<Resource>
     {
         /// <summary>
         /// Метод создания ресурсов.
@@ -18,14 +18,14 @@ namespace SpaceShip.Domain.Interfaces
         /// </summary>
         /// <param name="id">ID ресурса</param>
         /// <returns>true если ресурс есть в БД</returns>
-        public bool FindById(int id);
+        public bool FindById(Guid id);
 
         /// <summary>
         /// Получить существующий ресурс.
         /// </summary>
         /// <param name="id">ID ресурс.</param>
         /// <returns>Модель ресурса.</returns>
-        public Resource Get(int id);
+        public Resource Get(Guid id);
 
         /// <summary>
         /// Обновление существующего ресурса в БД
@@ -33,5 +33,11 @@ namespace SpaceShip.Domain.Interfaces
         /// <param name="resource">обновленная сущность</param>
         /// <returns>Модель ресурса</returns>
         public Resource Update(Resource resource);
+
+        /// <summary>
+        /// Delete entity by <paramref name="id"/>.
+        /// </summary>
+        /// <returns>The indication of operation success.</returns>
+        bool Delete(Guid id);
     }
 }

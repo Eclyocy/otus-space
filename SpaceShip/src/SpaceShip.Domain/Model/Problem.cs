@@ -1,10 +1,23 @@
 ﻿namespace SpaceShip.Domain.Model
 {
-    public class Problem
+    /// <summary>
+    /// Проблемы.
+    /// </summary>
+    public class Problem : BaseEntity
     {
-        public int Id { get; set; }
+        /// <summary>
+        /// Problem ID.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Имя проблемы.
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Коллекция типов ресурсов.
+        /// </summary>
         public virtual ICollection<ResourceType> ResourceTypes { get; set; }
     }
 }

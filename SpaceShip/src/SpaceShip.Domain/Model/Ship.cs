@@ -18,12 +18,27 @@ namespace SpaceShip.Domain.Model
             Step = 0;
             State = SpaceshipState.Start;
         }
+
         #endregion
 
+        /// <summary>
+        /// Ship ID.
+        /// </summary>
         public Guid Id { get; set; }
+
+        /// <summary>
+        /// Статус корабля.
+        /// </summary>
         public SpaceshipState State { get; set; }
+
+        /// <summary>
+        /// Ход.
+        /// </summary>
         public short Step { get; set; }
 
+        /// <summary>
+        /// Коллекция ресурсов.
+        /// </summary>
         public virtual ICollection<Resource> Resources { get; set; }
     }
 }

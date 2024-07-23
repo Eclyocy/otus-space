@@ -4,31 +4,13 @@ using SpaceShip.Domain.Model;
 
 namespace SpaceShip.Domain.Implementation
 {
-    public class ResourceRepository : IResourceRepository
+    public class ResourceRepository : BaseRepository<Problem>, IResourceRepository
     {
         private EfCoreContext _context;
 
         public ResourceRepository(EfCoreContext context)
         {
             _context = context;
-        }
-
-        /// <summary>
-        /// Выборка ресурса по id
-        /// </summary>
-        /// <param name="id">ID ресурса</param>
-        /// <returns>true если ресурс есть в БД</returns>
-        public bool FindById(int id)
-        {
-            var resources = _context.Resources
-              .Where(resources => resources.Id == id);
-
-            if (resources == null)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -62,11 +44,6 @@ namespace SpaceShip.Domain.Implementation
         /// <returns>Модель ресурса</returns>
         public Resource Update(Resource resource)
         {
-            if (!FindById(resource.Id))
-            {
-                throw new Exception("Resource not found");
-            }
-
             _context.Resources.Update(resource);
 
             return _context.Resources.Find(resource.Id) ?? throw new Exception("Resource not found");

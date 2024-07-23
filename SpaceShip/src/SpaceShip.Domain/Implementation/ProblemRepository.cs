@@ -4,32 +4,21 @@ using SpaceShip.Domain.Model;
 
 namespace SpaceShip.Domain.Implementation
 {
-    public class ProblemRepository : IProblemRepository
+    public class ProblemRepository : BaseRepository<Problem>, IProblemRepository
     {
-        private EfCoreContext _context;
-
-        public ProblemRepository(EfCoreContext context)
-        {
-            _context = context;
-        }
+        #region constructor
 
         /// <summary>
-        /// Выборка проблемы по id
+        /// Constructor.
         /// </summary>
-        /// <param name="id">ID проблемы</param>
-        /// <returns>true если корабль есть в БД</returns>
-        public bool FindById(int id)
+        public ProblemRepository(EfCoreContext context)
+            : base(context)
         {
-            var problem = _context.Problems
-              .Where(prblm => prblm.Id == id);
-
-            if (problem == null)
-            {
-                return true;
-            }
-
-            return false;
         }
+
+        #endregion
+
+        #region public methods
 
         /// <summary>
         /// Метод создания проблемы.
@@ -39,8 +28,8 @@ namespace SpaceShip.Domain.Implementation
         {
             var newProblem = new Problem() { Name = name };
 
-            _context.Add(newProblem);
-            _context.SaveChanges();
+            Context.Add(newProblem);
+            Context.SaveChanges();
 
             return newProblem;
         }
@@ -51,7 +40,7 @@ namespace SpaceShip.Domain.Implementation
         /// <returns>Модель проблемы</returns>
         public Problem Get(int id)
         {
-            return _context.Problems.Find(id) ?? throw new Exception("Spaceship not found");
+            return Context.Problems.Find(id) ?? throw new Exception("Spaceship not found");
         }
 
         /// <summary>
@@ -62,14 +51,26 @@ namespace SpaceShip.Domain.Implementation
         /// <exception cref="Exception">Проблема не найдена</exception>
         public Problem Update(Problem problem)
         {
-            if (!FindById(problem.Id))
-            {
-                throw new Exception("Problem not found");
-            }
+            Context.Problems.Update(problem);
+            Context.SaveChanges();
 
-            _context.Problems.Update(problem);
-
-            return _context.Problems.Find(problem.Id) ?? throw new Exception("Problem not found");
+            return Context.Problems.Find(problem.Id) ?? throw new Exception("Problem not found");
         }
+
+        /// <summary>
+        /// Выборка корабля по id
+        /// </summary>
+        /// <param name="id">ID проблемы</param>
+        /// <returns>true если корабль есть в БД</returns>
+        public Problem? Delete(Guid id)
+        {
+            var problem = Context.Problems.Find(id);
+            var prb = Context.Problems.Remove(problem);
+            Context.SaveChanges();
+
+            return problem;
+        }
+
+        #endregion
     }
 }

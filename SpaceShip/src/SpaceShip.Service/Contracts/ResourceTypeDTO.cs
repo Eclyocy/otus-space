@@ -5,7 +5,7 @@
         /// <summary>
         /// Id типа ресурсов
         /// </summary>
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Наименование ресурса
