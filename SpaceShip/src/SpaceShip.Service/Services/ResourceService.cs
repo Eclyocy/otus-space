@@ -53,6 +53,17 @@ namespace SpaceShip.Service.Services
         /// <returns>Метрики ресурса</returns>
         public ResourceDTO GetResource(Guid resourceId)
         {
+            Resource resource = GetRepositoryResource(resourceId);
+
+            return _mapper.Map<ResourceDTO>(resource);
+        }
+
+        /// <summary>
+        /// Получить ресурсы.
+        /// </summary>
+        /// <returns>Метрики проблемы</returns>
+        public ResourceDTO GetResources()
+        {
             List<Resource> resource = _resourceRepository.GetAll();
 
             return _mapper.Map<ResourceDTO>(resource);

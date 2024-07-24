@@ -61,6 +61,18 @@ public class SpaceShipService : IShipService
     /// <returns>Метрики корабля</returns>
     public SpaceShipDTO? GetShip(Guid shipId)
     {
+        Ship ship = GetRepositoryShip(shipId);
+
+        return _mapper.Map<SpaceShipDTO>(ship);
+    }
+
+    /// <summary>
+    /// Получить метрики корабля.
+    /// </summary>
+    /// <param name="shipId">ID корабля</param>
+    /// <returns>Метрики корабля</returns>
+    public SpaceShipDTO? GetShips(Guid shipId)
+    {
         List<Ship> ship = _shipRepository.GetAll();
 
         return _mapper.Map<SpaceShipDTO>(ship);

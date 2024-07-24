@@ -9,10 +9,10 @@ namespace SpaceShip.Domain.Model
     public abstract class BaseEntity
     {
         /// <summary>
-        /// Entity ID.
+        /// Entity Id.
         /// </summary>
         [Key]
-        [Column("id")]
+        [Column("Id")]
         public Guid Id { get; set; }
     }
 }

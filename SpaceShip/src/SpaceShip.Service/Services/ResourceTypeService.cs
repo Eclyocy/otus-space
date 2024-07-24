@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using GameController.Services.Exceptions;
+using SpaceShip.Domain.Implementation;
 using SpaceShip.Domain.Interfaces;
+using SpaceShip.Domain.Model;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using ResourceType = SpaceShip.Domain.Model.ResourceType;
@@ -50,10 +52,21 @@ namespace SpaceShip.Service.Services
         /// <summary>
         /// Получить тип ресурса.
         /// </summary>
-        /// <returns>Метрики типа ресурса</returns>
+        /// <returns>Метрики ресурса</returns>
         public ResourceTypeDTO GetResourceType(Guid resourceTypeId)
         {
-            List<Domain.Model.ResourceType> resourceType = _resourceTypeRepository.GetAll();
+            ResourceType resourceType = GetRepositoryResourceType(resourceTypeId);
+
+            return _mapper.Map<ResourceTypeDTO>(resourceType);
+        }
+
+        /// <summary>
+        /// Получить типы ресурсов.
+        /// </summary>
+        /// <returns>Метрики проблемы</returns>
+        public ResourceTypeDTO GetResourcesType()
+        {
+            List<ResourceType> resourceType = _resourceTypeRepository.GetAll();
 
             return _mapper.Map<ResourceTypeDTO>(resourceType);
         }

@@ -53,6 +53,17 @@ namespace SpaceShip.Service.Services
         /// <returns>Метрики проблемы</returns>
         public ProblemDTO GetProblem(Guid problemId)
         {
+            Problem problem = GetRepositoryProblem(problemId);
+
+            return _mapper.Map<ProblemDTO>(problem);
+        }
+
+        /// <summary>
+        /// Получить проблемы.
+        /// </summary>
+        /// <returns>Метрики проблемы</returns>
+        public ProblemDTO GetProblems()
+        {
             List<Problem> problem = _problemRepository.GetAll();
 
             return _mapper.Map<ProblemDTO>(problem);
