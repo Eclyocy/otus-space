@@ -14,6 +14,7 @@ namespace SpaceShip.Service.Mappers
         /// </summary>
         public ProblemModelMappingProfile()
         {
+            // Database models -> Service models
             CreateMap<Problem, ProblemDTO>();
         }
     }

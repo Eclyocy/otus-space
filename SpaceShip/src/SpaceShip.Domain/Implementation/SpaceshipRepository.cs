@@ -6,70 +6,16 @@ namespace SpaceShip.Domain.Implementation
 {
     public class SpaceshipRepository : BaseRepository<Ship>, ISpaceshipRepository
     {
-        private EfCoreContext _context;
+        #region constructor
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public SpaceshipRepository(EfCoreContext context)
+            : base(context)
         {
-            _context = context;
         }
 
-        /// <summary>
-        /// Выборка корабля по id
-        /// </summary>
-        /// <param name="id">ID космического корабля</param>
-        /// <returns>true если корабль есть в БД</returns>
-        public bool FindById(Guid id)
-        {
-            var spaceship = _context.Spaceships
-              .Where(spaceship => spaceship.Id == id);
-
-            if (spaceship == null)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Метод создания корабля.
-        /// </summary>
-        /// <returns>Корабль</returns>
-        public Ship Create()
-        {
-            var newSpaceship = new Ship();
-
-            _context.Add(newSpaceship);
-            _context.SaveChanges();
-
-            return newSpaceship;
-        }
-
-        /// <summary>
-        /// Метод возвращает иформацию по существующему кораблю.
-        /// </summary>
-        /// <returns>Модель корабля</returns>
-        public Ship Get(Guid id)
-        {
-               return _context.Spaceships.Find(id) ?? throw new Exception("Spaceship not found");
-        }
-
-        /// <summary>
-        /// Обновить существующий корабль.
-        /// </summary>
-        /// <param name="ship">новая модель корабля</param>
-        /// <returns>обновленная модель корабля</returns>
-        /// <exception cref="Exception">Корабль не найден</exception>
-        public Ship Update(Ship ship)
-        {
-            if (!FindById(ship.Id))
-            {
-                throw new Exception("Spaceship not found");
-            }
-
-            _context.Spaceships.Update(ship);
-
-            return _context.Spaceships.Find(ship.Id) ?? throw new Exception("Spaceship not found");
-        }
+        #endregion
     }
 }

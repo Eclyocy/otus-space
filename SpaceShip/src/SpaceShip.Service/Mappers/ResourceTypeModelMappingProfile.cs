@@ -14,6 +14,7 @@ namespace SpaceShip.Service.Mappers
         /// </summary>
         public ResourceTypeModelMappingProfile()
         {
+            // Database models -> Service models
             CreateMap<ResourceType, ResourceTypeDTO>();
         }
     }

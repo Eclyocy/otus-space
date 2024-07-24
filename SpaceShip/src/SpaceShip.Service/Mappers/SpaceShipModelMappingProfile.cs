@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using SpaceShip.Domain.Model;
 using SpaceShip.Service.Contracts;
 
@@ -14,6 +14,7 @@ public class SpaceShipModelMappingProfile : Profile
     /// </summary>
     public SpaceShipModelMappingProfile()
     {
+        // Database models -> Service models
         CreateMap<Ship, SpaceShipDTO>()
             .ForMember(dest => dest.Id, op => op.MapFrom(src => src.Id))
             .ForMember(dest => dest.Step, op => op.MapFrom(src => src.Step))

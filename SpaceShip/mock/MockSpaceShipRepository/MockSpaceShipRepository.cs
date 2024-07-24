@@ -25,12 +25,17 @@ public class MockSpaceShipRepository : ISpaceshipRepository
     /// Создание корабля (в минимальной конфигурации)
     /// </summary>
     /// <returns>Метрики корабля</returns>
-    public Ship Create()
+    public Ship Create(Ship entity)
     {
         var ship = new Ship();
         ship.Id = Guid.NewGuid(); // какого??? это должно быть в репозитории!
         _repository.Add(ship.Id, ship);
         return ship;
+    }
+
+    public bool Delete(Guid id)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -59,6 +64,11 @@ public class MockSpaceShipRepository : ISpaceshipRepository
         return ship ?? throw new KeyNotFoundException();
     }
 
+    public List<Ship> GetAll()
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Обновить существующий корабль
     /// </summary>
@@ -68,5 +78,10 @@ public class MockSpaceShipRepository : ISpaceshipRepository
     {
         _repository.Add(ship.Id, ship);
         return ship;
+    }
+
+    void IRepository<Ship>.Update(Ship entity)
+    {
+        throw new NotImplementedException();
     }
 }

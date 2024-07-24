@@ -27,6 +27,11 @@ namespace SpaceShip.Domain.Model
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Имя корабля.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Статус корабля.
         /// </summary>
         public SpaceshipState State { get; set; }

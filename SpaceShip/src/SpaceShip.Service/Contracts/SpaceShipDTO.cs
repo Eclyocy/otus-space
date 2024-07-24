@@ -13,6 +13,11 @@ public class SpaceShipDTO
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Имя корабля.
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
     /// Номер шага игры
     /// </summary>
     public short Step { get; set; }

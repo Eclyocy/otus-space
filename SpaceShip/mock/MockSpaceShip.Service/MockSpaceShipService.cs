@@ -19,8 +19,8 @@ public class MockSpaceShipService : IShipService
             Step = 3,
             Resources = new List<ResourceDTO>()
             {
-                new ResourceDTO() { Id = 1, Name = "Engine", State = ResourceStateDTO.Normal },
-                new ResourceDTO() { Id = 2, Name = "Body", State = ResourceStateDTO.Normal }
+                new ResourceDTO() { Id = Guid.NewGuid(), Name = "Engine", State = ResourceStateDTO.Normal },
+                new ResourceDTO() { Id = Guid.NewGuid(), Name = "Body", State = ResourceStateDTO.Normal }
             }
         }
     };
