@@ -58,6 +58,8 @@ namespace GameController
                 endpoints.MapControllers();
             });
 
+            application.UseCors();
+
             SetupRabbitMQ(application.ApplicationServices.GetService<IOptions<RabbitMQSettings>>());
         }
 
@@ -88,6 +90,15 @@ namespace GameController
                     info: new() { Title = "Game Controller API", Version = "v1" });
                 options.EnableAnnotations();
             });
+
+            services.AddCors(options =>
+                {
+                    options.AddDefaultPolicy(builder =>
+                        builder
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .WithOrigins("*"));
+                });
         }
 
         #endregion

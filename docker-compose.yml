@@ -1,9 +1,9 @@
 version: "2.1"
 
 services:
-  ui:
-    container_name: ui_otus
-    build: UI
+  game_ui:
+    container_name: game_ui_otus
+    build: GameUI
     ports:
     - 4200:4200
 
@@ -17,7 +17,7 @@ services:
     - 7070:7196
     environment:
     - ASPNETCORE_ENVIRONMENT=Production
-    - ASPNETCORE_URLS=https://+:7196
+    - ASPNETCORE_URLS=http://+:7196
     - RABBITMQ__HOSTNAME=rabbitmq
     - RABBITMQ__PORT=5672
     - RABBITMQ__USERNAME=game-controller
