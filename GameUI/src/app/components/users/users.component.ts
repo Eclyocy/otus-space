@@ -18,16 +18,6 @@ export class UsersComponent {
   public users: User[] = [];
 
   public ngOnInit(): void {
-    /*
-    const user: User = {
-      id: "1",
-      name: "Vasya"
-    }
-
-    this.users = [user]
-
-    console.log(this.users);
-    */
     this.apiService.getUsers().subscribe({
       next: (users: User[]) => {
         this.users = users;
