@@ -5,7 +5,7 @@ services:
     container_name: game_ui_otus
     build: GameUI
     ports:
-    - 4200:4200
+    - 8080:4200
 
   game_controller_api:
     container_name: game_controller_api_otus
