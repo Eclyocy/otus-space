@@ -51,14 +51,13 @@ namespace GameController
             application.UseHttpsRedirection();
 
             application.UseRouting();
+            application.UseCors();
             application.UseAuthorization();
 
             application.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-            application.UseCors();
 
             SetupRabbitMQ(application.ApplicationServices.GetService<IOptions<RabbitMQSettings>>());
         }
@@ -71,6 +70,15 @@ namespace GameController
             services.ConfigureDatabase();
 
             services.ConfigureApplicationServices(Configuration);
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
 
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
@@ -90,15 +98,6 @@ namespace GameController
                     info: new() { Title = "Game Controller API", Version = "v1" });
                 options.EnableAnnotations();
             });
-
-            services.AddCors(options =>
-                {
-                    options.AddDefaultPolicy(builder =>
-                        builder
-                            .AllowAnyMethod()
-                            .AllowAnyHeader()
-                            .WithOrigins("*"));
-                });
         }
 
         #endregion
