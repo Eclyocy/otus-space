@@ -3,7 +3,7 @@
 namespace EventGenerator.Database.Models
 {
     [Table("event")]
-    public class Event : BaseEntity
+    public class Event
     {
         [Column("generatorid")]
         public Guid GeneratorId { get; set; }

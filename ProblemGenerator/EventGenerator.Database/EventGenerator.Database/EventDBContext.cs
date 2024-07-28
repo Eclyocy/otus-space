@@ -15,7 +15,7 @@ namespace EventGenerator.Database
         {
             Database.EnsureCreated(); 
         }
-        public DbSet<Ship> Ships { get; set; }
+        //public DbSet<Ship> Ships { get; set; }
         public DbSet<Event> Events { get; set; }
     }
 }
