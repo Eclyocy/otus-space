@@ -1,10 +1,20 @@
+using EventGenerator.Database.Models;
+using EventGenerator.Database.Interfaces;
+
 namespace EventGenerator.Database.Repository
 {
-    public class EventRepository
+    public class EventRepository : BaseRepository<Event>, IEventRepository
     {
-        public string Id { get; set; }
-        public Guid IdShip { get; set; }
-        public int Volume { get; set; }
-        public int IdType { get; set; }
+        #region constructor
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public EventRepository(EventDBContext databaseContext)
+            : base(databaseContext)
+        {
+        }
+
+        #endregion
     }
 }

@@ -34,7 +34,11 @@ namespace EventGenerator.Services.Services
             createEventDto.ShipId = shipId;
             createEventDto.troublecoint = random.Next(0, 10);
 
-            return _mapper.Map<CreateEventDto>(createEventDto);
+            //CreateSessionDto createSessionDto = await CreateSessionRequestAsync();
+            Event eventRequest = _mapper.Map<Event>(createEventDto);
+            Event event_ = _eventRepository.Create(eventRequest);
+
+            return _mapper.Map<CreateEventDto>(_eventRepository.Create(event_));
         }
     }
 }
