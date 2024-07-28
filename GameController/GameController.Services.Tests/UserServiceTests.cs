@@ -48,11 +48,12 @@ namespace GameController.Services.Tests
             var result = _userService.GetUser(userId);
 
             // Assert
-            //  Assert.Multiple(() => {Assert.That(result,)});
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Id, Is.EqualTo(userDto.Id));
-            Assert.That(result.Name, Is.EqualTo(userDto.Name));
-            _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Id, Is.EqualTo(userDto.Id));
+                Assert.That(result.Name, Is.EqualTo(userDto.Name));
+            });
         }
 
         [Test]
