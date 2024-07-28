@@ -117,12 +117,6 @@ namespace GameController
                 rabbitMQSettings.NewDayQueueNameGenerator,
                 rabbitMQSettings.NewDayExchangeName,
                 routingKey: string.Empty);
-
-            QueueDeclareAndBind(
-                connectionFactory,
-                rabbitMQSettings.NewDayQueueNameShip,
-                rabbitMQSettings.NewDayExchangeName,
-                routingKey: string.Empty);
         }
 
         /// <summary>

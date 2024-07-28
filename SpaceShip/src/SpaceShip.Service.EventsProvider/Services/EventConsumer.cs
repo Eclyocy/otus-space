@@ -80,9 +80,6 @@ public abstract class EventConsumer : IHostedService
     {
         try
         {
-            // создаем Exchange:
-            _channel.ExchangeDeclare(exchange: ExchangeName, type: ExchangeType.Fanout, durable: true);
-
             // создаем и подключаем очередь:
             _channel.QueueDeclare(
                 queue: QueueName,
