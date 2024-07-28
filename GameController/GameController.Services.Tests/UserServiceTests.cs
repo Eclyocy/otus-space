@@ -6,12 +6,11 @@ using GameController.Services.Models.User;
 using GameController.Services.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NUnit.Framework;
 
-namespace GameContoller.Services.Tests
+namespace GameController.Services.Tests
 {
     [TestFixture]
-    public class UnitTest1
+    public class UserServiceTests
     {
         private UserService _userService;
         private Mock<IUserRepository> _userRepositoryMock;
@@ -51,9 +50,9 @@ namespace GameContoller.Services.Tests
 
             // Assert
             //  Assert.Multiple(() => {Assert.That(result,)});
-            NUnit.Framework.Assert.That(result, Is.Not.Null);
-            NUnit.Framework.Assert.That(result.Id, Is.EqualTo(userDto.Id));
-            NUnit.Framework.Assert.That(result.Name, Is.EqualTo(userDto.Name));
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Id, Is.EqualTo(userDto.Id));
+            Assert.That(result.Name, Is.EqualTo(userDto.Name));
             _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
         }
 
@@ -65,7 +64,7 @@ namespace GameContoller.Services.Tests
             _userRepositoryMock.Setup(repo => repo.Get(userId)).Returns((User)null);
 
             // Act & Assert
-            NUnit.Framework.Assert.Throws<NotFoundException>(() => _userService.GetUser(userId));
+            Assert.Throws<NotFoundException>(() => _userService.GetUser(userId));
             _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
         }
     }
