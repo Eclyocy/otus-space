@@ -27,7 +27,6 @@ namespace GameController.Services.Tests
             _userService = new UserService(_userRepositoryMock.Object, _loggerMock.Object, _mapperMock.Object);
         }
 
-
         public void SetupCreateUser(CreateUserDto createUserDto, User user)
         {
             _mapperMock.Setup(m => m.Map<User>(createUserDto)).Returns(user);
