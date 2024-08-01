@@ -22,19 +22,6 @@ namespace EventGenerator.Services.Services
             _mapper = mapper;
         }
 
-        //public async Task<EventDto> CreateEvent(Guid shipId)
-        //{
-        //    _logger.LogInformation("Create event for ship {shipId}", shipId);
-
-        //    CreateEventDto createEventDto = await CreateSessionRequestAsync();
-
-        //    Event eventRequest = _mapper.Map<Event>(createSessionDto);
-        //    sessionRequest.UserId = userId;
-        //    Session session = _sessionRepository.Create(sessionRequest);
-
-        //    return _mapper.Map<SessionDto>(session);
-        //}
-
         public async Task<EventDto> CreateEventAsync(Guid shipId)
         {
             _logger.LogInformation("Create event by Ship ID {shipId}", shipId);
