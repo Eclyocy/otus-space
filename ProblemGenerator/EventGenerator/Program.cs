@@ -1,45 +1,40 @@
-using System;
-using System.Reflection;
-using AutoMapper;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using EventGenerator.API.Helpers;
-using EventGenerator.Services.Interfaces;
-using EventGenerator.Services.Services;
-using EventGenerator.Database.Interfaces;
-using EventGenerator.Database.Repository;
+using Microsoft.Extensions.Logging.Console;
 
-//using EventGenerator.Services.Mappers;
-
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddAutoMapper(x => x.AddProfile(typeof(EventMapper)));
-// Add services to the container.
-builder.Services.AddTransient<IGeneratorService, GeneratorService>();
-builder.Services.AddTransient<IEventRepository, EventRepository>();
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+namespace EventGenerator
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    options.RoutePrefix = string.Empty;
-});
+    /// <summary>
+    /// Web-service entry point.
+    /// </summary>
+    public class Program
+    {
+        #region public methods
 
-app.UseHttpsRedirection();
-app.UseRouting();
-app.UseAuthorization();
+        /// <summary>
+        /// Configure, build and run the web-server.
+        /// </summary>
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-app.MapControllers();
+        #endregion
 
-app.Run();
+        #region private methods
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                .ConfigureLogging(logging =>
+                {
+                    logging
+                        .AddConsole(options => options.FormatterName = nameof(CustomConsoleFormatter))
+                        .AddConsoleFormatter<CustomConsoleFormatter, ConsoleFormatterOptions>();
+
+                    logging
+                        .AddApplicationInsights();
+                });
+
+        #endregion
+    }
+}

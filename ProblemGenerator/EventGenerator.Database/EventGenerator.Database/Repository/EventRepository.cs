@@ -3,7 +3,9 @@ using EventGenerator.Database.Interfaces;
 
 namespace EventGenerator.Database.Repository
 {
+ 
     public class EventRepository : BaseRepository<Event>, IEventRepository
+ 
     {
         #region constructor
 

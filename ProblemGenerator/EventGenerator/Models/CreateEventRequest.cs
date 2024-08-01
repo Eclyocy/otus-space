@@ -1,6 +1,8 @@
 namespace EventGenerator.API.Models
 {
-    public class CreateGeneratorRequest
+ 
+    public class CreateEventRequest
+ 
     {
         /// <summary>
         /// Ship ID.

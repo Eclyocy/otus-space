@@ -8,9 +8,13 @@ using System.Threading.Tasks;
 namespace EventGenerator.Database.Models
 {
     [Table("ship")]
+ 
     public class Ship : BaseEntity
+ 
     {
         [Column("shipid")]
+ 
         public Guid ShipId { get; set; }
+ 
     }
 }

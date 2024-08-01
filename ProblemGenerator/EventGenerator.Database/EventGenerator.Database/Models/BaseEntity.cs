@@ -8,10 +8,14 @@ using System.Threading.Tasks;
 
 namespace EventGenerator.Database.Models
 {
+ 
     public abstract class BaseEntity
+ 
     {
         [Key]
         [Column("id")]
+ 
         public Guid Id { get; set; }
+ 
     }
 }
