@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EventGenerator.Services.Models.Event
+﻿namespace EventGenerator.Services.Models.Event
 {
     public record EventDto
     {
-        public Guid EventId { get; set; }
+        public Guid GeneratorId { get; set; }
+        public Guid IdShip { get; set; }
+        public int troublecoint { get; set; }
     }
 }

@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventGenerator.Database", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventGenerator.Services", "EventGenerator.Services\EventGenerator.Services.csproj", "{90AD0CD0-5631-49BF-AE9A-B7170897CB70}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{D3364EA2-1B82-4683-A5A3-1C44747150EA}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\otus-space-release-v0.1\otus-space-release-v0.1\SpaceShip\.editorconfig = ..\..\otus-space-release-v0.1\otus-space-release-v0.1\SpaceShip\.editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -4,9 +4,13 @@ using EventGenerator.Services.Helpers;
 
 namespace EventGenerator.Services.Mappers
 {
+ 
     public class EventMapper : Profile
+ 
     {
+ 
         public EventMapper()
+ 
         {
             // Service models -> Database models
             //CreateMap<CreateEventDto, Shi>();

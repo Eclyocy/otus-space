@@ -10,13 +10,16 @@ namespace EventGenerator.Controllers
 {
     [ApiController]
     [Route("/api/generators")]
-    public class EventGeneratorController : Controller
+    public class EventController : Controller
+ 
     {
-        private readonly IGeneratorService _eventService;
+        private readonly IEventService _eventService;
 
         private readonly IMapper _mapper;
 
-        public EventGeneratorController(IGeneratorService service, IMapper mapper)
+ 
+        public EventController(IEventService service, IMapper mapper)
+ 
         {
             _eventService = service;
             _mapper = mapper;
@@ -28,9 +31,9 @@ namespace EventGenerator.Controllers
         /// <returns>Guid корабля</returns>
         [HttpGet]
         [SwaggerOperation("Получение Guid корабля - заглушка")]
-        public CreateGeneratorRequest GetShip(CreateGeneratorRequest generatorRequest)
+        public CreateEventRequest GetShip(CreateEventRequest generatorRequest)
         {
-            return new CreateGeneratorRequest()
+            return new CreateEventRequest()
             {
                 IdShip = Guid.NewGuid()
             };
@@ -44,14 +47,11 @@ namespace EventGenerator.Controllers
         [HttpPost]
         [Route("{shipId}")]
         [SwaggerOperation("Создание нового события")]
-        public CreateGeneratorResponse CreateEvent(Guid shipId)
+        public async Task<EventResponse> CreateEvent(Guid shipId)
         {
-            CreateEventDto createEventDto = _eventService.CreateEvent(shipId);
-            return _mapper.Map<CreateGeneratorResponse>(createEventDto);
-            //return new CreateGeneratorResponse()
-            //{
-            //    IdShip = Guid.NewGuid()
-            //};
+            EventDto eventDto = await _eventService.CreateEventAsync(shipId);
+            
+            return _mapper.Map<EventResponse>(eventDto);
         }
     }
 }

@@ -3,17 +3,17 @@ using EventGenerator.API.Models;
 using EventGenerator.Services.Models;
 using EventGenerator.Services.Models.Event;
 
-namespace EventGenerator.API.Helpers
+namespace EventGenerator.API.Mappers
 {
     public class EventMapper : Profile
     {
         public EventMapper()
         {
             // Controller models -> Service models
-            CreateMap<CreateGeneratorRequest, CreateEventDto>();
+            CreateMap<CreateEventRequest, CreateEventDto>();
 
             // Service models -> Controller models
-            CreateMap<CreateGeneratorResponse, NewDayMessageDto>();
+            CreateMap<NewDayMessageDto, EventResponse>();
         }
     }
 }
