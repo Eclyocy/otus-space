@@ -8,7 +8,7 @@ using SpaceShip.Domain.Mappers;
 
 namespace SpaceShip.UnitTest.Services;
 
-public class SpaceShipControllerTests
+public class SpaceShipServiceTests
 {
     private IMapper _mapper;
 
@@ -47,6 +47,15 @@ public class SpaceShipControllerTests
         var result = repository.FindById(id);
 
         Assert.That(result.Id, Is.EqualTo(id));
+    }
+
+     [Test]
+    public void GetShip_WhenNotFound()
+    {
+        var repository = new MockSpaceShipRepository();
+        var ship = repository.Create();
+
+        Assert.Throws<KeyNotFoundException>(() => repository.FindById(Guid.Empty));
     }
 
     [Test]
