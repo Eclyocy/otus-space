@@ -78,25 +78,8 @@ public abstract class EventConsumer : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        try
-        {
-            // создаем и подключаем очередь:
-            _channel.QueueDeclare(
-                queue: QueueName,
-                durable: true,
-                exclusive: false,
-                autoDelete: false);
-
-            _channel.QueueBind(
-                queue: QueueName,
-                exchange: ExchangeName,
-                routingKey: string.Empty);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Cannot bind queue {queue} with exchange {exchange}", QueueName, ExchangeName);
-            return;
-        }
+        CreateQueue(QueueName);
+        BindQueue(QueueName, ExchangeName);
 
         _logger.LogInformation("Queue {queueName} connected to exchange {exchangeName}. Ready to consume new messages", QueueName, ExchangeName);
 
@@ -136,4 +119,35 @@ public abstract class EventConsumer : IHostedService
     }
 
     protected abstract void HandleMessage(string message);
+
+    private void CreateQueue(string queueName)
+    {
+        try
+        {
+            _channel.QueueDeclare(
+                queue: queueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot create queue {queue}.", queueName);
+        }
+    }
+
+    private void BindQueue(string queueName, string exchangeName)
+    {
+        try
+        {
+            _channel.QueueBind(
+                queue: queueName,
+                exchange: exchangeName,
+                routingKey: string.Empty);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot bind queue {queue} to exchange {exchange}", queueName, exchangeName);
+        }
+    }
 }
