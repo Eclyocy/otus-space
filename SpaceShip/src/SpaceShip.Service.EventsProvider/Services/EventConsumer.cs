@@ -78,24 +78,14 @@ public abstract class EventConsumer : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        try
+        while (!CreateQueue(QueueName))
         {
-            // создаем и подключаем очередь:
-            _channel.QueueDeclare(
-                queue: QueueName,
-                durable: true,
-                exclusive: false,
-                autoDelete: false);
-
-            _channel.QueueBind(
-                queue: QueueName,
-                exchange: ExchangeName,
-                routingKey: string.Empty);
+            sleep 60000;
         }
-        catch (Exception e)
+
+        while (!BindQueue(QueueName, ExchangeName))
         {
-            _logger.LogError(e, "Cannot bind queue {queue} with exchange {exchange}", QueueName, ExchangeName);
-            return;
+            sleep 60000;
         }
 
         _logger.LogInformation("Queue {queueName} connected to exchange {exchangeName}. Ready to consume new messages", QueueName, ExchangeName);
@@ -136,4 +126,39 @@ public abstract class EventConsumer : IHostedService
     }
 
     protected abstract void HandleMessage(string message);
+
+    private bool CreateQueue(queueName)
+    {
+        try
+        {
+            _channel.QueueDeclare(
+                queue: QueueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot create queue {queue}.", QueueName);
+            return false
+        }
+
+        return true;
+    }
+
+    private bool BindQueue(queueName, exchange)
+    {
+        try
+        {
+            _channel.QueueBind(
+                queue: queueName,
+                exchange: exchange,
+                routingKey: string.Empty);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot bind queue {queue} to exchange {exchange}", QueueName, ExchangeName);
+            return false
+        }
+    }
 }
