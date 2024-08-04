@@ -73,6 +73,15 @@ public class SpaceShipServiceTests
         Assert.That(result.Id, Is.EqualTo(id));
     }
 
+     [Test]
+    public void GetShip_WhenNotFound()
+    {
+        var repository = new MockSpaceShipRepository();
+        var ship = repository.Create();
+
+        Assert.Throws<KeyNotFoundException>(() => repository.FindById(Guid.Empty));
+    }
+
     [Test]
     public void GetShip_WhenNotFound()
     {
