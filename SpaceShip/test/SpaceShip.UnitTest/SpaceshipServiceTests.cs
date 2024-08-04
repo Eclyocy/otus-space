@@ -61,9 +61,4 @@ public class SpaceShipControllerTests
 
         Assert.That(result.Step, Is.EqualTo(initStep + 1));
     }
-
-    // private static SpaceShipModelDto CreateShip()
-    // {
-    //     return new SpaceShipModelDto();
-    // }
 }
