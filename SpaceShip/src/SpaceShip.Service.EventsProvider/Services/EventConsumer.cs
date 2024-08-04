@@ -54,6 +54,7 @@ public abstract class EventConsumer : IHostedService
         catch
         {
             _logger.LogError("Failed to connect RabbitMQ host {_host}", _host);
+            throw;
         }
     }
 
@@ -133,6 +134,7 @@ public abstract class EventConsumer : IHostedService
         catch (Exception e)
         {
             _logger.LogError(e, "Cannot create queue {queue}.", queueName);
+            throw;
         }
     }
 
@@ -148,6 +150,7 @@ public abstract class EventConsumer : IHostedService
         catch (Exception e)
         {
             _logger.LogError(e, "Cannot bind queue {queue} to exchange {exchange}", queueName, exchangeName);
+            throw;
         }
     }
 }
