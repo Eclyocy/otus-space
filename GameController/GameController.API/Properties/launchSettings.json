@@ -23,7 +23,6 @@
         "RABBITMQ__VIRTUALHOST": "/",
         "RABBITMQ__NEWDAYEXCHANGENAME": "x_new_day",
         "RABBITMQ__NEWDAYQUEUENAMEGENERATOR": "q_new_day_generator",
-        "RABBITMQ__NEWDAYQUEUENAMESHIP": "q_new_day_ship",
         "DATABASE_HOSTNAME": "localhost",
         "DATABASE_PORT": "5050",
         "DATABASE_NAME": "game_controller",

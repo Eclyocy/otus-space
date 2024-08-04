@@ -19,7 +19,6 @@ services:
     - RABBITMQ__VIRTUALHOST=/
     - RABBITMQ__NEWDAYEXCHANGENAME=x_new_day
     - RABBITMQ__NEWDAYQUEUENAMEGENERATOR=q_new_day_generator
-    - RABBITMQ__NEWDAYQUEUENAMESHIP=q_new_day_ship
     - DATABASE_HOSTNAME=game_controller_db
     - DATABASE_PORT=5432
     - DATABASE_NAME=game_controller
