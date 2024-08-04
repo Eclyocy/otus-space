@@ -8,7 +8,7 @@ using SpaceShip.WebAPI.Controllers;
 using SpaceShip.WebAPI.Mappers;
 using SpaceShip.WebAPI.Models;
 
-namespace SpaceShip.UnitTest;
+namespace SpaceShip.UnitTest.Controllers;
 
 public class SpaceShipControllerTests
 {
