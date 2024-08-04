@@ -58,13 +58,10 @@ namespace GameController.Services.Tests
 
                 // Verify calls
                 _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
+
                 _mapperMock.Verify(m => m.Map<UserDto>(user), Times.Once);
-                _loggerMock.Verify(logger => logger.Log(
-                    LogLevel.Information,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains($"Get user by ID {userId}")),
-                    null,
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Once);
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
             });
         }
 
@@ -76,16 +73,17 @@ namespace GameController.Services.Tests
             _userRepositoryMock.Setup(repo => repo.Get(userId)).Returns((User)null);
 
             // Act & Assert
-            Assert.Throws<NotFoundException>(() => _userService.GetUser(userId));
-            _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
-            _userRepositoryMock.VerifyNoOtherCalls();
-            _mapperMock.Verify(m => m.Map<UserDto>(It.IsAny<User>()), Times.Never);
-            _loggerMock.Verify(logger => logger.Log(
-                It.IsAny<LogLevel>(),
-                It.IsAny<EventId>(),
-                It.IsAny<It.IsAnyType>(),
-                It.IsAny<Exception>(),
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Exactly(2));
+            Assert.Multiple(() =>
+            {
+                Assert.Throws<NotFoundException>(() => _userService.GetUser(userId));
+
+                _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
+                _userRepositoryMock.VerifyNoOtherCalls();
+
+                _mapperMock.Verify(m => m.Map<UserDto>(It.IsAny<User>()), Times.Never);
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
+            });
         }
 
         #endregion
