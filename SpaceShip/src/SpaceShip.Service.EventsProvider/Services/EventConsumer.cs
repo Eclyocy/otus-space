@@ -122,7 +122,6 @@ public abstract class EventConsumer : IHostedService
         catch (Exception e)
         {
             _logger.LogError(e, "{consumer} failed to consume new message", ConsumerName);
-            return;
         }
     }
 
