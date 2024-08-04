@@ -88,9 +88,9 @@ public abstract class EventConsumer : IHostedService
                 autoDelete: false);
 
             _channel.QueueBind(
-                  queue: QueueName,
-                  exchange: ExchangeName,
-                  routingKey: string.Empty);
+                queue: QueueName,
+                exchange: ExchangeName,
+                routingKey: string.Empty);
         }
         catch (Exception e)
         {
