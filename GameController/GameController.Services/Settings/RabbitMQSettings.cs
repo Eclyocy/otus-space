@@ -42,11 +42,6 @@
         /// </summary>
         public string NewDayQueueNameGenerator { get; set; }
 
-        /// <summary>
-        /// Rabbit MQ queue name for "new day" messages for ship.
-        /// </summary>
-        public string NewDayQueueNameShip { get; set; }
-
         #endregion
     }
 }

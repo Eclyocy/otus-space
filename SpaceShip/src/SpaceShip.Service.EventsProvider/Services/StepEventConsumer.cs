@@ -20,6 +20,7 @@ public class StepEventConsumer : EventConsumer
         : base(logger, configuration)
     {
         QueueName = configuration["RABBITMQ_STEP_QUEUE"];
+        ExchangeName = configuration["RABBITMQ_STEP_EXCHANGE"];
         ConsumerName = nameof(StepEventConsumer);
 
         _shipService = shipService;

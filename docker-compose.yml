@@ -19,7 +19,6 @@ services:
     - RABBITMQ__VIRTUALHOST=/
     - RABBITMQ__NEWDAYEXCHANGENAME=x_new_day
     - RABBITMQ__NEWDAYQUEUENAMEGENERATOR=q_new_day_generator
-    - RABBITMQ__NEWDAYQUEUENAMESHIP=q_new_day_ship
     - DATABASE_HOSTNAME=game_controller_db
     - DATABASE_PORT=5432
     - DATABASE_NAME=game_controller
@@ -54,8 +53,10 @@ services:
     - RABBITMQ_HOST=rabbitmq
     - RABBITMQ_USER=space-ship
     - RABBITMQ_PASSWORD=Ss1234
-    - RABBITMQ_TROUBLES_QUEUE=q_troubles
+    - RABBITMQ_TROUBLES_QUEUE=q_troubles_ship
+    - RABBITMQ_TROUBLES_EXCHANGE=x_troubles
     - RABBITMQ_STEP_QUEUE=q_new_day_ship
+    - RABBITMQ_STEP_EXCHANGE=x_new_day
 
   rabbitmq:
     container_name: rabbitmq_otus

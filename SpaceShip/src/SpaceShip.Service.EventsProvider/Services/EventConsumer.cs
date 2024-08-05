@@ -54,10 +54,16 @@ public abstract class EventConsumer : IHostedService
         catch
         {
             _logger.LogError("Failed to connect RabbitMQ host {_host}", _host);
+            throw;
         }
     }
 
     #region public properties
+
+    /// <summary>
+    /// Имя exchange в который приходят сообщения.
+    /// </summary>
+    public string ExchangeName { get; protected set; }
 
     /// <summary>
     /// Имя очереди, сообщения из которой принимаем.
@@ -73,6 +79,11 @@ public abstract class EventConsumer : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        CreateQueue(QueueName);
+        BindQueue(QueueName, ExchangeName);
+
+        _logger.LogInformation("Queue {queueName} connected to exchange {exchangeName}. Ready to consume new messages", QueueName, ExchangeName);
+
         var consumer = new EventingBasicConsumer(_channel);
 
         consumer.Received += (model, ea) =>
@@ -109,4 +120,37 @@ public abstract class EventConsumer : IHostedService
     }
 
     protected abstract void HandleMessage(string message);
+
+    private void CreateQueue(string queueName)
+    {
+        try
+        {
+            _channel.QueueDeclare(
+                queue: queueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot create queue {queue}.", queueName);
+            throw;
+        }
+    }
+
+    private void BindQueue(string queueName, string exchangeName)
+    {
+        try
+        {
+            _channel.QueueBind(
+                queue: queueName,
+                exchange: exchangeName,
+                routingKey: string.Empty);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot bind queue {queue} to exchange {exchange}", queueName, exchangeName);
+            throw;
+        }
+    }
 }
