@@ -33,6 +33,11 @@ public class MockSpaceShipRepository : ISpaceshipRepository
         return ship;
     }
 
+    public Ship Create()
+    {
+        throw new NotImplementedException();
+    }
+
     public bool Delete(Guid id)
     {
         throw new NotImplementedException();

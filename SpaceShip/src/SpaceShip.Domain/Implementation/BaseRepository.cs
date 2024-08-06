@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Interfaces;
+using SpaceShip.Domain.Model;
 
 namespace SpaceShip.Domain.Implementation
 {
@@ -9,7 +10,7 @@ namespace SpaceShip.Domain.Implementation
     /// </summary>
     /// <typeparam name="T">Repository entity.</typeparam>
     public abstract class BaseRepository<T> : IRepository<T>
-        where T : class
+        where T : BaseEntity, new()
     {
         #region constructor
 
@@ -41,8 +42,10 @@ namespace SpaceShip.Domain.Implementation
         #region public methods
 
         /// <inheritdoc/>
-        public virtual T Create(T entity)
+        public virtual T Create()
         {
+            var entity = new T() { Id = Guid.NewGuid() };
+
             var entityEntry = EntitySet.Add(entity);
             Context.SaveChanges();
 

@@ -10,7 +10,7 @@
         /// Create entity.
         /// </summary>
         /// <returns>Created entity.</returns>
-        T Create(T entity);
+        T Create();
 
         /// <summary>
         /// Get all entities.

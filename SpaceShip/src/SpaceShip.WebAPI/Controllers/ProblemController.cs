@@ -17,9 +17,10 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("ProblemAdd")]
-        public ProblemDTO Create(ProblemDTO dto)
+        public ProblemDTO Create()
         {
-            return _iProblemService.Create(dto);
+            return new ProblemDTO { };
+            ////return _iProblemService.Create();
         }
     }
 }

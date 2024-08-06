@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
 namespace WebAPI.Controllers
@@ -13,13 +12,6 @@ namespace WebAPI.Controllers
         public ResourceController(IResourceService resourceService)
         {
             _iResourceService = resourceService;
-        }
-
-        [HttpPost]
-        [Route("ResourceAdd")]
-        public ResourceDTO Create(ResourceDTO resourceDTO)
-        {
-            return _iResourceService.Create(resourceDTO);
         }
     }
 }

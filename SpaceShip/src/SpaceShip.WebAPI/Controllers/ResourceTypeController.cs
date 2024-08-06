@@ -17,9 +17,11 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("ResourceTypemAdd")]
-        public ResourceTypeDTO Create(ResourceTypeDTO dto)
+        public ResourceTypeDTO Create()
         {
-            return _resourceTypeService.Create(dto);
+            return new ResourceTypeDTO { };
+
+            // return _resourceTypeService.Create();
         }
     }
 }

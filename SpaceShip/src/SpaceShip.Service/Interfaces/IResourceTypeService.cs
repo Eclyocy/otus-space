@@ -7,7 +7,7 @@ namespace SpaceShip.Service.Interfaces
         /// <summary>
         /// Create a ResourceType.
         /// </summary>
-        ResourceTypeDTO CreateResourceType(ResourceTypeDTO resourceTypeDTO);
+        ResourceTypeDTO CreateResourceType();
 
         /// <summary>
         /// Retrieve the ResourceType by <paramref name="resourceTypeId"/>.

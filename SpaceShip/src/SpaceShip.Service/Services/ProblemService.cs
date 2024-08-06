@@ -38,11 +38,9 @@ namespace SpaceShip.Service.Services
         /// Создать новую проблему.
         /// </summary>
         /// <returns>ID корабля</returns>
-        public ProblemDTO CreateProblem(ProblemDTO problemDTO)
+        public ProblemDTO CreateProblem()
         {
-            Problem problemRequest = _mapper.Map<Problem>(problemDTO);
-
-            Problem problem = _problemRepository.Create(problemRequest);
+            Problem problem = _problemRepository.Create();
 
             return _mapper.Map<ProblemDTO>(problem);
         }

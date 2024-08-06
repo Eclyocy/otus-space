@@ -5,7 +5,7 @@ namespace SpaceShip.Domain.Model
     /// <summary>
     /// Космического корабля.
     /// </summary>
-    public class Ship
+    public class Ship : BaseEntity
     {
         #region constructor
 

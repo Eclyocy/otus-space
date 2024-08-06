@@ -7,7 +7,7 @@ namespace SpaceShip.Service.Interfaces
         /// <summary>
         /// Create a problem.
         /// </summary>
-        ProblemDTO CreateProblem(ProblemDTO problemDTO);
+        ProblemDTO CreateProblem();
 
         /// <summary>
         /// Retrieve the problem by <paramref name="problemId"/>.

@@ -38,11 +38,9 @@ namespace SpaceShip.Service.Services
         /// Создать новый ресурс.
         /// </summary>
         /// <returns>ID ресурса</returns>
-        public ResourceDTO CreateResource(ResourceDTO resourceDTO)
+        public ResourceDTO CreateResource()
         {
-            Resource resourceRequest = _mapper.Map<Resource>(resourceDTO);
-
-            Resource resource = _resourceRepository.Create(resourceRequest);
+            Resource resource = _resourceRepository.Create();
 
             return _mapper.Map<ResourceDTO>(resource);
         }

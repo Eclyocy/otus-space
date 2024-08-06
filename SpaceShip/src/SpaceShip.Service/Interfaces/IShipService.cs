@@ -7,7 +7,7 @@ public interface IShipService
     /// <summary>
     /// Create a SpaceShip.
     /// </summary>
-    public SpaceShipDTO CreateShip(SpaceShipDTO spaceShipDTO);
+    public SpaceShipDTO CreateShip();
 
     /// <summary>
     /// Retrieve the SpaceShip by <paramref name="spaceshipId"/>.

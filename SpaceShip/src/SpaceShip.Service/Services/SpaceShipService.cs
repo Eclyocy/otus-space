@@ -45,11 +45,9 @@ public class SpaceShipService : IShipService
     /// Создать новый корабль с ресурсами.
     /// </summary>
     /// <returns>ID корабля</returns>
-    public SpaceShipDTO CreateShip(SpaceShipDTO spaceShipDTO)
+    public SpaceShipDTO CreateShip()
     {
-        Ship shipRequest = _mapper.Map<Ship>(spaceShipDTO);
-
-        Ship ship = _shipRepository.Create(shipRequest);
+        Ship ship = _shipRepository.Create();
 
         return _mapper.Map<SpaceShipDTO>(ship);
     }
