@@ -1,18 +1,17 @@
-﻿namespace SpaceShip.Domain.Model
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SpaceShip.Domain.Model
 {
     /// <summary>
     /// Проблемы.
     /// </summary>
+    [Table("problem")]
     public class Problem : BaseEntity
     {
         /// <summary>
-        /// Problem ID.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// Имя проблемы.
         /// </summary>
+        [Column("name")]
         public string Name { get; set; }
 
         /// <summary>

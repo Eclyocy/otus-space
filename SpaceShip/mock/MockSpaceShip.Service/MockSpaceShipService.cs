@@ -52,11 +52,6 @@ public class MockSpaceShipService : IShipService
         return ship;
     }
 
-    public SpaceShipDTO CreateShip(SpaceShipDTO spaceShipDTO)
-    {
-        throw new NotImplementedException();
-    }
-
     public bool DeleteShip(Guid spaceshipId)
     {
         throw new NotImplementedException();

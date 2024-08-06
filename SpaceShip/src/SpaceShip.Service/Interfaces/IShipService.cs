@@ -2,6 +2,9 @@
 
 namespace SpaceShip.Service.Interfaces;
 
+/// <summary>
+/// Interface for working with SpaceShip.
+/// </summary>
 public interface IShipService
 {
     /// <summary>
@@ -24,5 +27,8 @@ public interface IShipService
     /// </summary>
     bool DeleteShip(Guid spaceshipId);
 
+    /// <summary>
+    /// Process Day the SpaceShip with <paramref name="spaceshipId"/>.
+    /// </summary>
     public void ProcessNewDay(Guid spaceshipId);
 }

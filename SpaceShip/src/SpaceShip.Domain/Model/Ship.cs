@@ -1,10 +1,12 @@
-﻿using SpaceShip.Domain.Model.State;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using SpaceShip.Domain.Model.State;
 
 namespace SpaceShip.Domain.Model
 {
     /// <summary>
     /// Космического корабля.
     /// </summary>
+    [Table("ship")]
     public class Ship : BaseEntity
     {
         #region constructor
@@ -22,23 +24,21 @@ namespace SpaceShip.Domain.Model
         #endregion
 
         /// <summary>
-        /// Ship ID.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// Имя корабля.
         /// </summary>
+        [Column("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Статус корабля.
         /// </summary>
+        [Column("state")]
         public SpaceshipState State { get; set; }
 
         /// <summary>
         /// Ход.
         /// </summary>
+        [Column("step")]
         public short Step { get; set; }
 
         /// <summary>

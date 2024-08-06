@@ -1,26 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SpaceShip.Service.Contracts;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SpaceShip.Service.Interfaces;
 
 namespace WebAPI.Controllers
 {
+    /// <summary>
+    /// Controller for actions with problem.
+    /// </summary>
     [ApiController]
     [Route("api/v1/problem")]
     public class ProblemController : ControllerBase
     {
+        #region private fields
+
         private readonly IProblemService _iProblemService;
 
-        public ProblemController(IProblemService iProblemService)
+        private readonly IMapper _mapper;
+
+        #endregion
+
+        #region constructor
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public ProblemController(
+            IProblemService iProblemService,
+            IMapper mapper)
         {
             _iProblemService = iProblemService;
+            _mapper = mapper;
         }
 
-        [HttpPost]
-        [Route("ProblemAdd")]
-        public ProblemDTO Create()
-        {
-            return new ProblemDTO { };
-            ////return _iProblemService.Create();
-        }
+        #endregion
+
+        #region public methods
+
+        #endregion
     }
 }

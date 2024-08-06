@@ -4,6 +4,9 @@ using SpaceShip.Domain.Model;
 
 namespace SpaceShip.Domain.Implementation
 {
+    /// <summary>
+    /// Problem repository.
+    /// </summary>
     public class ProblemRepository : BaseRepository<Problem>, IProblemRepository
     {
         #region constructor

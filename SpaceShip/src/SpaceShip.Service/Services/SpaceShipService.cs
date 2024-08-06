@@ -67,9 +67,9 @@ public class SpaceShipService : IShipService
     /// <summary>
     /// Получить метрики корабля.
     /// </summary>
-    /// <param name="shipId">ID корабля</param>
+    /// <param name="spaceshipId">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO? GetShips(Guid shipId)
+    public SpaceShipDTO? GetShips(Guid spaceshipId)
     {
         List<Ship> ship = _shipRepository.GetAll();
 
@@ -104,8 +104,13 @@ public class SpaceShipService : IShipService
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
         var ship = _shipRepository.Get(id);
-        ship.Step++;
-        _shipRepository.Update(ship);
+
+        if (ship != null)
+        {
+            ship.Step++;
+            _shipRepository.Update(ship);
+        }
+
         return;
     }
 

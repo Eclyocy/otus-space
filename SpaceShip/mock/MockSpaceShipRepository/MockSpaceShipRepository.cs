@@ -25,17 +25,12 @@ public class MockSpaceShipRepository : ISpaceshipRepository
     /// Создание корабля (в минимальной конфигурации)
     /// </summary>
     /// <returns>Метрики корабля</returns>
-    public Ship Create(Ship entity)
+    public Ship Create()
     {
         var ship = new Ship();
         ship.Id = Guid.NewGuid(); // какого??? это должно быть в репозитории!
         _repository.Add(ship.Id, ship);
         return ship;
-    }
-
-    public Ship Create()
-    {
-        throw new NotImplementedException();
     }
 
     public bool Delete(Guid id)

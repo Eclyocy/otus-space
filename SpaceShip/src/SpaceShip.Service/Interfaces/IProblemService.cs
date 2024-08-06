@@ -2,6 +2,9 @@
 
 namespace SpaceShip.Service.Interfaces
 {
+    /// <summary>
+    /// Interface for working with problem.
+    /// </summary>
     public interface IProblemService
     {
         /// <summary>
