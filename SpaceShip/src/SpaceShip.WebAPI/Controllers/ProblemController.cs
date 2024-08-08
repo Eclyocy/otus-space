@@ -22,8 +22,10 @@ namespace WebAPI.Controllers
         #region constructor
 
         /// <summary>
-        /// Constructor.
+        /// Конструктор, в качестве параметра передаем сервис для работы с сущностью проблемы
         /// </summary>
+        /// <param name="iProblemService">Сервис работы с сущностью проблемы</param>
+        /// <param name="mapper">Маппер ответа сервиса</param>
         public ProblemController(
             IProblemService iProblemService,
             IMapper mapper)
