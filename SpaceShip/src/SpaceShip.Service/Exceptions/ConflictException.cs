@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace GameController.Services.Exceptions
+namespace SpaceShip.Services.Exceptions
 {
     /// <summary>
     /// Conflict (409) exception.

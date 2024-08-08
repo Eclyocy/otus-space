@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using GameController.Services.Exceptions;
 using Microsoft.Extensions.Logging;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Model;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Services.Exceptions;
 
 namespace SpaceShip.Service.Implementation;
 

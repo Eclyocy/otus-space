@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace GameController.Services.Exceptions
+namespace SpaceShip.Services.Exceptions
 {
     /// <summary>
     /// Not modified (304) exception.
