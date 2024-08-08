@@ -56,6 +56,11 @@ services:
     - RABBITMQ_PASSWORD=Ss1234
     - RABBITMQ_TROUBLES_QUEUE=q_troubles
     - RABBITMQ_STEP_QUEUE=q_new_day_ship
+    - POSTGRES_HOST=game_controller_db
+    - POSTGRES_PORT=5432
+    - POSTGRES_DATABASE=Spaceship
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=pg_pass
 
   rabbitmq:
     container_name: rabbitmq_otus

@@ -52,6 +52,11 @@ public class MockSpaceShipService : IShipService
         return ship;
     }
 
+    public bool DeleteShip(Guid spaceshipId)
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Метод получения состояния корабля
     /// </summary>
@@ -62,6 +67,11 @@ public class MockSpaceShipService : IShipService
         _logger.LogInformation("Get ship {shipId}", id);
 
         return _ships.FirstOrDefault(x => x.Id == id);
+    }
+
+    public SpaceShipDTO? GetShip(Guid spaceshipId)
+    {
+        throw new NotImplementedException();
     }
 
     public void ProcessNewDay(Guid id)
@@ -76,5 +86,10 @@ public class MockSpaceShipService : IShipService
         }
 
         ship.Step++;
+    }
+
+    public SpaceShipDTO UpdateShip(Guid spaceshipId, SpaceShipDTO spaceShipDTO)
+    {
+        throw new NotImplementedException();
     }
 }

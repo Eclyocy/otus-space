@@ -8,6 +8,9 @@ namespace SpaceShip.Service.Queue;
 /// </summary>
 public class TroubleEventConsumer : EventConsumer
 {
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     public TroubleEventConsumer(
         ILogger<TroubleEventConsumer> logger,
         IConfiguration configuration)

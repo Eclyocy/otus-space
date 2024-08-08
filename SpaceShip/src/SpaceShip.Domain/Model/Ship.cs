@@ -1,26 +1,49 @@
-﻿namespace SpaceShip.Domain.Model;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using SpaceShip.Domain.Model.State;
 
-/// <summary>
-/// Класс, описывающий сущность корабля
-/// </summary>
-public class Ship
+namespace SpaceShip.Domain.Model
 {
     /// <summary>
-    /// Публичный конструктор <see cref="Ship"/> class.
+    /// Космического корабля.
     /// </summary>
-    public Ship()
+    [Table("ship")]
+    public class Ship : BaseEntity
     {
-        Id = Guid.NewGuid();
-        Step = 0;
+        #region constructor
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public Ship()
+        {
+            Id = Guid.NewGuid();
+            Step = 0;
+            State = SpaceshipState.Start;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Имя корабля.
+        /// </summary>
+        [Column("name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Статус корабля.
+        /// </summary>
+        [Column("state")]
+        public SpaceshipState State { get; set; }
+
+        /// <summary>
+        /// Ход.
+        /// </summary>
+        [Column("step")]
+        public short Step { get; set; }
+
+        /// <summary>
+        /// Коллекция ресурсов.
+        /// </summary>
+        public virtual ICollection<Resource> Resources { get; set; }
     }
-
-    /// <summary>
-    /// Идентификатор корабля
-    /// </summary>
-    public Guid Id { get; }
-
-    /// <summary>
-    /// Номер шага игры
-    /// </summary>
-    public short Step { get; set; }
 }

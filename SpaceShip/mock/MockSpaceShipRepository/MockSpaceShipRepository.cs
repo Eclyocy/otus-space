@@ -1,23 +1,23 @@
-﻿using SpaceShip.Domain.DTO;
-using SpaceShip.Domain.Interfaces;
+﻿using SpaceShip.Domain.Interfaces;
+using SpaceShip.Domain.Model;
 
 namespace MockSpaceShip.Repository;
 
 /// <summary>
 /// Заглушка репозитория корабля для работы без БД
 /// </summary>
-public class MockSpaceShipRepository : IShipRepository
+public class MockSpaceShipRepository : ISpaceshipRepository
 {
     /// <summary>
     /// Словарь для хранения кораблей
     /// Ключ - Id корабля
     /// </summary>
-    private readonly Dictionary<Guid, SpaceShipModelDto> _repository;
+    private readonly Dictionary<Guid, Ship> _repository;
 
     /// <summary>
     /// Конструктор <see cref="MockSpaceShipRepository"/> class.
     /// </summary>
-    public MockSpaceShipRepository() => _repository = new Dictionary<Guid, SpaceShipModelDto>
+    public MockSpaceShipRepository() => _repository = new Dictionary<Guid, Ship>
     {
     };
 
@@ -25,58 +25,63 @@ public class MockSpaceShipRepository : IShipRepository
     /// Создание корабля (в минимальной конфигурации)
     /// </summary>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipModelDto Create()
+    public Ship Create()
     {
-        var ship = CreateShip();
+        var ship = new Ship();
+        ship.Id = Guid.NewGuid(); // какого??? это должно быть в репозитории!
         _repository.Add(ship.Id, ship);
         return ship;
+    }
+
+    public bool Delete(Guid id)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
     /// Возвращает корабль
     /// </summary>
     /// <param name="id">Id корабля</param>
-    /// <returns>Метрики корабля</returns>
-    public SpaceShipModelDto FindById(Guid id)
+    /// <returns>True если корабль найден, False в противном случае</returns>
+    public bool FindById(Guid id)
     {
-        if (_repository.TryGetValue(id, out SpaceShipModelDto? ship))
-        {
-            return ship;
-        }
-
-        throw new KeyNotFoundException("Cannot find spaceship by given Id");
+        return _repository.TryGetValue(id, out Ship? ship);
     }
 
     /// <summary>
-    /// Увеличивает шаг игры (новый день полета)
+    /// Получить существующий корабль
     /// </summary>
-    /// <param name="id">Id корабля</param>
-    /// <returns>Метрики корабля</returns>
-    public SpaceShipModelDto NextDay(Guid id)
+    /// <param name="id">ID корабля</param>
+    /// <returns>Модель корабля</returns>
+    /// <exception cref="KeyNotFoundException">Если корабля нет в БД</exception>
+    public Ship Get(Guid id)
     {
-        if (_repository.TryGetValue(id, out SpaceShipModelDto? ship))
+        if (!_repository.TryGetValue(id, out Ship? ship))
         {
-            ship.Step++;
-            _repository[id] = ship;
-            return ship;
+            throw new KeyNotFoundException();
         }
 
-        throw new KeyNotFoundException("Cannot find spaceship by given Id");
+        return ship ?? throw new KeyNotFoundException();
     }
 
-    private static SpaceShipModelDto CreateShip(Guid? shipId = null)
+    public List<Ship> GetAll()
     {
-        List<ResourceModelDto> value = new List<ResourceModelDto>
-        {
-            new () { Id = Guid.NewGuid(), Name = "Engine", State = ResourceStateModelDto.Normal },
-            new () { Id = Guid.NewGuid(), Name = "Body", State = ResourceStateModelDto.Normal }
-        };
+        throw new NotImplementedException();
+    }
 
-        return new SpaceShipModelDto
-        {
-            Id = shipId ?? Guid.NewGuid(),
-            Step = 0,
-            Resources = value
-        };
+    /// <summary>
+    /// Обновить существующий корабль
+    /// </summary>
+    /// <param name="ship">Новая сущность</param>
+    /// <returns>Модель корабля</returns>
+    public Ship Update(Ship ship)
+    {
+        _repository.Add(ship.Id, ship);
+        return ship;
+    }
+
+    void IRepository<Ship>.Update(Ship entity)
+    {
+        throw new NotImplementedException();
     }
 }

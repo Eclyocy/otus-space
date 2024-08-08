@@ -1,4 +1,4 @@
-using SpaceShip.Domain.DTO;
+﻿using SpaceShip.Domain.DTO;
 
 namespace SpaceShip.Domain.Interfaces;
 

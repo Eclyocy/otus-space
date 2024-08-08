@@ -1,4 +1,4 @@
-namespace SpaceShip.Domain.DTO;
+﻿namespace SpaceShip.Domain.DTO;
 
 /// <summary>
 /// DTO корабля
