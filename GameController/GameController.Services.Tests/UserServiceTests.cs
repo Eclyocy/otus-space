@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
@@ -59,7 +58,6 @@ namespace GameController.Services.Tests
 
                 // Verify calls
                 _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
-
                 _mapperMock.Verify(m => m.Map<UserDto>(user), Times.Once);
 
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
@@ -92,14 +90,14 @@ namespace GameController.Services.Tests
         #region tests for GetUsers
 
         [Test]
-        public void GetUsers_ReturnsUserDto_WhenUserExists()
+        public void GetUsers_ReturnsListUserDto_WhenUserExists()
         {
             // Arrange
             List<User> users = new List<User>() {new User { Id = Guid.NewGuid(), Name = "Test User", PasswordHash = "hashedPassword" } };
-
             var userId = Guid.NewGuid();
             var user = new User { Id = userId, Name = "Test User", PasswordHash = "hashedPassword" };
             var userDto = new UserDto { Id = userId, Name = "Test User" };
+
             _userRepositoryMock.Setup(repo => repo.GetAll()).Returns(users);
             _mapperMock.Setup(m => m.Map<List<UserDto>>(users)).Returns(new List<UserDto>() { new UserDto { Id = userId, Name = user.Name }});
 
@@ -127,7 +125,7 @@ namespace GameController.Services.Tests
         }
 
         [Test]
-        public void GetUsers_ThrowsNotFoundException_WhenUserDoesNotExist()
+        public void GetUsers_ThrowsNotFoundException_WhenUsersDoesNotExist()
         {
             // Arrange
             _userRepositoryMock.Setup(repo => repo.GetAll()).Returns((List<User>)null);
@@ -146,6 +144,173 @@ namespace GameController.Services.Tests
             });
         }
 
+        #endregion
+
+        #region tests for CreateUser
+        [Test]
+        public void CreateUser_ReturnUserDto_WhenUserExists()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var user = new User { Id = userId, Name = "Test User", PasswordHash = "hashedPassword" };
+            var createUserDto = new CreateUserDto { Name = "Test User", PasswordHash = "hashedPassword" };
+            var userDto = new UserDto { Id = userId, Name = "Test User" };
+            _mapperMock.Setup(m => m.Map<User>(createUserDto)).Returns(user);
+            _userRepositoryMock.Setup(repo => repo.Create(user)).Returns(user);
+            _mapperMock.Setup(m => m.Map<UserDto>(user)).Returns(userDto);
+
+
+            // Act
+            var result = _userService.CreateUser(createUserDto);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result, Is.EqualTo(userDto));
+                Assert.That(result.Id, Is.EqualTo(userDto.Id));
+                Assert.That(result.Name, Is.EqualTo(userDto.Name));
+
+                // Verify calls
+                _userRepositoryMock.Verify(repo => repo.Create(user), Times.Once);
+                _mapperMock.Verify(m => m.Map<User>(createUserDto), Times.Once);
+                _mapperMock.Verify(m => m.Map<UserDto>(user), Times.Once);
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
+        [Test]
+        public void CreateUser_ThrowsNotFoundException_WhenUserDoesNotExist()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var user = new User { Id = userId, Name = "Test User", PasswordHash = "hashedPassword" };
+            var createUserDto = new CreateUserDto { Name = "Test User", PasswordHash = "hashedPassword" };
+
+            _mapperMock.Setup(m => m.Map<User>(createUserDto)).Returns(user);
+            _userRepositoryMock.Setup(repo => repo.Create(user)).Returns((User)null);
+
+            // Act & Assert
+            Assert.Multiple(() =>
+            {
+                Assert.Throws<NotFoundException>(() => _userService.CreateUser(createUserDto));
+
+                _userRepositoryMock.Verify(repo => repo.Create(user), Times.Once);
+                _userRepositoryMock.VerifyNoOtherCalls();
+
+                _mapperMock.Verify(m => m.Map<User>(It.IsAny<CreateUserDto>()), Times.Once);
+                _mapperMock.Verify(m => m.Map<UserDto>(It.IsAny<User>()), Times.Never);
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
+        #endregion
+
+        #region tests for UpdateUser
+
+        [Test]
+        public void UpdateUser_ReturnsUserDto_WhenUserExists()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var user = new User { Id = userId, Name = "Test User", PasswordHash = "hashedPassword" };
+            var updateUserDto = new UpdateUserDto { Name = "Test User1", PasswordHash = "hashedPassword1" };
+
+            _userRepositoryMock.Setup(repo => repo.Get(userId)).Returns(user);
+            _userRepositoryMock.Setup(repo => repo.Update(user));
+            _mapperMock.Setup(m => m.Map<UserDto>(user)).Returns(new UserDto { Id = userId, Name = updateUserDto.Name });
+
+            // Act
+            var result = _userService.UpdateUser(userId, updateUserDto);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Name, Is.EqualTo(updateUserDto.Name));
+
+                _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
+                _userRepositoryMock.Verify(repo => repo.Update(user), Times.Once);
+
+                _mapperMock.Verify(m => m.Map<UserDto>(user), Times.Once);
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
+        [Test]
+        public void UpdateUser_ThrowsNotModifiedException_WhenDataIsNotModified()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var user = new User { Id = userId, Name = "Test User", PasswordHash = "hashedPassword" };
+            var updateUserDto = new UpdateUserDto { Name = "Test User", PasswordHash = "hashedPassword" };
+
+            _userRepositoryMock.Setup(repo => repo.Get(userId)).Returns(user);
+
+            // Act & Assert
+            Assert.Multiple(() =>
+            {
+                Assert.Throws<NotModifiedException>(() => _userService.UpdateUser(userId, updateUserDto));
+
+                _userRepositoryMock.Verify(repo => repo.Update(user), Times.Never);
+
+                _mapperMock.Verify(m => m.Map<UserDto>(user), Times.Never);
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
+        #endregion
+
+        #region tests for DeleteUser
+
+        [Test]
+        public void DeleteUser_ReturnsTrue_WhenUserExists()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            _userRepositoryMock.Setup(repo => repo.Delete(userId)).Returns(true);
+
+            // Act
+            var result = _userService.DeleteUser(userId);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.True);
+
+                _userRepositoryMock.Verify(repo => repo.Delete(userId), Times.Once);
+                _userRepositoryMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
+        [Test]
+        public void DeleteUser_ReturnsFalse_WhenUserDoesNotExist()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+
+            _userRepositoryMock.Setup(repo => repo.Delete(userId)).Returns(false);
+
+            // Act
+            var result = _userService.DeleteUser(userId);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.False);
+
+                _userRepositoryMock.Verify(repo => repo.Delete(userId), Times.Once);
+                _userRepositoryMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
         #endregion
     }
 }
