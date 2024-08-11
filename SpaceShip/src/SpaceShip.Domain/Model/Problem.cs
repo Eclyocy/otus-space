@@ -5,18 +5,18 @@ namespace SpaceShip.Domain.Model
     /// <summary>
     /// Проблемы.
     /// </summary>
-    [Table("problem")]
+    [Table("Problem")]
     public class Problem : BaseEntity
     {
         /// <summary>
         /// Имя проблемы.
         /// </summary>
-        [Column("name")]
-        public string Name { get; set; }
+        [Column("Name")]
+        public string? Name { get; set; }
 
         /// <summary>
         /// Коллекция типов ресурсов.
         /// </summary>
-        public virtual ICollection<ResourceType> ResourceTypes { get; set; }
+        public virtual ICollection<ResourceType>? ResourceTypes { get; set; }
     }
 }

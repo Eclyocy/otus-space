@@ -69,7 +69,7 @@ public class SpaceShipService : IShipService
     /// </summary>
     /// <param name="spaceshipId">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO? GetShips(Guid spaceshipId)
+    public SpaceShipDTO? GetShips()
     {
         List<Ship> ship = _shipRepository.GetAll();
 
@@ -130,7 +130,7 @@ public class SpaceShipService : IShipService
 
         if (ship == null)
         {
-            throw new NotFoundException($"User with ID {shipId} not found.");
+            throw new NotFoundException($"Ship with ID {shipId} not found.");
         }
 
         return ship;

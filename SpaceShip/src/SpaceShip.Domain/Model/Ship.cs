@@ -27,7 +27,7 @@ namespace SpaceShip.Domain.Model
         /// Имя корабля.
         /// </summary>
         [Column("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Статус корабля.
@@ -39,11 +39,11 @@ namespace SpaceShip.Domain.Model
         /// Ход.
         /// </summary>
         [Column("step")]
-        public short Step { get; set; }
+        public short? Step { get; set; }
 
         /// <summary>
         /// Коллекция ресурсов.
         /// </summary>
-        public virtual ICollection<Resource> Resources { get; set; }
+        public virtual ICollection<Resource>? Resources { get; set; }
     }
 }
