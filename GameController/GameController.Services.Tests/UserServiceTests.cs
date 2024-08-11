@@ -58,6 +58,7 @@ namespace GameController.Services.Tests
 
                 // Verify calls
                 _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
+
                 _mapperMock.Verify(m => m.Map<UserDto>(user), Times.Once);
 
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
