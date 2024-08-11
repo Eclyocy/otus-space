@@ -1,11 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Repository;
-using EventGenerator.Database.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EventGenerator.Database
 {
+    /// <summary>
+    /// Extensions for <see cref="IServiceCollection"/> for database.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// Configure project-specific service collection with DI.
+        /// </summary>
         public static IServiceCollection ConfigureDatabase(
             this IServiceCollection services)
         {

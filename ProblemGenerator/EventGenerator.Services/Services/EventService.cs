@@ -10,7 +10,6 @@ namespace EventGenerator.Services.Services
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
-        //private readonly IGeneratorService _generatorService;
 
         private readonly ILogger<EventService> _logger;
         private readonly IMapper _mapper;
@@ -31,9 +30,8 @@ namespace EventGenerator.Services.Services
             Random random = new Random();
 
             createEventDto.ShipId = shipId;
-            createEventDto.troublecoint = random.Next(0, 10);
+            createEventDto.Troublecoint = random.Next(0, 10);
 
-            //CreateSessionDto createSessionDto = await CreateSessionRequestAsync();
             Event eventRequest = _mapper.Map<Event>(createEventDto);
             Event event_ = _eventRepository.Create(eventRequest);
 

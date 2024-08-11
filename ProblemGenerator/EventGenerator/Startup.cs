@@ -1,12 +1,8 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using EventGenerator.API.Mappers;
+﻿using EventGenerator.API.Mappers;
 using EventGenerator.API.ServicesExtensions;
 using EventGenerator.Database;
 using EventGenerator.Services;
-using Microsoft.AspNetCore.Connections;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Options;
+using FluentValidation.AspNetCore;
 
 namespace EventGenerator
 {
@@ -55,8 +51,6 @@ namespace EventGenerator
             {
                 endpoints.MapControllers();
             });
-
-            //SetupRabbitMQ(application.ApplicationServices.GetService<IOptions<RabbitMQSettings>>());
         }
 
         /// <summary>
@@ -64,7 +58,6 @@ namespace EventGenerator
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.ConfigureDatabase();
 
             services.ConfigureApplicationServices(Configuration);

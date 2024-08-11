@@ -1,56 +1,46 @@
-using AutoMapper;
+п»їusing AutoMapper;
 using EventGenerator.API.Models;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Event;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-
 namespace EventGenerator.Controllers
 {
     [ApiController]
-    [Route("/api/generators")]
+    [Route("/api/events")]
     public class EventController : Controller
- 
     {
         private readonly IEventService _eventService;
-
         private readonly IMapper _mapper;
-
- 
         public EventController(IEventService service, IMapper mapper)
- 
         {
             _eventService = service;
             _mapper = mapper;
         }
 
         /// <summary>
-        /// Заглушка - Получение Guid корабля
+        /// Р—Р°РіР»СѓС€РєР° - РџРѕР»СѓС‡РµРЅРёРµ Guid РєРѕСЂР°Р±Р»СЏ.
         /// </summary>
-        /// <returns>Guid корабля</returns>
         [HttpGet]
-        [SwaggerOperation("Получение Guid корабля - заглушка")]
-        public CreateEventRequest GetShip(CreateEventRequest generatorRequest)
+        [SwaggerOperation("РџРѕР»СѓС‡РµРЅРёРµ Guid РєРѕСЂР°Р±Р»СЏ - Р·Р°РіР»СѓС€РєР°")]
+        public CreateEventRequest GetShip(CreateEventRequest eventRequest)
         {
             return new CreateEventRequest()
             {
                 IdShip = Guid.NewGuid()
             };
-
         }
 
         /// <summary>
-        /// Создать новое событие
+        /// РЎРѕР·РґР°С‚СЊ РЅРѕРІРѕРµ СЃРѕР±С‹С‚РёРµ.
         /// </summary>
-        /// <returns>200</returns>
         [HttpPost]
         [Route("{shipId}")]
-        [SwaggerOperation("Создание нового события")]
+        [SwaggerOperation("РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ СЃРѕР±С‹С‚РёСЏ")]
         public async Task<EventResponse> CreateEvent(Guid shipId)
         {
             EventDto eventDto = await _eventService.CreateEventAsync(shipId);
-            
             return _mapper.Map<EventResponse>(eventDto);
         }
     }

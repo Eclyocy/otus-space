@@ -2,7 +2,7 @@
 {
     public record NewDayMessageDto
     {
-        public Guid GeneratorId { get; set; } 
+        public Guid EventId { get; set; }
         public Guid ShipId { get; set; }
     }
 }

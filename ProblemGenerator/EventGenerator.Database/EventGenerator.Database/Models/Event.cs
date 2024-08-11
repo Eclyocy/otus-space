@@ -1,26 +1,29 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventGenerator.Database.Models
 {
+    /// <summary>
+    /// Event model.
+    /// </summary>
     [Table("event")]
- 
-    public class Event
- 
+    public class Event : BaseEntity
     {
-        [Column("generatorid")]
-        [Key]
-        public Guid GeneratorId { get; set; }
- 
+        /// <summary>
+        /// Event ID.
+        /// </summary>
+        [Column("event_id")]
+        public Guid EventId { get; set; }
 
-        [Column("shipid")]
- 
+        /// <summary>
+        /// Ship ID.
+        /// </summary>
+        [Column("ship_id")]
         public Guid ShipId { get; set; }
- 
 
+        /// <summary>
+        /// Troublecoint.
+        /// </summary>
         [Column("troublecoint")]
- 
-        public int troublecoint { get; set; }
- 
+        public int Troublecoint { get; set; }
     }
 }

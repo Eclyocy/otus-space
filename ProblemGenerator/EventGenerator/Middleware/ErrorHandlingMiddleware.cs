@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using EventGenerator.Services.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace EventGenerator.API.Middleware
 {

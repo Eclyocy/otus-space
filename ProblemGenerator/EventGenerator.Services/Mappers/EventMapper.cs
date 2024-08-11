@@ -13,7 +13,7 @@ namespace EventGenerator.Services.Mappers
 
             // Database models -> Service models
             CreateMap<Event, EventDto>()
-                .ForMember(x => x.GeneratorId, opt => opt.MapFrom(x => x.GeneratorId));
+                .ForMember(x => x.EventId, opt => opt.MapFrom(x => x.EventId));
         }
     }
 }

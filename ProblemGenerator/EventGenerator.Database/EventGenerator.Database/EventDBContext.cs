@@ -4,16 +4,29 @@ using Microsoft.Extensions.Configuration;
 
 namespace EventGenerator.Database
 {
+    /// <summary>
+    /// Database context for event controller application.
+    /// </summary>
     public class EventDBContext : DbContext
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public EventDBContext(DbContextOptions<EventDBContext> options)
             : base(options)
         {
             Database.EnsureCreated();
         }
-        //public DbSet<Ship> Ships { get; set; }
 
+        /// <summary>
+        /// Events.
+        /// </summary>
         public DbSet<Event> Events { get; set; }
+
+        /// <summary>
+        /// Ships.
+        /// </summary>
+        public DbSet<Ship> Ships { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

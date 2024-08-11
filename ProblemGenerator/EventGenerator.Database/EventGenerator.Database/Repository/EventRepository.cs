@@ -1,14 +1,13 @@
+﻿using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
-using EventGenerator.Database.Interfaces;
 
 namespace EventGenerator.Database.Repository
 {
- 
+    /// <summary>
+    /// Event repository.
+    /// </summary>
     public class EventRepository : BaseRepository<Event>, IEventRepository
- 
     {
-        #region constructor
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -16,7 +15,5 @@ namespace EventGenerator.Database.Repository
             : base(databaseContext)
         {
         }
-
-        #endregion
     }
 }

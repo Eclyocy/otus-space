@@ -16,12 +16,12 @@
         ///// Get all entities.
         ///// </summary>
         ///// <returns>List of entities.</returns>
-        //List<T> GetAll();
+        // List<T> GetAll();
 
         ///// <summary>
         ///// Get entity by <paramref name="id"/>.
         ///// </summary>
         ///// <returns>Entity if found, otherwise null.</returns>
-        //T? Get(Guid id);
+        // T? Get(Guid id);
     }
 }
