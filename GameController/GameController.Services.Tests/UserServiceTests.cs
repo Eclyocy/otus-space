@@ -125,26 +125,6 @@ namespace GameController.Services.Tests
             });
         }
 
-        [Test]
-        public void GetUsers_ThrowsNotFoundException_WhenUsersDoesNotExist()
-        {
-            // Arrange
-            _userRepositoryMock.Setup(repo => repo.GetAll()).Returns((List<User>)null);
-
-            // Act & Assert
-            Assert.Multiple(() =>
-            {
-                Assert.Throws<NotFoundException>(() => _userService.GetUsers());
-
-                _userRepositoryMock.Verify(repo => repo.GetAll(), Times.Once);
-                _userRepositoryMock.VerifyNoOtherCalls();
-
-                _mapperMock.Verify(m => m.Map<List<UserDto>>(It.IsAny<List<User>>()), Times.Never);
-
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
-            });
-        }
-
         #endregion
 
         #region tests for CreateUser

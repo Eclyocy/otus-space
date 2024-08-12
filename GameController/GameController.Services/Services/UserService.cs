@@ -68,11 +68,6 @@ namespace GameController.Services.Services
 
             List<User> users = _userRepository.GetAll();
 
-            if (users == null || !users.Any())
-            {
-                throw new NotFoundException("No users found.");
-            }
-
             return _mapper.Map<List<UserDto>>(users);
         }
 
