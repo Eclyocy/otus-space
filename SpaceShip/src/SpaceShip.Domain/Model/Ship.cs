@@ -19,6 +19,27 @@ namespace SpaceShip.Domain.Model
             Id = Guid.NewGuid();
             Step = 0;
             State = SpaceshipState.Start;
+            Resources = new List<Resource>()
+            {
+                new Resource()
+                {
+                Name = "Armor",
+                Amount = 10,
+                State = ResourceState.Start
+                },
+                new Resource()
+                {
+                Name = "Fuel",
+                Amount = 4,
+                State = ResourceState.Start
+                },
+                new Resource()
+                {
+                Name = "Water",
+                Amount = 6,
+                State = ResourceState.Start
+                }
+            };
         }
 
         #endregion
