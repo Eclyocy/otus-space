@@ -51,6 +51,7 @@ namespace GameController
             application.UseHttpsRedirection();
 
             application.UseRouting();
+            application.UseCors();
             application.UseAuthorization();
 
             application.UseEndpoints(endpoints =>
@@ -69,6 +70,15 @@ namespace GameController
             services.ConfigureDatabase();
 
             services.ConfigureApplicationServices(Configuration);
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+            });
 
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
