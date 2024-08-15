@@ -44,7 +44,7 @@ namespace SpaceShip.Domain.Implementation
         /// <inheritdoc/>
         public virtual T Create()
         {
-            var entity = new T() { Id = Guid.NewGuid() };
+            var entity = new T();
 
             var entityEntry = EntitySet.Add(entity);
             Context.SaveChanges();

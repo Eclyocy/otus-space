@@ -18,6 +18,6 @@ public class SpaceShipModelMappingProfile : Profile
         CreateMap<Ship, SpaceShipDTO>()
             .ForMember(dest => dest.Id, op => op.MapFrom(src => src.Id))
             .ForMember(dest => dest.Step, op => op.MapFrom(src => src.Step))
-            .ForMember(dest => dest.Resources, op => op.UseDestinationValue());
+            .ForMember(dest => dest.Name, opt => opt.Ignore());
     }
 }

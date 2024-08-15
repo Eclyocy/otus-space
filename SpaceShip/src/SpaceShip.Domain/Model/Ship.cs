@@ -6,7 +6,7 @@ namespace SpaceShip.Domain.Model
     /// <summary>
     /// Космического корабля.
     /// </summary>
-    [Table("ship")]
+    [Table("Ship")]
     public class Ship : BaseEntity
     {
         #region constructor
@@ -47,24 +47,24 @@ namespace SpaceShip.Domain.Model
         /// <summary>
         /// Имя корабля.
         /// </summary>
-        [Column("name")]
+        [Column("Name")]
         public string? Name { get; set; }
 
         /// <summary>
         /// Статус корабля.
         /// </summary>
-        [Column("state")]
+        [Column("State")]
         public SpaceshipState State { get; set; }
 
         /// <summary>
         /// Ход.
         /// </summary>
-        [Column("step")]
+        [Column("Step")]
         public short? Step { get; set; }
 
         /// <summary>
         /// Коллекция ресурсов.
         /// </summary>
-        public virtual ICollection<Resource>? Resources { get; set; }
+        public virtual List<Resource>? Resources { get; set; }
     }
 }

@@ -30,5 +30,5 @@ public class SpaceShipDTO
     /// <summary>
     /// Коллекция ресурсов корабля
     /// </summary>
-    public ICollection<ResourceDTO> Resources { get; set; }
+    public List<ResourceDTO> Resources { get; set; }
 }

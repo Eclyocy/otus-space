@@ -12,13 +12,13 @@ namespace SpaceShip.Domain.Model
         /// <summary>
         /// SpaceshipId.
         /// </summary>
-        [Column("SpaceshipId_id")]
+        [Column("SpaceshipId")]
         public Guid? SpaceshipId { get; set; }
 
         /// <summary>
         /// ResourceTypeId.
         /// </summary>
-        [Column("ResourceType_id")]
+        [Column("ResourceTypeId")]
         public Guid? ResourceTypeId { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace SpaceShip.Domain.Model
         public int? Amount { get; set; }
 
         /// <summary>
-        /// Виртуцальное ствойство корабля.
+        /// Виртуальное свойство корабля.
         /// </summary>
         [ForeignKey("SpaceshipId")]
         public virtual Ship? Spaceship { get; set; }
