@@ -70,32 +70,6 @@ namespace GameController.Services.Tests
             });
         }
 
-        [Test]
-        public void CreateUser_ThrowsNotFoundException_WhenUserDoesNotExist()
-        {
-            // Arrange
-            var userId = Guid.NewGuid();
-            var user = new User { Id = userId, Name = _name, PasswordHash = _passwordHash };
-            var createUserDto = new CreateUserDto { Name = _name, PasswordHash = _passwordHash };
-
-            _mapperMock.Setup(m => m.Map<User>(createUserDto)).Returns(user);
-            _userRepositoryMock.Setup(repo => repo.Create(user)).Returns((User)null);
-
-            // Act & Assert
-            Assert.Multiple(() =>
-            {
-                Assert.Throws<NotFoundException>(() => _userService.CreateUser(createUserDto));
-
-                _userRepositoryMock.Verify(repo => repo.Create(user), Times.Once);
-                _userRepositoryMock.VerifyNoOtherCalls();
-
-                _mapperMock.Verify(m => m.Map<User>(It.IsAny<CreateUserDto>()), Times.Once);
-                _mapperMock.Verify(m => m.Map<UserDto>(It.IsAny<User>()), Times.Never);
-
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
-            });
-        }
-
         #endregion
 
         #region tests for GetUser

@@ -53,11 +53,6 @@ namespace GameController.Services.Services
 
             User user = _userRepository.Create(userRequest);
 
-            if (user == null)
-            {
-                throw new NotFoundException("No user found.");
-            }
-
             return _mapper.Map<UserDto>(user);
         }
 
