@@ -19,8 +19,8 @@ namespace GameController.Services.Tests
         private Mock<ILogger<UserService>> _loggerMock;
         private Mock<IMapper> _mapperMock;
         private readonly Guid userId = Guid.NewGuid();
-        private const string _name = "Test User";
-        private const string _passwordHash = "Test User";
+        private const string NameUser = "Test User";
+        private const string PasswordHashUser = "Test User";
 
         #endregion
 
@@ -42,9 +42,9 @@ namespace GameController.Services.Tests
         public void CreateUser_ReturnUserDto_WhenUserСorrect()
         {
             // Arrange
-            var user = new User { Id = userId, Name = _name, PasswordHash = _passwordHash };
-            var createUserDto = new CreateUserDto { Name = _name, PasswordHash = _passwordHash };
-            var userDto = new UserDto { Id = userId, Name = _name };
+            var user = new User { Id = userId, Name = NameUser, PasswordHash = PasswordHashUser };
+            var createUserDto = new CreateUserDto { Name = NameUser, PasswordHash = PasswordHashUser };
+            var userDto = new UserDto { Id = userId, Name = NameUser };
             _mapperMock.Setup(m => m.Map<User>(createUserDto)).Returns(user);
             _userRepositoryMock.Setup(repo => repo.Create(user)).Returns(user);
             _mapperMock.Setup(m => m.Map<UserDto>(user)).Returns(userDto);
@@ -78,9 +78,8 @@ namespace GameController.Services.Tests
         public void GetUser_ReturnsUserDto_WhenUserExists()
         {
             // Arrange
-            var userId = Guid.NewGuid();
-            var user = new User { Id = userId, Name = _name, PasswordHash = _passwordHash };
-            var userDto = new UserDto { Id = userId, Name = _name };
+            var user = new User { Id = userId, Name = NameUser, PasswordHash = PasswordHashUser };
+            var userDto = new UserDto { Id = userId, Name = NameUser };
             _userRepositoryMock.Setup(repo => repo.Get(userId)).Returns(user);
             _mapperMock.Setup(m => m.Map<UserDto>(user)).Returns(new UserDto { Id = userId, Name = user.Name });
 
@@ -107,7 +106,6 @@ namespace GameController.Services.Tests
         public void GetUser_ThrowsNotFoundException_WhenUserDoesNotExist()
         {
             // Arrange
-            var userId = Guid.NewGuid();
             _userRepositoryMock.Setup(repo => repo.Get(userId)).Returns((User)null);
 
             // Act & Assert
@@ -132,10 +130,9 @@ namespace GameController.Services.Tests
         public void GetUsers_ReturnsListUserDto_WhenUserExists()
         {
             // Arrange
-            List<User> users = new List<User>() {new User { Id = Guid.NewGuid(), Name = _name, PasswordHash = _passwordHash } };
-            var userId = Guid.NewGuid();
-            var user = new User { Id = userId, Name = _name, PasswordHash = _passwordHash };
-            var userDto = new UserDto { Id = userId, Name = _name };
+            List<User> users = new List<User>() {new User { Id = Guid.NewGuid(), Name = NameUser, PasswordHash = PasswordHashUser } };
+            var user = new User { Id = userId, Name = NameUser, PasswordHash = PasswordHashUser };
+            var userDto = new UserDto { Id = userId, Name = NameUser };
 
             _userRepositoryMock.Setup(repo => repo.GetAll()).Returns(users);
             _mapperMock.Setup(m => m.Map<List<UserDto>>(users)).Returns(new List<UserDto>() { new UserDto { Id = userId, Name = user.Name }});
@@ -171,8 +168,7 @@ namespace GameController.Services.Tests
         public void UpdateUser_ReturnsUserDto_WhenUserExists()
         {
             // Arrange
-            var userId = Guid.NewGuid();
-            var user = new User { Id = userId, Name = _name, PasswordHash = _passwordHash };
+            var user = new User { Id = userId, Name = NameUser, PasswordHash = PasswordHashUser };
             var updateUserDto = new UpdateUserDto { Name = "Test User1", PasswordHash = "hashedPassword1" };
 
             _userRepositoryMock.Setup(repo => repo.Get(userId)).Returns(user);
@@ -227,7 +223,6 @@ namespace GameController.Services.Tests
         public void DeleteUser_ReturnsTrue_WhenUserExists()
         {
             // Arrange
-            var userId = Guid.NewGuid();
             _userRepositoryMock.Setup(repo => repo.Delete(userId)).Returns(true);
 
             // Act
@@ -249,7 +244,6 @@ namespace GameController.Services.Tests
         public void DeleteUser_ReturnsFalse_WhenUserDoesNotExist()
         {
             // Arrange
-            var userId = Guid.NewGuid();
             _userRepositoryMock.Setup(repo => repo.Delete(userId)).Returns(false);
 
             // Act
