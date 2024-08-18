@@ -4,7 +4,7 @@ using SpaceShip.Domain.Model;
 namespace SpaceShip.Domain.EfCore
 {
     /// <summary>
-    /// Database context for game controller application.
+    /// Database context for space ship application.
     /// </summary>
     public class EfCoreContext : DbContext
     {
@@ -17,12 +17,8 @@ namespace SpaceShip.Domain.EfCore
         {
         }
 
-        #endregion
-
-        #region public properties
-
         /// <summary>
-        /// Users.
+        /// Constructor which ensures that the database is created.
         /// </summary>
         public EfCoreContext(DbContextOptions<EfCoreContext> options)
             : base(options)
@@ -30,23 +26,27 @@ namespace SpaceShip.Domain.EfCore
             Database.EnsureCreated();
         }
 
+        #endregion
+
+        #region public properties
+
         /// <summary>
-        /// Sessions.
+        /// Problems.
         /// </summary>
         public DbSet<Problem> Problems { get; set; }
 
         /// <summary>
-        /// Sessions.
+        /// Resources.
         /// </summary>
         public DbSet<Resource> Resources { get; set; }
 
         /// <summary>
-        /// Sessions.
+        /// Resource types.
         /// </summary>
         public DbSet<ResourceType> ResourcesType { get; set; }
 
         /// <summary>
-        /// Sessions.
+        /// Space ships.
         /// </summary>
         public DbSet<Ship> Spaceships { get; set; }
 
