@@ -26,6 +26,10 @@ export class ApiService {
     return this.http.get<User>(`${environment.apiUrl}users/${userId}`);
   }
 
+  public deleteUser(userId: string): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}users/${userId}`);
+  }
+
   public createUserSession(userId: string): Observable<Session> {
     return this.http.post<Session>(`${environment.apiUrl}users/${userId}/sessions`, {});
   }
