@@ -4,7 +4,7 @@ using SpaceShip.Domain.Model.State;
 namespace SpaceShip.Domain.Model
 {
     /// <summary>
-    /// Космического корабля.
+    /// Космический корабль.
     /// </summary>
     [Table("Ship")]
     public class Ship : BaseEntity
