@@ -1,7 +1,7 @@
 ﻿namespace SpaceShip.Service.Contracts
 {
     /// <summary>
-    /// Model for resourceType ship.
+    /// Model for resourceType.
     /// </summary>
     public class ResourceTypeDTO
     {

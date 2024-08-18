@@ -18,7 +18,7 @@ public class ResourceDTO
     public string Name { get; set; }
 
     /// <summary>
-    /// КОличество ресурса
+    /// Количество ресурса
     /// </summary>
     public int Amount { get; set; }
 

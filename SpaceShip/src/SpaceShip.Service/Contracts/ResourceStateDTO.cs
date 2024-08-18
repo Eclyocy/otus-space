@@ -1,7 +1,7 @@
 ﻿namespace SpaceShip.Service.Contracts;
 
 /// <summary>
-/// DTO для списка возможных сосотояний ресурса.
+/// DTO для списка возможных состояний ресурса.
 /// </summary>
 public enum ResourceStateDTO
 {
