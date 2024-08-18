@@ -1,1 +1,11 @@
 <p>user works!</p>
+
+<h2>User</h2>
+
+<ul>
+  <li *ngFor="let userSession of userSessions">
+    <span>ID:</span> {{userSession.sessionId}}<br/>
+    <span>Ship ID:</span> {{userSession.shipId}}<br/>
+    <span>Generator ID:</span> {{userSession.generatorId}}
+  </li>
+</ul>
