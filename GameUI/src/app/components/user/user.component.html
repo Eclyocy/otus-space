@@ -1,13 +1,20 @@
-<p>user works!</p>
-
 <h2>User {{userName}}</h2>
 
 <h3>Sessions</h3>
 
-<ul>
-  <li *ngFor="let userSession of userSessions">
-    <span>ID:</span> {{userSession.sessionId}}<br/>
-    <span>Ship ID:</span> {{userSession.shipId}}<br/>
-    <span>Generator ID:</span> {{userSession.generatorId}}
-  </li>
-</ul>
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Ship ID</th>
+      <th>Generator ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let userSession of userSessions">
+      <td>{{userSession.sessionId}}</td>
+      <td>{{userSession.shipId}}</td>
+      <td>{{userSession.generatorId}}</td>
+    </tr>
+  </tbody>
+</table>

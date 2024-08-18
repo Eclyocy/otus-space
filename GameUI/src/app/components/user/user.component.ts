@@ -2,17 +2,21 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Session } from '../../models/session';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
 
 @Component({
   selector: 'app-user',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   templateUrl: './user.component.html',
-  styleUrl: './user.component.css'
+  styleUrls: [
+    './user.component.css',
+    '../../app.component.css'
+  ]
 })
 export class UserComponent {
   private readonly apiService = inject(ApiService)
