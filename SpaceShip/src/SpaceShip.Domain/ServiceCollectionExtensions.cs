@@ -28,9 +28,5 @@ namespace SpaceShip.Domain.EfCore
         }
 
         #endregion
-
-        #region private methods
-
-        #endregion
     }
 }

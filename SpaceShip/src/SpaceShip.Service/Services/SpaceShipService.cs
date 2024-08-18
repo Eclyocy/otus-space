@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Model;
@@ -47,6 +48,8 @@ public class SpaceShipService : IShipService
     /// <returns>ID корабля</returns>
     public SpaceShipDTO CreateShip()
     {
+        _logger.LogInformation("Create space ship");
+
         Ship ship = _shipRepository.Create();
 
         return _mapper.Map<SpaceShipDTO>(ship);
@@ -59,6 +62,8 @@ public class SpaceShipService : IShipService
     /// <returns>Метрики корабля</returns>
     public SpaceShipDTO? GetShip(Guid shipId)
     {
+        _logger.LogInformation("Get space ship by id {id}", shipId);
+
         Ship ship = GetRepositoryShip(shipId);
 
         return _mapper.Map<SpaceShipDTO>(ship);
@@ -71,6 +76,8 @@ public class SpaceShipService : IShipService
     /// <returns>Метрики корабля</returns>
     public SpaceShipDTO? GetShips()
     {
+        _logger.LogInformation("Get all space ships");
+
         List<Ship> ship = _shipRepository.GetAll();
 
         return _mapper.Map<SpaceShipDTO>(ship);
@@ -82,6 +89,11 @@ public class SpaceShipService : IShipService
     /// <returns>Метрики корабля</returns>
     public SpaceShipDTO UpdateShip(Guid shipId, SpaceShipDTO spaceShipDTO)
     {
+        _logger.LogInformation(
+            "Update space ship with id {id}: {request}",
+            shipId,
+            JsonSerializer.Serialize(spaceShipDTO));
+
         Ship ship = UpdateRepositoryShip(shipId, spaceShipDTO);
 
         return _mapper.Map<SpaceShipDTO>(ship);
@@ -90,9 +102,11 @@ public class SpaceShipService : IShipService
     /// <summary>
     /// Удалить корабль.
     /// </summary>
-    public bool DeleteShip(Guid shipTypeId)
+    public bool DeleteShip(Guid shipId)
     {
-        return _shipRepository.Delete(shipTypeId);
+        _logger.LogInformation("Delete space ship with id {id}", shipId);
+
+        return _shipRepository.Delete(shipId);
     }
 
     /// <summary>

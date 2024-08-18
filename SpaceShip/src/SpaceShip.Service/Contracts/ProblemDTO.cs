@@ -3,7 +3,7 @@
 namespace SpaceShip.Service.Contracts
 {
     /// <summary>
-    /// Model for space ship.
+    /// Model for problem.
     /// </summary>
     public class ProblemDTO
     {
