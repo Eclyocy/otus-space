@@ -1,10 +1,38 @@
-<p>users works!</p>
-
 <h2>Users</h2>
 
-<ul>
-  <li *ngFor="let user of users">
-    <span>ID:</span> {{user.id}}<br/>
-    <span>Name:</span> {{user.name}}
-  </li>
-</ul>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>ID</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.name}}</td>
+      <td>{{user.id}}</td>
+      <td>
+        <button [routerLink]="['/users', user.id]">View Details</button><br/>
+        <button (click)="deleteUser(user.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- Create User Form -->
+<div class="create-user-form">
+  <h3>Create New User</h3>
+  <form (ngSubmit)="createUser()">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" [(ngModel)]="newUser.name" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" [(ngModel)]="newUser.password" required>
+    </div>
+    <button type="submit">Create User</button>
+  </form>
+</div>
