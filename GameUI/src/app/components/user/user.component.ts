@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { Session } from '../../models/session';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-user',
@@ -14,11 +16,34 @@ import { Session } from '../../models/session';
 })
 export class UserComponent {
   private readonly apiService = inject(ApiService)
+  private _userId: string
 
-  public userId: string = "ce011d3f-e4b3-4c79-9151-501782abb080";
+  public userName: string = "";
   public userSessions: Session[] = [];
 
+  public get userId(): string {
+    return this._userId;
+  }
+
+  public constructor(
+    private route: ActivatedRoute,
+  ) {
+    const id = this.route.snapshot.paramMap.get('userId');
+    if (id === null) {
+      throw new Error('UserId is required');
+    }
+    this._userId = id;
+  }
+
   public ngOnInit(): void {
+    console.log(this.userId);
+
+    this.apiService.getUser(this.userId).subscribe({
+      next: (user: User) => {
+        this.userName = user.name;
+      }
+    })
+
     this.apiService.getUserSessions(this.userId).subscribe({
       next: (userSessions: Session[]) => {
         this.userSessions = userSessions;

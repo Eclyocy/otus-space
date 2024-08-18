@@ -21,6 +21,10 @@ export class ApiService {
     return this.http.get<User[]>(`${environment.apiUrl}users`, headers_node);
   }
 
+  public getUser(userId: string): Observable<User> {
+    return this.http.get<User>(`${environment.apiUrl}users/${userId}`);
+  }
+
   public getUserSessions(userId: string): Observable<Session[]> {
     let headers = new HttpHeaders({
       "Access-Control-Allow-Origin": "*"
