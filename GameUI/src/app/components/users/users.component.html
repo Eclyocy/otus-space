@@ -19,3 +19,20 @@
     </tr>
   </tbody>
 </table>
+
+
+<!-- Create User Form -->
+<div class="create-user-form">
+  <h3>Create New User</h3>
+  <form (ngSubmit)="createUser()">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" [(ngModel)]="newUser.name" required>
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" [(ngModel)]="newUser.password" required>
+    </div>
+    <button type="submit">Create User</button>
+  </form>
+</div>

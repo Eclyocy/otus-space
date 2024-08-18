@@ -13,6 +13,12 @@ export class ApiService {
     // This service can now make HTTP requests via `this.http`.
   }
 
+  public createUser(userName: string, password: string) {
+    return this.http.post<User>(
+      `${environment.apiUrl}users`,
+      { name: userName, password: password });
+  }
+
   public getUsers(): Observable<User[]> {
     let headers = new HttpHeaders({
       "Access-Control-Allow-Origin": "*"
