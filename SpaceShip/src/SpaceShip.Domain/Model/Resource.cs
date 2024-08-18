@@ -36,6 +36,7 @@ namespace SpaceShip.Domain.Model
         /// <summary>
         /// Количество ресурса.
         /// </summary>
+        [Column("Amount")]
         public int? Amount { get; set; }
 
         /// <summary>
