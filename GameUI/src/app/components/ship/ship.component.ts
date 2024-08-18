@@ -47,6 +47,18 @@ export class ShipComponent {
     this.loadUserSessionShip();
   }
 
+  public makeMove(): void {
+    this.apiService.postUserSessionMakeMove(this.userId, this.sessionId).subscribe({
+      next: () => {
+        console.log("Move made.");
+        this.loadUserSessionShip();
+      },
+      error: (error) => {
+        console.error("Error making move:", error);
+      }
+    });
+  }
+
   private fetchValueFromRoute(paramName: string): string {
     const value = this.route.snapshot.paramMap.get(paramName);
 

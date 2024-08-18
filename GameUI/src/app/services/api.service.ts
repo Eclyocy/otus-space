@@ -33,7 +33,7 @@ export class ApiService {
   }
 
   public deleteUser(userId: string): Observable<any> {
-    return this.http.delete<any>(`${environment.apiUrl}users/${userId}`);
+    return this.http.delete(`${environment.apiUrl}users/${userId}`);
   }
 
   public createUserSession(userId: string): Observable<Session> {
@@ -55,5 +55,9 @@ export class ApiService {
 
   public getUserSessionShip(userId: string, sessionId: string): Observable<Ship> {
     return this.http.get<Ship>(`${environment.apiUrl}users/${userId}/sessions/${sessionId}/ship`);
+  }
+
+  public postUserSessionMakeMove(userId: string, sessionId: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}users/${userId}/sessions/${sessionId}/make-move`, {});
   }
 }
