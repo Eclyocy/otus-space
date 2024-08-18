@@ -3,14 +3,15 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using MockSpaceShip.Repository;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using SpaceShip.Domain.Interfaces;
+using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Mappers;
 using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
+using SpaceShip.Service.Services;
 using SpaceShip.WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,10 +43,12 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 });
 
 // SpaceShip services registration:
-builder.Services.AddTransient<IShipService, SpaceShipService>();
-builder.Services.AddSingleton<IShipRepository, MockSpaceShipRepository>();
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
+builder.Services.AddTransient<IProblemService, ProblemService>();
+builder.Services.AddTransient<IResourceService, ResourceService>();
+builder.Services.AddTransient<IResourceTypeService, ResourceTypeService>();
+builder.Services.AddTransient<IShipService, SpaceShipService>();
 
 // Automapper:
 builder.Services.AddSingleton<IMapper>(
@@ -55,10 +58,18 @@ builder.Services.AddSingleton<IMapper>(
             {
                 cfg.AddProfile<SpaceShipMappingProfile>();
                 cfg.AddProfile<SpaceShipModelMappingProfile>();
+                cfg.AddProfile<ProblemModelMappingProfile>();
+                cfg.AddProfile<ResourceModelMappingProfile>();
+                cfg.AddProfile<ResourceStateModelMappingProfile>();
+                cfg.AddProfile<ResourceTypeModelMappingProfile>();
             })));
 
-// RabbitMQ --> TODO
-//
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.ConfigureDatabase();
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -68,11 +79,8 @@ app.UseSwaggerUI(options =>
         options.RoutePrefix = string.Empty;
     });
 
-app.UseHttpsRedirection();
-app.UseRouting();
 app.UseAuthorization();
-app.UseEndpoints(endpoints =>
-    {
-        _ = endpoints.MapControllers();
-    });
+
+app.MapControllers();
+
 app.Run();

@@ -1,5 +1,5 @@
-using AutoMapper;
-using SpaceShip.Domain.DTO;
+﻿using AutoMapper;
+using SpaceShip.Domain.Model;
 using SpaceShip.Service.Contracts;
 
 namespace SpaceShip.Domain.Mappers;
@@ -14,8 +14,10 @@ public class SpaceShipModelMappingProfile : Profile
     /// </summary>
     public SpaceShipModelMappingProfile()
     {
-        CreateMap<ResourceStateDTO, ResourceStateModelDto>().ReverseMap();
-        CreateMap<ResourceDTO, ResourceModelDto>().ReverseMap();
-        CreateMap<SpaceShipDTO, SpaceShipModelDto>().ReverseMap();
+        // Database models -> Service models
+        CreateMap<Ship, SpaceShipDTO>()
+            .ForMember(dest => dest.Id, op => op.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Step, op => op.MapFrom(src => src.Step))
+            .ForMember(dest => dest.Name, opt => opt.Ignore());
     }
 }

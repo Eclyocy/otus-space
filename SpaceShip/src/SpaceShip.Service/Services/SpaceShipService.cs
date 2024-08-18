@@ -1,8 +1,11 @@
+﻿using System.Text.Json;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using SpaceShip.Domain.Interfaces;
+using SpaceShip.Domain.Model;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Services.Exceptions;
 
 namespace SpaceShip.Service.Implementation;
 
@@ -11,23 +14,33 @@ namespace SpaceShip.Service.Implementation;
 /// </summary>
 public class SpaceShipService : IShipService
 {
-    private readonly IShipRepository _repository;
+    #region private fields
+
+    private readonly ISpaceshipRepository _shipRepository;
 
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
+
+    #endregion
+
+    #region constructor
 
     /// <summary>
     /// Конструктор.
     /// </summary>
     public SpaceShipService(
-        IShipRepository repository,
+        ISpaceshipRepository shipRepository,
         IMapper mapper,
         ILogger<SpaceShipService> logger)
     {
-        _repository = repository;
+        _shipRepository = shipRepository;
         _mapper = mapper;
         _logger = logger;
     }
+
+    #endregion
+
+    #region public methods
 
     /// <summary>
     /// Создать новый корабль с ресурсами.
@@ -37,19 +50,63 @@ public class SpaceShipService : IShipService
     {
         _logger.LogInformation("Create space ship");
 
-        return _mapper.Map<SpaceShipDTO>(_repository.Create());
+        Ship ship = _shipRepository.Create();
+
+        return _mapper.Map<SpaceShipDTO>(ship);
     }
 
     /// <summary>
     /// Получить метрики корабля.
     /// </summary>
-    /// <param name="id">ID корабля</param>
+    /// <param name="shipId">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO? Get(Guid id)
+    public SpaceShipDTO? GetShip(Guid shipId)
     {
-        _logger.LogInformation("Get space ship by id {id}", id);
+        _logger.LogInformation("Get space ship by id {id}", shipId);
 
-        return _mapper.Map<SpaceShipDTO>(_repository.FindById(id));
+        Ship ship = GetRepositoryShip(shipId);
+
+        return _mapper.Map<SpaceShipDTO>(ship);
+    }
+
+    /// <summary>
+    /// Получить метрики корабля.
+    /// </summary>
+    /// <param name="spaceshipId">ID корабля</param>
+    /// <returns>Метрики корабля</returns>
+    public SpaceShipDTO? GetShips()
+    {
+        _logger.LogInformation("Get all space ships");
+
+        List<Ship> ship = _shipRepository.GetAll();
+
+        return _mapper.Map<SpaceShipDTO>(ship);
+    }
+
+    /// <summary>
+    /// Изменение метрик существующего корабля.
+    /// </summary>
+    /// <returns>Метрики корабля</returns>
+    public SpaceShipDTO UpdateShip(Guid shipId, SpaceShipDTO spaceShipDTO)
+    {
+        _logger.LogInformation(
+            "Update space ship with id {id}: {request}",
+            shipId,
+            JsonSerializer.Serialize(spaceShipDTO));
+
+        Ship ship = UpdateRepositoryShip(shipId, spaceShipDTO);
+
+        return _mapper.Map<SpaceShipDTO>(ship);
+    }
+
+    /// <summary>
+    /// Удалить корабль.
+    /// </summary>
+    public bool DeleteShip(Guid shipId)
+    {
+        _logger.LogInformation("Delete space ship with id {id}", shipId);
+
+        return _shipRepository.Delete(shipId);
     }
 
     /// <summary>
@@ -60,7 +117,71 @@ public class SpaceShipService : IShipService
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
-        _repository.NextDay(id);
+        var ship = _shipRepository.Get(id);
+
+        if (ship != null)
+        {
+            ship.Step++;
+            _shipRepository.Update(ship);
+        }
+
         return;
     }
+
+    #endregion
+
+    #region private methods
+
+    /// <summary>
+    /// Get ship from repository.
+    /// </summary>
+    /// <exception cref="NotFoundException">
+    /// In case the ship is not found by the repository.
+    /// </exception>
+    private Ship GetRepositoryShip(Guid shipId)
+    {
+        Ship? ship = _shipRepository.Get(shipId);
+
+        if (ship == null)
+        {
+            throw new NotFoundException($"Ship with ID {shipId} not found.");
+        }
+
+        return ship;
+    }
+
+    /// <summary>
+    /// Update ship in repository.
+    /// </summary>
+    /// <exception cref="NotFoundException">
+    /// In case the ship is not found by the repository.
+    /// </exception>
+    /// <exception cref="NotModifiedException">
+    /// In case no changes are requested.
+    /// </exception>
+    private Ship UpdateRepositoryShip(
+        Guid shipId,
+        SpaceShipDTO shipRequest)
+    {
+        Ship currentShip = GetRepositoryShip(shipId);
+
+        bool updateRequested = false;
+
+        if (shipRequest.Name != null && shipRequest.Name != currentShip.Name)
+        {
+            updateRequested = true;
+            currentShip.Name = shipRequest.Name;
+        }
+
+        if (!updateRequested)
+        {
+            throw new NotModifiedException();
+        }
+
+        _shipRepository.Update(currentShip); // updates entity in-place
+
+        return currentShip;
+    }
+
+    #endregion
 }

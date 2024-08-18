@@ -52,7 +52,7 @@ public class SpaceShipController : ControllerBase
     {
         try
         {
-            return Results.Ok(_mapper.Map<SpaceShipMetricResponse>(_service.Get(id)));
+            return Results.Ok(_mapper.Map<SpaceShipMetricResponse>(_service.GetShip(id)));
         }
         catch (KeyNotFoundException)
         {
