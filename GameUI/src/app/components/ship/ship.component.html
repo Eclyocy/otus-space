@@ -1,0 +1,20 @@
+<h2>User {{userName}}'s Ship from Session {{sessionId}}</h2>
+
+<h3>Day: {{ship?.day}}</h3>
+
+<h3>Resources</h3>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let shipResource of ship?.resources">
+      <td>{{shipResource.name}}</td>
+      <td>{{shipResource.state}}</td>
+    </tr>
+  </tbody>
+</table>

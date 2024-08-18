@@ -30,7 +30,7 @@ export class UserComponent {
   }
 
   public constructor(
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     const id = this.route.snapshot.paramMap.get('userId');
     if (id === null) {

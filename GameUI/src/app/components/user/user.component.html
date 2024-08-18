@@ -8,6 +8,7 @@
       <th>ID</th>
       <th>Ship ID</th>
       <th>Generator ID</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -15,6 +16,9 @@
       <td>{{userSession.sessionId}}</td>
       <td>{{userSession.shipId}}</td>
       <td>{{userSession.generatorId}}</td>
+      <td>
+        <a [routerLink]="['/users', userId, 'sessions', userSession.sessionId, 'ship']" class="link">View Ship</a>
+      </td>
     </tr>
   </tbody>
 </table>
