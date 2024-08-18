@@ -25,6 +25,10 @@ export class ApiService {
     return this.http.get<User>(`${environment.apiUrl}users/${userId}`);
   }
 
+  public createUserSession(userId: string): Observable<Session> {
+    return this.http.post<Session>(`${environment.apiUrl}users/${userId}/sessions`, {});
+  }
+
   public getUserSessions(userId: string): Observable<Session[]> {
     let headers = new HttpHeaders({
       "Access-Control-Allow-Origin": "*"

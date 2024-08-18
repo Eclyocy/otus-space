@@ -40,23 +40,41 @@ export class UserComponent {
   }
 
   public ngOnInit(): void {
-    console.log(this.userId);
+    this.loadUser();
+    this.loadUserSessions();
+  }
 
+  public createSession(): void {
+    this.apiService.createUserSession(this.userId).subscribe({
+      next: (newSession: Session) => {
+        console.log("New session created:", newSession);
+        this.userSessions.push(newSession);
+      },
+      error: (error) => {
+        console.error("Error creating new session:", error);
+      }
+    });
+  }
+
+  private loadUser(): void {
     this.apiService.getUser(this.userId).subscribe({
       next: (user: User) => {
         this.userName = user.name;
+      },
+      error: (error) => {
+        console.error("Error fetching user:", error);
       }
-    })
+    });
+  }
 
+  private loadUserSessions(): void {
     this.apiService.getUserSessions(this.userId).subscribe({
       next: (userSessions: Session[]) => {
         this.userSessions = userSessions;
       },
       error: (error) => {
-        console.error("Error fetching user sessions.");
+        console.error("Error fetching user sessions:", error);
       }
     });
-
-    console.log(this.userSessions);
   }
 }
