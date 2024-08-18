@@ -3,7 +3,6 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using SpaceShip.Domain.EfCore;
@@ -65,8 +64,6 @@ builder.Services.AddSingleton<IMapper>(
                 cfg.AddProfile<ResourceTypeModelMappingProfile>();
             })));
 
-// RabbitMQ --> TODO
-//
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -75,11 +72,12 @@ builder.Services.ConfigureDatabase();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.RoutePrefix = string.Empty;
+    });
 
 app.UseAuthorization();
 
