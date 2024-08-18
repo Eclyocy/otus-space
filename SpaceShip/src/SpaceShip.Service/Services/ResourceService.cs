@@ -59,7 +59,7 @@ namespace SpaceShip.Service.Services
         /// <summary>
         /// Получить ресурсы.
         /// </summary>
-        /// <returns>Метрики проблемы</returns>
+        /// <returns>Метрики ресурсов</returns>
         public ResourceDTO GetResources()
         {
             List<Resource> resource = _resourceRepository.GetAll();

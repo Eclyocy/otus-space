@@ -79,7 +79,7 @@ namespace SpaceShip.Service.Services
         }
 
         /// <summary>
-        /// Удалить ресурс.
+        /// Удалить проблему.
         /// </summary>
         public bool DeleteProblem(Guid problemId)
         {
@@ -109,10 +109,10 @@ namespace SpaceShip.Service.Services
         }
 
         /// <summary>
-        /// Update user in repository.
+        /// Update problem in repository.
         /// </summary>
         /// <exception cref="NotFoundException">
-        /// In case the user is not found by the repository.
+        /// In case the problem is not found by the repository.
         /// </exception>
         /// <exception cref="NotModifiedException">
         /// In case no changes are requested.
