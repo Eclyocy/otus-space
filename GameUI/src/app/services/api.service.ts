@@ -9,9 +9,7 @@ import { Ship } from '../models/ship';
 @Injectable({ providedIn: 'root'})
 export class ApiService {
 
-  constructor(private http: HttpClient) {
-    // This service can now make HTTP requests via `this.http`.
-  }
+  constructor(private http: HttpClient) { }
 
   public createUser(userName: string, password: string) {
     return this.http.post<User>(
@@ -20,12 +18,7 @@ export class ApiService {
   }
 
   public getUsers(): Observable<User[]> {
-    let headers = new HttpHeaders({
-      "Access-Control-Allow-Origin": "*"
-    });
-    let headers_node = { headers: headers }
-
-    return this.http.get<User[]>(`${environment.apiUrl}users`, headers_node);
+    return this.http.get<User[]>(`${environment.apiUrl}users`);
   }
 
   public getUser(userId: string): Observable<User> {
@@ -37,16 +30,13 @@ export class ApiService {
   }
 
   public createUserSession(userId: string): Observable<Session> {
-    return this.http.post<Session>(`${environment.apiUrl}users/${userId}/sessions`, {});
+    return this.http.post<Session>(
+      `${environment.apiUrl}users/${userId}/sessions`,
+      { });
   }
 
   public getUserSessions(userId: string): Observable<Session[]> {
-    let headers = new HttpHeaders({
-      "Access-Control-Allow-Origin": "*"
-    });
-    let headers_node = { headers: headers }
-
-    return this.http.get<Session[]>(`${environment.apiUrl}users/${userId}/sessions`, headers_node);
+    return this.http.get<Session[]>(`${environment.apiUrl}users/${userId}/sessions`);
   }
 
   public deleteUserSession(userId: string, sessionId: string): Observable<any> {
@@ -58,6 +48,8 @@ export class ApiService {
   }
 
   public postUserSessionMakeMove(userId: string, sessionId: string): Observable<any> {
-    return this.http.post(`${environment.apiUrl}users/${userId}/sessions/${sessionId}/make-move`, {});
+    return this.http.post(
+      `${environment.apiUrl}users/${userId}/sessions/${sessionId}/make-move`,
+      { });
   }
 }
