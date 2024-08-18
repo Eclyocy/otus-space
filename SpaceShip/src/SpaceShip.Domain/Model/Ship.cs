@@ -23,26 +23,28 @@ namespace SpaceShip.Domain.Model
             {
                 new Resource()
                 {
-                Name = "Armor",
-                Amount = 10,
-                State = ResourceState.Start
+                    Name = "Armor",
+                    Amount = 10,
+                    State = ResourceState.Start
                 },
                 new Resource()
                 {
-                Name = "Fuel",
-                Amount = 4,
-                State = ResourceState.Start
+                    Name = "Fuel",
+                    Amount = 4,
+                    State = ResourceState.Start
                 },
                 new Resource()
                 {
-                Name = "Water",
-                Amount = 6,
-                State = ResourceState.Start
+                    Name = "Water",
+                    Amount = 6,
+                    State = ResourceState.Start
                 }
             };
         }
 
         #endregion
+
+        #region public properties
 
         /// <summary>
         /// Имя корабля.
@@ -66,5 +68,7 @@ namespace SpaceShip.Domain.Model
         /// Коллекция ресурсов.
         /// </summary>
         public virtual List<Resource>? Resources { get; set; }
+
+        #endregion
     }
 }
