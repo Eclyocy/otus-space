@@ -75,14 +75,14 @@ public abstract class EventConsumer : IHostedService
     {
         var consumer = new EventingBasicConsumer(_channel);
 
-        consumer.Received += (model, ea) =>
+        consumer.Received += async (model, ea) =>
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
             _logger.LogInformation("{consumer} received new message: {message}", ConsumerName, message);
 
-            HandleMessage(message);
+            await HandleMessageAsync(message);
         };
 
         try
@@ -108,5 +108,5 @@ public abstract class EventConsumer : IHostedService
         return Task.CompletedTask;
     }
 
-    protected abstract void HandleMessage(string message);
+    protected abstract Task HandleMessageAsync(string message);
 }

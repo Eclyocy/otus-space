@@ -26,9 +26,4 @@ public interface IShipService
     /// Delete the SpaceShip with <paramref name="spaceshipId"/>.
     /// </summary>
     bool DeleteShip(Guid spaceshipId);
-
-    /// <summary>
-    /// Process Day the SpaceShip with <paramref name="spaceshipId"/>.
-    /// </summary>
-    public void ProcessNewDay(Guid spaceshipId);
 }
