@@ -7,12 +7,12 @@ namespace EventGenerator.API.Mappers
     /// <summary>
     /// Mappings for generatop models.
     /// </summary>
-    public class GeneratopMapper : Profile
+    public class GeneratorMapper : Profile
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public GeneratopMapper()
+        public GeneratorMapper()
         {
             // Controller models -> Service models
             CreateMap<CreateGeneratorRequest, CreateGeneratorDto>();

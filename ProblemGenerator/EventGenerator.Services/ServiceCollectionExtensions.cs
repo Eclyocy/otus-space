@@ -12,8 +12,10 @@ namespace EventGenerator.Services
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            services.AddAutoMapper(x => x.AddProfile(typeof(GeneratorMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(EventMapper)));
 
+            services.AddTransient<IGeneratorService, GeneratorService>();
             services.AddTransient<IEventService, EventService>();
 
             return services;

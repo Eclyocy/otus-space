@@ -62,6 +62,7 @@ namespace EventGenerator
 
             services.ConfigureApplicationServices(Configuration);
 
+            services.AddAutoMapper(x => x.AddProfile(typeof(GeneratorMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(EventMapper)));
 
             services.AddControllers();
