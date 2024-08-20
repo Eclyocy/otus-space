@@ -49,6 +49,7 @@ builder.Services.AddTransient<IProblemService, ProblemService>();
 builder.Services.AddTransient<IResourceService, ResourceService>();
 builder.Services.AddTransient<IResourceTypeService, ResourceTypeService>();
 builder.Services.AddTransient<IShipService, SpaceShipService>();
+builder.Services.AddScoped<IGameStepService, GameStepService>();
 
 // Automapper:
 builder.Services.AddSingleton<IMapper>(

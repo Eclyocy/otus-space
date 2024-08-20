@@ -20,7 +20,7 @@ public class TroubleEventConsumer : EventConsumer
         ConsumerName = nameof(TroubleEventConsumer);
     }
 
-    protected override void HandleMessage(string message)
+    protected override Task HandleMessageAsync(string message)
     {
         throw new NotImplementedException();
     }
