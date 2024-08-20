@@ -19,15 +19,16 @@ namespace EventGenerator.Database
         }
 
         /// <summary>
+        /// Generator.
+        /// </summary>
+        public DbSet<Generator> Generators { get; set; }
+
+        /// <summary>
         /// Events.
         /// </summary>
         public DbSet<Event> Events { get; set; }
 
-        /// <summary>
-        /// Ships.
-        /// </summary>
-        public DbSet<Ship> Ships { get; set; }
-
+        /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var config = new ConfigurationBuilder()

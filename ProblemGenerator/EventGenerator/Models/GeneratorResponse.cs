@@ -1,9 +1,9 @@
 ﻿namespace EventGenerator.API.Models
 {
     /// <summary>
-    /// Event model.
+    /// Generator model.
     /// </summary>
-    public class EventResponse
+    public class GeneratorResponse
     {
         /// <summary>
         /// Generator ID.
@@ -11,13 +11,13 @@
         public Guid GeneratorId { get; set; }
 
         /// <summary>
-        /// Event ID.
+        /// Ship ID.
         /// </summary>
-        public Guid EventId { get; set; }
+        public Guid ShipId { get; set; }
 
         /// <summary>
-        /// Event Coint.
+        /// Troublecoint.
         /// </summary>
-        public int EventCoint { get; set; }
+        public int Troublecoint { get; set; }
     }
 }

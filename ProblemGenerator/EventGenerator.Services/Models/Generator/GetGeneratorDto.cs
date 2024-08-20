@@ -1,9 +1,9 @@
-﻿namespace EventGenerator.Services.Models.Event
+﻿namespace EventGenerator.Services.Models.Generator
 {
     /// <summary>
-    /// Model for event creation.
+    /// Model for get generator.
     /// </summary>
-    public class CreateEventDto
+    internal class GetGeneratorDto
     {
         /// <summary>
         /// Generator ID.
@@ -11,8 +11,8 @@
         public Guid GeneratorId { get; set; }
 
         /// <summary>
-        /// Event Coint.
+        /// Ship ID.
         /// </summary>
-        public int EventCoint { get; set; }
+        public Guid ShipId { get; set; }
     }
 }

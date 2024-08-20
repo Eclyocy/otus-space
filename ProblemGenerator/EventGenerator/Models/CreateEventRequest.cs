@@ -1,10 +1,13 @@
 ﻿namespace EventGenerator.API.Models
 {
+    /// <summary>
+    /// Model for event creation.
+    /// </summary>
     public class CreateEventRequest
     {
         /// <summary>
-        /// Ship ID.
+        /// Generator ID.
         /// </summary>
-        public Guid IdShip { get; set; }
+        public Guid GeneratorId { get; set; }
     }
 }

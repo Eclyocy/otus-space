@@ -2,8 +2,14 @@
 
 namespace EventGenerator.Services.Interfaces
 {
+    /// <summary>
+    /// Interface for working with event generator.
+    /// </summary>
     public interface IEventService
      {
-        Task<EventDto> CreateEventAsync(Guid shipId);
+        /// <summary>
+        /// Create a event.
+        /// </summary>
+        EventDto CreateEvent(Guid generatorpId);
     }
 }

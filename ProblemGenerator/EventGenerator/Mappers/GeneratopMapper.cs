@@ -1,24 +1,24 @@
 ﻿using AutoMapper;
 using EventGenerator.API.Models;
-using EventGenerator.Services.Models.Event;
+using EventGenerator.Services.Models.Generator;
 
 namespace EventGenerator.API.Mappers
 {
     /// <summary>
-    /// Mappings for event models.
+    /// Mappings for generatop models.
     /// </summary>
-    public class EventMapper : Profile
+    public class GeneratopMapper : Profile
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public EventMapper()
+        public GeneratopMapper()
         {
             // Controller models -> Service models
-            CreateMap<CreateEventRequest, CreateEventDto>();
+            CreateMap<CreateGeneratorRequest, CreateGeneratorDto>();
 
             // Service models -> Controller models
-            CreateMap<EventDto, EventResponse>();
+            CreateMap<GeneratorDto, GeneratorResponse>();
         }
     }
 }

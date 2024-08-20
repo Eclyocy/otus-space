@@ -29,12 +29,19 @@ namespace EventGenerator.Database.Repository
         /// </summary>
         protected DbSet<T> EntitySet { get; }
 
+        /// <inheritdoc/>
         public virtual T Create(T entity)
-         {
+        {
             var entityEntry = EntitySet.Add(entity);
             Context.SaveChanges();
 
             return entityEntry.Entity;
+        }
+
+        /// <inheritdoc/>
+        public virtual T? Get(Guid id)
+        {
+            return EntitySet.Find(id);
         }
     }
 }

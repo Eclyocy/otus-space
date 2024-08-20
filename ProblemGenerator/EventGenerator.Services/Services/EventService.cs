@@ -1,38 +1,61 @@
 ﻿using AutoMapper;
 using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
+using EventGenerator.Services.Exceptions;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Event;
 using Microsoft.Extensions.Logging;
 
 namespace EventGenerator.Services.Services
 {
+    /// <summary>
+    /// Class for working with event generator servisce.
+    /// </summary>
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IGeneratorRepository _generatorRepository;
+
+        private readonly IGeneratorService _generatorService;
 
         private readonly ILogger<EventService> _logger;
         private readonly IMapper _mapper;
 
-        public EventService(IEventRepository eventRepository, ILogger<EventService> logger, IMapper mapper)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public EventService(
+            IEventRepository eventRepository,
+            IGeneratorRepository generatorRepository,
+            IGeneratorService generatorService,
+            ILogger<EventService> logger,
+            IMapper mapper)
         {
             _eventRepository = eventRepository;
+            _generatorRepository = generatorRepository;
+
+            _generatorService = generatorService;
+
             _logger = logger;
             _mapper = mapper;
         }
 
-        public async Task<EventDto> CreateEventAsync(Guid shipId)
+        /// <inheritdoc/>
+        public EventDto CreateEvent(Guid generatorId)
         {
-            _logger.LogInformation("Create event by Ship ID {shipId}", shipId);
+            _logger.LogInformation("Create event by Generator ID {generatorId}", generatorId);
 
-            CreateEventDto createEventDto = new CreateEventDto();
+            if (_generatorRepository.Get(generatorId) == null)
+            {
+                _logger.LogError("Generator {generatorId} not found.", generatorId);
+
+                throw new NotFoundException($"Generator {generatorId} not found.");
+            }
 
             Random random = new Random();
-
-            createEventDto.ShipId = shipId;
-            createEventDto.Troublecoint = random.Next(0, 10);
-
-            Event eventRequest = _mapper.Map<Event>(createEventDto);
+            Event eventRequest = new ();
+            eventRequest.GenertatorId = generatorId;
+            eventRequest.EventCoint = random.Next(0, 10);
             Event event_ = _eventRepository.Create(eventRequest);
 
             return _mapper.Map<EventDto>(event_);

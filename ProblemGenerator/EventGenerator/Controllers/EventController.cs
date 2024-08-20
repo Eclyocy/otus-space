@@ -7,29 +7,23 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace EventGenerator.Controllers
 {
+    /// <summary>
+    /// Controller for actions with events by generator.
+    /// </summary>
     [ApiController]
     [Route("/api/events")]
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public EventController(IEventService service, IMapper mapper)
         {
             _eventService = service;
             _mapper = mapper;
-        }
-
-        /// <summary>
-        /// Заглушка - Получение Guid корабля.
-        /// </summary>
-        [HttpGet]
-        [SwaggerOperation("Получение Guid корабля - заглушка")]
-        public CreateEventRequest GetShip(CreateEventRequest eventRequest)
-        {
-            return new CreateEventRequest()
-            {
-                IdShip = Guid.NewGuid()
-            };
         }
 
         /// <summary>
@@ -38,9 +32,9 @@ namespace EventGenerator.Controllers
         [HttpPost]
         [Route("{shipId}")]
         [SwaggerOperation("Создание нового события")]
-        public async Task<EventResponse> CreateEvent(Guid shipId)
+        public EventResponse CreateEvent(Guid gereratopId)
         {
-            EventDto eventDto = await _eventService.CreateEventAsync(shipId);
+            EventDto eventDto = _eventService.CreateEvent(gereratopId);
             return _mapper.Map<EventResponse>(eventDto);
         }
     }
