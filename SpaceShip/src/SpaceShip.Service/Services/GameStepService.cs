@@ -5,7 +5,7 @@ using SpaceShip.Service.Interfaces;
 namespace SpaceShip.Service.Implementation;
 
 /// <summary>
-/// Сервис для обработки события новго игоровго дня (шага игры).
+/// Сервис для обработки события нового игрового дня (шага игры).
 /// Регистрируется как ScopedService для работы с обработчиками сообщений из очереди RabbitMQ.
 /// </summary>
 public class GameStepService : IGameStepService
