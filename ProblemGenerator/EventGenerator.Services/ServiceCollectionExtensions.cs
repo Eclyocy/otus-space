@@ -15,8 +15,8 @@ namespace EventGenerator.Services
             services.AddAutoMapper(x => x.AddProfile(typeof(GeneratorMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(EventMapper)));
 
-            services.AddTransient<IGeneratorService, GeneratorService>();
-            services.AddTransient<IEventService, EventService>();
+            services.AddScoped<IGeneratorService, GeneratorService>();
+            services.AddScoped<IEventService, EventService>();
 
             return services;
         }

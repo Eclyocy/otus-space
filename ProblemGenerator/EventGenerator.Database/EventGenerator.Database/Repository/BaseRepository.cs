@@ -13,9 +13,9 @@ namespace EventGenerator.Database.Repository
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseRepository(EventDBContext databaseContext)
+        protected BaseRepository(EventDBContext eventDBContext)
         {
-            Context = databaseContext;
+            Context = eventDBContext;
             EntitySet = Context.Set<T>();
         }
 

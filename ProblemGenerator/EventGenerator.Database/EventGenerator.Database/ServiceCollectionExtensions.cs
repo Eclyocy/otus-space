@@ -17,6 +17,7 @@ namespace EventGenerator.Database
         {
             services.AddDbContext<EventDBContext>();
 
+            services.AddTransient<IGeneratorRepository, GeneratorRepository>();
             services.AddTransient<IEventRepository, EventRepository>();
 
             return services;
