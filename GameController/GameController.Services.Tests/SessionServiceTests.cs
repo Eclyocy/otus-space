@@ -1,6 +1,4 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
@@ -15,9 +13,8 @@ using Moq;
 namespace GameController.Services.Tests
 {
     [TestFixture]
-    internal class SessionServiceTests
+    public class SessionServiceTests
     {
-
         #region private fields
 
         private Mock<ISessionRepository> _sessionRepositoryMock;
@@ -31,10 +28,10 @@ namespace GameController.Services.Tests
 
         private SessionService _sessionService;
 
-        private readonly Guid userId = Guid.NewGuid();
-        private readonly Guid sessionId = Guid.NewGuid();
-        private const string Name = "Test User";
-        private const string PasswordHash = "Test User";
+        private readonly Guid _userId = Guid.NewGuid();
+        private readonly Guid _sessionId = Guid.NewGuid();
+        private const string UserName = "Test User";
+        private const string UserPasswordHash = "Test Password";
 
         #endregion
 
@@ -67,48 +64,97 @@ namespace GameController.Services.Tests
         #region CreateUserSessionAsync
 
         [Test]
-        public async Task CreateUserSessionAsync_WhenUiserIDExists()
+        public async Task CreateUserSessionAsync_WhenUserExists()
         {
             // Arrange
-            SessionDto sessionDto = new SessionDto { SessionId = Guid.NewGuid() };
+            _userRepositoryMock
+                .Setup(x => x.Get(_userId))
+                .Returns(new User() { Id = _userId, Name = UserName, PasswordHash = UserPasswordHash });
 
-            _userRepositoryMock.Setup(x => x.Get(userId)).Returns(new User { Id = userId, Name = Name, PasswordHash = PasswordHash });
+            Guid shipGuid = Guid.NewGuid();
+            _shipServiceMock
+                .Setup(x => x.CreateShipAsync())
+                .ReturnsAsync(shipGuid);
 
-            _sessionRepositoryMock.Setup(x => x.Create(It.IsAny<Session>())).Returns(new Session());
+            Guid generatorGuid = Guid.NewGuid();
+            _generatorServiceMock
+                .Setup(x => x.CreateGeneratorAsync())
+                .ReturnsAsync(generatorGuid);
 
-            _mapperMock.Setup(x => x.Map<Session>(It.IsAny<CreateSessionDto>())).Returns(new Session());
-            _mapperMock.Setup(x => x.Map<SessionDto>(It.IsAny<Session>())).Returns(sessionDto);
+            _sessionRepositoryMock
+                .Setup(x => x.Create(It.IsAny<Session>()))
+                .Returns(new Session());
+
+            _mapperMock
+                .Setup(x => x.Map<Session>(
+                    It.Is<CreateSessionDto>(x => x.ShipId == shipGuid && x.GeneratorId == generatorGuid )))
+                .Returns(new Session() { ShipId = shipGuid, GeneratorId = generatorGuid });
+
+            _mapperMock
+                .Setup(x => x.Map<SessionDto>(
+                    It.IsAny<Session>()))
+                .Returns(new SessionDto());
 
             // Act
-            SessionDto actualSessionDto = await _sessionService.CreateUserSessionAsync(userId);
+            SessionDto sessionDto = await _sessionService.CreateUserSessionAsync(_userId);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(sessionDto, actualSessionDto);
-                _sessionRepositoryMock.Verify(x => x.Create(It.IsAny<Session>()), Times.Once);
+                Assert.That(sessionDto, Is.Not.Null);
+
+                _userRepositoryMock.Verify(x => x.Get(_userId), Times.Once);
+                _userRepositoryMock.VerifyNoOtherCalls();
+
+                _sessionRepositoryMock.Verify(x => x.Create(
+                    It.Is<Session>(session =>
+                        session.Id == Guid.Empty &&
+                        session.UserId == _userId &&
+                        session.ShipId == shipGuid &&
+                        session.GeneratorId == generatorGuid)));
+                _sessionRepositoryMock.VerifyNoOtherCalls();
+
+                _generatorServiceMock.Verify(x => x.CreateGeneratorAsync(), Times.Once);
+                _generatorServiceMock.VerifyNoOtherCalls();
+
+                _shipServiceMock.Verify(x => x.CreateShipAsync(), Times.Once);
+                _shipServiceMock.VerifyNoOtherCalls();
+
+                _rabbitMQServiceMock.VerifyNoOtherCalls();
 
                 _mapperMock.Verify(x => x.Map<Session>(It.IsAny<CreateSessionDto>()), Times.Once);
                 _mapperMock.Verify(x => x.Map<SessionDto>(It.IsAny<Session>()), Times.Once);
-
-                _sessionRepositoryMock.VerifyNoOtherCalls();
+                _mapperMock.VerifyNoOtherCalls();
 
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
             });
         }
 
         [Test]
-        public async Task CreateUserSessionAsync_WhenUserIdIsNull()
+        public void CreateUserSessionAsync_WhenUserDoesNotExist()
         {
             // Arrange
-            _sessionRepositoryMock.Setup(repo => repo.Get(userId)).Returns((Session)null);
+            _userRepositoryMock.Setup(repo => repo.Get(_userId)).Returns((User?)null);
 
             // Act & Assert
-            var exception = Assert.ThrowsAsync<NotFoundException>(() => _sessionService.CreateUserSessionAsync(userId));
+            var exception = Assert
+                .ThrowsAsync<NotFoundException>(() => _sessionService.CreateUserSessionAsync(_userId));
+
             Assert.Multiple(() =>
-            {  
-                Assert.That(exception.Message, Is.EqualTo($"User {userId} not found."));
+            {
+                Assert.That(exception.Message, Is.EqualTo($"User {_userId} not found."));
+
+                _userRepositoryMock.Verify(repo => repo.Get(_userId), Times.Once);
+                _userRepositoryMock.VerifyNoOtherCalls();
+
+                _sessionRepositoryMock.VerifyNoOtherCalls();
+
+                _generatorServiceMock.VerifyNoOtherCalls();
+                _shipServiceMock.VerifyNoOtherCalls();
+                _rabbitMQServiceMock.VerifyNoOtherCalls();
+
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
+                _mapperMock.VerifyNoOtherCalls();
             });
         }
 
@@ -122,16 +168,18 @@ namespace GameController.Services.Tests
             // Arrange
             var sessions = new List<Session>
             {
-                new Session { Id = sessionId, UserId = userId }
+                new Session { Id = _sessionId, UserId = _userId }
             };
 
-            SessionDto sessionDto = new SessionDto { SessionId = sessionId, UserId = userId };
+            SessionDto sessionDto = new SessionDto { SessionId = _sessionId, UserId = _userId };
 
-            _sessionRepositoryMock.Setup(repo => repo.GetAllByUserId(userId)).Returns(sessions);
-            _mapperMock.Setup(x => x.Map<List<SessionDto>>(It.IsAny<List<Session>>())).Returns(new List<SessionDto>() { sessionDto });
+            _sessionRepositoryMock.Setup(repo => repo.GetAllByUserId(_userId)).Returns(sessions);
+            _mapperMock
+                .Setup(x => x.Map<List<SessionDto>>(It.IsAny<List<Session>>()))
+                .Returns(new List<SessionDto>() { sessionDto });
 
             // Act
-            var actualSessions = _sessionService.GetUserSessions(userId);
+            var actualSessions = _sessionService.GetUserSessions(_userId);
 
             // Assert
             Assert.Multiple(() =>
@@ -145,7 +193,7 @@ namespace GameController.Services.Tests
                     Assert.That(item.UserId, Is.EqualTo(sessionDto.UserId));
                 }
 
-                _sessionRepositoryMock.Verify(repo => repo.GetAllByUserId(userId), Times.Once);
+                _sessionRepositoryMock.Verify(repo => repo.GetAllByUserId(_userId), Times.Once);
             });
         }
 
@@ -153,11 +201,11 @@ namespace GameController.Services.Tests
         public void GetUserSessions_WhenUserIdIsInvalid()
         {
             // Arrange
-            _sessionRepositoryMock.Setup(repo => repo.GetAllByUserId(userId)).Returns(new List<Session>());
+            _sessionRepositoryMock.Setup(repo => repo.GetAllByUserId(_userId)).Returns(new List<Session>());
             _mapperMock.Setup(x => x.Map<List<SessionDto>>(It.IsAny<List<Session>>())).Returns(new List<SessionDto>());
 
             // Act
-            var actualSessions = _sessionService.GetUserSessions(userId);
+            var actualSessions = _sessionService.GetUserSessions(_userId);
 
             // Assert
             Assert.Multiple(() =>
@@ -165,7 +213,7 @@ namespace GameController.Services.Tests
                 Assert.That(actualSessions, Is.Not.Null);
                 Assert.That(actualSessions.Count, Is.EqualTo(0));
 
-                _sessionRepositoryMock.Verify(repo => repo.GetAllByUserId(userId), Times.Once);
+                _sessionRepositoryMock.Verify(repo => repo.GetAllByUserId(_userId), Times.Once);
             });
         }
 
@@ -177,13 +225,22 @@ namespace GameController.Services.Tests
         public void GetUserSession_ValidUserId()
         {
             // Arrange
-            Session? session = new Session { Id = sessionId, UserId = userId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() };
+            Session session = new Session {
+                Id = _sessionId,
+                UserId = _userId,
+                GeneratorId = Guid.NewGuid(),
+                ShipId = Guid.NewGuid()
+            };
 
-            _sessionRepositoryMock.Setup(repo => repo.Get(sessionId)).Returns(new Session { Id = sessionId, UserId = userId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() });
-            _mapperMock.Setup(x => x.Map<SessionDto>(It.IsAny<Session>())).Returns(new SessionDto { SessionId = sessionId, UserId = userId });
+            _sessionRepositoryMock
+                .Setup(repo => repo.Get(_sessionId))
+                .Returns(session);
+            _mapperMock
+                .Setup(x => x.Map<SessionDto>(It.IsAny<Session>()))
+                .Returns(new SessionDto { SessionId = _sessionId, UserId = _userId });
 
             // Act
-            var result = _sessionService.GetUserSession(userId, sessionId);
+            var result = _sessionService.GetUserSession(_userId, _sessionId);
 
             // Assert
             Assert.Multiple(() =>
@@ -191,7 +248,7 @@ namespace GameController.Services.Tests
                 Assert.IsNotNull(result);
                 Assert.That(result.SessionId, Is.EqualTo(session.Id));
 
-                _sessionRepositoryMock.Verify(repo => repo.Get(sessionId), Times.Once);
+                _sessionRepositoryMock.Verify(repo => repo.Get(_sessionId), Times.Once);
                 _mapperMock.Verify(x => x.Map<SessionDto>(It.IsAny<Session>()), Times.Once);
 
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
@@ -202,15 +259,15 @@ namespace GameController.Services.Tests
         public void GetUserSession_WhenSessionIsNull()
         {
             // Arrange
-            _sessionRepositoryMock.Setup(repo => repo.Get(sessionId)).Returns((Session)null);
+            _sessionRepositoryMock.Setup(repo => repo.Get(_sessionId)).Returns((Session)null);
 
             // Act & Assert
-            var exception = Assert.Throws<NotFoundException>(() => _sessionService.GetUserSession(userId, sessionId));
+            var exception = Assert.Throws<NotFoundException>(() => _sessionService.GetUserSession(_userId, _sessionId));
             Assert.Multiple(() =>
             {
-                Assert.That(exception.Message, Is.EqualTo($"Session with {sessionId} is not found."));
+                Assert.That(exception.Message, Is.EqualTo($"Session with {_sessionId} is not found."));
 
-                _sessionRepositoryMock.Verify(repo => repo.Get(sessionId), Times.Once);
+                _sessionRepositoryMock.Verify(repo => repo.Get(_sessionId), Times.Once);
                 _mapperMock.Verify(x => x.Map<SessionDto>(It.IsAny<Session>()), Times.Never);
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
             });
@@ -220,20 +277,19 @@ namespace GameController.Services.Tests
         public void GetUserSession_WhenSessionUserIdDoesNotMatch()
         {
             // Arrange
-
             Guid differentUserId = Guid.NewGuid();
 
-            var session = new Session { Id = sessionId, UserId = differentUserId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() };
-            _sessionRepositoryMock.Setup(repo => repo.Get(sessionId)).Returns(session);
+            var session = new Session { Id = _sessionId, UserId = differentUserId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() };
+            _sessionRepositoryMock.Setup(repo => repo.Get(_sessionId)).Returns(session);
 
             // Act & Assert
-            var exception = Assert.Throws<ConflictException>(() => _sessionService.GetUserSession(userId, sessionId));
+            var exception = Assert.Throws<ConflictException>(() => _sessionService.GetUserSession(_userId, _sessionId));
             Assert.Multiple(() =>
             {
-                Assert.That(exception.Message, Is.EqualTo($"Session {sessionId} is linked to another user."));
+                Assert.That(exception.Message, Is.EqualTo($"Session {_sessionId} is linked to another user."));
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
 
-                _sessionRepositoryMock.Verify(repo => repo.Get(sessionId), Times.Once);
+                _sessionRepositoryMock.Verify(repo => repo.Get(_sessionId), Times.Once);
                 _mapperMock.Verify(x => x.Map<SessionDto>(It.IsAny<Session>()), Times.Never);
             });
         }
@@ -247,25 +303,24 @@ namespace GameController.Services.Tests
         {
             // Arrange
             var shipId = Guid.NewGuid();
-            var sessionDto = new SessionDto { SessionId = sessionId, ShipId = shipId };
+            var sessionDto = new SessionDto { SessionId = _sessionId, ShipId = shipId };
             var shipDto = new ShipDto { Id = shipId };
 
-            _sessionRepositoryMock.Setup(repo => repo.Get(sessionId)).
-                Returns(new Session { Id = sessionId, UserId = userId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() });
+            _sessionRepositoryMock.Setup(repo => repo.Get(_sessionId)).
+                Returns(new Session { Id = _sessionId, UserId = _userId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() });
             _shipServiceMock.Setup(x => x.GetShipAsync(shipId)).ReturnsAsync(shipDto);
 
             _mapperMock.Setup(x => x.Map<SessionDto>(It.IsAny<Session>())).Returns(sessionDto);
             _mapperMock.Setup(x => x.Map<SessionDto>(It.IsAny<Session>())).Returns(sessionDto);
 
-
             // Act
-            var result = await _sessionService.GetUserSessionShipAsync(userId, sessionId);
+            var result = await _sessionService.GetUserSessionShipAsync(_userId, _sessionId);
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.IsNotNull(result);
-                Assert.AreEqual(shipId, result.Id);
+                Assert.That(result.Id, Is.EqualTo(shipId));
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
             });
 
@@ -276,16 +331,16 @@ namespace GameController.Services.Tests
         public void GetUserSessionShipAsync_WhenSessionDoesNotExist_ThrowsNotFoundException()
         {
             // Arrange
-            _sessionServiceMock.Setup(x => x.GetUserSession(userId, sessionId))
-                .Throws(new NotFoundException($"Session with {sessionId} is not found."));
+            _sessionServiceMock.Setup(x => x.GetUserSession(_userId, _sessionId))
+                .Throws(new NotFoundException($"Session with {_sessionId} is not found."));
 
             // Act & Assert
             var exception = Assert.ThrowsAsync<NotFoundException>(async () =>
-                await _sessionService.GetUserSessionShipAsync(userId, sessionId));
+                await _sessionService.GetUserSessionShipAsync(_userId, _sessionId));
 
             Assert.Multiple(() =>
             {
-                Assert.That(exception.Message, Is.EqualTo($"Session with {sessionId} is not found."));
+                Assert.That(exception.Message, Is.EqualTo($"Session with {_sessionId} is not found."));
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(3));
 
                 _shipServiceMock.Verify(x => x.GetShipAsync(It.IsAny<Guid>()), Times.Never);
@@ -300,19 +355,24 @@ namespace GameController.Services.Tests
         public void DeleteUserSession_WhenSessionExists_CallsDeleteOnRepository()
         {
             // Arrange
-            var sessionDto = new SessionDto { SessionId = sessionId, ShipId = Guid.NewGuid() };
-            var session = new Session { Id = sessionId, UserId = userId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() };
+            var sessionDto = new SessionDto { SessionId = _sessionId, ShipId = Guid.NewGuid() };
+            var session = new Session {
+                Id = _sessionId,
+                UserId = _userId,
+                GeneratorId = Guid.NewGuid(),
+                ShipId = Guid.NewGuid()
+            };
 
-            _sessionRepositoryMock.Setup(repo => repo.Get(sessionId)).Returns(session);
-            _sessionRepositoryMock.Setup(x => x.Delete(sessionId)).Verifiable();
+            _sessionRepositoryMock.Setup(repo => repo.Get(_sessionId)).Returns(session);
+            _sessionRepositoryMock.Setup(x => x.Delete(_sessionId)).Verifiable();
 
             _mapperMock.Setup(x => x.Map<SessionDto>(session)).Returns(sessionDto);
 
             // Act
-            _sessionService.DeleteUserSession(userId, sessionId);
+            _sessionService.DeleteUserSession(_userId, _sessionId);
 
             // Assert
-            _sessionRepositoryMock.Verify(x => x.Delete(sessionId), Times.Once);
+            _sessionRepositoryMock.Verify(x => x.Delete(_sessionId), Times.Once);
             Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
         }
 
@@ -320,16 +380,16 @@ namespace GameController.Services.Tests
         public void DeleteUserSession_WhenSessionDoesNotExist_ThrowsNotFoundException()
         {
             // Arrange
-            _sessionServiceMock.Setup(x => x.GetUserSession(userId, sessionId))
-                .Throws(new NotFoundException($"Session with {sessionId} is not found."));
+            _sessionServiceMock.Setup(x => x.GetUserSession(_userId, _sessionId))
+                .Throws(new NotFoundException($"Session with {_sessionId} is not found."));
 
             // Act & Assert
             var exception = Assert.Throws<NotFoundException>(() =>
-                _sessionService.DeleteUserSession(userId, sessionId));
+                _sessionService.DeleteUserSession(_userId, _sessionId));
 
             Assert.Multiple(() =>
             {
-                Assert.That(exception.Message, Is.EqualTo($"Session with {sessionId} is not found."));
+                Assert.That(exception.Message, Is.EqualTo($"Session with {_sessionId} is not found."));
                 _sessionRepositoryMock.Verify(x => x.Delete(It.IsAny<Guid>()), Times.Never);
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(3));
             });
@@ -337,17 +397,23 @@ namespace GameController.Services.Tests
 
         #endregion
 
-        #region DeleteUserSession
+        #region MakeMove
+
         [Test]
         public void MakeMove_WhenCalled_CorrectlyProcessesMove()
         {
             // Arrange
             var shipId = Guid.NewGuid();
-            var sessionDto = new SessionDto { SessionId = sessionId, ShipId = shipId };
+            var sessionDto = new SessionDto { SessionId = _sessionId, ShipId = shipId };
             var newDayMessage = new NewDayMessage { ShipId = shipId };
-            var session = new Session { Id = sessionId, UserId = userId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() };
+            var session = new Session {
+                Id = _sessionId,
+                UserId = _userId,
+                GeneratorId = Guid.NewGuid(),
+                ShipId = Guid.NewGuid()
+            };
 
-            _sessionRepositoryMock.Setup(repo => repo.Get(sessionId)).Returns(session);
+            _sessionRepositoryMock.Setup(repo => repo.Get(_sessionId)).Returns(session);
 
             _mapperMock.Setup(x => x.Map<SessionDto>(session)).Returns(sessionDto);
             _mapperMock.Setup(x => x.Map<NewDayMessage>(sessionDto)).Returns(newDayMessage);
@@ -355,7 +421,7 @@ namespace GameController.Services.Tests
             _rabbitMQServiceMock.Setup(x => x.SendNewDayMessage(newDayMessage)).Verifiable();
 
             // Act
-            _sessionService.MakeMove(userId, sessionId);
+            _sessionService.MakeMove(_userId, _sessionId);
 
             // Assert
             _mapperMock.Verify(x => x.Map<NewDayMessage>(sessionDto), Times.Once);
@@ -368,16 +434,17 @@ namespace GameController.Services.Tests
         public void MakeMove_WhenSessionDoesNotExist_ThrowsNotFoundException()
         {
             // Arrange
-            _sessionRepositoryMock.Setup(repo => repo.Get(sessionId))
-                .Throws(new NotFoundException($"Session with {sessionId} is not found."));
+            _sessionRepositoryMock
+                .Setup(repo => repo.Get(_sessionId))
+                .Throws(new NotFoundException($"Session with {_sessionId} is not found."));
 
             // Act & Assert
             var exception = Assert.Throws<NotFoundException>(() =>
-                _sessionService.MakeMove(userId, sessionId));
+                _sessionService.MakeMove(_userId, _sessionId));
 
             Assert.Multiple(() =>
             {
-                Assert.That(exception.Message, Is.EqualTo($"Session with {sessionId} is not found."));
+                Assert.That(exception.Message, Is.EqualTo($"Session with {_sessionId} is not found."));
 
                 _mapperMock.Verify(x => x.Map<NewDayMessage>(It.IsAny<SessionDto>()), Times.Never);
                 _rabbitMQServiceMock.Verify(x => x.SendNewDayMessage(It.IsAny<NewDayMessage>()), Times.Never);
@@ -387,6 +454,5 @@ namespace GameController.Services.Tests
         }
 
         #endregion
-
     }
 }
