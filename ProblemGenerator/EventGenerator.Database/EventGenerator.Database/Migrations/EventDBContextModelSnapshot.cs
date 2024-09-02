@@ -29,9 +29,33 @@ namespace EventGenerator.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<int>("EventCoint")
+                        .HasColumnType("integer")
+                        .HasColumnName("event_coint");
+
                     b.Property<Guid>("EventId")
                         .HasColumnType("uuid")
                         .HasColumnName("event_id");
+
+                    b.Property<Guid>("GenertatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("genertator_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("event");
+                });
+
+            modelBuilder.Entity("EventGenerator.Database.Models.Generator", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("GeneratorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("generator_id");
 
                     b.Property<Guid>("ShipId")
                         .HasColumnType("uuid")
@@ -43,23 +67,7 @@ namespace EventGenerator.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("event");
-                });
-
-            modelBuilder.Entity("EventGenerator.Database.Models.Ship", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("ShipId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("ship_id");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ship");
+                    b.ToTable("generator");
                 });
 #pragma warning restore 612, 618
         }
