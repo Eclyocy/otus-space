@@ -44,7 +44,7 @@ public class SpaceShipControllerTests
     public void GetShip_WhenOk()
     {
         var mock  = new Mock<IShipService>();
-        mock.Setup(svc => svc.Get(_createdShipId)).Returns(CreateShip(_createdShipId));
+        mock.Setup(svc => svc.GetShip(_createdShipId)).Returns(CreateShip(_createdShipId));
         var controller = new SpaceShipController(mock.Object, _mapper);
 
         var response = controller.Get(_createdShipId);
@@ -58,7 +58,7 @@ public class SpaceShipControllerTests
     public void GetShip_WhenNotFound()
     {
         var mock  = new Mock<IShipService>();
-        mock.Setup(svc => svc.Get(Guid.Empty)).Throws<KeyNotFoundException>();
+        mock.Setup(svc => svc.GetShip(Guid.Empty)).Throws<KeyNotFoundException>();
         var controller = new SpaceShipController(mock.Object, _mapper);
 
         var response = controller.Get(Guid.Empty);
