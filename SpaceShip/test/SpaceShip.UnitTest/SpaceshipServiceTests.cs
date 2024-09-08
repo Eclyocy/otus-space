@@ -17,9 +17,10 @@ public class SpaceShipServiceTests
     private IMapper _mapper;
     private ISpaceshipRepository _repository;
     private ILogger<SpaceShipService> _logger;
+    private SpaceShipService _service;
 
-    [SetUp]
-    public void Setup()
+    [OneTimeSetUp]
+    public void OneTimeSetup()
     {
         _mapper = new Mapper(
             new MapperConfiguration(
@@ -49,35 +50,42 @@ public class SpaceShipServiceTests
         _repository = mock.Object;
 
         _logger = Mock.Of<ILogger<SpaceShipService>>();
+    }
 
+    [SetUp]
+    public void Setup()
+    {
+        _service = new SpaceShipService(_repository, _mapper, _logger);
     }
 
     [Test]
     public void CreateShip_WhenOk()
     {
-        var service = new SpaceShipService(_repository, _mapper, _logger);
-        var ship = service.CreateShip();
+        var ship = _service.CreateShip();
 
-        Assert.That(ship.Id, Is.InstanceOf<Guid>());
-        Assert.That(ship.Step, Is.EqualTo(0));
+        Assert.Multiple(() =>
+        {
+            Assert.That(ship.Id, Is.InstanceOf<Guid>());
+            Assert.That(ship.Step, Is.EqualTo(0));
+        });
     }
 
     [Test]
     public void GetShip_WhenOk()
     {
-        var service = new SpaceShipService(_repository, _mapper, _logger);
         var id = Guid.NewGuid();
-        var result = service.GetShip(id);
+        var result = _service.GetShip(id);
 
-        Assert.That(result, Is.InstanceOf<SpaceShipDTO>());
-        Assert.That(result.Id, Is.EqualTo(id));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.InstanceOf<SpaceShipDTO>());
+            Assert.That(result.Id, Is.EqualTo(id));
+        });
     }
 
     [Test]
     public void GetShip_WhenNotFound()
     {
-        var service = new SpaceShipService(_repository, _mapper, _logger);
-
-        Assert.Throws<NotFoundException>(() => service.GetShip(Guid.Empty));
+        Assert.Throws<NotFoundException>(() => _service.GetShip(Guid.Empty));
     }
 }
