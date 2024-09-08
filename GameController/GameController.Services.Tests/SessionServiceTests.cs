@@ -87,7 +87,7 @@ namespace GameController.Services.Tests
 
             _mapperMock
                 .Setup(x => x.Map<Session>(
-                    It.Is<CreateSessionDto>(x => x.ShipId == shipGuid && x.GeneratorId == generatorGuid )))
+                    It.Is<CreateSessionDto>(x => x.ShipId == shipGuid && x.GeneratorId == generatorGuid)))
                 .Returns(new Session() { ShipId = shipGuid, GeneratorId = generatorGuid });
 
             _mapperMock
@@ -192,6 +192,7 @@ namespace GameController.Services.Tests
                     Assert.That(item.SessionId, Is.EqualTo(sessionDto.SessionId));
                     Assert.That(item.UserId, Is.EqualTo(sessionDto.UserId));
                 }
+
                 _mapperMock.Verify(x => x.Map<List<SessionDto>>(It.IsAny<List<Session>>()), Times.Once);
                 _sessionRepositoryMock.Verify(repo => repo.GetAllByUserId(_userId), Times.Once);
                 _sessionRepositoryMock.VerifyNoOtherCalls();
