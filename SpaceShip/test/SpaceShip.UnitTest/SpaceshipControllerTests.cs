@@ -68,7 +68,6 @@ public class SpaceShipControllerTests
     [Test]
     public void GetShip_WhenNotFound()
     {
-        var mock  = new Mock<IShipService>();
         _mockService.Setup(svc => svc.GetShip(Guid.Empty)).Throws<KeyNotFoundException>();
         var controller = new SpaceShipController(_mockService.Object, _mapper);
 
