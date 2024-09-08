@@ -2,8 +2,10 @@
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
+using GameController.Services.Hubs;
 using GameController.Services.Models.User;
 using GameController.Services.Services;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -19,6 +21,7 @@ namespace GameController.Services.Tests
         private Mock<ILogger<UserService>> _loggerMock;
         private Mock<IMapper> _mapperMock;
         private readonly Guid userId = Guid.NewGuid();
+        private Mock<IHubContext<UserHub>> _userHubContextMock;
         private const string NameUser = "Test User";
         private const string PasswordHashUser = "Test User";
 
@@ -32,7 +35,8 @@ namespace GameController.Services.Tests
             _userRepositoryMock = new Mock<IUserRepository>();
             _loggerMock = new Mock<ILogger<UserService>>();
             _mapperMock = new Mock<IMapper>();
-            _userService = new UserService(_userRepositoryMock.Object, _loggerMock.Object, _mapperMock.Object);
+            _userHubContextMock = new Mock<IHubContext<UserHub>>();
+            _userService = new UserService(_userRepositoryMock.Object, _userHubContextMock.Object, _loggerMock.Object, _mapperMock.Object);
         }
 
         #endregion

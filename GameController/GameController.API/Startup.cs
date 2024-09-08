@@ -6,6 +6,7 @@ using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
 using GameController.Database;
 using GameController.Services;
+using GameController.Services.Hubs;
 using GameController.Services.Services;
 using GameController.Services.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -75,6 +76,8 @@ namespace GameController
                         [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
                     }
                 });
+
+                endpoints.MapHub<UserHub>("/user-hub");
             });
 
             SetupRabbitMQ(application.ApplicationServices.GetService<IOptions<RabbitMQSettings>>());
@@ -111,6 +114,8 @@ namespace GameController
                 .AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
+
+            services.AddSignalR();
 
             services.AddSwaggerGen(options =>
             {

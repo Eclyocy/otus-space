@@ -33,6 +33,11 @@ namespace GameController.Services.Interfaces
         UserDto UpdateUser(Guid userId, UpdateUserDto updateUserDto);
 
         /// <summary>
+        /// Update the user with <paramref name="userId"/>.
+        /// </summary>
+        Task<UserDto> UpdateUserAsync(Guid userId, UpdateUserDto updateUserDto);
+
+        /// <summary>
         /// Delete the user with <paramref name="userId"/>.
         /// </summary>
         bool DeleteUser(Guid userId);
