@@ -13,6 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceShip.Service", "src\Sp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceShip.Domain", "src\SpaceShip.Domain\SpaceShip.Domain.csproj", "{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{95184D67-C6BF-40F8-B738-5254FDF3CD50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceShip.UnitTest", "test\SpaceShip.UnitTest\SpaceShip.UnitTest.csproj", "{28306AFD-E605-4868-B8FA-C58C1C0D1B23}"
+EndProject
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,14 +40,22 @@ Global
 		{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28306AFD-E605-4868-B8FA-C58C1C0D1B23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28306AFD-E605-4868-B8FA-C58C1C0D1B23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28306AFD-E605-4868-B8FA-C58C1C0D1B23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28306AFD-E605-4868-B8FA-C58C1C0D1B23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+    
 	GlobalSection(NestedProjects) = preSolution
 		{22B4E504-2A43-4141-B721-78B2C70F2CE8} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
 		{ACF54AA2-74AD-4010-A8A1-D21512F47A93} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
 		{DB649135-A9FF-499F-AF5C-00B791CE40B5} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
 		{C9BF86E0-B97C-4267-A218-4E01B7ABEFBE} = {54D9AE29-DCDD-4A5E-BF70-CEB15CD472E7}
+		{28306AFD-E605-4868-B8FA-C58C1C0D1B23} = {95184D67-C6BF-40F8-B738-5254FDF3CD50}
 	EndGlobalSection
+
 EndGlobal

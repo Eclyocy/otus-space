@@ -63,7 +63,7 @@ public class SpaceShipController : ControllerBase
     /// <summary>
     /// Создать новый корабль
     /// </summary>
-    /// <returns>200</returns>
+    /// <returns>201</returns>
     [HttpPost(Name = "Создать новый корабль")]
     [Produces("application/json")]
     [ProducesResponseType<SpaceShipCreateResponse>(StatusCodes.Status201Created)]
