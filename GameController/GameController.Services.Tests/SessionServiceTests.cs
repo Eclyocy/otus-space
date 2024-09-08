@@ -192,8 +192,9 @@ namespace GameController.Services.Tests
                     Assert.That(item.SessionId, Is.EqualTo(sessionDto.SessionId));
                     Assert.That(item.UserId, Is.EqualTo(sessionDto.UserId));
                 }
-
+                _mapperMock.Verify(x => x.Map<List<SessionDto>>(It.IsAny<List<Session>>()), Times.Once);
                 _sessionRepositoryMock.Verify(repo => repo.GetAllByUserId(_userId), Times.Once);
+                _sessionRepositoryMock.VerifyNoOtherCalls();
             });
         }
 
@@ -212,8 +213,9 @@ namespace GameController.Services.Tests
             {
                 Assert.That(actualSessions, Is.Not.Null);
                 Assert.That(actualSessions.Count, Is.EqualTo(0));
-
+                _mapperMock.Verify(x => x.Map<List<SessionDto>>(It.IsAny<List<Session>>()), Times.Once);
                 _sessionRepositoryMock.Verify(repo => repo.GetAllByUserId(_userId), Times.Once);
+                _sessionRepositoryMock.VerifyNoOtherCalls();
             });
         }
 
@@ -234,7 +236,7 @@ namespace GameController.Services.Tests
 
             _sessionRepositoryMock
                 .Setup(repo => repo.Get(_sessionId))
-                .Returns(session);
+                .Returns(new Session { Id = _sessionId, UserId = _userId, GeneratorId = Guid.NewGuid(), ShipId = Guid.NewGuid() });
             _mapperMock
                 .Setup(x => x.Map<SessionDto>(It.IsAny<Session>()))
                 .Returns(new SessionDto { SessionId = _sessionId, UserId = _userId });
@@ -249,7 +251,10 @@ namespace GameController.Services.Tests
                 Assert.That(result.SessionId, Is.EqualTo(session.Id));
 
                 _sessionRepositoryMock.Verify(repo => repo.Get(_sessionId), Times.Once);
+                _sessionRepositoryMock.VerifyNoOtherCalls();
+
                 _mapperMock.Verify(x => x.Map<SessionDto>(It.IsAny<Session>()), Times.Once);
+                _mapperMock.VerifyNoOtherCalls();
 
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
             });
@@ -268,7 +273,11 @@ namespace GameController.Services.Tests
                 Assert.That(exception.Message, Is.EqualTo($"Session with {_sessionId} is not found."));
 
                 _sessionRepositoryMock.Verify(repo => repo.Get(_sessionId), Times.Once);
+                _sessionRepositoryMock.VerifyNoOtherCalls();
+
                 _mapperMock.Verify(x => x.Map<SessionDto>(It.IsAny<Session>()), Times.Never);
+                _mapperMock.VerifyNoOtherCalls();
+
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
             });
         }
@@ -290,7 +299,10 @@ namespace GameController.Services.Tests
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
 
                 _sessionRepositoryMock.Verify(repo => repo.Get(_sessionId), Times.Once);
+                _sessionRepositoryMock.VerifyNoOtherCalls();
+
                 _mapperMock.Verify(x => x.Map<SessionDto>(It.IsAny<Session>()), Times.Never);
+                _mapperMock.VerifyNoOtherCalls();
             });
         }
 
@@ -322,9 +334,10 @@ namespace GameController.Services.Tests
                 Assert.IsNotNull(result);
                 Assert.That(result.Id, Is.EqualTo(shipId));
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
-            });
 
-            _shipServiceMock.Verify(x => x.GetShipAsync(shipId), Times.Once);
+                _shipServiceMock.Verify(x => x.GetShipAsync(shipId), Times.Once);
+                _shipServiceMock.VerifyNoOtherCalls();
+            });
         }
 
         [Test]
@@ -372,8 +385,14 @@ namespace GameController.Services.Tests
             _sessionService.DeleteUserSession(_userId, _sessionId);
 
             // Assert
-            _sessionRepositoryMock.Verify(x => x.Delete(_sessionId), Times.Once);
-            Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
+            Assert.Multiple(() =>
+            {
+                _sessionRepositoryMock.Verify(x => x.Delete(_sessionId), Times.Once);
+                _sessionRepositoryMock.Verify(x => x.Get(_sessionId), Times.Once);
+                _sessionRepositoryMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
+            });
         }
 
         [Test]
@@ -425,7 +444,11 @@ namespace GameController.Services.Tests
 
             // Assert
             _mapperMock.Verify(x => x.Map<NewDayMessage>(sessionDto), Times.Once);
+            _mapperMock.Verify(x => x.Map<SessionDto>(session), Times.Once);
+            _mapperMock.VerifyNoOtherCalls();
+
             _rabbitMQServiceMock.Verify(x => x.SendNewDayMessage(newDayMessage), Times.Once);
+            _rabbitMQServiceMock.VerifyNoOtherCalls();
 
             Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
         }
@@ -447,7 +470,10 @@ namespace GameController.Services.Tests
                 Assert.That(exception.Message, Is.EqualTo($"Session with {_sessionId} is not found."));
 
                 _mapperMock.Verify(x => x.Map<NewDayMessage>(It.IsAny<SessionDto>()), Times.Never);
+                _mapperMock.VerifyNoOtherCalls();
+
                 _rabbitMQServiceMock.Verify(x => x.SendNewDayMessage(It.IsAny<NewDayMessage>()), Times.Never);
+                _rabbitMQServiceMock.VerifyNoOtherCalls();
 
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
             });
