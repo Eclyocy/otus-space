@@ -38,6 +38,7 @@ namespace GameController.Services.Tests
         #endregion
 
         #region tests for CreateUser
+
         [Test]
         public void CreateUser_ReturnUserDto_WhenUserСorrect()
         {
@@ -48,7 +49,6 @@ namespace GameController.Services.Tests
             _mapperMock.Setup(m => m.Map<User>(createUserDto)).Returns(user);
             _userRepositoryMock.Setup(repo => repo.Create(user)).Returns(user);
             _mapperMock.Setup(m => m.Map<UserDto>(user)).Returns(userDto);
-
 
             // Act
             var result = _userService.CreateUser(createUserDto);
