@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameController.Services", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameController.API", "GameController.API\GameController.API.csproj", "{BAB241D2-B8B5-4471-A7C6-DDEBC83F41EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameController.Services.Tests", "GameController.Services.Tests\GameController.Services.Tests.csproj", "{98644C84-01AD-4519-A9BB-22A0D8353B16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameController.Services.Tests", "GameController.Services.Tests\GameController.Services.Tests.csproj", "{98644C84-01AD-4519-A9BB-22A0D8353B16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
