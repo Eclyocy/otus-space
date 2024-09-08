@@ -24,8 +24,7 @@ public class SpaceShipControllerTests
                 static cfg =>
                 {
                     cfg.AddProfile<SpaceShipMappingProfile>();
-                }
-        ));
+                }));
     }
 
     [SetUp]

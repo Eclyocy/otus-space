@@ -2,13 +2,13 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Internal;
-using SpaceShip.Domain.Model;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Mappers;
+using SpaceShip.Domain.Model;
+using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Services.Exceptions;
-using SpaceShip.Service.Contracts;
 
 namespace SpaceShip.UnitTest.Services;
 
@@ -31,13 +31,13 @@ public class SpaceShipServiceTests
                     cfg.AddProfile<ResourceModelMappingProfile>();
                     cfg.AddProfile<ResourceStateModelMappingProfile>();
                     cfg.AddProfile<ResourceTypeModelMappingProfile>();
-                }
-        ));
+                }));
 
         var mock = new Mock<ISpaceshipRepository>();
         mock.Setup(repo => repo.Create()).Returns(new Ship());
-        mock.Setup(repo => repo.Get(It.IsAny<Guid>())).Returns<Guid>((id) => {
-            if(id == Guid.Empty)
+        mock.Setup(repo => repo.Get(It.IsAny<Guid>())).Returns<Guid>((id) =>
+        {
+            if (id == Guid.Empty)
             {
                 return null;
             }
