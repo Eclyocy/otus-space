@@ -7,6 +7,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Mappers;
+using SpaceShip.Notifications;
 using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
@@ -68,7 +69,7 @@ builder.Services.AddSingleton<IMapper>(
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddNotifications();
 builder.Services.ConfigureDatabase();
 
 var app = builder.Build();
@@ -83,5 +84,6 @@ app.UseSwaggerUI(options =>
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseNotifications();
 
 app.Run();
