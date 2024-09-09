@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Notifications;
@@ -18,7 +17,7 @@ public class GameStepService : IGameStepService
     private readonly ISpaceshipRepository _shipRepository;
 
     // private readonly INotificationsHub _notificationsHub;
-    private readonly IHubContext<NotificationsHub> _hubContext;
+    private readonly INotificationsProvider _notificationsProvider;
 
     #endregion
 
@@ -27,11 +26,11 @@ public class GameStepService : IGameStepService
     public GameStepService(
         ISpaceshipRepository shipRepository,
         ILogger<SpaceShipService> logger,
-        IHubContext<NotificationsHub> hubContext)
+        INotificationsProvider notificationsProvider)
     {
         _shipRepository = shipRepository;
         _logger = logger;
-        _hubContext = hubContext;
+        _notificationsProvider = notificationsProvider;
     }
 
     #endregion
@@ -54,7 +53,7 @@ public class GameStepService : IGameStepService
             _shipRepository.Update(ship);
 
             _logger.LogInformation("Try to notify about ship {id} changes", id);
-            await _hubContext.Clients.All.SendAsync(nameof(GameStepService), ship);
+            await _notificationsProvider.SendAllAsync(ship);
         }
     }
 }

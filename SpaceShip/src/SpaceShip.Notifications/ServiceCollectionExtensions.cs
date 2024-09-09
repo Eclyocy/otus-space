@@ -15,7 +15,7 @@ namespace SpaceShip.Notifications
         public static IServiceCollection AddNotifications(this IServiceCollection services)
         {
             services.AddSignalR();
-            services.AddTransient<INotificationsHub, NotificationsHub>();
+            services.AddTransient<INotificationsProvider, NotificationsProvider>();
 
             return services;
         }

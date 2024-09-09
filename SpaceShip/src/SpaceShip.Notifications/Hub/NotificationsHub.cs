@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.SignalR;
  
 namespace SpaceShip.Notifications
 {
-    public class NotificationsHub : Hub, INotificationsHub
+    public class NotificationsHub : Hub
     {
         public async Task SubscribeToShip(Guid shipId)
         {
