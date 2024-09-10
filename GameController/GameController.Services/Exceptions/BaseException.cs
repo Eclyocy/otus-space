@@ -7,7 +7,16 @@ namespace GameController.Services.Exceptions
     /// </summary>
     public abstract class BaseException : Exception
     {
-        #region constructor
+        #region constructors
+
+        /// <summary>
+        /// Constructor with HTTP status code only.
+        /// </summary>
+        protected BaseException(HttpStatusCode statusCode)
+            : base()
+        {
+            StatusCode = statusCode;
+        }
 
         /// <summary>
         /// Constructor with HTTP status code and message.

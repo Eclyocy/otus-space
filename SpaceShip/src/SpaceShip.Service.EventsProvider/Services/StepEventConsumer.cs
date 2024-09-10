@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SpaceShip.Service.EventsConsumer.Contracts;
@@ -11,21 +12,20 @@ namespace SpaceShip.Service.Queue;
 /// </summary>
 public class StepEventConsumer : EventConsumer
 {
-    private readonly IShipService _shipService;
-
+    private readonly IServiceScopeFactory _scopeServiceFactory;
     public StepEventConsumer(
         ILogger<TroubleEventConsumer> logger,
         IConfiguration configuration,
-        IShipService shipService)
+        IServiceScopeFactory serviceScopeFactory)
         : base(logger, configuration)
     {
         QueueName = configuration["RABBITMQ_STEP_QUEUE"];
         ConsumerName = nameof(StepEventConsumer);
-
-        _shipService = shipService;
+        _scopeServiceFactory = serviceScopeFactory;
     }
 
-    protected override void HandleMessage(string message)
+    /// <inheritdoc/>
+    protected override async Task HandleMessageAsync(string message)
     {
         StepMessageDTO? stepMessage = JsonConvert.DeserializeObject<StepMessageDTO>(message);
 
@@ -34,6 +34,12 @@ public class StepEventConsumer : EventConsumer
             throw new Exception("Unable to parse step message.");
         }
 
-        _shipService.ProcessNewDay(stepMessage.ShipId);
+        using (IServiceScope scope = _scopeServiceFactory.CreateScope())
+        {
+            IGameStepService dayServiceScoped =
+                scope.ServiceProvider.GetRequiredService<IGameStepService>();
+
+            await dayServiceScoped.ProcessNewDayAsync(stepMessage.ShipId);
+        }
     }
 }

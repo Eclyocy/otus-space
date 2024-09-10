@@ -61,11 +61,10 @@ namespace GameController.Database.Repositories
         }
 
         /// <inheritdoc/>
-        public T Update(T entity)
+        public void Update(T entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
             Context.SaveChanges();
-            return entity;
         }
 
         /// <inheritdoc/>

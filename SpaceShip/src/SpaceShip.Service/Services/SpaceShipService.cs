@@ -109,25 +109,6 @@ public class SpaceShipService : IShipService
         return _shipRepository.Delete(shipId);
     }
 
-    /// <summary>
-    /// Применить новый игровой день (новый шаг)
-    /// </summary>
-    /// <param name="id">ID корабля</param>
-    public void ProcessNewDay(Guid id)
-    {
-        _logger.LogInformation("Process new day for ship with id {id}", id);
-
-        var ship = _shipRepository.Get(id);
-
-        if (ship != null)
-        {
-            ship.Step++;
-            _shipRepository.Update(ship);
-        }
-
-        return;
-    }
-
     #endregion
 
     #region private methods

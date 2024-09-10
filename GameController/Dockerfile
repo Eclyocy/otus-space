@@ -7,6 +7,7 @@ COPY *.sln .
 COPY GameController.API/*.csproj ./GameController.API/
 COPY GameController.Database/*.csproj ./GameController.Database/
 COPY GameController.Services/*.csproj ./GameController.Services/
+COPY GameController.Services.Tests/*.csproj ./GameController.Services.Tests/
 
 # Restore packages
 RUN dotnet restore
