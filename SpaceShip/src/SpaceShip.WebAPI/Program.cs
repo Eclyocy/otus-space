@@ -14,7 +14,7 @@ using SpaceShip.Service.Queue;
 using SpaceShip.Service.Services;
 using SpaceShip.WebAPI.Mappers;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
 
 builder.Services.AddEndpointsApiExplorer();
 
