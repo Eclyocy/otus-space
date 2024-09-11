@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using SpaceShip.Domain.Interfaces;
 using SpaceShip.Notifications;
 using SpaceShip.Service.Interfaces;
 
@@ -14,21 +13,22 @@ public class GameStepService : IGameStepService
     #region private fields
 
     private readonly ILogger _logger;
-    private readonly ISpaceshipRepository _shipRepository;
-
-    // private readonly INotificationsHub _notificationsHub;
+    private readonly IShipService _shipService;
     private readonly INotificationsProvider _notificationsProvider;
 
     #endregion
 
     #region constructor
 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
     public GameStepService(
-        ISpaceshipRepository shipRepository,
+        IShipService shipService,
         ILogger<SpaceShipService> logger,
         INotificationsProvider notificationsProvider)
     {
-        _shipRepository = shipRepository;
+        _shipService = shipService;
         _logger = logger;
         _notificationsProvider = notificationsProvider;
     }
@@ -43,17 +43,17 @@ public class GameStepService : IGameStepService
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
-        var ship = _shipRepository.Get(id);
+        var ship = _shipService.GetShip(id);
 
         if (ship != null)
         {
             ship.Step++;
 
             _logger.LogInformation("Update ship {id} in repository. Set step {step} ", id, ship.Step);
-            _shipRepository.Update(ship);
+            _shipService.UpdateShip(id, ship);
 
             _logger.LogInformation("Try to notify about ship {id} changes", id);
-            await _notificationsProvider.SendAllAsync(ship);
+            await _notificationsProvider.SendAsync(id, ship);
         }
     }
 }

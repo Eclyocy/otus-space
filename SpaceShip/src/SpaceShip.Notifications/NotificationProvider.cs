@@ -1,5 +1,3 @@
-
-
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
@@ -18,21 +16,26 @@ public class NotificationsProvider : INotificationsProvider
         _hubContext = hubContext;
     }
 
-    public async Task SendAsync(string connectionId, object notification)
+    public async Task SendAsync(Guid shipId, object notification)
     {
-        await _hubContext.Clients.Client(connectionId).SendAsync(nameof(NotificationsProvider), notification);
+        _logger.LogInformation("Sending notification to group {id} clients", shipId);
+        await _hubContext.Clients.Group(shipId.ToString()).SendAsync(nameof(NotificationsProvider), notification);
     }
 
     public async Task SendAllAsync(object notification)
     {
+        _logger.LogInformation("Sending notification to all clients");
         await _hubContext.Clients.All.SendAsync(nameof(NotificationsProvider), notification);
     }
 
-    public async Task SubscribeAsync(string clientId, IEnumerable<Guid> ids)
+    public async Task SubscribeAsync(string connectionId, IEnumerable<Guid> ids) // <-- кажется, что здесь нужен метод для пользователя, но это будет возможно после добавления авторизации
     {
-        _logger.LogInformation("New request to subscribe from client {clientId} to sips {sips}", clientId, ids);
+        _logger.LogInformation("New request to subscribe from {connectionId} to ships {ships}", connectionId, ids);
         
-        // TODO - check if ship is exist and add to mapping dict.
+        foreach(var id in ids)
+        {
+            await _hubContext.Groups.AddToGroupAsync(connectionId, id.ToString());
+        }
 
     }
 }

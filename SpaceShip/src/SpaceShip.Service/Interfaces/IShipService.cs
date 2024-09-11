@@ -18,6 +18,14 @@ public interface IShipService
     public SpaceShipDTO? GetShip(Guid spaceshipId);
 
     /// <summary>
+    /// Check if SpaceShip exist.
+    /// </summary>
+    /// <param name="shipId">SpaceShip identifier.</param>
+    /// <param name="ship">out param represent ship metrics when it exist.</param>
+    /// <returns>true if ship find, false otherwhere.</returns>
+    public bool TryGetShip(Guid shipId, out SpaceShipDTO? ship);
+
+    /// <summary>
     /// Update the SpaceShip with <paramref name="spaceshipId"/>.
     /// </summary>
     SpaceShipDTO UpdateShip(Guid spaceshipId, SpaceShipDTO spaceShipDTO);
