@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
-using SpaceShip.Notifications;
+using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Services.Exceptions;
 
 namespace SpaceShip.Service.Implementation;
 
@@ -14,7 +15,6 @@ public class GameStepService : IGameStepService
 
     private readonly ILogger _logger;
     private readonly IShipService _shipService;
-    private readonly INotificationsProvider _notificationsProvider;
 
     #endregion
 
@@ -25,12 +25,10 @@ public class GameStepService : IGameStepService
     /// </summary>
     public GameStepService(
         IShipService shipService,
-        ILogger<SpaceShipService> logger,
-        INotificationsProvider notificationsProvider)
+        ILogger<SpaceShipService> logger)
     {
         _shipService = shipService;
         _logger = logger;
-        _notificationsProvider = notificationsProvider;
     }
 
     #endregion
@@ -39,21 +37,19 @@ public class GameStepService : IGameStepService
     /// Применить новый игровой день (новый шаг)
     /// </summary>
     /// <param name="id">ID корабля</param>
-    public async Task ProcessNewDayAsync(Guid id)
+    public async Task<SpaceShipDTO> ProcessNewDayAsync(Guid id)
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
         var ship = _shipService.GetShip(id);
 
-        if (ship != null)
+        if (ship == null)
         {
-            ship.Step++;
-
-            _logger.LogInformation("Update ship {id} in repository. Set step {step} ", id, ship.Step);
-            _shipService.UpdateShip(id, ship);
-
-            _logger.LogInformation("Try to notify about ship {id} changes", id);
-            await _notificationsProvider.SendAsync(id, ship);
+            throw new NotFoundException(string.Format("Ship with id {0} not found in ships service", id));
         }
+
+        ship.Step++;
+        _logger.LogInformation("Update ship {id} in repository. Set step {step} ", id, ship.Step);
+        return _shipService.UpdateShip(id, ship);
     }
 }

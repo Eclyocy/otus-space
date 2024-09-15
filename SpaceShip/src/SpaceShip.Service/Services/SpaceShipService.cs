@@ -131,6 +131,15 @@ public class SpaceShipService : IShipService
 
     #endregion
 
+    #region asynchronous methods
+
+    public async Task<bool> TryGetShipAsync(Guid shipId)
+    {
+        return true;
+    }
+
+    #endregion
+
     #region private methods
 
     /// <summary>

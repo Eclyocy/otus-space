@@ -8,7 +8,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\SpaceShip.Domain\SpaceShip.Domain.csproj" />
-    <ProjectReference Include="..\SpaceShip.Notifications\SpaceShip.Notifications.csproj" />
   </ItemGroup>
   
   <ItemGroup>

@@ -7,6 +7,8 @@ namespace SpaceShip.Service.Interfaces;
 /// </summary>
 public interface IShipService
 {
+    #region synchronous methods
+
     /// <summary>
     /// Create a SpaceShip.
     /// </summary>
@@ -34,4 +36,17 @@ public interface IShipService
     /// Delete the SpaceShip with <paramref name="spaceshipId"/>.
     /// </summary>
     bool DeleteShip(Guid spaceshipId);
+
+    #endregion
+
+    #region asynchronous methods
+
+    /// <summary>
+    /// Check if SpaceShip exist.
+    /// </summary>
+    /// <param name="shipId">Ship identifier.</param>
+    /// <returns>true if exist, false otherwhere.</returns>
+    public Task<bool> TryGetShipAsync(Guid shipId);
+
+    #endregion
 }
