@@ -54,6 +54,7 @@ namespace GameController
 
             application.UseRouting();
             application.UseCors();
+            application.UseAuthentication();
             application.UseAuthorization();
 
             application.UseEndpoints(endpoints =>
@@ -112,8 +113,37 @@ namespace GameController
                     info: new() { Title = "Game Controller API", Version = "v1" });
                 options.EnableAnnotations();
             });
-        }
 
+            // Проверка наличия ключа JWT
+            var jwtKey = Configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(jwtKey))
+            {
+                throw new ArgumentNullException("JWT key is not configured.");
+            }
+
+            // Настройка JWT авторизации
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                };
+            });
+
+            // Регистрация сервиса для работы с JWT
+            services.AddScoped<JwtService>();
+        }
         #endregion
 
         #region private methods
