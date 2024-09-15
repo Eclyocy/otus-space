@@ -1,12 +1,16 @@
-﻿using FluentValidation;
+﻿using System.Text;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using GameController.API.Mappers;
 using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
 using GameController.Database;
 using GameController.Services;
+using GameController.Services.Services;
 using GameController.Services.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
@@ -39,27 +43,35 @@ namespace GameController
         /// <summary>
         /// Configure HTTP request pipeline.
         /// </summary>
-        public void Configure(
-            IApplicationBuilder application,
-            IWebHostEnvironment environment)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            application.UseExceptionHandler(x => x.UseCustomExceptionHandler());
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
-            application.UseSwagger();
-            application.UseSwaggerUI();
+            app.UseExceptionHandler(x => x.UseCustomExceptionHandler());
 
-            application.UseHttpsRedirection();
+            // Настройка Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
-            application.UseRouting();
-            application.UseCors();
-            application.UseAuthorization();
+            app.UseHttpsRedirection();
 
-            application.UseEndpoints(endpoints =>
+            app.UseRouting();
+
+            // Аутентификация должна идти перед авторизацией
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseCors(); // Включение CORS
+
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
 
-            SetupRabbitMQ(application.ApplicationServices.GetService<IOptions<RabbitMQSettings>>());
+            SetupRabbitMQ(app.ApplicationServices.GetService<IOptions<RabbitMQSettings>>());
         }
 
         /// <summary>
@@ -67,39 +79,74 @@ namespace GameController
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
+            // Регистрация базы данных
             services.ConfigureDatabase();
 
+            // Регистрация сервисов приложения
             services.ConfigureApplicationServices(Configuration);
 
+            // Настройка CORS
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
-                    builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader());
             });
 
-            services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
-            services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
-            services.AddAutoMapper(x => x.AddProfile(typeof(ShipMapper)));
+            // Настройка AutoMapper для различных мапперов
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<SessionMapper>();
+                cfg.AddProfile<UserMapper>();
+                cfg.AddProfile<ShipMapper>();
+            });
 
+            // Добавление контроллеров
             services.AddControllers();
 
-            services
-                .AddFluentValidationAutoValidation()
-                .AddFluentValidationClientsideAdapters();
+            // Настройка FluentValidation
+            services.AddFluentValidationAutoValidation()
+                    .AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
 
+            // Настройка Swagger с аннотациями
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc(
-                    name: "v1",
-                    info: new() { Title = "Game Controller API", Version = "v1" });
+                options.SwaggerDoc("v1", new() { Title = "Game Controller API", Version = "v1" });
                 options.EnableAnnotations();
             });
-        }
 
+            // Проверка наличия ключа JWT
+            var jwtKey = Configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(jwtKey))
+            {
+                throw new ArgumentNullException("JWT key is not configured.");
+            }
+
+            // Настройка JWT авторизации
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                };
+            });
+
+            // Регистрация сервиса для работы с JWT
+            services.AddScoped<JwtService>();
+        }
         #endregion
 
         #region private methods

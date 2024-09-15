@@ -30,7 +30,10 @@
         "DATABASE_USER": "postgres",
         "DATABASE_PASSWORD": "pg_pass",
         "SPACESHIPAPI__HOSTNAME": "localhost",
-        "SPACESHIPAPI__PORT": "5051"
+        "SPACESHIPAPI__PORT": "5051",
+        "Jwt__Key": "MySuperSecretKeyForJwtTokenGeneration",
+        "Jwt__Issuer": "GameControllerAPI",
+        "Jwt__Audience": "GameControllerUsers"
       }
     },
     "IIS Express": {
