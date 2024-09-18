@@ -33,7 +33,8 @@
         "SPACESHIPAPI__PORT": "5051",
         "Jwt__Key": "MySuperSecretKeyForJwtTokenGeneration",
         "Jwt__Issuer": "GameControllerAPI",
-        "Jwt__Audience": "GameControllerUsers"
+        "Jwt__Audience": "GameControllerUsers",
+        "Jwt__ExpirationMinutes": "1"
       }
     },
     "IIS Express": {
