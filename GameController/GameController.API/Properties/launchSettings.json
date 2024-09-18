@@ -35,7 +35,8 @@
         "GENERATORAPI__PORT": "6061",
         "Jwt__Key": "MySuperSecretKeyForJwtTokenGeneration",
         "Jwt__Issuer": "GameControllerAPI",
-        "Jwt__Audience": "GameControllerUsers"
+        "Jwt__Audience": "GameControllerUsers",
+        "Jwt__ExpirationMinutes": "1"
       }
     },
     "IIS Express": {

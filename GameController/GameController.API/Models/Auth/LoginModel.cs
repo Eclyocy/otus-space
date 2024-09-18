@@ -1,4 +1,4 @@
-﻿namespace GameController.API.Models.User
+﻿namespace GameController.API.Models.Auth
 {
     public class LoginModel
     {

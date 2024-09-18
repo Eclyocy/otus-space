@@ -122,6 +122,8 @@ namespace GameController
             }
 
             // Настройка JWT авторизации
+            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<JwtService>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
