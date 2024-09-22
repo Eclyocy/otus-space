@@ -182,6 +182,8 @@ public class SpaceShipService : IShipService
         {
             updateRequested = true;
             currentShip.Name = shipRequest.Name;
+            currentShip.Step = shipRequest.Step;
+            currentShip.State = shipRequest.State;
         }
 
         if (!updateRequested)
@@ -189,9 +191,9 @@ public class SpaceShipService : IShipService
             throw new NotModifiedException();
         }
 
-        _shipRepository.Update(currentShip); // updates entity in-place
+        _shipRepository.Update(currentShip);
 
-        return currentShip;
+        return GetRepositoryShip(shipId);
     }
 
     #endregion
