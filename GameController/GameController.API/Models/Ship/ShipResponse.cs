@@ -6,6 +6,11 @@
     public class ShipResponse
     {
         /// <summary>
+        /// Space ship ID.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Space ship current day.
         /// </summary>
         public int Day { get; set; }
