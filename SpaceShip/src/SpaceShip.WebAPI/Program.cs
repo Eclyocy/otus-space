@@ -17,6 +17,15 @@ using SpaceShip.WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 #pragma warning disable SA1118 // ParameterMustNotSpanMultipleLines
@@ -80,6 +89,8 @@ app.UseSwaggerUI(options =>
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
+
+app.UseCors();
 
 app.UseAuthorization();
 

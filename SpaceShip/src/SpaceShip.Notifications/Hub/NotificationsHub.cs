@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using SpaceShip.Service.Interfaces;
 
 namespace SpaceShip.Notifications;
@@ -8,7 +9,13 @@ namespace SpaceShip.Notifications;
 /// </summary>
 public class NotificationsHub : Hub
 {
+    #region private fields
+
     private readonly IShipService _shipService;
+
+    private readonly ILogger<NotificationsHub> _logger;
+
+    #endregion
 
     #region constructor
 
@@ -16,10 +23,15 @@ public class NotificationsHub : Hub
     /// Initializes a new instance of the <see cref="NotificationsHub"/> class.
     /// </summary>
     /// <param name="shipService">Service which providing spaceship base operations.</param>
-    public NotificationsHub(IShipService shipService)
+    /// <param name="loggerFactory">Logger factory.</param>
+    public NotificationsHub(
+        IShipService shipService,
+        ILoggerFactory loggerFactory)
         : base()
     {
         _shipService = shipService;
+
+        _logger = loggerFactory.CreateLogger<NotificationsHub>();
     }
 
     #endregion
@@ -33,10 +45,16 @@ public class NotificationsHub : Hub
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     public async Task Subscribe(Guid shipId)
     {
+        _logger.LogInformation("Subscribing to ship {shipId}.", shipId);
+
         if (!await ShipExist(shipId))
         {
+            _logger.LogInformation("Ship {shipId} does not exist, do not subscribe.", shipId);
+
             return;
         }
+
+        _logger.LogInformation("Subscribing client {connectionId} to {shipId}.", Context.ConnectionId, shipId);
 
         await Groups.AddToGroupAsync(Context.ConnectionId, shipId.ToString());
     }
