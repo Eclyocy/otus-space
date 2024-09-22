@@ -50,5 +50,10 @@ namespace SpaceShip.Domain.Model
         /// </summary>
         [ForeignKey("ResourceTypeId")]
         public virtual ResourceType? ResourceType { get; set; }
+
+        /// <summary>
+        /// Виртуцальное ствойство список вложенных ресурсов.
+        /// </summary>
+        public virtual List<Resource>? Resources { get; set; }
     }
 }

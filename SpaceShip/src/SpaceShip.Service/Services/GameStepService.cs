@@ -1,5 +1,6 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SpaceShip.Domain.Interfaces;
+using SpaceShip.Domain.Model.State;
 using SpaceShip.Service.Interfaces;
 
 namespace SpaceShip.Service.Implementation;
@@ -42,6 +43,24 @@ public class GameStepService : IGameStepService
         if (ship != null)
         {
             ship.Step++;
+
+            var updateResources = ship.Resources;
+
+            foreach (var i in updateResources)
+            {
+                foreach (var j in i.Resources)
+                {
+                    if (j.Amount >= 10)
+                    {
+                        j.Amount = j.Amount - 10;
+                    }
+
+                    if (j.Amount == 0)
+                    {
+                        ship.State = SpaceshipState.Sleep;
+                    }
+                }
+            }
 
             _logger.LogInformation("Update ship {id} in repository. Set step {step} ", id, ship.Step);
             _shipRepository.Update(ship);

@@ -144,7 +144,7 @@ public class SpaceShipService : IShipService
         Guid shipId,
         SpaceShipDTO shipRequest)
     {
-        Ship currentShip = GetRepositoryShip(shipId);
+        var currentShip = GetRepositoryShip(shipId);
 
         bool updateRequested = false;
 
