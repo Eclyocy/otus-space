@@ -11,7 +11,7 @@ namespace EventGenerator.API.Controllers
     /// Controller for actions with generators.
     /// </summary>
     [ApiController]
-    [Route("/api/generator")]
+    [Route("/api/generators")]
     public class GeneratorController : Controller
     {
         private readonly IGeneratorService _generatorService;
@@ -53,14 +53,14 @@ namespace EventGenerator.API.Controllers
         }
 
         /// <summary>
-        /// Создать новое событие.
+        /// Получение существующего генератора событий.
         /// </summary>
         [HttpGet]
-        [Route("{shipId}")]
+        [Route("{generatorId}")]
         [SwaggerOperation("Получение существующего генератора событий")]
-        public GeneratorResponse GetGenerator(Guid shipId)
+        public GeneratorResponse GetGenerator(Guid generatorId)
         {
-            GeneratorDto generatorDto = _generatorService.GetGenerator(shipId);
+            GeneratorDto generatorDto = _generatorService.GetGenerator(generatorId);
             return _mapper.Map<GeneratorResponse>(generatorDto);
         }
     }

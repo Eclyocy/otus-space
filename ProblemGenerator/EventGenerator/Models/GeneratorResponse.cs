@@ -16,8 +16,8 @@
         public Guid ShipId { get; set; }
 
         /// <summary>
-        /// Troublecoint.
+        /// Trouble Coins.
         /// </summary>
-        public int Troublecoint { get; set; }
+        public int TroubleCoins { get; set; }
     }
 }

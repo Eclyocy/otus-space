@@ -9,14 +9,12 @@ using Microsoft.Extensions.Logging;
 namespace EventGenerator.Services.Services
 {
     /// <summary>
-    /// Class for working with event generator servisce.
+    /// Service for working with event generator.
     /// </summary>
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
         private readonly IGeneratorRepository _generatorRepository;
-
-        private readonly IGeneratorService _generatorService;
 
         private readonly ILogger<EventService> _logger;
         private readonly IMapper _mapper;
@@ -27,14 +25,11 @@ namespace EventGenerator.Services.Services
         public EventService(
             IEventRepository eventRepository,
             IGeneratorRepository generatorRepository,
-            IGeneratorService generatorService,
             ILogger<EventService> logger,
             IMapper mapper)
         {
             _eventRepository = eventRepository;
             _generatorRepository = generatorRepository;
-
-            _generatorService = generatorService;
 
             _logger = logger;
             _mapper = mapper;

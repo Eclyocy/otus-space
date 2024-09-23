@@ -1,4 +1,4 @@
-using EventGenerator.API.Helpers;
+﻿using EventGenerator.API.Helpers;
 using Microsoft.Extensions.Logging.Console;
 
 namespace EventGenerator
@@ -23,7 +23,7 @@ namespace EventGenerator
         #region private methods
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
+            Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
                 .ConfigureLogging(logging =>
                 {

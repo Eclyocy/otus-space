@@ -9,9 +9,6 @@ namespace EventGenerator
     /// <summary>
     /// Main start up class.
     /// </summary>
-    /// <remarks>
-    /// Constructor.
-    /// </remarks>
     public class Startup(IConfiguration configuration, IWebHostEnvironment environment)
     {
         #region public properties

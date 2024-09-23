@@ -11,7 +11,7 @@ namespace EventGenerator.Controllers
     /// Controller for actions with events by generator.
     /// </summary>
     [ApiController]
-    [Route("/api/events")]
+    [Route("/api/generators/{generatorId}/events")]
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
@@ -30,7 +30,7 @@ namespace EventGenerator.Controllers
         /// Создать новое событие.
         /// </summary>
         [HttpPost]
-        [Route("{shipId}")]
+        [Route("{generatorId}")]
         [SwaggerOperation("Создание нового события")]
         public EventResponse CreateEvent(Guid gereratopId)
         {
