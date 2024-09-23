@@ -15,7 +15,7 @@ namespace SpaceShip.Service.Mappers
         public ProblemModelMappingProfile()
         {
             // Database models -> Service models
-            CreateMap<Problem, ProblemDTO>().ReverseMap();
+            CreateMap<Problem, ProblemDTO>();
         }
     }
 }

@@ -84,26 +84,6 @@ public class SpaceShipService : IShipService
     }
 
     /// <summary>
-    /// Метод для проверки существования корабля.
-    /// </summary>
-    /// <param name="shipId">ID корабля.</param>
-    /// <param name="ship">возвращаемые метрики корабля, если он найден.</param>
-    /// <returns>true если корабль найден, false в противном случае.</returns>
-    public bool TryGetShip(Guid shipId, out SpaceShipDTO? ship)
-    {
-        Ship? repoShip = _shipRepository.Get(shipId);
-
-        if (repoShip is null)
-        {
-            ship = null;
-            return false;
-        }
-
-        ship = _mapper.Map<SpaceShipDTO>(repoShip);
-        return true;
-    }
-
-    /// <summary>
     /// Изменение метрик существующего корабля.
     /// </summary>
     /// <returns>Метрики корабля</returns>
@@ -135,6 +115,13 @@ public class SpaceShipService : IShipService
 
     public async Task<bool> TryGetShipAsync(Guid shipId)
     {
+        Ship? ship = _shipRepository.Get(shipId);
+
+        if (ship == null)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -177,13 +164,10 @@ public class SpaceShipService : IShipService
 
         bool updateRequested = false;
 
-        // TODO: перейти на валидатор.
-        if ((shipRequest.Name != null && shipRequest.Name != currentShip.Name) || shipRequest.Step != currentShip.Step || shipRequest.State != currentShip.State)
+        if (shipRequest.Name != null && shipRequest.Name != currentShip.Name)
         {
             updateRequested = true;
             currentShip.Name = shipRequest.Name;
-            currentShip.Step = shipRequest.Step;
-            currentShip.State = shipRequest.State;
         }
 
         if (!updateRequested)
@@ -191,9 +175,9 @@ public class SpaceShipService : IShipService
             throw new NotModifiedException();
         }
 
-        _shipRepository.Update(currentShip);
+        _shipRepository.Update(currentShip); // updates entity in-place
 
-        return GetRepositoryShip(shipId);
+        return currentShip;
     }
 
     #endregion
