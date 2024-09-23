@@ -6,6 +6,7 @@ WORKDIR /app
 COPY *.sln .
 COPY ./src/SpaceShip.Domain/*.csproj ./src/SpaceShip.Domain/
 COPY ./src/SpaceShip.WebAPI/*.csproj ./src/SpaceShip.WebAPI/
+COPY ./src/SpaceShip.Notifications/*.csproj ./src/SpaceShip.Notifications/
 COPY ./src/SpaceShip.Service/*.csproj ./src/SpaceShip.Service/
 COPY ./src/SpaceShip.Service.EventsProvider/*.csproj ./src/SpaceShip.Service.EventsProvider/
 COPY ./test/SpaceShip.UnitTest/*.csproj ./test/SpaceShip.UnitTest/

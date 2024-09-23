@@ -4,6 +4,8 @@ import { ApiService } from '../../services/api.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
 import { Ship } from '../../models/ship';
+import { Subscription } from 'rxjs';
+import { ShipSignalRService } from '../../services/ship.signalr.service';
 
 @Component({
   selector: 'app-ship',
@@ -20,6 +22,7 @@ import { Ship } from '../../models/ship';
 })
 export class ShipComponent {
   private readonly apiService = inject(ApiService)
+  private shipSubscription?: Subscription
   private _userId: string
   private _sessionId: string
 
@@ -36,7 +39,8 @@ export class ShipComponent {
 
   public constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private shipSignalRService: ShipSignalRService
   ) {
     this._userId = this.fetchValueFromRoute('userId');
     this._sessionId = this.fetchValueFromRoute('sessionId');
@@ -45,6 +49,17 @@ export class ShipComponent {
   public ngOnInit(): void {
     this.loadUser();
     this.loadUserSessionShip();
+  }
+
+  public ngOnDestroy(): void {
+    if (this.shipSubscription) {
+      this.shipSubscription.unsubscribe();
+    }
+
+    if (this.ship)
+    {
+      this.shipSignalRService.leaveGroup(this.ship.id);
+    }
   }
 
   public makeMove(): void {
@@ -85,6 +100,15 @@ export class ShipComponent {
       next: (ship: Ship) => {
         this.ship = ship;
         console.log(ship);
+
+        if (this.ship)
+        {
+          this.shipSubscription = this.shipSignalRService.joinGroup(this.ship.id).subscribe(
+            (message) => {
+              console.log(message);
+            }
+          );
+        }
       },
       error: (error) => {
         if (error.status === 404) {
