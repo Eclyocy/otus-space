@@ -43,7 +43,7 @@ public class NotificationsProvider : INotificationsProvider
 
         await _hubContext
             .Clients.Group(shipId.ToString())
-            .SendAsync(NotificationMethod.Refresh, _mapper.Map<SpaceShipMetricsNotification>(ship));
+            .SendAsync(NotificationMethod.Refresh, _mapper.Map<SignalRShip>(ship));
     }
 
     /// <inheritdoc/>
@@ -53,7 +53,7 @@ public class NotificationsProvider : INotificationsProvider
 
         await _hubContext
             .Clients.All
-            .SendAsync(NotificationMethod.Refresh, _mapper.Map<SpaceShipMetricsNotification>(ship));
+            .SendAsync(NotificationMethod.Refresh, _mapper.Map<SignalRShip>(ship));
     }
 
     /// <inheritdoc/>

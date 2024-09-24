@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using SpaceShip.Notifications.Models;
 using SpaceShip.Service.Contracts;
 
@@ -14,8 +14,11 @@ public class ShipMetricsProfile : Profile
     /// </summary>
     public ShipMetricsProfile()
     {
-        CreateMap<ResourceStateDTO, ResourceState>().ReverseMap();
-        CreateMap<ResourceDTO, Resource>().ReverseMap();
-        CreateMap<SpaceShipDTO, SpaceShipMetricsNotification>().ReverseMap();
+        CreateMap<ResourceStateDTO, SignalRResourceState>().ReverseMap();
+        CreateMap<ResourceDTO, SignalRResource>().ReverseMap();
+        CreateMap<SpaceShipDTO, SignalRShip>()
+            .ForMember(x => x.Day, opt => opt.MapFrom(x => x.Step))
+            .ReverseMap()
+            .ForMember(x => x.Step, opt => opt.MapFrom(x => x.Day));
     }
 }

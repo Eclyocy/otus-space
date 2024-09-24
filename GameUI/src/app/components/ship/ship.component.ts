@@ -114,8 +114,13 @@ export class ShipComponent {
   private setupShipSubscription(shipId: string)
   {
     this.shipSubscription = this.shipSignalRService.joinGroup(shipId).subscribe(
-      (message) => {
-        console.log(message);
+      (ship: Ship | null) => {
+        if (ship) {
+          console.log("Received ship update:", ship);
+          this.ship = ship;
+        } else {
+          console.log("Received an invalid ship update, unable to process.");
+        }
       }
     );
   }

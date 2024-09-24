@@ -3,7 +3,7 @@
 /// <summary>
 /// Модель ресурса корабля.
 /// </summary>
-public class Resource
+public class SignalRResource
 {
     /// <summary>
     /// Id ресурса.
@@ -18,5 +18,5 @@ public class Resource
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема).
     /// </summary>
-    public required ResourceState State { get; set; }
+    public required SignalRResourceState State { get; set; }
 }
