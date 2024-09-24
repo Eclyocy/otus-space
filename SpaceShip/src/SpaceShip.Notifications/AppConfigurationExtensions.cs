@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 
 namespace SpaceShip.Notifications;
@@ -13,7 +13,7 @@ public static class AppConfigurationExtensions
     /// </summary>
     /// <param name="app">Application.</param>
     /// <param name="url">Endpoint for SignalR notifications methods.</param>
-    public static void UseNotifications(this IEndpointRouteBuilder app, string url = "/notificationsHub")
+    public static void UseNotifications(this IEndpointRouteBuilder app, string url = "/notifications-hub")
     {
         app.MapHub<NotificationsHub>(url);
     }

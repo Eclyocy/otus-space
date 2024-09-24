@@ -13,7 +13,7 @@ export class ShipSignalRService {
 
   constructor() {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.shipBaseUrl}/notificationsHub`, {
+      .withUrl(environment.shipSignalRHubUrl, {
         withCredentials: false
       })
       .build();
