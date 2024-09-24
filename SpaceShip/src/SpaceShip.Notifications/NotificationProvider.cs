@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using SpaceShip.Notifications.Mappers;
@@ -40,14 +40,20 @@ public class NotificationsProvider : INotificationsProvider
     public async Task SendAsync(Guid shipId, SpaceShipDTO ship)
     {
         _logger.LogInformation("Sending notification to group {id} clients", shipId);
-        await _hubContext.Clients.Group(shipId.ToString()).SendAsync(nameof(NotificationsProvider), _mapper.Map<SpaceShipMetricsNotification>(ship));
+
+        await _hubContext
+            .Clients.Group(shipId.ToString())
+            .SendAsync(NotificationMethod.Refresh, _mapper.Map<SpaceShipMetricsNotification>(ship));
     }
 
     /// <inheritdoc/>
     public async Task SendAllAsync(SpaceShipDTO ship)
     {
         _logger.LogInformation("Sending notification to all clients");
-        await _hubContext.Clients.All.SendAsync(nameof(NotificationsProvider), _mapper.Map<SpaceShipMetricsNotification>(ship));
+
+        await _hubContext
+            .Clients.All
+            .SendAsync(NotificationMethod.Refresh, _mapper.Map<SpaceShipMetricsNotification>(ship));
     }
 
     /// <inheritdoc/>
