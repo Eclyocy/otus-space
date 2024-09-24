@@ -19,7 +19,7 @@ export class ShipSignalRService {
 
     this.shipSubject = new Subject<string>();
 
-    this.hubConnection.on("Receive", (message) => {
+    this.hubConnection.on("Refresh", (message) => {
       console.log("SignalR message received", message);
       this.shipSubject.next(message);
     });

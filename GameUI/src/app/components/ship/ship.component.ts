@@ -66,7 +66,6 @@ export class ShipComponent {
     this.apiService.postUserSessionMakeMove(this.userId, this.sessionId).subscribe({
       next: () => {
         console.log("Move made.");
-        this.loadUserSessionShip();
       },
       error: (error) => {
         console.error("Error making move:", error);
@@ -99,16 +98,8 @@ export class ShipComponent {
     this.apiService.getUserSessionShip(this.userId, this.sessionId).subscribe({
       next: (ship: Ship) => {
         this.ship = ship;
-        console.log(ship);
-
-        if (this.ship)
-        {
-          this.shipSubscription = this.shipSignalRService.joinGroup(this.ship.id).subscribe(
-            (message) => {
-              console.log(message);
-            }
-          );
-        }
+        console.log("Loaded user session ship:", ship);
+        this.setupShipSubscription(this.ship.id);
       },
       error: (error) => {
         if (error.status === 404) {
@@ -118,6 +109,15 @@ export class ShipComponent {
         }
       }
     });
+  }
+
+  private setupShipSubscription(shipId: string)
+  {
+    this.shipSubscription = this.shipSignalRService.joinGroup(shipId).subscribe(
+      (message) => {
+        console.log(message);
+      }
+    );
   }
 
   private handleShipNotFound(): void {
