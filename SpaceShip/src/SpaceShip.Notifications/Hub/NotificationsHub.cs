@@ -47,7 +47,7 @@ public class NotificationsHub : Hub
     {
         _logger.LogInformation("Subscribing to ship {shipId}.", shipId);
 
-        if (!await ShipExist(shipId))
+        if (!ShipExists(shipId))
         {
             _logger.LogInformation("Ship {shipId} does not exist, do not subscribe.", shipId);
 
@@ -68,7 +68,7 @@ public class NotificationsHub : Hub
     {
         foreach (var id in shipIds)
         {
-            if (!await ShipExist(id))
+            if (!ShipExists(id))
             {
                 continue;
             }
@@ -92,9 +92,9 @@ public class NotificationsHub : Hub
 
     #region private methods
 
-    private async Task<bool> ShipExist(Guid id)
+    private bool ShipExists(Guid id)
     {
-        return await _shipService.TryGetShipAsync(id);
+        return _shipService.GetShip(id) != null;
     }
 
     #endregion
