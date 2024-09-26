@@ -5,7 +5,6 @@ using GameController.API.Models.Auth;
 using GameController.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 
 namespace GameController.API.Controllers
 {
@@ -26,12 +25,12 @@ namespace GameController.API.Controllers
         {
             if (login.Username == "string" && login.Password == "string")
             {
-                var (token, refreshToken) = _jwtService.GenerateTokens(login.Username);
+                var (token, refreshToken, expiresIn) = _jwtService.GenerateTokens(login.Username);
                 var tokenResponse = new TokenResponse
                 {
                     AccessToken = token,
                     RefreshToken = refreshToken,
-                    ExpiresIn = 60 // Токен живет 900 секунд (15 минут)
+                    ExpiresIn = expiresIn
                 };
                 return Ok(tokenResponse);
             }
