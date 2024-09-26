@@ -1,9 +1,9 @@
-namespace SpaceShip.Notifications.Models;
+﻿namespace SpaceShip.Notifications.Models;
 
 /// <summary>
 /// Модель ответа о состоянии корабля
 /// </summary>
-public class SpaceShipMetricsNotification
+public class SignalRShip
 {
     /// <summary>
     /// Id корабля
@@ -13,10 +13,10 @@ public class SpaceShipMetricsNotification
     /// <summary>
     /// Номер хода
     /// </summary>
-    public int Step { get; set; }
+    public int Day { get; set; }
 
     /// <summary>
     /// Коллекция ресурсов корабля
     /// </summary>
-    public List<Resource>? Resources { get; set; }
+    public List<SignalRResource>? Resources { get; set; }
 }

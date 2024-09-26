@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using SpaceShip.Domain.Interfaces;
-using SpaceShip.Domain.Model.State;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
@@ -16,8 +14,9 @@ public class GameStepService : IGameStepService
 {
     #region private fields
 
+    private readonly IShipService _shipService;
+
     private readonly ILogger _logger;
-    private readonly ISpaceshipRepository _shipRepository;
     private readonly IMapper _mapper;
 
     #endregion
@@ -25,11 +24,12 @@ public class GameStepService : IGameStepService
     #region constructor
 
     public GameStepService(
-        ISpaceshipRepository shipRepository,
+        IShipService shipService,
         IMapper mapper,
         ILogger<GameStepService> logger)
     {
-        _shipRepository = shipRepository;
+        _shipService = shipService;
+
         _mapper = mapper;
         _logger = logger;
     }
@@ -44,38 +44,11 @@ public class GameStepService : IGameStepService
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
-        var ship = _shipRepository.Get(id);
-
-        if (ship == null)
-        {
-            throw new NotFoundException(string.Format("Ship with id {0} not found in ships service", id));
-        }
+        var ship = _shipService.GetShip(id)
+            ?? throw new NotFoundException($"Ship with id {id} not found.");
 
         ship.Step++;
 
-        var updateResources = ship.Resources;
-
-        foreach (var i in updateResources)
-        {
-            foreach (var j in i.Resources)
-            {
-                if (j.Amount >= 10)
-                {
-                    j.Amount = j.Amount - 10;
-                }
-
-                if (j.Amount == 0)
-                {
-                    ship.State = SpaceshipState.Sleep;
-                }
-            }
-        }
-
-        ship.Step++;
-
-        _logger.LogInformation("Update ship {id} in repository. Set step {step} ", id, ship.Step);
-        _shipRepository.Update(ship);
-
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _shipService.UpdateShip(id, ship);
     }
 }

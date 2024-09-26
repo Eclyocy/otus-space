@@ -43,20 +43,46 @@ public class NotificationsHub : Hub
     /// </summary>
     /// <param name="shipId">Spaceship identifier. </param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
+    /// <remarks>Must be named as <see cref="NotificationMethod.Subscribe"/>.</remarks>
     public async Task Subscribe(Guid shipId)
     {
-        _logger.LogInformation("Subscribing to ship {shipId}.", shipId);
+        _logger.LogInformation("Subscribing client {connectionId} to ship {shipId}.", Context.ConnectionId, shipId);
 
-        if (!await ShipExist(shipId))
+        if (!ShipExists(shipId))
         {
             _logger.LogInformation("Ship {shipId} does not exist, do not subscribe.", shipId);
 
             return;
         }
 
-        _logger.LogInformation("Subscribing client {connectionId} to {shipId}.", Context.ConnectionId, shipId);
-
         await Groups.AddToGroupAsync(Context.ConnectionId, shipId.ToString());
+
+        _logger.LogInformation("Client {connectionId} subscribed to ship {shipId}.", Context.ConnectionId, shipId);
+    }
+
+    /// <summary>
+    /// Unsubscribe client from the group of subscribers for SignalR notifications on a specific spaceship.
+    /// </summary>
+    /// <param name="shipId">Spaceship identifier. </param>
+    /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
+    /// <remarks>Must be named as <see cref="NotificationMethod.Unsubscribe"/>.</remarks>
+    public async Task Unsubscribe(Guid shipId)
+    {
+        _logger.LogInformation(
+            "Unsubscribing client {connectionId} from ship {shipId}.",
+            Context.ConnectionId,
+            shipId);
+
+        if (!ShipExists(shipId))
+        {
+            _logger.LogInformation("Ship {shipId} does not exist, do not unsubscribe.", shipId);
+
+            return;
+        }
+
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, shipId.ToString());
+
+        _logger.LogInformation("Client {connectionId} unsubscribed from ship {shipId}.", Context.ConnectionId, shipId);
     }
 
     /// <summary>
@@ -68,7 +94,7 @@ public class NotificationsHub : Hub
     {
         foreach (var id in shipIds)
         {
-            if (!await ShipExist(id))
+            if (!ShipExists(id))
             {
                 continue;
             }
@@ -85,16 +111,16 @@ public class NotificationsHub : Hub
     [Obsolete]
     public async Task SendAsync(string message)
     {
-        await Clients.All.SendAsync("Receive", message);
+        await Clients.All.SendAsync(NotificationMethod.Refresh, message);
     }
 
     #endregion
 
     #region private methods
 
-    private async Task<bool> ShipExist(Guid id)
+    private bool ShipExists(Guid id)
     {
-        return await _shipService.TryGetShipAsync(id);
+        return _shipService.GetShip(id) != null;
     }
 
     #endregion

@@ -111,22 +111,6 @@ public class SpaceShipService : IShipService
 
     #endregion
 
-    #region asynchronous methods
-
-    public async Task<bool> TryGetShipAsync(Guid shipId)
-    {
-        Ship? ship = _shipRepository.Get(shipId);
-
-        if (ship == null)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    #endregion
-
     #region private methods
 
     /// <summary>
@@ -168,6 +152,12 @@ public class SpaceShipService : IShipService
         {
             updateRequested = true;
             currentShip.Name = shipRequest.Name;
+        }
+
+        if (shipRequest.Step != currentShip.Step)
+        {
+            updateRequested = true;
+            currentShip.Step = shipRequest.Step;
         }
 
         if (!updateRequested)

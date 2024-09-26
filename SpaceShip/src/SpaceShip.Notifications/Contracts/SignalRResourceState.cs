@@ -1,9 +1,9 @@
-namespace SpaceShip.Notifications.Models;
+﻿namespace SpaceShip.Notifications.Models;
 
 /// <summary>
 /// Возможные состояния ресурсов
 /// </summary>
-public enum ResourceState
+public enum SignalRResourceState
 {
     /// <summary>
     /// Спящий режим, не потребляет другие ресурсы
