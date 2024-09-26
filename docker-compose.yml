@@ -45,6 +45,10 @@ services:
     - SPACESHIPAPI__PORT=5216
     - GENERATORAPI__HOSTNAME=generator_webapi
     - GENERATORAPI__PORT=7161
+    - Jwt__Key=MySuperSecretKeyForJwtTokenGeneration
+    - Jwt__Issuer=GameControllerAPI
+    - Jwt__Audience=GameControllerUsers
+    - Jwt__ExpirationMinutes=1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7196/health"]
       interval: 10s
