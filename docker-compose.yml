@@ -33,6 +33,10 @@ services:
     - DATABASE_PASSWORD=pg_pass
     - SPACESHIPAPI__HOSTNAME=spaceship_webapi
     - SPACESHIPAPI__PORT=5216
+    - Jwt__Key=MySuperSecretKeyForJwtTokenGeneration
+    - Jwt__Issuer=GameControllerAPI
+    - Jwt__Audience=GameControllerUsers
+    - Jwt__ExpirationMinutes=1
 
   game_controller_db:
     container_name: game_controller_db_otus
