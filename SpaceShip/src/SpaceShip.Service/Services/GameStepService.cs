@@ -1,6 +1,8 @@
+﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using SpaceShip.Domain.Interfaces;
+using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Services.Exceptions;
 
 namespace SpaceShip.Service.Implementation;
 
@@ -12,18 +14,23 @@ public class GameStepService : IGameStepService
 {
     #region private fields
 
+    private readonly IShipService _shipService;
+
     private readonly ILogger _logger;
-    private readonly ISpaceshipRepository _shipRepository;
+    private readonly IMapper _mapper;
 
     #endregion
 
     #region constructor
 
     public GameStepService(
-        ISpaceshipRepository shipRepository,
-        ILogger<SpaceShipService> logger)
+        IShipService shipService,
+        IMapper mapper,
+        ILogger<GameStepService> logger)
     {
-        _shipRepository = shipRepository;
+        _shipService = shipService;
+
+        _mapper = mapper;
         _logger = logger;
     }
 
@@ -33,18 +40,15 @@ public class GameStepService : IGameStepService
     /// Применить новый игровой день (новый шаг)
     /// </summary>
     /// <param name="id">ID корабля</param>
-    public async Task ProcessNewDayAsync(Guid id)
+    public async Task<SpaceShipDTO> ProcessNewDayAsync(Guid id)
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
-        var ship = _shipRepository.Get(id);
+        var ship = _shipService.GetShip(id)
+            ?? throw new NotFoundException($"Ship with id {id} not found.");
 
-        if (ship != null)
-        {
-            ship.Step++;
+        ship.Step++;
 
-            _logger.LogInformation("Update ship {id} in repository. Set step {step} ", id, ship.Step);
-            _shipRepository.Update(ship);
-        }
+        return _shipService.UpdateShip(id, ship);
     }
 }

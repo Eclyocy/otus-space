@@ -4,6 +4,8 @@ import { ApiService } from '../../services/api.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
 import { Ship } from '../../models/ship';
+import { Subscription } from 'rxjs';
+import { ShipSignalRService } from '../../services/ship.signalr.service';
 
 @Component({
   selector: 'app-ship',
@@ -20,6 +22,7 @@ import { Ship } from '../../models/ship';
 })
 export class ShipComponent {
   private readonly apiService = inject(ApiService)
+  private shipSubscription?: Subscription
   private _userId: string
   private _sessionId: string
 
@@ -36,7 +39,8 @@ export class ShipComponent {
 
   public constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private shipSignalRService: ShipSignalRService
   ) {
     this._userId = this.fetchValueFromRoute('userId');
     this._sessionId = this.fetchValueFromRoute('sessionId');
@@ -47,11 +51,21 @@ export class ShipComponent {
     this.loadUserSessionShip();
   }
 
+  public ngOnDestroy(): void {
+    if (this.shipSubscription) {
+      this.shipSubscription.unsubscribe();
+    }
+
+    if (this.ship)
+    {
+      this.shipSignalRService.leaveGroup(this.ship.id);
+    }
+  }
+
   public makeMove(): void {
     this.apiService.postUserSessionMakeMove(this.userId, this.sessionId).subscribe({
       next: () => {
         console.log("Move made.");
-        this.loadUserSessionShip();
       },
       error: (error) => {
         console.error("Error making move:", error);
@@ -84,7 +98,8 @@ export class ShipComponent {
     this.apiService.getUserSessionShip(this.userId, this.sessionId).subscribe({
       next: (ship: Ship) => {
         this.ship = ship;
-        console.log(ship);
+        console.log("Loaded user session ship:", ship);
+        this.setupShipSubscription(this.ship.id);
       },
       error: (error) => {
         if (error.status === 404) {
@@ -94,6 +109,20 @@ export class ShipComponent {
         }
       }
     });
+  }
+
+  private setupShipSubscription(shipId: string)
+  {
+    this.shipSubscription = this.shipSignalRService.joinGroup(shipId).subscribe(
+      (ship: Ship | null) => {
+        if (ship) {
+          console.log("Received ship update:", ship);
+          this.ship = ship;
+        } else {
+          console.log("Received an invalid ship update, unable to process.");
+        }
+      }
+    );
   }
 
   private handleShipNotFound(): void {

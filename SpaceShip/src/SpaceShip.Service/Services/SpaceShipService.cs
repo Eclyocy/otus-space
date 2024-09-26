@@ -154,6 +154,12 @@ public class SpaceShipService : IShipService
             currentShip.Name = shipRequest.Name;
         }
 
+        if (shipRequest.Step != currentShip.Step)
+        {
+            updateRequested = true;
+            currentShip.Step = shipRequest.Step;
+        }
+
         if (!updateRequested)
         {
             throw new NotModifiedException();

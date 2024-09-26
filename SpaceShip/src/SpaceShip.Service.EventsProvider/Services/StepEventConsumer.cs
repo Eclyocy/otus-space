@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SpaceShip.Notifications;
 using SpaceShip.Service.EventsConsumer.Contracts;
 using SpaceShip.Service.Interfaces;
 
@@ -13,15 +14,19 @@ namespace SpaceShip.Service.Queue;
 public class StepEventConsumer : EventConsumer
 {
     private readonly IServiceScopeFactory _scopeServiceFactory;
+    private readonly INotificationsProvider _notificationsProvider;
+
     public StepEventConsumer(
         ILogger<TroubleEventConsumer> logger,
         IConfiguration configuration,
-        IServiceScopeFactory serviceScopeFactory)
+        IServiceScopeFactory serviceScopeFactory,
+        INotificationsProvider notificationsProvider)
         : base(logger, configuration)
     {
         QueueName = configuration["RABBITMQ_STEP_QUEUE"];
         ConsumerName = nameof(StepEventConsumer);
         _scopeServiceFactory = serviceScopeFactory;
+        _notificationsProvider = notificationsProvider;
     }
 
     /// <inheritdoc/>
@@ -39,7 +44,8 @@ public class StepEventConsumer : EventConsumer
             IGameStepService dayServiceScoped =
                 scope.ServiceProvider.GetRequiredService<IGameStepService>();
 
-            await dayServiceScoped.ProcessNewDayAsync(stepMessage.ShipId);
+            var ship = await dayServiceScoped.ProcessNewDayAsync(stepMessage.ShipId);
+            await _notificationsProvider.SendAsync(stepMessage.ShipId, ship);
         }
     }
 }
