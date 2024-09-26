@@ -80,7 +80,7 @@ namespace GameController.Services.Services
         /// <summary>
         /// GenerateTokens.
         /// </summary>
-        public (string Token, string RefreshToken) GenerateTokens(string username)
+        public (string Token, string RefreshToken, int ExpiresIn) GenerateTokens(string username)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -119,7 +119,9 @@ namespace GameController.Services.Services
                 signingCredentials: credentials);
 
             var refreshToken = GenerateRefreshToken();  // Генерация рефреш токена
-            return (new JwtSecurityTokenHandler().WriteToken(token), refreshToken);
+            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            int expiresIn = (int)(token.ValidTo - epoch).TotalSeconds;
+            return (new JwtSecurityTokenHandler().WriteToken(token), refreshToken, expiresIn);
         }
 
         /// <summary>
