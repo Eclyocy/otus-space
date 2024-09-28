@@ -44,11 +44,11 @@ namespace EventGenerator.Services.Services
         }
 
         /// <inheritdoc/>
-        public GeneratorDto GetGenerator(Guid shipId)
+        public GeneratorDto GetGenerator(Guid generatorId)
         {
-            _logger.LogInformation("Get generator by ship ID {shipId}", shipId);
+            _logger.LogInformation("Get generator by generator Id {generatorId}", generatorId);
 
-            Generator generator = _generatorRepository.Get(shipId);
+            Generator generator = _generatorRepository.Get(generatorId);
 
             return _mapper.Map<GeneratorDto>(generator);
         }

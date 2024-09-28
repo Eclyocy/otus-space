@@ -29,17 +29,13 @@ namespace EventGenerator.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<int>("EventCoint")
+                    b.Property<int>("EventLevel")
                         .HasColumnType("integer")
-                        .HasColumnName("event_coint");
+                        .HasColumnName("event_level");
 
-                    b.Property<Guid>("EventId")
+                    b.Property<Guid>("GeneratorId")
                         .HasColumnType("uuid")
-                        .HasColumnName("event_id");
-
-                    b.Property<Guid>("GenertatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("genertator_id");
+                        .HasColumnName("generator_id");
 
                     b.HasKey("Id");
 
@@ -53,17 +49,13 @@ namespace EventGenerator.Database.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("GeneratorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("generator_id");
-
                     b.Property<Guid>("ShipId")
                         .HasColumnType("uuid")
                         .HasColumnName("ship_id");
 
-                    b.Property<int>("Troublecoint")
+                    b.Property<int>("TroubleCoins")
                         .HasColumnType("integer")
-                        .HasColumnName("troublecoint");
+                        .HasColumnName("trouble_coins");
 
                     b.HasKey("Id");
 

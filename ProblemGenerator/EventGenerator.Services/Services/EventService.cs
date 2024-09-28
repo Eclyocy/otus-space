@@ -52,7 +52,7 @@ namespace EventGenerator.Services.Services
             Random random = new Random();
             int newEventLevel = random.Next(1, 3);
             Event eventRequest = new ();
-            eventRequest.GenertatorId = generatorId;
+            eventRequest.GeneratorId = generatorId;
             eventRequest.EventLevel = (newEventLevel >= generator.TroubleCoins) ? newEventLevel : 0;
             Event event_ = _eventRepository.Create(eventRequest);
             return _mapper.Map<EventDto>(event_);
