@@ -1,6 +1,5 @@
 ﻿using EventGenerator.Database.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace EventGenerator.Database
 {
@@ -31,14 +30,29 @@ namespace EventGenerator.Database
         /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var config = new ConfigurationBuilder()
-                        .AddJsonFile("appsettings.json")
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                        .Build();
+            string hostname = GetEnvironmentVariable("DATABASE_HOSTNAME");
+            string port = GetEnvironmentVariable("DATABASE_PORT");
+            string username = GetEnvironmentVariable("DATABASE_USER");
+            string password = GetEnvironmentVariable("DATABASE_PASSWORD");
+            string database = GetEnvironmentVariable("DATABASE_NAME");
 
-            Console.WriteLine(config.GetConnectionString("DefaultConnection"));
+            string connectionString = string.Format(
+                "Host={0};Port={1};Username={2};Password={3};Database={4};",
+                hostname,
+                port,
+                username,
+                password,
+                database);
 
-            optionsBuilder.UseNpgsql(config.GetConnectionString("DefaultConnection"));
+            Console.WriteLine(connectionString);
+
+            optionsBuilder.UseNpgsql(connectionString);
+        }
+
+        private static string GetEnvironmentVariable(string name)
+        {
+            return Environment.GetEnvironmentVariable(name)
+                ?? throw new Exception(string.Format("{0} environment variable must be specified", name));
         }
     }
 }

@@ -11,7 +11,7 @@ namespace EventGenerator.Controllers
     /// Controller for actions with events by generator.
     /// </summary>
     [ApiController]
-    [Route("/api/generators/{generatorId}/events")]
+    [Route("/api/generators/events")]
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
