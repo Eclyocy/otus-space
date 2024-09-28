@@ -9,21 +9,15 @@ namespace EventGenerator.Database.Models
     public class Event : BaseEntity
     {
         /// <summary>
-        /// Genertator ID.
+        /// Generator ID.
         /// </summary>
-        [Column("genertator_id")]
-        public Guid GenertatorId { get; set; }
+        [Column("generator_id")]
+        public Guid GeneratorId { get; set; }
 
         /// <summary>
-        /// Event ID.
+        /// Event Level.
         /// </summary>
-        [Column("event_id")]
-        public Guid EventId { get; set; }
-
-        /// <summary>
-        /// Event Coint.
-        /// </summary>
-        [Column("event_coint")]
-        public int EventCoint { get; set; }
+        [Column("event_level")]
+        public int EventLevel { get; set; }
     }
 }

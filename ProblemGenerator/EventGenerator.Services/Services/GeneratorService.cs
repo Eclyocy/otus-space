@@ -8,14 +8,14 @@ using Microsoft.Extensions.Logging;
 namespace EventGenerator.Services.Services
 {
     /// <summary>
-    /// Class for working with event generator servisce.
+    /// Class for working with generator servisce.
     /// </summary>
     public class GeneratorService : IGeneratorService
     {
         /// <summary>
-        /// Const.
+        /// Const. Trouble coin when create generator.
         /// </summary>
-        private const int TroublecointStart = 10;
+        private const int TroubleCoinCreate = 0;
 
         private readonly IGeneratorRepository _generatorRepository;
         private readonly ILogger<GeneratorService> _logger;
@@ -37,7 +37,7 @@ namespace EventGenerator.Services.Services
             _logger.LogInformation("Create generator by request {createGeneratorDto}", createGeneratorDto);
 
             Generator generatorRequest = _mapper.Map<Generator>(createGeneratorDto);
-            generatorRequest.Troublecoint = TroublecointStart;
+            generatorRequest.TroubleCoins = TroubleCoinCreate;
             Generator generator = _generatorRepository.Create(generatorRequest);
 
             return _mapper.Map<GeneratorDto>(generator);

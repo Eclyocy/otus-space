@@ -47,12 +47,14 @@ namespace EventGenerator.Services.Services
                 throw new NotFoundException($"Generator {generatorId} not found.");
             }
 
+            Generator generator = _generatorRepository.Get(generatorId);
+
             Random random = new Random();
+            int newEventLevel = random.Next(1, 3);
             Event eventRequest = new ();
             eventRequest.GenertatorId = generatorId;
-            eventRequest.EventCoint = random.Next(0, 10);
+            eventRequest.EventLevel = (newEventLevel >= generator.TroubleCoins) ? newEventLevel : 0;
             Event event_ = _eventRepository.Create(eventRequest);
-
             return _mapper.Map<EventDto>(event_);
         }
     }

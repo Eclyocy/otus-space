@@ -5,7 +5,7 @@ using EventGenerator.Services.Models.Event;
 namespace EventGenerator.Services.Mappers
 {
     /// <summary>
-    /// Mappers for events generator models.
+    /// Mappers for generated events models.
     /// </summary>
     public class EventMapper : Profile
     {

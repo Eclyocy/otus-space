@@ -40,11 +40,5 @@ namespace EventGenerator.Database
 
             optionsBuilder.UseNpgsql(config.GetConnectionString("DefaultConnection"));
         }
-
-        private static string GetEnvironmentVariable(string name)
-        {
-            return Environment.GetEnvironmentVariable(name)
-                ?? throw new Exception(string.Format("{0} environment variable must be specified", name));
-        }
     }
 }

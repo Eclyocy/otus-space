@@ -11,8 +11,8 @@
         public Guid GeneratorId { get; set; }
 
         /// <summary>
-        /// Event Coint.
+        /// Event Level.
         /// </summary>
-        public int EventCoint { get; set; }
+        public int EventLevel { get; set; }
     }
 }
