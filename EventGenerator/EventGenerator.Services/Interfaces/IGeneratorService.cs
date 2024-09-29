@@ -30,7 +30,10 @@ namespace EventGenerator.Services.Interfaces
 
         /// <summary>
         /// Generate an event.
+        /// Generator may not actually produce a new event:
+        /// either due to insufficient trouble coins,
+        /// or just to hold onto its funds to have more options later.
         /// </summary>
-        EventDto GenerateEvent(Guid generatorId);
+        EventDto? GenerateEvent(Guid generatorId);
     }
 }

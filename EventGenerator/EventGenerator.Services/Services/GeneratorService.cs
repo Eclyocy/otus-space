@@ -100,7 +100,7 @@ namespace EventGenerator.Services.Services
         }
 
         /// <inheritdoc/>
-        public EventDto GenerateEvent(Guid generatorId)
+        public EventDto? GenerateEvent(Guid generatorId)
         {
             _logger.LogInformation("Generate an event by generator {generatorId}.", generatorId);
 
@@ -108,24 +108,22 @@ namespace EventGenerator.Services.Services
 
             EventLevelDto? maxEventLevel = GetMaxEventLevel(generator.TroubleCoins);
 
-            if (maxEventLevel == null)
-            {
-                _logger.LogWarning(
-                    "Unable to create a new event for generator {generatorId}: no trouble coins.",
-                    generatorId);
-
-                throw new PreconditionFailedException($"Generator {generatorId} has insufficient funds.");
-            }
-
             Random random = new();
-            EventLevelDto generatedEventLevel = (EventLevelDto)random.Next((int)EventLevelDto.Low, (int)maxEventLevel);
+            EventLevelDto generatedEventLevel = (EventLevelDto)random.Next(
+                0,
+                maxEventLevel.HasValue ? (int)maxEventLevel.Value : 0);
+
+            if ((int)generatedEventLevel == 0)
+            {
+                _logger.LogInformation("Generator {generatorId} decided to hold onto its trouble coins.", generatorId);
+
+                return null;
+            }
 
             _logger.LogInformation(
                 "Generator {generatorId} has generated an event with level {eventLevel}.",
                 generatorId,
                 generatedEventLevel);
-
-            /* TODO: possibly should be wrapped in a transaction. */
 
             EventDto eventEntity = _eventService.CreateEvent(
                 new()
@@ -134,7 +132,7 @@ namespace EventGenerator.Services.Services
                     EventLevel = generatedEventLevel
                 });
 
-            generator.TroubleCoins -= (int)generatedEventLevel + 1;
+            generator.TroubleCoins -= (int)generatedEventLevel;
             _generatorRepository.Update(generator);
 
             return _mapper.Map<EventDto>(eventEntity);
