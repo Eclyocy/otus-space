@@ -3,14 +3,24 @@ version: "2.1"
 services:
   game_ui:
     container_name: game_ui_otus
+    depends_on:
+      game_controller_api:
+        condition: service_healthy
     build: GameUI
     ports:
     - 8080:4200
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4200"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   game_controller_api:
     container_name: game_controller_api_otus
     depends_on:
       rabbitmq:
+        condition: service_healthy
+      game_controller_db:
         condition: service_healthy
     build: GameController
     ports:
@@ -33,6 +43,11 @@ services:
     - DATABASE_PASSWORD=pg_pass
     - SPACESHIPAPI__HOSTNAME=spaceship_webapi
     - SPACESHIPAPI__PORT=5216
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7196/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   game_controller_db:
     container_name: game_controller_db_otus
@@ -45,12 +60,19 @@ services:
     - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
     - game_controller_otus_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 50s
 
   spaceship_webapi:
     image: spaceship-webapi
     container_name: spaceship_webapi_otus
     depends_on:
-    - game_controller_api
+      game_controller_db:
+        condition: service_healthy
     build: SpaceShip
     ports:
     - 5051:5216
@@ -67,6 +89,11 @@ services:
     - POSTGRES_DATABASE=spaceship_db
     - POSTGRES_USER=postgres
     - POSTGRES_PASSWORD=pg_pass
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5216/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     container_name: rabbitmq_otus

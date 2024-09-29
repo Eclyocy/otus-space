@@ -1,0 +1,33 @@
+name: GameController CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+    - GameController/**
+  pull_request:
+    branches: [ main ]
+    paths:
+    - GameController/**
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0'
+
+    - name: Restore dependencies
+      run: dotnet restore GameController/GameController.sln
+
+    - name: Build
+      run: dotnet build GameController/GameController.sln --no-restore
+
+    - name: Test
+      run: dotnet test GameController/GameController.sln --no-build --verbosity normal
