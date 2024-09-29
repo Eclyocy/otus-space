@@ -17,6 +17,7 @@
 
         /// <summary>
         /// Trouble coins.
+        /// Reflects the maximum level of events the generator can produce.
         /// </summary>
         public int TroubleCoins { get; set; }
     }

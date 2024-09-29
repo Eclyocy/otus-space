@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EventGenerator.Database
 {
     /// <summary>
-    /// Database context for event controller application.
+    /// Database context for event generator application.
     /// </summary>
     public class EventDBContext : DbContext
     {

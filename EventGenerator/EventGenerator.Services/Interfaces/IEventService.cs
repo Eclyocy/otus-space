@@ -6,7 +6,7 @@ namespace EventGenerator.Services.Interfaces
     /// Interface for working with events.
     /// </summary>
     public interface IEventService
-     {
+    {
         /// <summary>
         /// Create an event.
         /// </summary>

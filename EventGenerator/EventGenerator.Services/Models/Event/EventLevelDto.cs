@@ -8,16 +8,16 @@
         /// <summary>
         /// Low level event.
         /// </summary>
-        Low,
+        Low = 0,
 
         /// <summary>
         /// Medium level event.
         /// </summary>
-        Medium,
+        Medium = 1,
 
         /// <summary>
         /// High level event.
         /// </summary>
-        High
+        High = 2
     }
 }
