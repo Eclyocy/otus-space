@@ -1,6 +1,12 @@
 ﻿using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
+using GameController.Services.Models.Generator;
+using GameController.Services.Settings;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using RestSharp;
+using RestSharp.Serializers.NewtonsoftJson;
 
 namespace GameController.Services.Services
 {
@@ -13,6 +19,8 @@ namespace GameController.Services.Services
 
         private readonly ILogger<GeneratorService> _logger;
 
+        private readonly RestClient _restClient;
+
         #endregion
 
         #region constructor
@@ -21,9 +29,14 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public GeneratorService(
-            ILogger<GeneratorService> logger)
+            ILogger<GeneratorService> logger,
+            IOptions<GeneratorApiSettings> options)
         {
             _logger = logger;
+
+            _restClient = new RestClient(
+                $"http://{options.Value.Hostname}:{options.Value.Port}/api/generators",
+                configureSerialization: cfg => cfg.UseNewtonsoftJson(new JsonSerializerSettings()));
         }
 
         #endregion
@@ -31,15 +44,20 @@ namespace GameController.Services.Services
         #region public methods
 
         /// <inheritdoc/>
-        public async Task<Guid> CreateGeneratorAsync()
+        public async Task<Guid> CreateGeneratorAsync(CreateGeneratorDto createGeneratorDto)
         {
-            _logger.LogInformation("Create generator");
+            _logger.LogInformation("Create generator via request: {request}", createGeneratorDto);
 
-            Guid generatorId = await GuidGenerator.GenerateGuidAsync();
+            RestRequest request = new();
+            request.AddJsonBody(createGeneratorDto);
+            RestResponse<GeneratorDto> generatorResponse = await _restClient.ExecutePostAsync<GeneratorDto>(request);
 
-            _logger.LogInformation("Created generator with ID {generatorId}", generatorId);
+            GeneratorDto generatorDto = RequestHelper.ValidateResponse(
+                _restClient.BuildUri(request),
+                generatorResponse,
+                _logger);
 
-            return generatorId;
+            return generatorDto.Id;
         }
 
         #endregion

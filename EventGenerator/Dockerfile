@@ -32,4 +32,4 @@ RUN apt-get update && apt-get install -y curl && apt-get clean
 # Expose port for the API to run on
 EXPOSE 7161
 
-ENTRYPOINT ["dotnet", "EventGenerator.dll"]
+ENTRYPOINT ["dotnet", "EventGenerator.API.dll"]

@@ -43,6 +43,8 @@ services:
     - DATABASE_PASSWORD=pg_pass
     - SPACESHIPAPI__HOSTNAME=spaceship_webapi
     - SPACESHIPAPI__PORT=5216
+    - GENERATORAPI__HOSTNAME=generator_webapi
+    - GENERATORAPI__PORT=7161
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7196/health"]
       interval: 10s
@@ -107,11 +109,11 @@ services:
     environment:
     - ASPNETCORE_ENVIRONMENT=Production
     - ASPNETCORE_URLS=http://+:7161
-    - POSTGRES_HOST=game_controller_db
-    - POSTGRES_PORT=5432
-    - POSTGRES_DATABASE=event_generator_db
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=pg_pass
+    - DATABASE_HOSTNAME=game_controller_db
+    - DATABASE_PORT=5432
+    - DATABASE_NAME=event_generator_db
+    - DATABASE_USER=postgres
+    - DATABASE_PASSWORD=pg_pass
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7161/health"]
       interval: 10s

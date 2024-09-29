@@ -30,7 +30,9 @@
         "DATABASE_USER": "postgres",
         "DATABASE_PASSWORD": "pg_pass",
         "SPACESHIPAPI__HOSTNAME": "localhost",
-        "SPACESHIPAPI__PORT": "5051"
+        "SPACESHIPAPI__PORT": "5051",
+        "GENERATORAPI__HOSTNAME": "localhost",
+        "GENERATORAPI__PORT": "6061"
       }
     },
     "IIS Express": {

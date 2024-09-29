@@ -66,6 +66,10 @@ namespace EventGenerator.Database
                 .HasMany(g => g.Events)
                 .WithOne(e => e.Generator)
                 .HasForeignKey(e => e.GeneratorId);
+
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Generator)
+                .WithMany(g => g.Events);
         }
 
         #endregion

@@ -27,6 +27,7 @@ namespace GameController.Services
 
             services.Configure<RabbitMQSettings>(x => configuration.GetSection("RabbitMQ").Bind(x));
             services.Configure<SpaceShipApiSettings>(x => configuration.GetSection("SpaceShipApi").Bind(x));
+            services.Configure<GeneratorApiSettings>(x => configuration.GetSection("GeneratorApi").Bind(x));
 
             services.AddTransient<IGeneratorService, GeneratorService>();
             services.AddTransient<IRabbitMQService, RabbitMQService>();
