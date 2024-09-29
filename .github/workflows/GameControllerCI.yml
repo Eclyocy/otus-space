@@ -1,10 +1,14 @@
-name: .NET Tests
+name: GameController CI
 
 on:
   push:
     branches: [ main ]
+    paths:
+    - GameController/**
   pull_request:
     branches: [ main ]
+    paths:
+    - GameController/**
   workflow_dispatch:
 
 jobs:
