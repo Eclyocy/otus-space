@@ -1,5 +1,8 @@
 FROM node:22-alpine
 
+# Get curl for healthcheck
+RUN apk add --no-cache curl
+
 RUN mkdir /app
 WORKDIR /app
 

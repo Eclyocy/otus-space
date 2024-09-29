@@ -6,6 +6,8 @@ using GameController.API.Validators.User;
 using GameController.Database;
 using GameController.Services;
 using GameController.Services.Settings;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
@@ -57,6 +59,16 @@ namespace GameController
             application.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                {
+                    ResultStatusCodes =
+                    {
+                        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+                        [HealthStatus.Degraded] = StatusCodes.Status200OK,
+                        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+                    }
+                });
             });
 
             SetupRabbitMQ(application.ApplicationServices.GetService<IOptions<RabbitMQSettings>>());
@@ -85,6 +97,8 @@ namespace GameController
             services.AddAutoMapper(x => x.AddProfile(typeof(ShipMapper)));
 
             services.AddControllers();
+
+            services.AddHealthChecks();
 
             services
                 .AddFluentValidationAutoValidation()

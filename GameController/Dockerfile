@@ -27,6 +27,9 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 COPY --from=build-env /root/.dotnet/corefx/cryptography/x509stores/my/* /root/.dotnet/corefx/cryptography/x509stores/my/
 
+# Get curl for healthcheck
+RUN apt-get update && apt-get install -y curl && apt-get clean
+
 # Expose port for the API to run on
 EXPOSE 7196
 
