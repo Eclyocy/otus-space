@@ -2,8 +2,10 @@
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
+using GameController.Services.Hubs;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
 namespace GameController.Services.Services
@@ -16,6 +18,8 @@ namespace GameController.Services.Services
         #region private fields
 
         private readonly IUserRepository _userRepository;
+
+        private readonly IHubContext<UserHub> _userHubContext;
 
         private readonly ILogger<UserService> _logger;
 
@@ -30,10 +34,13 @@ namespace GameController.Services.Services
         /// </summary>
         public UserService(
             IUserRepository userRepository,
+            IHubContext<UserHub> userHubContext,
             ILogger<UserService> logger,
             IMapper mapper)
         {
             _userRepository = userRepository;
+
+            _userHubContext = userHubContext;
 
             _logger = logger;
 
@@ -77,7 +84,7 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
-        public UserDto UpdateUser(Guid userId, UpdateUserDto updateUserDto)
+        public async Task<UserDto> UpdateUserAsync(Guid userId, UpdateUserDto updateUserDto)
         {
             _logger.LogInformation(
                 "Update user with ID {userId} via request {updateUserDto}",
@@ -85,6 +92,8 @@ namespace GameController.Services.Services
                 updateUserDto);
 
             User user = UpdateRepositoryUser(userId, updateUserDto);
+
+            await _userHubContext.Clients.All.SendAsync(UserHub.RefreshUserName, userId, user.Name);
 
             return _mapper.Map<UserDto>(user);
         }
