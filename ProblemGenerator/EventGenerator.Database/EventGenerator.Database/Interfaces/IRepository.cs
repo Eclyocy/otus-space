@@ -17,5 +17,11 @@
         /// </summary>
         /// <returns>Entity if found, otherwise null.</returns>
         T? Get(Guid id);
+
+        /// <summary>
+        /// Update entity.
+        /// </summary>
+        /// <remarks>Updates <paramref name="entity"/> in-place.</remarks>
+        void Update(T entity);
     }
 }

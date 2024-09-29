@@ -10,6 +10,6 @@ namespace EventGenerator.Services.Interfaces
         /// <summary>
         /// Create an event.
         /// </summary>
-        EventDto CreateEvent(Guid generatorId);
+        EventDto CreateEvent(CreateEventDto createEventRequest);
     }
 }

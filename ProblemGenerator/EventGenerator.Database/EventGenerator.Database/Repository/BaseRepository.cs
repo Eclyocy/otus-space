@@ -43,5 +43,12 @@ namespace EventGenerator.Database.Repository
         {
             return EntitySet.Find(id);
         }
+
+        /// <inheritdoc/>
+        public void Update(T entity)
+        {
+            Context.Entry(entity).State = EntityState.Modified;
+            Context.SaveChanges();
+        }
     }
 }

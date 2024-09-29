@@ -8,6 +8,8 @@ namespace EventGenerator.Database
     /// </summary>
     public class EventDBContext : DbContext
     {
+        #region constructor
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -16,6 +18,10 @@ namespace EventGenerator.Database
         {
             Database.EnsureCreated();
         }
+
+        #endregion
+
+        #region public properties
 
         /// <summary>
         /// Generator.
@@ -26,6 +32,10 @@ namespace EventGenerator.Database
         /// Events.
         /// </summary>
         public DbSet<Event> Events { get; set; }
+
+        #endregion
+
+        #region protected methods
 
         /// <inheritdoc/>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -47,10 +57,27 @@ namespace EventGenerator.Database
             optionsBuilder.UseNpgsql(connectionString);
         }
 
+        /// <inheritdoc/>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Generator>()
+                .HasMany(g => g.Events)
+                .WithOne(e => e.Generator)
+                .HasForeignKey(e => e.GeneratorId);
+        }
+
+        #endregion
+
+        #region private methods
+
         private static string GetEnvironmentVariable(string name)
         {
             return Environment.GetEnvironmentVariable(name)
                 ?? throw new Exception(string.Format("{0} environment variable must be specified", name));
         }
+
+        #endregion
     }
 }

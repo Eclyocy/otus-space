@@ -18,6 +18,6 @@
         /// <summary>
         /// Event level.
         /// </summary>
-        public int EventLevel { get; set; }
+        public EventLevelResponse EventLevel { get; set; }
     }
 }

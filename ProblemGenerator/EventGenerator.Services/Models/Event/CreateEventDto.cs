@@ -13,6 +13,6 @@
         /// <summary>
         /// Event level.
         /// </summary>
-        public int EventLevel { get; set; }
+        public EventLevelDto EventLevel { get; set; }
     }
 }

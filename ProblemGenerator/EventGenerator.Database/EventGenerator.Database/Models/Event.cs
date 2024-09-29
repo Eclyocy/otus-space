@@ -18,6 +18,11 @@ namespace EventGenerator.Database.Models
         /// Event Level.
         /// </summary>
         [Column("event_level")]
-        public int EventLevel { get; set; }
+        public EventLevel EventLevel { get; set; }
+
+        /// <summary>
+        /// Generator which generated the event.
+        /// </summary>
+        public virtual Generator Generator { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EventGenerator.API.Mappers;
+﻿using System.Text.Json.Serialization;
+using EventGenerator.API.Mappers;
 using EventGenerator.API.ServicesExtensions;
 using EventGenerator.Database;
 using EventGenerator.Services;
@@ -62,7 +63,11 @@ namespace EventGenerator
             services.AddAutoMapper(x => x.AddProfile(typeof(GeneratorMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(EventMapper)));
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             services
                 .AddFluentValidationAutoValidation()
