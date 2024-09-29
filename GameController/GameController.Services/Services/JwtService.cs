@@ -121,6 +121,10 @@ namespace GameController.Services.Services
             var refreshToken = GenerateRefreshToken();  // Генерация рефреш токена
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             int expiresIn = (int)(token.ValidTo - epoch).TotalSeconds;
+            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(expiresIn);
+            DateTime dateTime = dateTimeOffset.UtcDateTime;
+
+            Console.WriteLine(dateTime);
             return (new JwtSecurityTokenHandler().WriteToken(token), refreshToken, expiresIn);
         }
 
