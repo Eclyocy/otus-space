@@ -3,13 +3,14 @@ using System.Security.Claims;
 using System.Text;
 using GameController.API.Models.Auth;
 using GameController.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GameController.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly JwtService _jwtService;
@@ -56,6 +57,14 @@ namespace GameController.API.Controllers
             return Ok(new { token = newJwtToken.Token, refreshToken = newJwtToken.RefreshToken });
         }
 
+        [HttpGet("test")]
+        [Authorize]
+        public IActionResult TestAuth()
+        {
+            var username = User.Identity.Name; // Извлечение информации о пользователе из токена
+            return Ok($"Welcome {username}, you are authorized to play!");
+        }
+
         private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
             var key = _jwtService.GetKey();
@@ -90,5 +99,6 @@ namespace GameController.API.Controllers
 
             return principal;
         }
+
     }
 }
