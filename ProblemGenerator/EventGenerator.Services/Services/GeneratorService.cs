@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
+using EventGenerator.Services.Exceptions;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Generator;
 using Microsoft.Extensions.Logging;
@@ -48,7 +49,14 @@ namespace EventGenerator.Services.Services
         {
             _logger.LogInformation("Get generator by generator Id {generatorId}", generatorId);
 
-            Generator generator = _generatorRepository.Get(generatorId);
+            Generator? generator = _generatorRepository.Get(generatorId);
+
+            if (generator == null)
+            {
+                _logger.LogError("Generator {generatorId} not found.", generatorId);
+
+                throw new NotFoundException($"Generator {generatorId} not found.");
+            }
 
             return _mapper.Map<GeneratorDto>(generator);
         }

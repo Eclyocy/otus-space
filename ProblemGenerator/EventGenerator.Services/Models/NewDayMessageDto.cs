@@ -1,17 +1,17 @@
 ﻿namespace EventGenerator.Services.Models
 {
     /// <summary>
-    /// Model for New Day Message
+    /// Model for "New Day" message.
     /// </summary>
     public record NewDayMessageDto
     {
         /// <summary>
-        /// Generator Id.
+        /// Generator ID.
         /// </summary>
         public Guid GeneratorId { get; set; }
 
         /// <summary>
-        /// Ship Id.
+        /// Ship ID.
         /// </summary>
         public Guid ShipId { get; set; }
     }

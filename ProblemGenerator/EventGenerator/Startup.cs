@@ -72,7 +72,7 @@ namespace EventGenerator
             {
                 options.SwaggerDoc(
                     name: "v1",
-                    info: new () { Title = "Event Generator Controller API", Version = "v1" });
+                    info: new() { Title = "Event Generator Controller API", Version = "v1" });
                 options.EnableAnnotations();
             });
         }

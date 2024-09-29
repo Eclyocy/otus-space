@@ -20,30 +20,17 @@ namespace EventGenerator.API.Controllers
         /// <summary>
         /// Constructor.
         /// </summary>
-        public GeneratorController(IGeneratorService service, IMapper mapper)
+        public GeneratorController(IGeneratorService generatorService, IMapper mapper)
         {
-            _generatorService = service;
+            _generatorService = generatorService;
             _mapper = mapper;
         }
 
         /// <summary>
-        /// Заглушка - Получение Guid корабля.
-        /// </summary>
-        [HttpGet]
-        [SwaggerOperation("Получение Guid корабля - заглушка")]
-        public CreateGeneratorRequest GetShip()
-        {
-            return new CreateGeneratorRequest()
-            {
-                ShipId = Guid.NewGuid()
-            };
-        }
-
-        /// <summary>
-        /// Создать новый генератор событий.
+        /// Create new event generator.
         /// </summary>
         [HttpPost]
-        [Route("{shipId}")]
+        [Route("")]
         [SwaggerOperation("Создание нового генератора событий")]
         public GeneratorResponse CreateGenerator(CreateGeneratorRequest createGeneratorRequest)
         {
@@ -53,7 +40,7 @@ namespace EventGenerator.API.Controllers
         }
 
         /// <summary>
-        /// Получение существующего генератора событий.
+        /// Get existing event generator.
         /// </summary>
         [HttpGet]
         [Route("{generatorId}")]

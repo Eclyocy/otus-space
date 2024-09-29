@@ -8,10 +8,10 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace EventGenerator.Controllers
 {
     /// <summary>
-    /// Controller for actions with events by generator.
+    /// Controller for actions with generated events.
     /// </summary>
     [ApiController]
-    [Route("/api/generators/events")]
+    [Route("/api/generators/{generatorId}/events")]
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
@@ -20,21 +20,21 @@ namespace EventGenerator.Controllers
         /// <summary>
         /// Constructor.
         /// </summary>
-        public EventController(IEventService service, IMapper mapper)
+        public EventController(IEventService eventService, IMapper mapper)
         {
-            _eventService = service;
+            _eventService = eventService;
             _mapper = mapper;
         }
 
         /// <summary>
-        /// Создать новое событие.
+        /// Create new event.
         /// </summary>
         [HttpPost]
-        [Route("{generatorId}")]
+        [Route("")]
         [SwaggerOperation("Создание нового события")]
-        public EventResponse CreateEvent(Guid gereratopId)
+        public EventResponse CreateEvent(Guid generatorId)
         {
-            EventDto eventDto = _eventService.CreateEvent(gereratopId);
+            EventDto eventDto = _eventService.CreateEvent(generatorId);
             return _mapper.Map<EventResponse>(eventDto);
         }
     }

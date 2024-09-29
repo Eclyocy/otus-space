@@ -16,7 +16,7 @@
         public Guid EventId { get; set; }
 
         /// <summary>
-        /// Event Level.
+        /// Event level.
         /// </summary>
         public int EventLevel { get; set; }
     }

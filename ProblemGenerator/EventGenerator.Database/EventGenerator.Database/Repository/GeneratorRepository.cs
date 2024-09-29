@@ -4,7 +4,7 @@ using EventGenerator.Database.Models;
 namespace EventGenerator.Database.Repository
 {
     /// <summary>
-    /// Event repository.
+    /// Generator repository.
     /// </summary>
     public class GeneratorRepository : BaseRepository<Generator>, IGeneratorRepository
     {

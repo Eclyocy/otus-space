@@ -18,10 +18,10 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DATABASE_HOSTNAME": "localhost",
-        "DATABASE_PORT": "5432",
-        "DATABASE_NAME": "EventDB",
+        "DATABASE_PORT": "5050",
+        "DATABASE_NAME": "event_generator",
         "DATABASE_USER": "postgres",
-        "DATABASE_PASSWORD": "123"
+        "DATABASE_PASSWORD": "pg_pass"
       }
     },
     "IIS Express": {

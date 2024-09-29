@@ -44,8 +44,6 @@ namespace EventGenerator.Database
                 password,
                 database);
 
-            Console.WriteLine(connectionString);
-
             optionsBuilder.UseNpgsql(connectionString);
         }
 

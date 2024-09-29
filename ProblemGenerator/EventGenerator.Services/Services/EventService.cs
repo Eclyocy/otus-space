@@ -4,17 +4,19 @@ using EventGenerator.Database.Models;
 using EventGenerator.Services.Exceptions;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Event;
+using EventGenerator.Services.Models.Generator;
 using Microsoft.Extensions.Logging;
 
 namespace EventGenerator.Services.Services
 {
     /// <summary>
-    /// Service for working with event generator.
+    /// Service for working with events.
     /// </summary>
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
-        private readonly IGeneratorRepository _generatorRepository;
+
+        private readonly IGeneratorService _generatorService;
 
         private readonly ILogger<EventService> _logger;
         private readonly IMapper _mapper;
@@ -24,12 +26,13 @@ namespace EventGenerator.Services.Services
         /// </summary>
         public EventService(
             IEventRepository eventRepository,
-            IGeneratorRepository generatorRepository,
+            IGeneratorService generatorService,
             ILogger<EventService> logger,
             IMapper mapper)
         {
             _eventRepository = eventRepository;
-            _generatorRepository = generatorRepository;
+
+            _generatorService = generatorService;
 
             _logger = logger;
             _mapper = mapper;
@@ -40,22 +43,28 @@ namespace EventGenerator.Services.Services
         {
             _logger.LogInformation("Create event by Generator ID {generatorId}", generatorId);
 
-            if (_generatorRepository.Get(generatorId) == null)
-            {
-                _logger.LogError("Generator {generatorId} not found.", generatorId);
+            GeneratorDto generator = _generatorService.GetGenerator(generatorId);
 
-                throw new NotFoundException($"Generator {generatorId} not found.");
+            if (generator.TroubleCoins == 0)
+            {
+                _logger.LogWarning(
+                    "Unable to create a new event for generator {generatorId}: no trouble coins.",
+                    generatorId);
+
+                throw new PreconditionFailedException($"Generator {generatorId} has insufficient funds.");
             }
 
-            Generator generator = _generatorRepository.Get(generatorId);
+            Random random = new();
+            int eventLevel = random.Next(1, generator.TroubleCoins);
 
-            Random random = new Random();
-            int newEventLevel = random.Next(1, 3);
-            Event eventRequest = new ();
-            eventRequest.GeneratorId = generatorId;
-            eventRequest.EventLevel = (newEventLevel >= generator.TroubleCoins) ? newEventLevel : 0;
-            Event event_ = _eventRepository.Create(eventRequest);
-            return _mapper.Map<EventDto>(event_);
+            Event eventRequest = new()
+            {
+                GeneratorId = generatorId,
+                EventLevel = eventLevel
+            };
+
+            Event eventEntity = _eventRepository.Create(eventRequest);
+            return _mapper.Map<EventDto>(eventEntity);
         }
     }
 }
