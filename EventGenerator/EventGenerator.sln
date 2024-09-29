@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventGenerator.API", "EventGenerator\EventGenerator.API.csproj", "{228D3CA9-2C56-456F-9BF0-C94E59410004}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventGenerator.Database", "EventGenerator.Database\EventGenerator.Database\EventGenerator.Database.csproj", "{1B7B4B78-878E-4995-8D0A-9AB90EA429D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventGenerator.Database", "EventGenerator.Database\EventGenerator.Database.csproj", "{1B7B4B78-878E-4995-8D0A-9AB90EA429D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventGenerator.Services", "EventGenerator.Services\EventGenerator.Services.csproj", "{90AD0CD0-5631-49BF-AE9A-B7170897CB70}"
 EndProject

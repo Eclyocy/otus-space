@@ -4,6 +4,8 @@ using EventGenerator.API.ServicesExtensions;
 using EventGenerator.Database;
 using EventGenerator.Services;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace EventGenerator
 {
@@ -48,6 +50,16 @@ namespace EventGenerator
             application.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                {
+                    ResultStatusCodes =
+                    {
+                        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+                        [HealthStatus.Degraded] = StatusCodes.Status200OK,
+                        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+                    }
+                });
             });
         }
 
@@ -68,6 +80,8 @@ namespace EventGenerator
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
+
+            services.AddHealthChecks();
 
             services
                 .AddFluentValidationAutoValidation()

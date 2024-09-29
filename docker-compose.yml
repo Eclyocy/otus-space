@@ -95,6 +95,29 @@ services:
       timeout: 5s
       retries: 5
 
+  generator_webapi:
+    image: generator-webapi
+    container_name: generator_webapi_otus
+    depends_on:
+      game_controller_db:
+        condition: service_healthy
+    build: EventGenerator
+    ports:
+    - 6061:7161
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_URLS=http://+:7161
+    - POSTGRES_HOST=game_controller_db
+    - POSTGRES_PORT=5432
+    - POSTGRES_DATABASE=event_generator_db
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=pg_pass
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7161/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   rabbitmq:
     container_name: rabbitmq_otus
     build: RabbitMQ

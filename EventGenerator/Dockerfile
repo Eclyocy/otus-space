@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Copy solution and projects files
 COPY *.sln .
-COPY EventGenerator.API/*.csproj ./EventGenerator/
+COPY EventGenerator/*.csproj ./EventGenerator/
 COPY EventGenerator.Database/*.csproj ./EventGenerator.Database/
 COPY EventGenerator.Services/*.csproj ./EventGenerator.Services/
 
@@ -26,7 +26,10 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 COPY --from=build-env /root/.dotnet/corefx/cryptography/x509stores/my/* /root/.dotnet/corefx/cryptography/x509stores/my/
 
+# Get curl for healthcheck
+RUN apt-get update && apt-get install -y curl && apt-get clean
+
 # Expose port for the API to run on
-EXPOSE 7196
+EXPOSE 7161
 
 ENTRYPOINT ["dotnet", "EventGenerator.dll"]

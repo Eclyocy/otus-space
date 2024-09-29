@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EventGenerator.Database\EventGenerator.Database.csproj" />
     <ProjectReference Include="..\EventGenerator.Services\EventGenerator.Services.csproj" />
   </ItemGroup>
 
