@@ -8,7 +8,7 @@ namespace GameController.Services.Helpers
     /// <summary>
     /// Helper for REST requests.
     /// </summary>
-    public class RequestHelper
+    public static class RequestHelper
     {
         #region public methods
 
