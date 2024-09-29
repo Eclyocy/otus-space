@@ -39,6 +39,8 @@ namespace EventGenerator.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GeneratorId");
+
                     b.ToTable("event");
                 });
 
@@ -60,6 +62,22 @@ namespace EventGenerator.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("generator");
+                });
+
+            modelBuilder.Entity("EventGenerator.Database.Models.Event", b =>
+                {
+                    b.HasOne("EventGenerator.Database.Models.Generator", "Generator")
+                        .WithMany("Events")
+                        .HasForeignKey("GeneratorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Generator");
+                });
+
+            modelBuilder.Entity("EventGenerator.Database.Models.Generator", b =>
+                {
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

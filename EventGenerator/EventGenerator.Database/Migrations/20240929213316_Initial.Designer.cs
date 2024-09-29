@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventGenerator.Database.Migrations
 {
     [DbContext(typeof(EventDBContext))]
-    [Migration("20240928195509_Initial")]
+    [Migration("20240929213316_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -42,6 +42,8 @@ namespace EventGenerator.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GeneratorId");
+
                     b.ToTable("event");
                 });
 
@@ -63,6 +65,22 @@ namespace EventGenerator.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("generator");
+                });
+
+            modelBuilder.Entity("EventGenerator.Database.Models.Event", b =>
+                {
+                    b.HasOne("EventGenerator.Database.Models.Generator", "Generator")
+                        .WithMany("Events")
+                        .HasForeignKey("GeneratorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Generator");
+                });
+
+            modelBuilder.Entity("EventGenerator.Database.Models.Generator", b =>
+                {
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }
