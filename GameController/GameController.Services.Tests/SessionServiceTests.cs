@@ -3,6 +3,7 @@ using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
+using GameController.Services.Models.Generator;
 using GameController.Services.Models.Message;
 using GameController.Services.Models.Session;
 using GameController.Services.Models.Ship;
@@ -76,9 +77,10 @@ namespace GameController.Services.Tests
                 .Setup(x => x.CreateShipAsync())
                 .ReturnsAsync(shipGuid);
 
+            CreateGeneratorDto createGeneratorDto = new() { ShipId = shipGuid };
             Guid generatorGuid = Guid.NewGuid();
             _generatorServiceMock
-                .Setup(x => x.CreateGeneratorAsync())
+                .Setup(x => x.CreateGeneratorAsync(createGeneratorDto))
                 .ReturnsAsync(generatorGuid);
 
             _sessionRepositoryMock
@@ -114,7 +116,7 @@ namespace GameController.Services.Tests
                         session.GeneratorId == generatorGuid)));
                 _sessionRepositoryMock.VerifyNoOtherCalls();
 
-                _generatorServiceMock.Verify(x => x.CreateGeneratorAsync(), Times.Once);
+                _generatorServiceMock.Verify(x => x.CreateGeneratorAsync(createGeneratorDto), Times.Once);
                 _generatorServiceMock.VerifyNoOtherCalls();
 
                 _shipServiceMock.Verify(x => x.CreateShipAsync(), Times.Once);

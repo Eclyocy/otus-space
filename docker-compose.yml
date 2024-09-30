@@ -43,6 +43,8 @@ services:
     - DATABASE_PASSWORD=pg_pass
     - SPACESHIPAPI__HOSTNAME=spaceship_webapi
     - SPACESHIPAPI__PORT=5216
+    - GENERATORAPI__HOSTNAME=generator_webapi
+    - GENERATORAPI__PORT=7161
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7196/health"]
       interval: 10s
@@ -91,6 +93,29 @@ services:
     - POSTGRES_PASSWORD=pg_pass
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5216/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  generator_webapi:
+    image: generator-webapi
+    container_name: generator_webapi_otus
+    depends_on:
+      game_controller_db:
+        condition: service_healthy
+    build: EventGenerator
+    ports:
+    - 6061:7161
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_URLS=http://+:7161
+    - DATABASE_HOSTNAME=game_controller_db
+    - DATABASE_PORT=5432
+    - DATABASE_NAME=event_generator_db
+    - DATABASE_USER=postgres
+    - DATABASE_PASSWORD=pg_pass
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7161/health"]
       interval: 10s
       timeout: 5s
       retries: 5

@@ -1,0 +1,30 @@
+name: EventGenerator CI
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+    - EventGenerator/**
+  pull_request:
+    branches: [ main ]
+    paths:
+    - EventGenerator/**
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0'
+
+    - name: Restore dependencies
+      run: dotnet restore EventGenerator/EventGenerator.sln
+
+    - name: Build
+      run: dotnet build EventGenerator/EventGenerator.sln --no-restore

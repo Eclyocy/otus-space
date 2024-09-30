@@ -3,6 +3,7 @@ using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
+using GameController.Services.Models.Generator;
 using GameController.Services.Models.Message;
 using GameController.Services.Models.Session;
 using GameController.Services.Models.Ship;
@@ -168,15 +169,18 @@ namespace GameController.Services.Services
 
         private async Task<CreateSessionDto> CreateSessionRequestAsync()
         {
-            Task<Guid> shipTask = _shipService.CreateShipAsync();
-            Task<Guid> generatorTask = _generatorService.CreateGeneratorAsync();
+            Guid shipId = await _shipService.CreateShipAsync();
 
-            await Task.WhenAll(shipTask, generatorTask);
+            Guid generatorId = await _generatorService.CreateGeneratorAsync(
+                new()
+                {
+                    ShipId = shipId
+                });
 
             return new()
             {
-                ShipId = shipTask.Result,
-                GeneratorId = generatorTask.Result
+                ShipId = shipId,
+                GeneratorId = generatorId
             };
         }
 

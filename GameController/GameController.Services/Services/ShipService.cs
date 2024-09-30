@@ -1,5 +1,4 @@
-﻿using System.Net;
-using GameController.Services.Exceptions;
+﻿using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Ship;
 using GameController.Services.Settings;
@@ -52,7 +51,7 @@ namespace GameController.Services.Services
             RestRequest request = new();
             RestResponse<ShipDto> shipResponse = await _restClient.ExecutePostAsync<ShipDto>(request);
 
-            ShipDto shipDto = ValidateResponse<ShipDto>(_restClient.BuildUri(request), shipResponse);
+            ShipDto shipDto = RequestHelper.ValidateResponse(_restClient.BuildUri(request), shipResponse, _logger);
 
             return shipDto.Id;
         }
@@ -66,43 +65,7 @@ namespace GameController.Services.Services
             request.AddUrlSegment("shipId", shipId);
             RestResponse<ShipDto> shipResponse = await _restClient.ExecuteGetAsync<ShipDto>(request);
 
-            return ValidateResponse<ShipDto>(_restClient.BuildUri(request), shipResponse);
-        }
-
-        #endregion
-
-        #region private methods
-
-        private T ValidateResponse<T>(Uri uri, RestResponse<T> response)
-        {
-            if (response.IsSuccessful)
-            {
-                if (response.Data != null)
-                {
-                    return response.Data;
-                }
-
-                _logger.LogError("Unable to retrieve {modelType} model via request {uri}", typeof(T), uri);
-
-                throw new Exception($"Unable to retrieve {typeof(T).Name} model.");
-            }
-
-            _logger.LogError(
-                "Unsuccessful request to {uri}: {errorStatusCode} {errorMessage}\n{errorException}",
-                uri,
-                response.StatusCode,
-                response.ErrorMessage,
-                response.ErrorException);
-
-            throw response.StatusCode switch
-            {
-                HttpStatusCode.NotFound =>
-                    new NotFoundException($"Remote server responded with {typeof(T).Name} not found"),
-                HttpStatusCode.Conflict when response.ErrorMessage is not null =>
-                    new ConflictException(response.ErrorMessage),
-                _ =>
-                    new Exception("Remote server responded with an error."),
-            };
+            return RequestHelper.ValidateResponse(_restClient.BuildUri(request), shipResponse, _logger);
         }
 
         #endregion

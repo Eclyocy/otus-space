@@ -1,19 +1,19 @@
-﻿using GameController.Database.Models;
+﻿using EventGenerator.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameController.Database
+namespace EventGenerator.Database
 {
     /// <summary>
-    /// Database context for game controller application.
+    /// Database context for event generator application.
     /// </summary>
-    public class DatabaseContext : DbContext
+    public class EventDBContext : DbContext
     {
         #region constructor
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+        public EventDBContext(DbContextOptions<EventDBContext> options)
             : base(options)
         {
             Database.EnsureCreated();
@@ -24,14 +24,14 @@ namespace GameController.Database
         #region public properties
 
         /// <summary>
-        /// Users.
+        /// Generator.
         /// </summary>
-        public DbSet<User> Users { get; set; }
+        public DbSet<Generator> Generators { get; set; }
 
         /// <summary>
-        /// Sessions.
+        /// Events.
         /// </summary>
-        public DbSet<Session> Sessions { get; set; }
+        public DbSet<Event> Events { get; set; }
 
         #endregion
 
@@ -55,6 +55,21 @@ namespace GameController.Database
                 database);
 
             optionsBuilder.UseNpgsql(connectionString);
+        }
+
+        /// <inheritdoc/>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Generator>()
+                .HasMany(g => g.Events)
+                .WithOne(e => e.Generator)
+                .HasForeignKey(e => e.GeneratorId);
+
+            modelBuilder.Entity<Event>()
+                .HasOne(e => e.Generator)
+                .WithMany(g => g.Events);
         }
 
         #endregion
