@@ -103,6 +103,8 @@ services:
     depends_on:
       game_controller_db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     build: EventGenerator
     ports:
     - 6061:7161
@@ -114,6 +116,12 @@ services:
     - DATABASE_NAME=event_generator_db
     - DATABASE_USER=postgres
     - DATABASE_PASSWORD=pg_pass
+    - RABBITMQ_HOST=rabbitmq
+    - RABBITMQ_USER=problem-generator
+    - RABBITMQ_PASSWORD=Pg1234
+    - RABBITMQ_NEW_DAY_EXCHANGE=x_new_day
+    - RABBITMQ_NEW_DAY_QUEUE=q_new_day_generator
+    - RABBITMQ_EVENTS_EXCHANGE=x_events
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7161/health"]
       interval: 10s

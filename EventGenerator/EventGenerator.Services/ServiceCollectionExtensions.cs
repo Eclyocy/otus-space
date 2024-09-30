@@ -18,6 +18,8 @@ namespace EventGenerator.Services
             services.AddScoped<IGeneratorService, GeneratorService>();
             services.AddScoped<IEventService, EventService>();
 
+            services.AddHostedService<RabbitMQService>();
+
             return services;
         }
     }
