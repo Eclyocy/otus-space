@@ -427,6 +427,7 @@ dotnet_diagnostic.SA1204.severity = silent
 dotnet_analyzer_diagnostic.category-StyleCop.CSharp.NamingRules.severity = error
 # FieldNamesMustNotBeginWithUnderscore
 dotnet_diagnostic.SA1309.severity = none
+dotnet_diagnostic.SA1300.severity = none
 
 # Error for all maintainability rules (SA14xx)
 dotnet_analyzer_diagnostic.category-StyleCop.CSharp.MaintainabilityRules.severity = error

@@ -38,6 +38,21 @@ namespace GameController.API.Controllers
             return Unauthorized();
         }
 
+        [HttpPost("token")]
+        [Consumes("application/x-www-form-urlencoded")]
+        public IActionResult token([FromForm] LoginModel login)
+        {
+            var (token, refreshToken, expiresIn) = _jwtService.GenerateTokens(login.Username);
+            var tokenResponse = new TokenResponseOIDC
+            {
+                access_token = token,
+                refresh_token = refreshToken,
+                expires_in = expiresIn
+            };
+
+            return Ok(tokenResponse);
+        }
+
         [HttpPost("refresh")]
         public IActionResult Refresh([FromBody] TokenModel tokenModel)
         {
