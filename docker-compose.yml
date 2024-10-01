@@ -75,6 +75,8 @@ services:
     depends_on:
       game_controller_db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     build: SpaceShip
     ports:
     - 5051:5216
