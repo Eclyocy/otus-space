@@ -121,7 +121,7 @@ services:
     - RABBITMQ_PASSWORD=Pg1234
     - RABBITMQ_NEW_DAY_EXCHANGE=x_new_day
     - RABBITMQ_NEW_DAY_QUEUE=q_new_day_generator
-    - RABBITMQ_EVENTS_EXCHANGE=x_events
+    - RABBITMQ_EVENTS_EXCHANGE=x_troubles
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7161/health"]
       interval: 10s
