@@ -99,6 +99,5 @@ namespace GameController.API.Controllers
 
             return principal;
         }
-
     }
 }

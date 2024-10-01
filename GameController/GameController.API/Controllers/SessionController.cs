@@ -4,7 +4,6 @@ using GameController.Controllers.Models.Ship;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Session;
 using GameController.Services.Models.Ship;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -14,7 +13,6 @@ namespace GameController.API.Controllers
     /// Controller for actions with user's game sessions.
     /// </summary>
     [ApiController]
-    [Authorize]
     [Route("/api/users/{userId}/sessions")]
     public class SessionController : ControllerBase
     {
