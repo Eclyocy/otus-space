@@ -14,7 +14,8 @@ public class SpaceShipMappingProfile : Profile
     /// </summary>
     public SpaceShipMappingProfile()
     {
-        CreateMap<ResourceDTO, ResourceResponse>();
+        CreateMap<ResourceDTO, ResourceResponse>()
+            .ForMember(x => x.Name, opt => opt.MapFrom(x => x.ResourceType.ToString()));
         CreateMap<SpaceShipDTO, SpaceShipMetricResponse>();
         CreateMap<ResourceStateDTO, ResourceStateResponse>();
         CreateMap<ResourceTypeDTO, ResourceTypeResponse>();

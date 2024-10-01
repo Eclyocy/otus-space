@@ -15,7 +15,7 @@ public class ResourceResponse
     /// <summary>
     /// Наименование ресурса.
     /// </summary>
-    public ResourceTypeResponse ResourceType { get; set; }
+    public ResourceTypeResponse Name { get; set; }
 
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема).

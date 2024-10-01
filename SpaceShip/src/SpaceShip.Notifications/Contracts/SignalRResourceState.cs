@@ -8,15 +8,15 @@ public enum SignalRResourceState
     /// <summary>
     /// Спящий режим, не потребляет другие ресурсы
     /// </summary>
-    Sleep,
+    Sleep = 1,
 
     /// <summary>
     /// Активен, норма.
     /// </summary>
-    Normal,
+    Normal = 0,
 
     /// <summary>
     /// Активен, есть проблема с ресурсом
     /// </summary>
-    Fail
+    Dead = 2
 }
