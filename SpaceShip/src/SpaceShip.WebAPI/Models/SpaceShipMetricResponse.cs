@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SpaceShip.WebAPI.Models;
@@ -21,5 +21,5 @@ public class SpaceShipMetricResponse
     /// <summary>
     /// Коллекция ресурсов корабля
     /// </summary>
-    public List<ResourceResponse>? Resources { get; set; }
+    public List<ResourceResponse> Resources { get; set; }
 }

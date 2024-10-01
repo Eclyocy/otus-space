@@ -15,10 +15,15 @@ public class ResourceResponse
     /// <summary>
     /// Наименование ресурса.
     /// </summary>
-    public required string Name { get; set; }
+    public ResourceTypeResponse ResourceType { get; set; }
 
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема).
     /// </summary>
-    public required ResourceStateResponse State { get; set; } = ResourceStateResponse.Sleep;
+    public ResourceStateResponse State { get; set; }
+
+    /// <summary>
+    /// Resource amount.
+    /// </summary>
+    public int Amount { get; set; }
 }

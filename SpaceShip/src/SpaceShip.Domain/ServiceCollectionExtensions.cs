@@ -21,7 +21,6 @@ namespace SpaceShip.Domain.EfCore
 
             services.AddTransient<IProblemRepository, ProblemRepository>();
             services.AddTransient<IResourceRepository, ResourceRepository>();
-            services.AddTransient<IResourceTypeRepository, ResourceTypeRepository>();
             services.AddTransient<ISpaceshipRepository, SpaceshipRepository>();
 
             return services;

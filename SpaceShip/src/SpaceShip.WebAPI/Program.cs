@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Mappers;
 using SpaceShip.Notifications;
@@ -47,20 +47,10 @@ builder.Services.AddSwaggerGen(static options =>
     });
 #pragma warning restore SA1118 // ParameterMustNotSpanMultipleLines
 
-builder.Services.AddControllers().AddNewtonsoftJson(static options =>
-{
-    options.SerializerSettings.Converters.Add(new StringEnumConverter
-    {
-        NamingStrategy = new CamelCaseNamingStrategy(),
-    });
-});
-
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
 builder.Services.AddTransient<IProblemService, ProblemService>();
-builder.Services.AddTransient<IResourceService, ResourceService>();
-builder.Services.AddTransient<IResourceTypeService, ResourceTypeService>();
 builder.Services.AddTransient<IShipService, SpaceShipService>();
 builder.Services.AddScoped<IGameStepService, GameStepService>();
 
@@ -78,7 +68,16 @@ builder.Services.AddSingleton<IMapper>(
                 cfg.AddProfile<ResourceTypeModelMappingProfile>();
             })));
 
-builder.Services.AddControllers();
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+});
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

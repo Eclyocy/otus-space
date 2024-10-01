@@ -5,7 +5,7 @@
 /// </summary>
 public enum ResourceStateDTO
 {
-    Sleep,
-    Normal,
-    Fail
+    Normal = 0,
+    Sleep = 1,
+    Dead = 2
 }

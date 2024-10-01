@@ -5,8 +5,8 @@
     /// </summary>
     public enum ResourceState
     {
-        Start,
-        Sleep,
-        Finish
+        Normal = 0,
+        Sleep = 1,
+        Dead = 2
     }
 }
