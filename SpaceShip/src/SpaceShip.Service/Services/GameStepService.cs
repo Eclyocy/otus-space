@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using SpaceShip.Domain.Model.State;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
@@ -46,6 +47,24 @@ public class GameStepService : IGameStepService
 
         var ship = _shipService.GetShip(id)
             ?? throw new NotFoundException($"Ship with id {id} not found.");
+
+        var updateResources = ship.Resources;
+
+        foreach (var i in updateResources)
+        {
+            foreach (var j in i.Resources)
+            {
+                if (j.Amount >= 10)
+                {
+                    j.Amount = j.Amount - 10;
+                }
+
+                if (j.Amount == 0)
+                {
+                    ship.State = SpaceshipState.Sleep;
+                }
+            }
+        }
 
         ship.Step++;
 

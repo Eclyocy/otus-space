@@ -46,4 +46,9 @@ public class ResourceDTO
     /// Сущность типа ресурсов
     /// </summary>
     public ResourceType ResourceType { get; set; }
+
+    /// <summary>
+    /// Виртуцальное ствойство список вложенных ресурсов.
+    /// </summary>
+    public virtual List<ResourceDTO>? Resources { get; set; }
 }
