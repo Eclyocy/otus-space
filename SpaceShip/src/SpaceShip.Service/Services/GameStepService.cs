@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
-using SpaceShip.Services.Exceptions;
 
 namespace SpaceShip.Service.Implementation;
 
@@ -44,11 +43,6 @@ public class GameStepService : IGameStepService
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
-        var ship = _shipService.GetShip(id)
-            ?? throw new NotFoundException($"Ship with id {id} not found.");
-
-        ship.Step++;
-
-        return _shipService.UpdateShip(id, ship);
+        return _shipService.RunExpenses(id);
     }
 }

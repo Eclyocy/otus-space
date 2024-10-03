@@ -17,6 +17,7 @@ public class SpaceShipService : IShipService
     #region private fields
 
     private readonly ISpaceshipRepository _shipRepository;
+    private readonly IResourceService _resourceService;
 
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
@@ -30,10 +31,12 @@ public class SpaceShipService : IShipService
     /// </summary>
     public SpaceShipService(
         ISpaceshipRepository shipRepository,
+        IResourceService resourceService,
         IMapper mapper,
         ILogger<SpaceShipService> logger)
     {
         _shipRepository = shipRepository;
+        _resourceService = resourceService;
         _mapper = mapper;
         _logger = logger;
     }
@@ -95,6 +98,39 @@ public class SpaceShipService : IShipService
             JsonSerializer.Serialize(spaceShipDTO));
 
         Ship ship = UpdateRepositoryShip(shipId, spaceShipDTO);
+
+        return _mapper.Map<SpaceShipDTO>(ship);
+    }
+
+    /// <inheritdoc/>
+    public SpaceShipDTO RunExpenses(Guid spaceshipId)
+    {
+        Ship ship = GetRepositoryShip(spaceshipId);
+
+        foreach (var resource in ship.Resources)
+        {
+            if (resource.RequiredResourceType == null)
+            {
+                // Resource is self-sufficient.
+                continue;
+            }
+
+            var requiredResource = ship.Resources.FirstOrDefault(x =>
+                x.ResourceType == resource.RequiredResourceType);
+
+            if (requiredResource == null || requiredResource.Amount == 0)
+            {
+                // Missing required resources.
+                _resourceService.SetResourceStateToDead(resource.Id);
+                continue;
+            }
+
+            // Spending a single required resource.
+            _resourceService.DecreaseResourceAmount(requiredResource.Id);
+        }
+
+        ship.Step++;
+        _shipRepository.Update(ship);
 
         return _mapper.Map<SpaceShipDTO>(ship);
     }

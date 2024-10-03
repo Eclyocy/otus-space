@@ -15,9 +15,6 @@ public class SpaceShipModelMappingProfile : Profile
     public SpaceShipModelMappingProfile()
     {
         // Database models -> Service models
-        CreateMap<Ship, SpaceShipDTO>()
-            .ForMember(dest => dest.Id, op => op.MapFrom(src => src.Id))
-            .ForMember(dest => dest.Step, op => op.MapFrom(src => src.Step))
-            .ForMember(dest => dest.Name, opt => opt.Ignore());
+        CreateMap<Ship, SpaceShipDTO>().ReverseMap();
     }
 }

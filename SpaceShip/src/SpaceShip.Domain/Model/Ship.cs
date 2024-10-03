@@ -61,7 +61,7 @@ namespace SpaceShip.Domain.Model
         /// <summary>
         /// Коллекция ресурсов.
         /// </summary>
-        public virtual List<Resource>? Resources { get; set; }
+        public virtual List<Resource> Resources { get; set; }
 
         #endregion
     }

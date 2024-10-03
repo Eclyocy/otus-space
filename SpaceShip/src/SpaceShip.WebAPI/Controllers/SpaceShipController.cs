@@ -61,6 +61,16 @@ public class SpaceShipController : ControllerBase
     }
 
     /// <summary>
+    /// Test method.
+    /// </summary>
+    [HttpPost("{id}")]
+    public IResult Test(Guid id)
+    {
+        _service.RunExpenses(id);
+        return Results.Ok();
+    }
+
+    /// <summary>
     /// Создать новый корабль
     /// </summary>
     /// <returns>201</returns>

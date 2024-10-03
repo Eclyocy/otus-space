@@ -52,6 +52,7 @@ builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
 builder.Services.AddTransient<IProblemService, ProblemService>();
 builder.Services.AddTransient<IShipService, SpaceShipService>();
+builder.Services.AddTransient<IResourceService, ResourceService>();
 builder.Services.AddScoped<IGameStepService, GameStepService>();
 
 // Automapper:
