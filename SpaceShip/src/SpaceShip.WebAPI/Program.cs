@@ -15,7 +15,6 @@ using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
-using SpaceShip.Service.Services;
 using SpaceShip.WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,7 +57,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
-builder.Services.AddTransient<IResourceService, ResourceService>();
 builder.Services.AddTransient<IShipService, SpaceShipService>();
 builder.Services.AddScoped<IGameStepService, GameStepService>();
 
