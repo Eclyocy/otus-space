@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SpaceShip.Domain.Model;
+using SpaceShip.Domain.Entities;
 using SpaceShip.Service.Contracts;
 
 namespace SpaceShip.Domain.Mappers;

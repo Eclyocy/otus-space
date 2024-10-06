@@ -18,7 +18,7 @@ public class SpaceShipController : ControllerBase
 {
     #region private fields
 
-    private readonly ISpaceShipService _spaceShipService;
+    private readonly IShipService _spaceShipService;
     private readonly IMapper _mapper;
 
     #endregion
@@ -30,7 +30,7 @@ public class SpaceShipController : ControllerBase
     /// </summary>
     /// <param name="spaceShipService">Сервис работы с сущностью корабль</param>
     /// <param name="mapper">Маппер ответа сервиса</param>
-    public SpaceShipController(ISpaceShipService spaceShipService, IMapper mapper)
+    public SpaceShipController(IShipService spaceShipService, IMapper mapper)
     {
         _spaceShipService = spaceShipService;
         _mapper = mapper;

@@ -1,19 +1,21 @@
 ﻿namespace SpaceShip.Domain.Interfaces;
 
 /// <summary>
-/// Interface for base repository.
+/// Base repository.
 /// </summary>
-/// <typeparam name="T">Repository entity.</typeparam>
-public interface IRepository<T>
+/// <typeparam name="T">
+/// Entity type for the repository to work with.
+/// </typeparam>
+public interface IBaseRepository<T>
 {
     /// <summary>
-    /// Create entity.
+    /// Create entity via default constructor.
     /// </summary>
     /// <returns>Created entity.</returns>
     T Create(bool saveChanges = false);
 
     /// <summary>
-    /// Create entity.
+    /// Create entity via model.
     /// </summary>
     /// <returns>Created entity.</returns>
     T Create(T entity, bool saveChanges = false);
@@ -33,7 +35,6 @@ public interface IRepository<T>
     /// <summary>
     /// Update entity.
     /// </summary>
-    /// <remarks>Updates <paramref name="entity"/> in-place.</remarks>
     void Update(T entity, bool saveChanges = false);
 
     /// <summary>

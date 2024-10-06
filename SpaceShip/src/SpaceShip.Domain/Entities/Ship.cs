@@ -4,31 +4,31 @@ using SpaceShip.Domain.Enums;
 namespace SpaceShip.Domain.Entities;
 
 /// <summary>
-/// Космический корабль.
+/// Space ship entity.
 /// </summary>
 [Table("Ship")]
 public class Ship : BaseEntity
 {
     /// <summary>
-    /// Имя корабля.
+    /// Space ship name.
     /// </summary>
     [Column("Name")]
     public string? Name { get; set; }
 
     /// <summary>
-    /// Статус корабля.
+    /// Space ship state.
     /// </summary>
     [Column("State")]
-    public SpaceshipState State { get; set; }
+    public ShipState State { get; set; }
 
     /// <summary>
-    /// Ход.
+    /// Number of day on board the space ship.
     /// </summary>
     [Column("Step")]
-    public short? Step { get; set; }
+    public short Step { get; set; }
 
     /// <summary>
-    /// Коллекция ресурсов.
+    /// Related resources collection.
     /// </summary>
     public virtual ICollection<Resource> Resources { get; set; }
 }

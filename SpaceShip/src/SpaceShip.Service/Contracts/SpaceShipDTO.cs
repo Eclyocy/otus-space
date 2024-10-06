@@ -1,4 +1,4 @@
-﻿using SpaceShip.Domain.Models;
+﻿using SpaceShip.Domain.Enums;
 
 namespace SpaceShip.Service.Contracts;
 
@@ -25,7 +25,7 @@ public class SpaceShipDTO
     /// <summary>
     /// Состояние корабля
     /// </summary>
-    public SpaceshipState State { get; set; }
+    public ShipState State { get; set; }
 
     /// <summary>
     /// Коллекция ресурсов корабля

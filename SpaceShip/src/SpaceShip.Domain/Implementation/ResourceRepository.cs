@@ -1,12 +1,9 @@
-﻿using SpaceShip.Domain.EfCore;
-using SpaceShip.Domain.Entities;
+﻿using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
 
 namespace SpaceShip.Domain.Implementation;
 
-/// <summary>
-/// Resource repository.
-/// </summary>
+/// <inheritdoc cref="IResourceRepository"/>
 public class ResourceRepository : BaseRepository<Resource>, IResourceRepository
 {
     #region constructor
@@ -14,7 +11,7 @@ public class ResourceRepository : BaseRepository<Resource>, IResourceRepository
     /// <summary>
     /// Constructor.
     /// </summary>
-    public ResourceRepository(EfCoreContext context)
+    public ResourceRepository(DatabaseContext context)
         : base(context)
     {
     }

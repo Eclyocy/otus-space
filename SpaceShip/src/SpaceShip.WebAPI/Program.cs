@@ -8,8 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Mappers;
+using SpaceShip.Domain.ServiceCollectionExtensions;
 using SpaceShip.Notifications;
 using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
@@ -60,7 +60,7 @@ builder.Services
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
-builder.Services.AddTransient<ISpaceShipService, SpaceShipService>();
+builder.Services.AddTransient<IShipService, SpaceShipService>();
 builder.Services.AddScoped<IGameStepService, GameStepService>();
 
 // Automapper:

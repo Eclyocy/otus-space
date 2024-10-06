@@ -1,15 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
 
 namespace SpaceShip.Domain.Implementation;
 
-/// <summary>
-/// Base repository.
-/// </summary>
-/// <typeparam name="T">Repository entity.</typeparam>
-public abstract class BaseRepository<T> : IRepository<T>
+/// <inheritdoc cref="IBaseRepository{T}"/>
+public abstract class BaseRepository<T> : IBaseRepository<T>
     where T : BaseEntity, new()
 {
     #region constructor
@@ -17,9 +13,9 @@ public abstract class BaseRepository<T> : IRepository<T>
     /// <summary>
     /// Constructor.
     /// </summary>
-    protected BaseRepository(EfCoreContext efCoreContext)
+    protected BaseRepository(DatabaseContext databaseContext)
     {
-        Context = efCoreContext;
+        Context = databaseContext;
         EntitySet = Context.Set<T>();
     }
 
@@ -28,12 +24,12 @@ public abstract class BaseRepository<T> : IRepository<T>
     #region protected fields
 
     /// <summary>
-    /// Context.
+    /// Database context.
     /// </summary>
-    protected EfCoreContext Context { get; }
+    protected DatabaseContext Context { get; }
 
     /// <summary>
-    /// EntitySet.
+    /// Set of specific entities.
     /// </summary>
     protected DbSet<T> EntitySet { get; }
 

@@ -5,13 +5,13 @@ using SpaceShip.Service.Interfaces;
 namespace SpaceShip.Notifications;
 
 /// <summary>
-/// Notifications Hub for spaceships notifications for user (UI or GameController).
+/// Notifications Hub for space ships notifications for user (UI or GameController).
 /// </summary>
 public class NotificationsHub : Hub
 {
     #region private fields
 
-    private readonly ISpaceShipService _shipService;
+    private readonly IShipService _shipService;
 
     private readonly ILogger<NotificationsHub> _logger;
 
@@ -22,10 +22,10 @@ public class NotificationsHub : Hub
     /// <summary>
     /// Initializes a new instance of the <see cref="NotificationsHub"/> class.
     /// </summary>
-    /// <param name="shipService">Service which providing spaceship base operations.</param>
+    /// <param name="shipService">Service providing base operations with space ships.</param>
     /// <param name="loggerFactory">Logger factory.</param>
     public NotificationsHub(
-        ISpaceShipService shipService,
+        IShipService shipService,
         ILoggerFactory loggerFactory)
         : base()
     {
@@ -39,7 +39,7 @@ public class NotificationsHub : Hub
     #region public methods
 
     /// <summary>
-    /// Provide SignalR subscription to one spaceship metrics.
+    /// Provide SignalR subscription to one space ship metrics.
     /// </summary>
     /// <param name="shipId">Spaceship identifier. </param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
@@ -63,7 +63,7 @@ public class NotificationsHub : Hub
     /// <summary>
     /// Unsubscribe client from the group of subscribers for SignalR notifications on a specific spaceship.
     /// </summary>
-    /// <param name="shipId">Spaceship identifier. </param>
+    /// <param name="shipId">Space ship identifier. </param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     /// <remarks>Must be named as <see cref="NotificationMethod.Unsubscribe"/>.</remarks>
     public async Task Unsubscribe(Guid shipId)
@@ -86,9 +86,9 @@ public class NotificationsHub : Hub
     }
 
     /// <summary>
-    /// Provide SignalR subscription to one spaceships.
+    /// Provide SignalR subscription to one space ships.
     /// </summary>
-    /// <param name="shipIds">List of spaceships identifiers.</param>
+    /// <param name="shipIds">List of space ships identifiers.</param>
     /// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
     public async Task SubscribeMany(List<Guid> shipIds)
     {

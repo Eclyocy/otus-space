@@ -1,21 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
 
 namespace SpaceShip.Domain.Implementation;
 
-/// <summary>
-/// Spaceship repository.
-/// </summary>
-public class SpaceshipRepository : BaseRepository<Ship>, ISpaceshipRepository
+/// <inheritdoc cref="IShipRepository"/>
+public class ShipRepository : BaseRepository<Ship>, IShipRepository
 {
     #region constructor
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public SpaceshipRepository(EfCoreContext context)
+    public ShipRepository(DatabaseContext context)
         : base(context)
     {
     }
@@ -24,10 +21,13 @@ public class SpaceshipRepository : BaseRepository<Ship>, ISpaceshipRepository
 
     #region public methods
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Get space ship with related resources included
+    /// by its <paramref name="id"/>.
+    /// </summary>
     public override Ship? Get(Guid id)
     {
-        return Context.Spaceships
+        return Context.Ships
             .Include(x => x.Resources)
             .FirstOrDefault(x => x.Id == id);
     }

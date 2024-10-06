@@ -5,48 +5,48 @@ using SpaceShip.Domain.Enums;
 namespace SpaceShip.Domain.Entities;
 
 /// <summary>
-/// Ресурсы.
+/// Reource entity.
 /// </summary>
 [Table("Resource")]
 public class Resource : BaseEntity
 {
     /// <summary>
-    /// SpaceshipId.
+    /// ID of related space ship entity.
     /// </summary>
-    [Column("SpaceshipId")]
+    [Column("ShipId")]
     [Required]
-    public Guid SpaceshipId { get; set; }
+    public Guid ShipId { get; set; }
 
     /// <summary>
-    /// ResourceType.
+    /// Resource type.
     /// </summary>
     [Column("ResourceType")]
     [Required]
     public ResourceType ResourceType { get; set; }
 
     /// <summary>
-    /// Статус ресурса.
+    /// Resource state.
     /// </summary>
     [Column("State")]
     [Required]
     public ResourceState State { get; set; }
 
     /// <summary>
-    /// Название ресурса.
+    /// Resource name.
     /// </summary>
     [Column("Name")]
     public string? Name { get; set; }
 
     /// <summary>
-    /// Количество ресурса.
+    /// Resource amount.
     /// </summary>
     [Column("Amount")]
     [Required]
     public int Amount { get; set; }
 
     /// <summary>
-    /// Виртуальное свойство корабля.
+    /// Related entity: space ship.
     /// </summary>
-    [ForeignKey("SpaceshipId")]
-    public virtual Ship Spaceship { get; set; }
+    [ForeignKey("ShipId")]
+    public virtual Ship Ship { get; set; }
 }

@@ -5,7 +5,7 @@ namespace SpaceShip.Service.Interfaces;
 /// <summary>
 /// Interface for working with SpaceShip.
 /// </summary>
-public interface ISpaceShipService
+public interface IShipService
 {
     /// <summary>
     /// Create a SpaceShip.

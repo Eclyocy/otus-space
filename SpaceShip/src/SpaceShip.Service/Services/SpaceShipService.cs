@@ -13,11 +13,11 @@ namespace SpaceShip.Service.Implementation;
 /// <summary>
 /// Сервис для работы с сущностью "Корабль".
 /// </summary>
-public class SpaceShipService : ISpaceShipService
+public class SpaceShipService : IShipService
 {
     #region private fields
 
-    private readonly ISpaceshipRepository _shipRepository;
+    private readonly IShipRepository _shipRepository;
 
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
@@ -30,7 +30,7 @@ public class SpaceShipService : ISpaceShipService
     /// Конструктор.
     /// </summary>
     public SpaceShipService(
-        ISpaceshipRepository shipRepository,
+        IShipRepository shipRepository,
         IMapper mapper,
         ILogger<SpaceShipService> logger)
     {
@@ -56,7 +56,7 @@ public class SpaceShipService : ISpaceShipService
             new()
             {
                 Step = 0,
-                State = SpaceshipState.OK,
+                State = ShipState.OK,
             },
             saveChanges: false);
 

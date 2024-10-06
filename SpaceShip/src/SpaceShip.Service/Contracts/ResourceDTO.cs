@@ -1,5 +1,4 @@
-﻿using SpaceShip.Domain.Model;
-using SpaceShip.Domain.Models;
+﻿using SpaceShip.Domain.Enums;
 
 namespace SpaceShip.Service.Contracts;
 
@@ -37,11 +36,6 @@ public class ResourceDTO
     /// Состояние ресурса (спит, норма, проблема)
     /// </summary>
     public required ResourceStateDTO State { get; set; }
-
-    /// <summary>
-    /// Сущность корабля
-    /// </summary>
-    public Ship Spaceship { get; set; }
 
     /// <summary>
     /// Сущность типа ресурсов

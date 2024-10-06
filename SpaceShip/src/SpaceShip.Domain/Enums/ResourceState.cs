@@ -1,7 +1,7 @@
 ﻿namespace SpaceShip.Domain.Enums;
 
 /// <summary>
-/// State for Resource models.
+/// Resource states.
 /// </summary>
 public enum ResourceState : byte
 {
@@ -9,8 +9,10 @@ public enum ResourceState : byte
     /// Normal state.
     /// </summary>
     /// <remarks>
-    /// Resource can work as expected.<br/>
-    /// Resource consumes other resources in this state.
+    /// Resource is:<br/>
+    /// * functional;<br/>
+    /// * ready to be used;<br/>
+    /// * requires life support.
     /// </remarks>
     OK = 0,
 
@@ -18,8 +20,10 @@ public enum ResourceState : byte
     /// Hibernation.
     /// </summary>
     /// <remarks>
-    /// Resource can work as expected.<br/>
-    /// Resource does not consume other resources in this state.
+    /// Resource is:<br/>
+    /// * functional;<br/>
+    /// * not ready to be used;<br/>
+    /// * does not require life support.
     /// </remarks>
     Sleep = 1,
 
@@ -27,8 +31,10 @@ public enum ResourceState : byte
     /// Failure.
     /// </summary>
     /// <remarks>
-    /// Resource cannot work.<br/>
-    /// Resource does not consume other resources in this state.
+    /// Resource is:<br/>
+    /// * nonfunctional;<br/>
+    /// * not ready to be used;<br/>
+    /// * does not require life support.
     /// </remarks>
-    Fail = 2
+    Fail = 2,
 }
