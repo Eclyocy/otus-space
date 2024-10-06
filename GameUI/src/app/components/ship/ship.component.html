@@ -9,12 +9,14 @@
     <tr>
       <th>Name</th>
       <th>State</th>
+      <th>Amount</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let shipResource of ship?.resources">
       <td>{{shipResource.name}}</td>
       <td>{{shipResource.state}}</td>
+      <td>{{shipResource.amount}}</td>
     </tr>
   </tbody>
 </table>

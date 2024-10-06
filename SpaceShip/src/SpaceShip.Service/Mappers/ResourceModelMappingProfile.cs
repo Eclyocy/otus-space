@@ -14,8 +14,7 @@ namespace SpaceShip.Service.Mappers
         /// </summary>
         public ResourceModelMappingProfile()
         {
-            // Database models -> Service models // Database models -> Service models
-            CreateMap<Resource, ResourceDTO>();
+            CreateMap<Resource, ResourceDTO>().ReverseMap();
         }
     }
 }

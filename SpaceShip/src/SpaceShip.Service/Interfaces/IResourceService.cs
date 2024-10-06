@@ -3,28 +3,18 @@
 namespace SpaceShip.Service.Interfaces
 {
     /// <summary>
-    /// Interface for working with Resource.
+    /// Resources service interface.
     /// </summary>
     public interface IResourceService
     {
         /// <summary>
-        /// Create a Resource.
+        /// Decrease resource amount.
         /// </summary>
-        ResourceDTO CreateResource();
+        ResourceDTO DecreaseResourceAmount(Guid resourceId);
 
         /// <summary>
-        /// Retrieve the Resource by <paramref name="resourceId"/>.
+        /// Set resource state to Dead.
         /// </summary>
-        ResourceDTO GetResource(Guid resourceId);
-
-        /// <summary>
-        /// Update the Resource with <paramref name="resourceId"/>.
-        /// </summary>
-        ResourceDTO UpdateResource(Guid resourceId, ResourceDTO resourceDTO);
-
-        /// <summary>
-        /// Delete the Resource with <paramref name="resourceId"/>.
-        /// </summary>
-        bool DeleteResource(Guid resourceId);
+        ResourceDTO SetResourceStateToDead(Guid resourceId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Text.Json.Serialization;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using GameController.API.Mappers;
 using GameController.API.ServicesExtensions;
@@ -96,7 +97,9 @@ namespace GameController
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(ShipMapper)));
 
-            services.AddControllers();
+            services
+                .AddControllers()
+                .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
             services.AddHealthChecks();
 

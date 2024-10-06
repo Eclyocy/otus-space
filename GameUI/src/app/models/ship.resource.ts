@@ -1,4 +1,5 @@
 export interface ShipResource {
   name: string;
-  state: number;
+  state: string;
+  amount: number;
 }

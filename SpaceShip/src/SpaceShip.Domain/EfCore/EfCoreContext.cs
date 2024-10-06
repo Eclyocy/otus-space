@@ -41,11 +41,6 @@ namespace SpaceShip.Domain.EfCore
         public DbSet<Resource> Resources { get; set; }
 
         /// <summary>
-        /// Resource types.
-        /// </summary>
-        public DbSet<ResourceType> ResourcesType { get; set; }
-
-        /// <summary>
         /// Space ships.
         /// </summary>
         public DbSet<Ship> Spaceships { get; set; }

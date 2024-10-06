@@ -28,12 +28,7 @@ public class ResourceDTO
     public Guid SpaceshipId { get; set; }
 
     /// <summary>
-    /// Id типа ресурса
-    /// </summary>
-    public Guid? ResourceTypeId { get; set; }
-
-    /// <summary>
-    /// Состояние ресурса (спит, норма, проблема)
+    /// Состояние ресурса
     /// </summary>
     public required ResourceStateDTO State { get; set; }
 
@@ -45,5 +40,5 @@ public class ResourceDTO
     /// <summary>
     /// Сущность типа ресурсов
     /// </summary>
-    public ResourceType ResourceType { get; set; }
+    public ResourceTypeDTO ResourceType { get; set; }
 }

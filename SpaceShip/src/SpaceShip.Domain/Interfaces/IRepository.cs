@@ -28,12 +28,17 @@
         /// Update entity.
         /// </summary>
         /// <remarks>Updates <paramref name="entity"/> in-place.</remarks>
-        void Update(T entity);
+        void Update(T entity, bool saveChanges = true);
 
         /// <summary>
         /// Delete entity by <paramref name="id"/>.
         /// </summary>
         /// <returns>The indication of operation success.</returns>
         bool Delete(Guid id);
+
+        /// <summary>
+        /// Save changes.
+        /// </summary>
+        void SaveChanges();
     }
 }

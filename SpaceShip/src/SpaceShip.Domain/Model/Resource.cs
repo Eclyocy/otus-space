@@ -13,42 +13,46 @@ namespace SpaceShip.Domain.Model
         /// SpaceshipId.
         /// </summary>
         [Column("SpaceshipId")]
-        public Guid? SpaceshipId { get; set; }
+        public Guid SpaceshipId { get; set; }
 
         /// <summary>
-        /// ResourceTypeId.
+        /// Resource type.
         /// </summary>
-        [Column("ResourceTypeId")]
-        public Guid? ResourceTypeId { get; set; }
+        [Column("Type")]
+        public ResourceType ResourceType { get; set; }
 
         /// <summary>
         /// Статус ресурса.
         /// </summary>
         [Column("State")]
-        public ResourceState? State { get; set; }
-
-        /// <summary>
-        /// Название ресурса.
-        /// </summary>
-        [Column("Name")]
-        public string? Name { get; set; }
+        public ResourceState State { get; set; }
 
         /// <summary>
         /// Количество ресурса.
         /// </summary>
         [Column("Amount")]
-        public int? Amount { get; set; }
+        public int Amount { get; set; }
 
         /// <summary>
         /// Виртуальное свойство корабля.
         /// </summary>
         [ForeignKey("SpaceshipId")]
-        public virtual Ship? Spaceship { get; set; }
+        public virtual Ship Spaceship { get; set; }
 
         /// <summary>
-        /// Виртуцальное ствойство типа ресурса.
+        /// Тип ресурса, требуемый для поддержания жизнедеятельности ресурса.
         /// </summary>
-        [ForeignKey("ResourceTypeId")]
-        public virtual ResourceType? ResourceType { get; set; }
+        public ResourceType? RequiredResourceType
+        {
+            get
+            {
+                return ResourceType switch
+                {
+                    ResourceType.Engine => ResourceType.Fuel,
+                    ResourceType.Fuel => null,
+                    _ => null
+                };
+            }
+        }
     }
 }

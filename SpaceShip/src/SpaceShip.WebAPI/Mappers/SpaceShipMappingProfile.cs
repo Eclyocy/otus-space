@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using SpaceShip.Service.Contracts;
 using SpaceShip.WebAPI.Models;
 
@@ -14,9 +14,11 @@ public class SpaceShipMappingProfile : Profile
     /// </summary>
     public SpaceShipMappingProfile()
     {
-        CreateMap<ResourceStateDTO, ResourceStateResponse>().ReverseMap();
-        CreateMap<ResourceDTO, ResourceResponse>().ReverseMap();
-        CreateMap<SpaceShipDTO, SpaceShipMetricResponse>().ReverseMap();
+        CreateMap<ResourceDTO, ResourceResponse>()
+            .ForMember(x => x.Name, opt => opt.MapFrom(x => x.ResourceType.ToString()));
+        CreateMap<SpaceShipDTO, SpaceShipMetricResponse>();
+        CreateMap<ResourceStateDTO, ResourceStateResponse>();
+        CreateMap<ResourceTypeDTO, ResourceTypeResponse>();
 
         CreateMap<SpaceShipDTO, SpaceShipCreateResponse>()
             .ForMember(dest => dest.Id, op => op.MapFrom(src => src.Id));

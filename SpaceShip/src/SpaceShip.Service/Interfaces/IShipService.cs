@@ -23,6 +23,11 @@ public interface IShipService
     SpaceShipDTO UpdateShip(Guid spaceshipId, SpaceShipDTO spaceShipDTO);
 
     /// <summary>
+    /// Spend resources for life support.
+    /// </summary>
+    SpaceShipDTO RunExpenses(Guid spaceshipId);
+
+    /// <summary>
     /// Delete the SpaceShip with <paramref name="spaceshipId"/>.
     /// </summary>
     bool DeleteShip(Guid spaceshipId);

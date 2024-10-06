@@ -16,6 +16,11 @@ public class SignalRResource
     public required string Name { get; set; }
 
     /// <summary>
+    /// Resource amount.
+    /// </summary>
+    public int Amount { get; set; }
+
+    /// <summary>
     /// Состояние ресурса (спит, норма, проблема).
     /// </summary>
     public required SignalRResourceState State { get; set; }

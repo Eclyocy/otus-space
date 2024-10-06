@@ -7,7 +7,12 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7141;http://localhost:5216",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "POSTGRES_HOST": "localhost",
+        "POSTGRES_PORT": "5050",
+        "POSTGRES_DATABASE": "spaceship_db",
+        "POSTGRES_USER": "postgres",
+        "POSTGRES_PASSWORD": "pg_pass"
       }
     }
   }

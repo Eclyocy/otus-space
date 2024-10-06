@@ -65,10 +65,14 @@ namespace SpaceShip.Domain.Implementation
         }
 
         /// <inheritdoc/>
-        public void Update(T entity)
+        public void Update(T entity, bool saveChanges = true)
         {
             Context.Entry(entity).State = EntityState.Modified;
-            Context.SaveChanges();
+
+            if (saveChanges)
+            {
+                Context.SaveChanges();
+            }
         }
 
         /// <inheritdoc/>
@@ -83,6 +87,12 @@ namespace SpaceShip.Domain.Implementation
             EntitySet.Remove(obj);
             Context.SaveChanges();
             return true;
+        }
+
+        /// <inheritdoc/>
+        public void SaveChanges()
+        {
+            Context.SaveChanges();
         }
 
         #endregion

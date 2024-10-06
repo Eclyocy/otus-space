@@ -16,6 +16,11 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Resource amount.
+        /// </summary>
+        public int Amount { get; set; }
+
+        /// <summary>
         /// Resource state.
         /// </summary>
         public ShipResourceStateDto State { get; set; }

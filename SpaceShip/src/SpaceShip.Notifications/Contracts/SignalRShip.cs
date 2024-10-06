@@ -18,5 +18,5 @@ public class SignalRShip
     /// <summary>
     /// Коллекция ресурсов корабля
     /// </summary>
-    public List<SignalRResource>? Resources { get; set; }
+    public List<SignalRResource> Resources { get; set; }
 }

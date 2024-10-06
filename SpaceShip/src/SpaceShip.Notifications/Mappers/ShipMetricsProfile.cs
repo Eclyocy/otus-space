@@ -15,7 +15,9 @@ public class ShipMetricsProfile : Profile
     public ShipMetricsProfile()
     {
         CreateMap<ResourceStateDTO, SignalRResourceState>().ReverseMap();
-        CreateMap<ResourceDTO, SignalRResource>().ReverseMap();
+        CreateMap<ResourceDTO, SignalRResource>()
+            .ForMember(x => x.Name, opt => opt.MapFrom(x => x.ResourceType.ToString()))
+            .ReverseMap();
         CreateMap<SpaceShipDTO, SignalRShip>()
             .ForMember(x => x.Day, opt => opt.MapFrom(x => x.Step))
             .ReverseMap()
