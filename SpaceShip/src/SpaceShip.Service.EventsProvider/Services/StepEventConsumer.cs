@@ -16,6 +16,9 @@ public class StepEventConsumer : EventConsumer
     private readonly IServiceScopeFactory _scopeServiceFactory;
     private readonly INotificationsProvider _notificationsProvider;
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     public StepEventConsumer(
         ILogger<TroubleEventConsumer> logger,
         IConfiguration configuration,

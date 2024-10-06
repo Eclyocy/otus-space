@@ -48,7 +48,7 @@ public class SpaceShipService : IShipService
     /// Создать новый корабль с ресурсами.
     /// </summary>
     /// <returns>ID корабля</returns>
-    public SpaceShipDTO CreateShip()
+    public ShipDTO CreateShip()
     {
         _logger.LogInformation("Create space ship");
 
@@ -94,7 +94,7 @@ public class SpaceShipService : IShipService
 
         _shipRepository.SaveChanges();
 
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _mapper.Map<ShipDTO>(ship);
     }
 
     /// <summary>
@@ -102,13 +102,13 @@ public class SpaceShipService : IShipService
     /// </summary>
     /// <param name="shipId">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO GetShip(Guid shipId)
+    public ShipDTO GetShip(Guid shipId)
     {
         _logger.LogInformation("Get space ship by id {id}", shipId);
 
         Ship ship = GetRepositoryShip(shipId);
 
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _mapper.Map<ShipDTO>(ship);
     }
 
     /// <summary>
@@ -116,20 +116,20 @@ public class SpaceShipService : IShipService
     /// </summary>
     /// <param name="spaceshipId">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO? GetShips()
+    public ShipDTO? GetShips()
     {
         _logger.LogInformation("Get all space ships");
 
         List<Ship> ship = _shipRepository.GetAll();
 
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _mapper.Map<ShipDTO>(ship);
     }
 
     /// <summary>
     /// Изменение метрик существующего корабля.
     /// </summary>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO UpdateShip(Guid shipId, SpaceShipDTO spaceShipDTO)
+    public ShipDTO UpdateShip(Guid shipId, ShipDTO spaceShipDTO)
     {
         _logger.LogInformation(
             "Update space ship with id {id}: {request}",
@@ -138,7 +138,7 @@ public class SpaceShipService : IShipService
 
         Ship ship = UpdateRepositoryShip(shipId, spaceShipDTO);
 
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _mapper.Map<ShipDTO>(ship);
     }
 
     /// <summary>
@@ -186,7 +186,7 @@ public class SpaceShipService : IShipService
     /// </exception>
     private Ship UpdateRepositoryShip(
         Guid shipId,
-        SpaceShipDTO shipRequest)
+        ShipDTO shipRequest)
     {
         Ship currentShip = GetRepositoryShip(shipId);
 

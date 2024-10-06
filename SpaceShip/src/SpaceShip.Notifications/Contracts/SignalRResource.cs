@@ -1,4 +1,6 @@
-﻿namespace SpaceShip.Notifications.Models;
+﻿using SpaceShip.Domain.Enums;
+
+namespace SpaceShip.Notifications.Models;
 
 /// <summary>
 /// Модель ресурса корабля.
@@ -13,10 +15,10 @@ public class SignalRResource
     /// <summary>
     /// Наименование ресурса.
     /// </summary>
-    public required string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Состояние ресурса (спит, норма, проблема).
     /// </summary>
-    public required SignalRResourceState State { get; set; }
+    public ResourceState State { get; set; }
 }

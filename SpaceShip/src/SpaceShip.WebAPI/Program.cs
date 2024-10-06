@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using SpaceShip.Domain.Mappers;
 using SpaceShip.Domain.ServiceCollectionExtensions;
 using SpaceShip.Notifications;
@@ -47,16 +47,6 @@ builder.Services.AddSwaggerGen(static options =>
     options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services
-    .AddControllers()
-    .AddNewtonsoftJson(static options =>
-    {
-        options.SerializerSettings.Converters.Add(new StringEnumConverter
-        {
-            NamingStrategy = new CamelCaseNamingStrategy(),
-        });
-    });
-
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
@@ -70,12 +60,21 @@ builder.Services.AddSingleton<IMapper>(
             static cfg =>
             {
                 cfg.AddProfile<SpaceShipMappingProfile>();
-                cfg.AddProfile<SpaceShipModelMappingProfile>();
-                cfg.AddProfile<ResourceModelMappingProfile>();
-                cfg.AddProfile<ResourceStateModelMappingProfile>();
+                cfg.AddProfile<ShipMappingProfile>();
+                cfg.AddProfile<ResourceMappingProfile>();
             })));
 
-builder.Services.AddControllers();
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

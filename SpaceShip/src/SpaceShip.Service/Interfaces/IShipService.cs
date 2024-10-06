@@ -10,17 +10,17 @@ public interface IShipService
     /// <summary>
     /// Create a SpaceShip.
     /// </summary>
-    public SpaceShipDTO CreateShip();
+    ShipDTO CreateShip();
 
     /// <summary>
     /// Retrieve the SpaceShip by <paramref name="spaceshipId"/>.
     /// </summary>
-    public SpaceShipDTO GetShip(Guid spaceshipId);
+    ShipDTO GetShip(Guid spaceshipId);
 
     /// <summary>
     /// Update the SpaceShip with <paramref name="spaceshipId"/>.
     /// </summary>
-    SpaceShipDTO UpdateShip(Guid spaceshipId, SpaceShipDTO spaceShipDTO);
+    ShipDTO UpdateShip(Guid spaceshipId, ShipDTO spaceShipDTO);
 
     /// <summary>
     /// Delete the SpaceShip with <paramref name="spaceshipId"/>.

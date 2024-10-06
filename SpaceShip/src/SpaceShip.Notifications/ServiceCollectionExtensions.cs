@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Text.Json.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SpaceShip.Notifications
 {
@@ -14,7 +15,11 @@ namespace SpaceShip.Notifications
         /// </summary>
         public static IServiceCollection AddNotifications(this IServiceCollection services)
         {
-            services.AddSignalR();
+            services.AddSignalR()
+                .AddJsonProtocol(options =>
+                {
+                    options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             // register provider class in application
             services.AddTransient<INotificationsProvider, NotificationsProvider>();

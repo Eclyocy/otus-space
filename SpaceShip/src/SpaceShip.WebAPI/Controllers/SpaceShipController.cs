@@ -51,7 +51,7 @@ public class SpaceShipController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IResult Get(Guid id)
     {
-        SpaceShipDTO spaceShipDTO = _spaceShipService.GetShip(id);
+        ShipDTO spaceShipDTO = _spaceShipService.GetShip(id);
         SpaceShipMetricResponse response = _mapper.Map<SpaceShipMetricResponse>(spaceShipDTO);
         return Results.Ok(response);
     }
@@ -65,7 +65,7 @@ public class SpaceShipController : ControllerBase
     [ProducesResponseType<SpaceShipCreateResponse>(StatusCodes.Status201Created)]
     public IResult Create()
     {
-        SpaceShipDTO spaceShipDTO = _spaceShipService.CreateShip();
+        ShipDTO spaceShipDTO = _spaceShipService.CreateShip();
         SpaceShipCreateResponse response = _mapper.Map<SpaceShipCreateResponse>(spaceShipDTO);
         return Results.Created("api/v1/spaceship", response);
     }

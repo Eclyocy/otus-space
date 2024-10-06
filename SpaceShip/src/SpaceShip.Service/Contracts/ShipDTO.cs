@@ -3,32 +3,32 @@
 namespace SpaceShip.Service.Contracts;
 
 /// <summary>
-/// Состояние корабля (метрики)
+/// Состояние корабля (метрики).
 /// </summary>
-public class SpaceShipDTO
+public class ShipDTO
 {
     /// <summary>
-    /// Идентификатор корабля
+    /// Идентификатор корабля.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
     /// Имя корабля.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
-    /// Номер шага игры
+    /// Номер шага игры.
     /// </summary>
     public short Step { get; set; }
 
     /// <summary>
-    /// Состояние корабля
+    /// Состояние корабля.
     /// </summary>
     public ShipState State { get; set; }
 
     /// <summary>
-    /// Коллекция ресурсов корабля
+    /// Коллекция ресурсов корабля.
     /// </summary>
     public List<ResourceDTO> Resources { get; set; }
 }
