@@ -58,7 +58,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
-builder.Services.AddTransient<IProblemService, ProblemService>();
 builder.Services.AddTransient<IResourceService, ResourceService>();
 builder.Services.AddTransient<IResourceTypeService, ResourceTypeService>();
 builder.Services.AddTransient<IShipService, SpaceShipService>();
@@ -72,7 +71,6 @@ builder.Services.AddSingleton<IMapper>(
             {
                 cfg.AddProfile<SpaceShipMappingProfile>();
                 cfg.AddProfile<SpaceShipModelMappingProfile>();
-                cfg.AddProfile<ProblemModelMappingProfile>();
                 cfg.AddProfile<ResourceModelMappingProfile>();
                 cfg.AddProfile<ResourceStateModelMappingProfile>();
                 cfg.AddProfile<ResourceTypeModelMappingProfile>();
