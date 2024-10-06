@@ -59,7 +59,6 @@ builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
 builder.Services.AddTransient<IResourceService, ResourceService>();
-builder.Services.AddTransient<IResourceTypeService, ResourceTypeService>();
 builder.Services.AddTransient<IShipService, SpaceShipService>();
 builder.Services.AddScoped<IGameStepService, GameStepService>();
 
@@ -73,7 +72,6 @@ builder.Services.AddSingleton<IMapper>(
                 cfg.AddProfile<SpaceShipModelMappingProfile>();
                 cfg.AddProfile<ResourceModelMappingProfile>();
                 cfg.AddProfile<ResourceStateModelMappingProfile>();
-                cfg.AddProfile<ResourceTypeModelMappingProfile>();
             })));
 
 builder.Services.AddControllers();

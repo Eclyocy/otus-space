@@ -20,7 +20,6 @@ namespace SpaceShip.Domain.EfCore
             services.AddDbContext<EfCoreContext>();
 
             services.AddTransient<IResourceRepository, ResourceRepository>();
-            services.AddTransient<IResourceTypeRepository, ResourceTypeRepository>();
             services.AddTransient<ISpaceshipRepository, SpaceshipRepository>();
 
             return services;

@@ -1,17 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SpaceShip.Domain.Model
+﻿namespace SpaceShip.Domain.Model
 {
     /// <summary>
     /// Типы ресурсов.
     /// </summary>
-    [Table("ResourceType")]
-    public class ResourceType : BaseEntity
+    public enum ResourceType : byte
     {
-        /// <summary>
-        /// Имя типа ресурса.
-        /// </summary>
-        [Column("Name")]
-        public string? Name { get; set; }
+        Hull = 0,
+        MetalParts = 1,
+        Engine = 2,
+        Fuel = 3
     }
 }

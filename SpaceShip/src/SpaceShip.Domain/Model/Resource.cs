@@ -16,10 +16,10 @@ namespace SpaceShip.Domain.Model
         public Guid? SpaceshipId { get; set; }
 
         /// <summary>
-        /// ResourceTypeId.
+        /// ResourceType.
         /// </summary>
-        [Column("ResourceTypeId")]
-        public Guid? ResourceTypeId { get; set; }
+        [Column("ResourceType")]
+        public ResourceType ResourceType { get; set; }
 
         /// <summary>
         /// Статус ресурса.
@@ -44,11 +44,5 @@ namespace SpaceShip.Domain.Model
         /// </summary>
         [ForeignKey("SpaceshipId")]
         public virtual Ship? Spaceship { get; set; }
-
-        /// <summary>
-        /// Виртуцальное ствойство типа ресурса.
-        /// </summary>
-        [ForeignKey("ResourceTypeId")]
-        public virtual ResourceType? ResourceType { get; set; }
     }
 }
