@@ -1,4 +1,5 @@
-﻿using SpaceShip.Domain.EfCore;
+﻿using Microsoft.EntityFrameworkCore;
+using SpaceShip.Domain.EfCore;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Model;
 
@@ -17,6 +18,18 @@ namespace SpaceShip.Domain.Implementation
         public SpaceshipRepository(EfCoreContext context)
             : base(context)
         {
+        }
+
+        #endregion
+
+        #region public methods
+
+        /// <inheritdoc/>
+        public override Ship? Get(Guid id)
+        {
+            return Context.Spaceships
+                .Include(x => x.Resources)
+                .FirstOrDefault(x => x.Id == id);
         }
 
         #endregion

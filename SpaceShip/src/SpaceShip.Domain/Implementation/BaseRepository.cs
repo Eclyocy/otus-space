@@ -42,12 +42,29 @@ namespace SpaceShip.Domain.Implementation
         #region public methods
 
         /// <inheritdoc/>
-        public virtual T Create()
+        public virtual T Create(bool saveChanges = false)
         {
             var entity = new T();
 
             var entityEntry = EntitySet.Add(entity);
-            Context.SaveChanges();
+
+            if (saveChanges)
+            {
+                Context.SaveChanges();
+            }
+
+            return entityEntry.Entity;
+        }
+
+        /// <inheritdoc/>
+        public virtual T Create(T entity, bool saveChanges = false)
+        {
+            var entityEntry = EntitySet.Add(entity);
+
+            if (saveChanges)
+            {
+                Context.SaveChanges();
+            }
 
             return entityEntry.Entity;
         }
@@ -65,14 +82,18 @@ namespace SpaceShip.Domain.Implementation
         }
 
         /// <inheritdoc/>
-        public void Update(T entity)
+        public void Update(T entity, bool saveChanges = false)
         {
             Context.Entry(entity).State = EntityState.Modified;
-            Context.SaveChanges();
+
+            if (saveChanges)
+            {
+                Context.SaveChanges();
+            }
         }
 
         /// <inheritdoc/>
-        public bool Delete(Guid id)
+        public bool Delete(Guid id, bool saveChanges = false)
         {
             var obj = EntitySet.Find(id);
             if (obj == null)
@@ -81,8 +102,19 @@ namespace SpaceShip.Domain.Implementation
             }
 
             EntitySet.Remove(obj);
-            Context.SaveChanges();
+
+            if (saveChanges)
+            {
+                Context.SaveChanges();
+            }
+
             return true;
+        }
+
+        /// <inheritdoc/>
+        public void SaveChanges()
+        {
+            Context.SaveChanges();
         }
 
         #endregion

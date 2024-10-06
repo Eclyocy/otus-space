@@ -5,7 +5,7 @@
     /// </summary>
     public enum SpaceshipState : byte
     {
-        Start = 0,
+        OK = 0,
         Sleep = 1,
         Finish = 2
     }

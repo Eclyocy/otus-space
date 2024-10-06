@@ -5,8 +5,8 @@
     /// </summary>
     public enum ResourceState : byte
     {
-        Start = 0,
+        OK = 0,
         Sleep = 1,
-        Finish = 2
+        Dead = 2
     }
 }

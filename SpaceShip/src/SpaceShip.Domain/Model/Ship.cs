@@ -9,43 +9,6 @@ namespace SpaceShip.Domain.Model
     [Table("Ship")]
     public class Ship : BaseEntity
     {
-        #region constructor
-
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public Ship()
-        {
-            Id = Guid.NewGuid();
-            Step = 0;
-            State = SpaceshipState.Start;
-            Resources = new List<Resource>()
-            {
-                new Resource()
-                {
-                    Name = "Armor",
-                    Amount = 10,
-                    State = ResourceState.Start
-                },
-                new Resource()
-                {
-                    Name = "Fuel",
-                    Amount = 4,
-                    State = ResourceState.Start
-                },
-                new Resource()
-                {
-                    Name = "Water",
-                    Amount = 6,
-                    State = ResourceState.Start
-                }
-            };
-        }
-
-        #endregion
-
-        #region public properties
-
         /// <summary>
         /// Имя корабля.
         /// </summary>
@@ -67,8 +30,6 @@ namespace SpaceShip.Domain.Model
         /// <summary>
         /// Коллекция ресурсов.
         /// </summary>
-        public virtual List<Resource>? Resources { get; set; }
-
-        #endregion
+        public virtual ICollection<Resource> Resources { get; set; }
     }
 }

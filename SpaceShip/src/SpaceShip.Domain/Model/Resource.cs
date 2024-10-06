@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using SpaceShip.Domain.Model.State;
 
 namespace SpaceShip.Domain.Model
@@ -13,19 +14,22 @@ namespace SpaceShip.Domain.Model
         /// SpaceshipId.
         /// </summary>
         [Column("SpaceshipId")]
-        public Guid? SpaceshipId { get; set; }
+        [Required]
+        public Guid SpaceshipId { get; set; }
 
         /// <summary>
         /// ResourceType.
         /// </summary>
         [Column("ResourceType")]
+        [Required]
         public ResourceType ResourceType { get; set; }
 
         /// <summary>
         /// Статус ресурса.
         /// </summary>
         [Column("State")]
-        public ResourceState? State { get; set; }
+        [Required]
+        public ResourceState State { get; set; }
 
         /// <summary>
         /// Название ресурса.
@@ -37,12 +41,13 @@ namespace SpaceShip.Domain.Model
         /// Количество ресурса.
         /// </summary>
         [Column("Amount")]
-        public int? Amount { get; set; }
+        [Required]
+        public int Amount { get; set; }
 
         /// <summary>
         /// Виртуальное свойство корабля.
         /// </summary>
         [ForeignKey("SpaceshipId")]
-        public virtual Ship? Spaceship { get; set; }
+        public virtual Ship Spaceship { get; set; }
     }
 }

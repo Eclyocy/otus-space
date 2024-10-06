@@ -6,7 +6,7 @@
     public enum ResourceType : byte
     {
         Hull = 0,
-        MetalParts = 1,
+        ScrapMetal = 1,
         Engine = 2,
         Fuel = 3
     }

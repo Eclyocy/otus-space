@@ -10,7 +10,13 @@
         /// Create entity.
         /// </summary>
         /// <returns>Created entity.</returns>
-        T Create();
+        T Create(bool saveChanges = false);
+
+        /// <summary>
+        /// Create entity.
+        /// </summary>
+        /// <returns>Created entity.</returns>
+        T Create(T entity, bool saveChanges = false);
 
         /// <summary>
         /// Get all entities.
@@ -28,12 +34,17 @@
         /// Update entity.
         /// </summary>
         /// <remarks>Updates <paramref name="entity"/> in-place.</remarks>
-        void Update(T entity);
+        void Update(T entity, bool saveChanges = false);
 
         /// <summary>
         /// Delete entity by <paramref name="id"/>.
         /// </summary>
         /// <returns>The indication of operation success.</returns>
-        bool Delete(Guid id);
+        bool Delete(Guid id, bool saveChanges = false);
+
+        /// <summary>
+        /// Save all changes.
+        /// </summary>
+        void SaveChanges();
     }
 }
