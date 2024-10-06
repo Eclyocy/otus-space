@@ -31,19 +31,9 @@ namespace SpaceShip.Domain.EfCore
         #region public properties
 
         /// <summary>
-        /// Problems.
-        /// </summary>
-        public DbSet<Problem> Problems { get; set; }
-
-        /// <summary>
         /// Resources.
         /// </summary>
         public DbSet<Resource> Resources { get; set; }
-
-        /// <summary>
-        /// Resource types.
-        /// </summary>
-        public DbSet<ResourceType> ResourcesType { get; set; }
 
         /// <summary>
         /// Space ships.

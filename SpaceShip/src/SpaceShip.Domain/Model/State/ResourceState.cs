@@ -3,10 +3,10 @@
     /// <summary>
     /// State for Resource models.
     /// </summary>
-    public enum ResourceState
+    public enum ResourceState : byte
     {
-        Start,
-        Sleep,
-        Finish
+        OK = 0,
+        Sleep = 1,
+        Dead = 2
     }
 }

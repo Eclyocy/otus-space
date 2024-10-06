@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Domain.Model;
+using SpaceShip.Domain.Model.State;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
@@ -34,6 +35,7 @@ public class SpaceShipService : IShipService
         ILogger<SpaceShipService> logger)
     {
         _shipRepository = shipRepository;
+
         _mapper = mapper;
         _logger = logger;
     }
@@ -50,7 +52,49 @@ public class SpaceShipService : IShipService
     {
         _logger.LogInformation("Create space ship");
 
-        Ship ship = _shipRepository.Create();
+        Ship ship = _shipRepository.Create(
+            new Ship()
+            {
+                Step = 0,
+                State = SpaceshipState.OK
+            },
+            saveChanges: false);
+
+        ship.Resources = new List<Resource>()
+        {
+            new Resource()
+            {
+                Name = "Обшивка",
+                Amount = 1,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.Hull
+            },
+            new Resource()
+            {
+                Name = "Металлический лом",
+                Amount = 4,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.ScrapMetal
+            },
+            new Resource()
+            {
+                Name = "Двигатель",
+                Amount = 2,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.Engine
+            },
+            new Resource()
+            {
+                Name = "Топливо",
+                Amount = 22,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.Fuel
+            }
+        };
+
+        _shipRepository.SaveChanges();
+
+        ship = GetRepositoryShip(ship.Id);
 
         return _mapper.Map<SpaceShipDTO>(ship);
     }

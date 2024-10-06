@@ -3,10 +3,10 @@
     /// <summary>
     /// State for paceship models.
     /// </summary>
-    public enum SpaceshipState
+    public enum SpaceshipState : byte
     {
-        Start,
-        Sleep,
-        Finish
+        OK = 0,
+        Sleep = 1,
+        Finish = 2
     }
 }
