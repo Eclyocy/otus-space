@@ -1,7 +1,7 @@
-﻿using GameController.API.Middleware;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
+using SpaceShip.WebAPI.Middleware;
 
-namespace WebAPI.ApplicationBuilderExtensions;
+namespace SpaceShip.WebAPI.ApplicationBuilderExtensions;
 
 /// <summary>
 /// Extensions for application builder.

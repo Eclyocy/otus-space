@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using SpaceShip.Services.Exceptions;
 
-namespace GameController.API.Middleware
+namespace SpaceShip.WebAPI.Middleware
 {
     /// <summary>
     /// Middleware for converting unhandled exceptions into error response.

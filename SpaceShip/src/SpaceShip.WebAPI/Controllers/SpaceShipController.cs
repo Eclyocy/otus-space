@@ -18,7 +18,7 @@ public class SpaceShipController : ControllerBase
 {
     #region private fields
 
-    private readonly ISpaceShipService _shipService;
+    private readonly ISpaceShipService _spaceShipService;
     private readonly IMapper _mapper;
 
     #endregion
@@ -28,11 +28,11 @@ public class SpaceShipController : ControllerBase
     /// <summary>
     /// Конструктор, в качестве параметра передаем сервис для работы с сущностью корабля
     /// </summary>
-    /// <param name="service">Сервис работы с сущностью корабль</param>
+    /// <param name="spaceShipService">Сервис работы с сущностью корабль</param>
     /// <param name="mapper">Маппер ответа сервиса</param>
-    public SpaceShipController(ISpaceShipService service, IMapper mapper)
+    public SpaceShipController(ISpaceShipService spaceShipService, IMapper mapper)
     {
-        _shipService = service;
+        _spaceShipService = spaceShipService;
         _mapper = mapper;
     }
 
@@ -51,7 +51,7 @@ public class SpaceShipController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IResult Get(Guid id)
     {
-        SpaceShipDTO spaceShipDTO = _shipService.GetShip(id);
+        SpaceShipDTO spaceShipDTO = _spaceShipService.GetShip(id);
         SpaceShipMetricResponse response = _mapper.Map<SpaceShipMetricResponse>(spaceShipDTO);
         return Results.Ok(response);
     }
@@ -65,7 +65,7 @@ public class SpaceShipController : ControllerBase
     [ProducesResponseType<SpaceShipCreateResponse>(StatusCodes.Status201Created)]
     public IResult Create()
     {
-        SpaceShipDTO spaceShipDTO = _shipService.CreateShip();
+        SpaceShipDTO spaceShipDTO = _spaceShipService.CreateShip();
         SpaceShipCreateResponse response = _mapper.Map<SpaceShipCreateResponse>(spaceShipDTO);
         return Results.Created("api/v1/spaceship", response);
     }

@@ -15,8 +15,8 @@ using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
+using SpaceShip.WebAPI.ApplicationBuilderExtensions;
 using SpaceShip.WebAPI.Mappers;
-using WebAPI.ApplicationBuilderExtensions;
 
 #region application builder
 
