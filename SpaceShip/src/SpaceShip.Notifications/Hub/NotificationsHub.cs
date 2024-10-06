@@ -11,7 +11,7 @@ public class NotificationsHub : Hub
 {
     #region private fields
 
-    private readonly IShipService _shipService;
+    private readonly ISpaceShipService _shipService;
 
     private readonly ILogger<NotificationsHub> _logger;
 
@@ -25,7 +25,7 @@ public class NotificationsHub : Hub
     /// <param name="shipService">Service which providing spaceship base operations.</param>
     /// <param name="loggerFactory">Logger factory.</param>
     public NotificationsHub(
-        IShipService shipService,
+        ISpaceShipService shipService,
         ILoggerFactory loggerFactory)
         : base()
     {

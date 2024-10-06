@@ -5,7 +5,7 @@ namespace SpaceShip.Service.Interfaces;
 /// <summary>
 /// Interface for working with SpaceShip.
 /// </summary>
-public interface IShipService
+public interface ISpaceShipService
 {
     /// <summary>
     /// Create a SpaceShip.
@@ -15,7 +15,7 @@ public interface IShipService
     /// <summary>
     /// Retrieve the SpaceShip by <paramref name="spaceshipId"/>.
     /// </summary>
-    public SpaceShipDTO? GetShip(Guid spaceshipId);
+    public SpaceShipDTO GetShip(Guid spaceshipId);
 
     /// <summary>
     /// Update the SpaceShip with <paramref name="spaceshipId"/>.

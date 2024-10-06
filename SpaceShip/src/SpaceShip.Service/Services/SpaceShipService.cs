@@ -13,7 +13,7 @@ namespace SpaceShip.Service.Implementation;
 /// <summary>
 /// Сервис для работы с сущностью "Корабль".
 /// </summary>
-public class SpaceShipService : IShipService
+public class SpaceShipService : ISpaceShipService
 {
     #region private fields
 
@@ -104,7 +104,7 @@ public class SpaceShipService : IShipService
     /// </summary>
     /// <param name="shipId">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO? GetShip(Guid shipId)
+    public SpaceShipDTO GetShip(Guid shipId)
     {
         _logger.LogInformation("Get space ship by id {id}", shipId);
 
@@ -169,6 +169,8 @@ public class SpaceShipService : IShipService
 
         if (ship == null)
         {
+            _logger.LogInformation("Space ship with ID {shipId} not found.", shipId);
+
             throw new NotFoundException($"Ship with ID {shipId} not found.");
         }
 

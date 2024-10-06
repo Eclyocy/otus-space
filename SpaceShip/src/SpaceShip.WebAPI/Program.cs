@@ -16,6 +16,9 @@ using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
 using SpaceShip.WebAPI.Mappers;
+using WebAPI.ApplicationBuilderExtensions;
+
+#region application builder
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,34 +33,34 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 
-#pragma warning disable SA1118 // ParameterMustNotSpanMultipleLines
 builder.Services.AddSwaggerGen(static options =>
-    {
-        options.SwaggerDoc(
-            name: "v1",
-            info: new ()
-            {
-                Title = "Spaceship controller API",
-                Version = "v1",
-                Description = "Публичный API для работы c кораблем и его ресурсами",
-            });
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    });
-#pragma warning restore SA1118 // ParameterMustNotSpanMultipleLines
-
-builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 {
-    options.SerializerSettings.Converters.Add(new StringEnumConverter
-    {
-        NamingStrategy = new CamelCaseNamingStrategy(),
-    });
+    options.SwaggerDoc(
+        name: "v1",
+        info: new()
+        {
+            Title = "Spaceship controller API",
+            Version = "v1",
+            Description = "Публичный API для работы c кораблем и его ресурсами",
+        });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
+
+builder.Services
+    .AddControllers()
+    .AddNewtonsoftJson(static options =>
+    {
+        options.SerializerSettings.Converters.Add(new StringEnumConverter
+        {
+            NamingStrategy = new CamelCaseNamingStrategy(),
+        });
+    });
 
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
-builder.Services.AddTransient<IShipService, SpaceShipService>();
+builder.Services.AddTransient<ISpaceShipService, SpaceShipService>();
 builder.Services.AddScoped<IGameStepService, GameStepService>();
 
 // Automapper:
@@ -79,7 +82,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddNotifications();
 builder.Services.ConfigureDatabase();
 
+#endregion
+
+#region application
+
 var app = builder.Build();
+
+app.UseExceptionHandler(x => x.UseCustomErrorHandling());
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -106,3 +115,5 @@ app.MapHealthChecks("/health", new HealthCheckOptions
 });
 
 app.Run();
+
+#endregion

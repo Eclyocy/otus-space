@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.WebAPI.Models;
 
@@ -17,7 +18,7 @@ public class SpaceShipController : ControllerBase
 {
     #region private fields
 
-    private readonly IShipService _service;
+    private readonly ISpaceShipService _shipService;
     private readonly IMapper _mapper;
 
     #endregion
@@ -29,9 +30,9 @@ public class SpaceShipController : ControllerBase
     /// </summary>
     /// <param name="service">Сервис работы с сущностью корабль</param>
     /// <param name="mapper">Маппер ответа сервиса</param>
-    public SpaceShipController(IShipService service, IMapper mapper)
+    public SpaceShipController(ISpaceShipService service, IMapper mapper)
     {
-        _service = service;
+        _shipService = service;
         _mapper = mapper;
     }
 
@@ -50,14 +51,9 @@ public class SpaceShipController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IResult Get(Guid id)
     {
-        try
-        {
-            return Results.Ok(_mapper.Map<SpaceShipMetricResponse>(_service.GetShip(id)));
-        }
-        catch (KeyNotFoundException)
-        {
-            return Results.NotFound();
-        }
+        SpaceShipDTO spaceShipDTO = _shipService.GetShip(id);
+        SpaceShipMetricResponse response = _mapper.Map<SpaceShipMetricResponse>(spaceShipDTO);
+        return Results.Ok(response);
     }
 
     /// <summary>
@@ -69,7 +65,9 @@ public class SpaceShipController : ControllerBase
     [ProducesResponseType<SpaceShipCreateResponse>(StatusCodes.Status201Created)]
     public IResult Create()
     {
-        return Results.Created("api/v1/spaceship", _mapper.Map<SpaceShipCreateResponse>(_service.CreateShip()));
+        SpaceShipDTO spaceShipDTO = _shipService.CreateShip();
+        SpaceShipCreateResponse response = _mapper.Map<SpaceShipCreateResponse>(spaceShipDTO);
+        return Results.Created("api/v1/spaceship", response);
     }
 
     /// <summary>

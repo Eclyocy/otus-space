@@ -14,7 +14,7 @@ public class GameStepService : IGameStepService
 {
     #region private fields
 
-    private readonly IShipService _shipService;
+    private readonly ISpaceShipService _shipService;
 
     private readonly ILogger _logger;
     private readonly IMapper _mapper;
@@ -24,7 +24,7 @@ public class GameStepService : IGameStepService
     #region constructor
 
     public GameStepService(
-        IShipService shipService,
+        ISpaceShipService shipService,
         IMapper mapper,
         ILogger<GameStepService> logger)
     {
