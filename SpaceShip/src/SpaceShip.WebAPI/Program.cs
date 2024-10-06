@@ -8,13 +8,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using SpaceShip.Domain.Mappers;
 using SpaceShip.Domain.ServiceCollectionExtensions;
 using SpaceShip.Notifications;
-using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
+using SpaceShip.Service.Services;
 using SpaceShip.WebAPI.ApplicationBuilderExtensions;
 using SpaceShip.WebAPI.Mappers;
 
@@ -50,7 +49,7 @@ builder.Services.AddSwaggerGen(static options =>
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
-builder.Services.AddTransient<IShipService, SpaceShipService>();
+builder.Services.AddTransient<IShipService, ShipService>();
 builder.Services.AddScoped<IGameStepService, GameStepService>();
 
 // Automapper:

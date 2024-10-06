@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 
-namespace SpaceShip.Service.Implementation;
+namespace SpaceShip.Service.Services;
 
 /// <summary>
 /// Сервис для обработки события нового игрового дня (шага игры).

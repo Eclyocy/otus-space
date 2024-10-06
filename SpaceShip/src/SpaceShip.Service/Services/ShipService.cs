@@ -8,12 +8,12 @@ using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
 
-namespace SpaceShip.Service.Implementation;
+namespace SpaceShip.Service.Services;
 
 /// <summary>
 /// Сервис для работы с сущностью "Корабль".
 /// </summary>
-public class SpaceShipService : IShipService
+public class ShipService : IShipService
 {
     #region private fields
 
@@ -29,10 +29,10 @@ public class SpaceShipService : IShipService
     /// <summary>
     /// Конструктор.
     /// </summary>
-    public SpaceShipService(
+    public ShipService(
         IShipRepository shipRepository,
         IMapper mapper,
-        ILogger<SpaceShipService> logger)
+        ILogger<ShipService> logger)
     {
         _shipRepository = shipRepository;
 

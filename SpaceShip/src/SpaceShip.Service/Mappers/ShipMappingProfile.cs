@@ -2,7 +2,7 @@
 using SpaceShip.Domain.Entities;
 using SpaceShip.Service.Contracts;
 
-namespace SpaceShip.Domain.Mappers;
+namespace SpaceShip.Service.Mappers;
 
 /// <summary>
 /// Профиль автомаппера для сущности "Корабль".
