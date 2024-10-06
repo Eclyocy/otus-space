@@ -11,9 +11,19 @@
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Space ship name.
+        /// </summary>
+        public string? Name { get; set; }
+
+        /// <summary>
         /// Space ship current day.
         /// </summary>
         public int Day { get; set; }
+
+        /// <summary>
+        /// Space ship state.
+        /// </summary>
+        public string State { get; set; }
 
         /// <summary>
         /// Space ship resources.

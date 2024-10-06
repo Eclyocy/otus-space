@@ -13,11 +13,21 @@
         /// <summary>
         /// Resource name.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
+
+        /// <summary>
+        /// Resource amount.
+        /// </summary>
+        public int Amount { get; set; }
+
+        /// <summary>
+        /// Resource type.
+        /// </summary>
+        public string Type { get; set; }
 
         /// <summary>
         /// Resource state.
         /// </summary>
-        public ShipResourceStateDto State { get; set; }
+        public string State { get; set; }
     }
 }

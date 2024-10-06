@@ -1,6 +1,8 @@
-<h2>User {{userName}}'s Ship from Session {{sessionId}}</h2>
+<h2>Ship {{ship?.name ?? ship?.id}}</h2>
 
 <h3>Day: {{ship?.day}}</h3>
+
+<h3>State: {{ship?.state}}</h3>
 
 <h3>Resources</h3>
 
@@ -8,12 +10,14 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Amount</th>
       <th>State</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let shipResource of ship?.resources">
-      <td>{{shipResource.name}}</td>
+      <td>{{shipResource.name ?? shipResource.type}}</td>
+      <td>{{shipResource.amount}}</td>
       <td>{{shipResource.state}}</td>
     </tr>
   </tbody>

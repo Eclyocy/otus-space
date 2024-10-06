@@ -1,4 +1,6 @@
-﻿namespace SpaceShip.Notifications.Models;
+﻿using SpaceShip.Domain.Enums;
+
+namespace SpaceShip.Notifications.Models;
 
 /// <summary>
 /// Модель ответа о состоянии корабля
@@ -11,12 +13,22 @@ public class SignalRShip
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Space ship name.
+    /// </summary>
+    public string? Name { get; set; }
+
+    /// <summary>
     /// Номер хода
     /// </summary>
-    public int Day { get; set; }
+    public short Day { get; set; }
+
+    /// <summary>
+    /// Space ship state.
+    /// </summary>
+    public ShipState State { get; set; }
 
     /// <summary>
     /// Коллекция ресурсов корабля
     /// </summary>
-    public List<SignalRResource>? Resources { get; set; }
+    public List<SignalRResource> Resources { get; set; }
 }
