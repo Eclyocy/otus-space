@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using SpaceShip.Domain.Entities;
+using SpaceShip.Domain.Enums;
 using SpaceShip.Domain.Interfaces;
-using SpaceShip.Domain.Model;
-using SpaceShip.Domain.Model.State;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
@@ -53,10 +53,10 @@ public class SpaceShipService : ISpaceShipService
         _logger.LogInformation("Create space ship");
 
         Ship ship = _shipRepository.Create(
-            new Ship()
+            new()
             {
                 Step = 0,
-                State = SpaceshipState.OK
+                State = SpaceshipState.OK,
             },
             saveChanges: false);
 
@@ -93,8 +93,6 @@ public class SpaceShipService : ISpaceShipService
         };
 
         _shipRepository.SaveChanges();
-
-        ship = GetRepositoryShip(ship.Id);
 
         return _mapper.Map<SpaceShipDTO>(ship);
     }

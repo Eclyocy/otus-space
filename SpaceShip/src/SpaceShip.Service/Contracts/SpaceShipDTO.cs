@@ -1,4 +1,4 @@
-﻿using SpaceShip.Domain.Model.State;
+﻿using SpaceShip.Domain.Models;
 
 namespace SpaceShip.Service.Contracts;
 

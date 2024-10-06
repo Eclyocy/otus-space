@@ -1,4 +1,5 @@
 ﻿using SpaceShip.Domain.Model;
+using SpaceShip.Domain.Models;
 
 namespace SpaceShip.Service.Contracts;
 

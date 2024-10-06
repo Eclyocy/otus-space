@@ -1,11 +1,10 @@
-﻿using SpaceShip.Domain.Model;
+﻿using SpaceShip.Domain.Entities;
 
-namespace SpaceShip.Domain.Interfaces
+namespace SpaceShip.Domain.Interfaces;
+
+/// <summary>
+/// Интерфейс репозитория космических кораблей.
+/// </summary>
+public interface ISpaceshipRepository : IRepository<Ship>
 {
-    /// <summary>
-    /// Интерфейс репозитория космических кораблей.
-    /// </summary>
-    public interface ISpaceshipRepository : IRepository<Ship>
-    {
-    }
 }

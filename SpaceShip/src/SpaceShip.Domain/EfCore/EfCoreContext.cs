@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SpaceShip.Domain.Model;
+using SpaceShip.Domain.Entities;
 
 namespace SpaceShip.Domain.EfCore
 {
