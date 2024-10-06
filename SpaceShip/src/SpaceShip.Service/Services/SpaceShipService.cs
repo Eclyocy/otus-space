@@ -58,7 +58,7 @@ public class SpaceShipService : IShipService
                 Step = 0,
                 State = SpaceshipState.OK
             },
-            saveChanges: true);
+            saveChanges: false);
 
         ship.Resources = new List<Resource>()
         {
