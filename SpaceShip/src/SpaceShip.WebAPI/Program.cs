@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using SpaceShip.Domain.ServiceCollectionExtensions;
 using SpaceShip.Notifications;
 using SpaceShip.Service.Interfaces;
@@ -15,11 +17,23 @@ using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
 using SpaceShip.Service.Services;
 using SpaceShip.WebAPI.ApplicationBuilderExtensions;
+using SpaceShip.WebAPI.LogFormatters;
 using SpaceShip.WebAPI.Mappers;
 
 #region application builder
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add custom logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+builder.Logging.AddConsole(options =>
+{
+    options.FormatterName = nameof(CustomLogFormatter);
+});
+builder.Logging.AddDebug();
+
+builder.Services.AddSingleton<ConsoleFormatter, CustomLogFormatter>();
 
 builder.Services.AddCors(options =>
 {
