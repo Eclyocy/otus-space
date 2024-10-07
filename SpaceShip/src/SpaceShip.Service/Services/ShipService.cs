@@ -1,23 +1,23 @@
 ﻿using System.Text.Json;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using SpaceShip.Domain.Entities;
+using SpaceShip.Domain.Enums;
 using SpaceShip.Domain.Interfaces;
-using SpaceShip.Domain.Model;
-using SpaceShip.Domain.Model.State;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
 
-namespace SpaceShip.Service.Implementation;
+namespace SpaceShip.Service.Services;
 
 /// <summary>
 /// Сервис для работы с сущностью "Корабль".
 /// </summary>
-public class SpaceShipService : IShipService
+public class ShipService : IShipService
 {
     #region private fields
 
-    private readonly ISpaceshipRepository _shipRepository;
+    private readonly IShipRepository _shipRepository;
 
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
@@ -29,10 +29,10 @@ public class SpaceShipService : IShipService
     /// <summary>
     /// Конструктор.
     /// </summary>
-    public SpaceShipService(
-        ISpaceshipRepository shipRepository,
+    public ShipService(
+        IShipRepository shipRepository,
         IMapper mapper,
-        ILogger<SpaceShipService> logger)
+        ILogger<ShipService> logger)
     {
         _shipRepository = shipRepository;
 
@@ -48,15 +48,15 @@ public class SpaceShipService : IShipService
     /// Создать новый корабль с ресурсами.
     /// </summary>
     /// <returns>ID корабля</returns>
-    public SpaceShipDTO CreateShip()
+    public ShipDTO CreateShip()
     {
         _logger.LogInformation("Create space ship");
 
         Ship ship = _shipRepository.Create(
-            new Ship()
+            new()
             {
                 Step = 0,
-                State = SpaceshipState.OK
+                State = ShipState.OK,
             },
             saveChanges: false);
 
@@ -94,9 +94,7 @@ public class SpaceShipService : IShipService
 
         _shipRepository.SaveChanges();
 
-        ship = GetRepositoryShip(ship.Id);
-
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _mapper.Map<ShipDTO>(ship);
     }
 
     /// <summary>
@@ -104,13 +102,13 @@ public class SpaceShipService : IShipService
     /// </summary>
     /// <param name="shipId">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO? GetShip(Guid shipId)
+    public ShipDTO GetShip(Guid shipId)
     {
         _logger.LogInformation("Get space ship by id {id}", shipId);
 
         Ship ship = GetRepositoryShip(shipId);
 
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _mapper.Map<ShipDTO>(ship);
     }
 
     /// <summary>
@@ -118,20 +116,20 @@ public class SpaceShipService : IShipService
     /// </summary>
     /// <param name="spaceshipId">ID корабля</param>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO? GetShips()
+    public ShipDTO? GetShips()
     {
         _logger.LogInformation("Get all space ships");
 
         List<Ship> ship = _shipRepository.GetAll();
 
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _mapper.Map<ShipDTO>(ship);
     }
 
     /// <summary>
     /// Изменение метрик существующего корабля.
     /// </summary>
     /// <returns>Метрики корабля</returns>
-    public SpaceShipDTO UpdateShip(Guid shipId, SpaceShipDTO spaceShipDTO)
+    public ShipDTO UpdateShip(Guid shipId, ShipDTO spaceShipDTO)
     {
         _logger.LogInformation(
             "Update space ship with id {id}: {request}",
@@ -140,7 +138,7 @@ public class SpaceShipService : IShipService
 
         Ship ship = UpdateRepositoryShip(shipId, spaceShipDTO);
 
-        return _mapper.Map<SpaceShipDTO>(ship);
+        return _mapper.Map<ShipDTO>(ship);
     }
 
     /// <summary>
@@ -169,6 +167,8 @@ public class SpaceShipService : IShipService
 
         if (ship == null)
         {
+            _logger.LogInformation("Space ship with ID {shipId} not found.", shipId);
+
             throw new NotFoundException($"Ship with ID {shipId} not found.");
         }
 
@@ -186,7 +186,7 @@ public class SpaceShipService : IShipService
     /// </exception>
     private Ship UpdateRepositoryShip(
         Guid shipId,
-        SpaceShipDTO shipRequest)
+        ShipDTO shipRequest)
     {
         Ship currentShip = GetRepositoryShip(shipId);
 
@@ -209,7 +209,7 @@ public class SpaceShipService : IShipService
             throw new NotModifiedException();
         }
 
-        _shipRepository.Update(currentShip); // updates entity in-place
+        _shipRepository.Update(currentShip, saveChanges: true);
 
         return currentShip;
     }

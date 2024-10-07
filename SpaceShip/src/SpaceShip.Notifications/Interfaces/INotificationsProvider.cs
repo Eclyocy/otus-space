@@ -12,13 +12,13 @@ public interface INotificationsProvider
     /// </summary>
     /// <param name="shipId">Spaceship identifiers</param>
     /// <param name="shipDTO">DTO with spaceship metrics from service layer.</param>
-    public Task SendAsync(Guid shipId, SpaceShipDTO shipDTO);
+    public Task SendAsync(Guid shipId, ShipDTO shipDTO);
 
     /// <summary>
     /// Send metrics for all subscribers.
     /// </summary>
     /// <param name="shipDTO">DTO with spaceship metrics from service layer.</param>
-    public Task SendAllAsync(SpaceShipDTO shipDTO);
+    public Task SendAllAsync(ShipDTO shipDTO);
 
     /// <summary>
     /// Provide subscription for ships by clientId

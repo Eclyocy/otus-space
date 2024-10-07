@@ -1,22 +1,21 @@
 ﻿using System.Net;
 
-namespace SpaceShip.Services.Exceptions
+namespace SpaceShip.Services.Exceptions;
+
+/// <summary>
+/// Conflict (409) exception.
+/// </summary>
+public class ConflictException : BaseException
 {
+    #region constructor
+
     /// <summary>
-    /// Conflict (409) exception.
+    /// Constructor.
     /// </summary>
-    public class ConflictException : BaseException
+    public ConflictException(string message)
+        : base(HttpStatusCode.Conflict, message)
     {
-        #region constructor
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public ConflictException(string message)
-            : base(HttpStatusCode.Conflict, message)
-        {
-        }
-
-        #endregion
     }
+
+    #endregion
 }

@@ -16,6 +16,9 @@ public class StepEventConsumer : EventConsumer
     private readonly IServiceScopeFactory _scopeServiceFactory;
     private readonly INotificationsProvider _notificationsProvider;
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     public StepEventConsumer(
         ILogger<TroubleEventConsumer> logger,
         IConfiguration configuration,
@@ -44,7 +47,7 @@ public class StepEventConsumer : EventConsumer
             IGameStepService dayServiceScoped =
                 scope.ServiceProvider.GetRequiredService<IGameStepService>();
 
-            var ship = await dayServiceScoped.ProcessNewDayAsync(stepMessage.ShipId);
+            var ship = dayServiceScoped.ProcessNewDay(stepMessage.ShipId);
             await _notificationsProvider.SendAsync(stepMessage.ShipId, ship);
         }
     }

@@ -17,7 +17,6 @@ namespace GameController.API.Mappers
             // Service models -> Controller models
             CreateMap<ShipDto, ShipResponse>();
             CreateMap<ShipResourceDto, ShipResourceResponse>();
-            CreateMap<ShipResourceStateDto, ShipResourceStateResponse>();
         }
     }
 }

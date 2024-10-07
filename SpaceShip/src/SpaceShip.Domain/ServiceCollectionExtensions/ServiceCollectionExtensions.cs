@@ -2,7 +2,7 @@
 using SpaceShip.Domain.Implementation;
 using SpaceShip.Domain.Interfaces;
 
-namespace SpaceShip.Domain.EfCore
+namespace SpaceShip.Domain.ServiceCollectionExtensions
 {
     /// <summary>
     /// Extensions for <see cref="IServiceCollection"/> for database.
@@ -17,10 +17,10 @@ namespace SpaceShip.Domain.EfCore
         public static IServiceCollection ConfigureDatabase(
             this IServiceCollection services)
         {
-            services.AddDbContext<EfCoreContext>();
+            services.AddDbContext<DatabaseContext>();
 
             services.AddTransient<IResourceRepository, ResourceRepository>();
-            services.AddTransient<ISpaceshipRepository, SpaceshipRepository>();
+            services.AddTransient<IShipRepository, ShipRepository>();
 
             return services;
         }

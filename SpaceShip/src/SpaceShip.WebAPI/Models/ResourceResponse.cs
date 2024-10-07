@@ -1,4 +1,5 @@
 ﻿using System;
+using SpaceShip.Domain.Enums;
 
 namespace SpaceShip.WebAPI.Models;
 
@@ -8,17 +9,27 @@ namespace SpaceShip.WebAPI.Models;
 public class ResourceResponse
 {
     /// <summary>
-    /// Id ресурса.
+    /// ID ресурса.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
     /// Наименование ресурса.
     /// </summary>
-    public required string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
-    /// Состояние ресурса (спит, норма, проблема).
+    /// Resource amount.
     /// </summary>
-    public required ResourceStateResponse State { get; set; } = ResourceStateResponse.Sleep;
+    public int Amount { get; set; }
+
+    /// <summary>
+    /// Resource type.
+    /// </summary>
+    public ResourceType ResourceType { get; set; }
+
+    /// <summary>
+    /// Состояние ресурса.
+    /// </summary>
+    public ResourceState State { get; set; }
 }

@@ -3,8 +3,8 @@
 namespace SpaceShip.Domain.Interfaces;
 
 /// <summary>
-/// Resources repository.
+/// Space ship repository.
 /// </summary>
-public interface IResourceRepository : IBaseRepository<Resource>
+public interface IShipRepository : IBaseRepository<Ship>
 {
 }

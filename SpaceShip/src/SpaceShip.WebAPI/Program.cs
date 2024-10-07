@@ -1,23 +1,39 @@
 ﻿using System;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using SpaceShip.Domain.EfCore;
-using SpaceShip.Domain.Mappers;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using SpaceShip.Domain.ServiceCollectionExtensions;
 using SpaceShip.Notifications;
-using SpaceShip.Service.Implementation;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
+using SpaceShip.Service.Services;
+using SpaceShip.WebAPI.ApplicationBuilderExtensions;
+using SpaceShip.WebAPI.LogFormatters;
 using SpaceShip.WebAPI.Mappers;
 
+#region application builder
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add custom logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+builder.Logging.AddConsole(options =>
+{
+    options.FormatterName = nameof(CustomLogFormatter);
+});
+builder.Logging.AddDebug();
+
+builder.Services.AddSingleton<ConsoleFormatter, CustomLogFormatter>();
 
 builder.Services.AddCors(options =>
 {
@@ -30,34 +46,24 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 
-#pragma warning disable SA1118 // ParameterMustNotSpanMultipleLines
 builder.Services.AddSwaggerGen(static options =>
-    {
-        options.SwaggerDoc(
-            name: "v1",
-            info: new ()
-            {
-                Title = "Spaceship controller API",
-                Version = "v1",
-                Description = "Публичный API для работы c кораблем и его ресурсами",
-            });
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    });
-#pragma warning restore SA1118 // ParameterMustNotSpanMultipleLines
-
-builder.Services.AddControllers().AddNewtonsoftJson(static options =>
 {
-    options.SerializerSettings.Converters.Add(new StringEnumConverter
-    {
-        NamingStrategy = new CamelCaseNamingStrategy(),
-    });
+    options.SwaggerDoc(
+        name: "v1",
+        info: new()
+        {
+            Title = "Spaceship controller API",
+            Version = "v1",
+            Description = "Публичный API для работы c кораблем и его ресурсами",
+        });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
-builder.Services.AddTransient<IShipService, SpaceShipService>();
+builder.Services.AddTransient<IShipService, ShipService>();
 builder.Services.AddScoped<IGameStepService, GameStepService>();
 
 // Automapper:
@@ -67,19 +73,34 @@ builder.Services.AddSingleton<IMapper>(
             static cfg =>
             {
                 cfg.AddProfile<SpaceShipMappingProfile>();
-                cfg.AddProfile<SpaceShipModelMappingProfile>();
-                cfg.AddProfile<ResourceModelMappingProfile>();
-                cfg.AddProfile<ResourceStateModelMappingProfile>();
+                cfg.AddProfile<ShipMappingProfile>();
+                cfg.AddProfile<ResourceMappingProfile>();
             })));
 
-builder.Services.AddControllers();
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 builder.Services.AddHealthChecks();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddNotifications();
 builder.Services.ConfigureDatabase();
 
+#endregion
+
+#region application
+
 var app = builder.Build();
+
+app.UseExceptionHandler(x => x.UseCustomErrorHandling());
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -106,3 +127,5 @@ app.MapHealthChecks("/health", new HealthCheckOptions
 });
 
 app.Run();
+
+#endregion
