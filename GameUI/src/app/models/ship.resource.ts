@@ -1,6 +1,6 @@
 export interface ShipResource {
   name: string | null;
   amount: number;
-  type: string;
+  resourceType: string;
   state: string;
 }

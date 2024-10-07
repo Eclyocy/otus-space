@@ -18,7 +18,7 @@
         /// <summary>
         /// Resource type.
         /// </summary>
-        public string Type { get; set; }
+        public string ResourceType { get; set; }
 
         /// <summary>
         /// Resource state.

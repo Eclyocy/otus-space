@@ -10,5 +10,5 @@ public interface IGameStepService
     /// <summary>
     /// Process Day the SpaceShip with <paramref name="spaceshipId"/>.
     /// </summary>
-    Task<ShipDTO> ProcessNewDayAsync(Guid spaceshipId);
+    ShipDTO ProcessNewDay(Guid spaceshipId);
 }

@@ -209,7 +209,7 @@ public class ShipService : IShipService
             throw new NotModifiedException();
         }
 
-        _shipRepository.Update(currentShip); // updates entity in-place
+        _shipRepository.Update(currentShip, saveChanges: true);
 
         return currentShip;
     }

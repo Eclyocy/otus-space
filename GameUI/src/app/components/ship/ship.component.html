@@ -1,4 +1,4 @@
-<h2>Ship {{ship?.name ?? ship?.id}}</h2>
+<h2>Ship {{getShipDisplayName()}}</h2>
 
 <h3>Day: {{ship?.day}}</h3>
 
@@ -16,7 +16,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let shipResource of ship?.resources">
-      <td>{{shipResource.name ?? shipResource.type}}</td>
+      <td>{{getShipResourceDisplayName(shipResource)}}</td>
       <td>{{shipResource.amount}}</td>
       <td>{{shipResource.state}}</td>
     </tr>

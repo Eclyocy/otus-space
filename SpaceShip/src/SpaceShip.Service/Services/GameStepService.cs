@@ -40,7 +40,7 @@ public class GameStepService : IGameStepService
     /// Применить новый игровой день (новый шаг)
     /// </summary>
     /// <param name="id">ID корабля</param>
-    public async Task<ShipDTO> ProcessNewDayAsync(Guid id)
+    public ShipDTO ProcessNewDay(Guid id)
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
