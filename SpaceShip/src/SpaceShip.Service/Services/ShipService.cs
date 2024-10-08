@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Enums;
@@ -44,10 +43,7 @@ public class ShipService : IShipService
 
     #region public methods
 
-    /// <summary>
-    /// Создать новый корабль с ресурсами.
-    /// </summary>
-    /// <returns>ID корабля</returns>
+    /// <inheritdoc/>
     public ShipDTO CreateShip()
     {
         _logger.LogInformation("Create space ship");
@@ -78,7 +74,14 @@ public class ShipService : IShipService
             },
             new Resource()
             {
-                Name = "Двигатель",
+                Name = "Двигатель (передний)",
+                Amount = 1,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.Engine
+            },
+            new Resource()
+            {
+                Name = "Двигатель (боковой)",
                 Amount = 2,
                 State = ResourceState.OK,
                 ResourceType = ResourceType.Engine
@@ -97,11 +100,7 @@ public class ShipService : IShipService
         return _mapper.Map<ShipDTO>(ship);
     }
 
-    /// <summary>
-    /// Получить метрики корабля.
-    /// </summary>
-    /// <param name="shipId">ID корабля</param>
-    /// <returns>Метрики корабля</returns>
+    /// <inheritdoc/>
     public ShipDTO GetShip(Guid shipId)
     {
         _logger.LogInformation("Get space ship by id {id}", shipId);
@@ -111,39 +110,98 @@ public class ShipService : IShipService
         return _mapper.Map<ShipDTO>(ship);
     }
 
-    /// <summary>
-    /// Получить метрики корабля.
-    /// </summary>
-    /// <param name="spaceshipId">ID корабля</param>
-    /// <returns>Метрики корабля</returns>
-    public ShipDTO? GetShips()
+    /// <inheritdoc/>
+    public ShipDTO ProcessNewDay(Guid shipId)
     {
-        _logger.LogInformation("Get all space ships");
+        _logger.LogInformation("Processing new day on board the space ship with id {id}.", shipId);
 
-        List<Ship> ship = _shipRepository.GetAll();
+        Ship ship = GetRepositoryShip(shipId);
 
-        return _mapper.Map<ShipDTO>(ship);
+        foreach (Resource resource in ship.Resources)
+        {
+            if (resource.RequiredResourceType == null)
+            {
+                _logger.LogInformation(
+                    "Resource {resourceName} of type {resourceType} is self-sufficient.",
+                    resource.Name,
+                    resource.ResourceType);
+
+                continue;
+            }
+
+            int requiredAmount = resource.Amount;
+            _logger.LogInformation(
+                "Resource {resourceName} of type {resourceType} requires {requiredAmount} of {requiredResourceType} resource(s).",
+                resource.Name,
+                resource.ResourceType,
+                requiredAmount,
+                resource.RequiredResourceType);
+
+            List<Resource> requiredResources = ship.Resources
+                .Where(x => x.ResourceType == resource.RequiredResourceType.Value)
+                .ToList();
+
+            if (requiredResources.Count == 0)
+            {
+                _logger.LogWarning(
+                    "No resources of type {requiredResourceType} on board. Resource {resourceName} is failed.",
+                    resource.RequiredResourceType,
+                    resource.Name);
+
+                resource.State = ResourceState.Fail;
+
+                continue;
+            }
+
+            if (requiredResources.Select(x => x.Amount).Sum() < requiredAmount)
+            {
+                _logger.LogWarning(
+                    "Insufficient resources of type {requiredResourceType} on board. Resource {resourceName} spends all leftovers and is failed.",
+                    resource.RequiredResourceType,
+                    resource.Name);
+
+                requiredResources.ForEach(x => x.Amount = 0);
+
+                resource.State = ResourceState.Fail;
+
+                continue;
+            }
+
+            _logger.LogInformation(
+                "Spending {requiredAmount} of {requiredResourceType} for {resourceType} life-support.",
+                requiredAmount,
+                resource.RequiredResourceType,
+                resource.ResourceType);
+
+            int leftoverAmount = requiredAmount;
+            foreach (Resource requiredResource in requiredResources)
+            {
+                if (leftoverAmount == 0)
+                {
+                    break;
+                }
+
+                if (requiredResource.Amount <= leftoverAmount)
+                {
+                    leftoverAmount -= requiredResource.Amount;
+                    requiredResource.Amount = 0;
+
+                    continue;
+                }
+
+                requiredResource.Amount -= leftoverAmount;
+                leftoverAmount = 0;
+            }
+        }
+
+        ship.Step++;
+
+        _shipRepository.Update(ship, saveChanges: true);
+
+        return GetShip(shipId);
     }
 
-    /// <summary>
-    /// Изменение метрик существующего корабля.
-    /// </summary>
-    /// <returns>Метрики корабля</returns>
-    public ShipDTO UpdateShip(Guid shipId, ShipDTO spaceShipDTO)
-    {
-        _logger.LogInformation(
-            "Update space ship with id {id}: {request}",
-            shipId,
-            JsonSerializer.Serialize(spaceShipDTO));
-
-        Ship ship = UpdateRepositoryShip(shipId, spaceShipDTO);
-
-        return _mapper.Map<ShipDTO>(ship);
-    }
-
-    /// <summary>
-    /// Удалить корабль.
-    /// </summary>
+    /// <inheritdoc/>
     public bool DeleteShip(Guid shipId)
     {
         _logger.LogInformation("Delete space ship with id {id}", shipId);
@@ -173,45 +231,6 @@ public class ShipService : IShipService
         }
 
         return ship;
-    }
-
-    /// <summary>
-    /// Update ship in repository.
-    /// </summary>
-    /// <exception cref="NotFoundException">
-    /// In case the ship is not found by the repository.
-    /// </exception>
-    /// <exception cref="NotModifiedException">
-    /// In case no changes are requested.
-    /// </exception>
-    private Ship UpdateRepositoryShip(
-        Guid shipId,
-        ShipDTO shipRequest)
-    {
-        Ship currentShip = GetRepositoryShip(shipId);
-
-        bool updateRequested = false;
-
-        if (shipRequest.Name != null && shipRequest.Name != currentShip.Name)
-        {
-            updateRequested = true;
-            currentShip.Name = shipRequest.Name;
-        }
-
-        if (shipRequest.Step != currentShip.Step)
-        {
-            updateRequested = true;
-            currentShip.Step = shipRequest.Step;
-        }
-
-        if (!updateRequested)
-        {
-            throw new NotModifiedException();
-        }
-
-        _shipRepository.Update(currentShip, saveChanges: true);
-
-        return currentShip;
     }
 
     #endregion

@@ -64,7 +64,6 @@ builder.Services.AddSwaggerGen(static options =>
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
 builder.Services.AddTransient<IShipService, ShipService>();
-builder.Services.AddScoped<IGameStepService, GameStepService>();
 
 // Automapper:
 builder.Services.AddSingleton<IMapper>(
