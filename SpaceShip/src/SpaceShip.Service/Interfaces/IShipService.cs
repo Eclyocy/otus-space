@@ -13,17 +13,17 @@ public interface IShipService
     ShipDTO CreateShip();
 
     /// <summary>
-    /// Retrieve the SpaceShip by <paramref name="spaceshipId"/>.
+    /// Retrieve the SpaceShip by <paramref name="shipId"/>.
     /// </summary>
-    ShipDTO GetShip(Guid spaceshipId);
+    ShipDTO GetShip(Guid shipId);
 
     /// <summary>
-    /// Update the SpaceShip with <paramref name="spaceshipId"/>.
+    /// Process new day on board the SpaceShip with <paramref name="shipId"/>.
     /// </summary>
-    ShipDTO UpdateShip(Guid spaceshipId, ShipDTO spaceShipDTO);
+    ShipDTO ProcessNewDay(Guid shipId);
 
     /// <summary>
-    /// Delete the SpaceShip with <paramref name="spaceshipId"/>.
+    /// Delete the SpaceShip with <paramref name="shipId"/>.
     /// </summary>
-    bool DeleteShip(Guid spaceshipId);
+    bool DeleteShip(Guid shipId);
 }

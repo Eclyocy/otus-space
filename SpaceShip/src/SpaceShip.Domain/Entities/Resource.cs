@@ -49,4 +49,16 @@ public class Resource : BaseEntity
     /// </summary>
     [ForeignKey("ShipId")]
     public virtual Ship Ship { get; set; }
+
+    /// <summary>
+    /// Resource type required for this resource life-support.
+    /// </summary>
+    public ResourceType? RequiredResourceType => ResourceType switch
+    {
+        ResourceType.Hull => ResourceType.ScrapMetal,
+        ResourceType.Engine => ResourceType.Fuel,
+        ResourceType.ScrapMetal => null,
+        ResourceType.Fuel => null,
+        _ => null
+    };
 }
