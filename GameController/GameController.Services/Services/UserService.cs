@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Security.Cryptography;
+using System.Text;
+using AutoMapper;
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
@@ -51,6 +53,8 @@ namespace GameController.Services.Services
 
             User userRequest = _mapper.Map<User>(createUserDto);
 
+            userRequest.PasswordHash = HashPassword(userRequest.PasswordHash);
+
             User user = _userRepository.Create(userRequest);
 
             return _mapper.Map<UserDto>(user);
@@ -74,6 +78,14 @@ namespace GameController.Services.Services
             User user = GetRepositoryUser(userId);
 
             return _mapper.Map<UserDto>(user);
+        }
+
+        /// <inheritdoc/>
+        public bool GetUserByName(string name, string password)
+        {
+            _logger.LogInformation("Get user by username {name}", name);
+
+            return GetRepositoryUserByName(name, password);
         }
 
         /// <inheritdoc/>
@@ -121,6 +133,25 @@ namespace GameController.Services.Services
             return user;
         }
 
+        private bool GetRepositoryUserByName(string name, string password)
+        {
+            User? userFromBd = _userRepository.GetUserByLogin(name);
+
+            if (userFromBd == null)
+            {
+                return false;
+            }
+
+            string hash = HashPassword(password);
+
+            if (userFromBd.PasswordHash != hash)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Update user in repository.
         /// </summary>
@@ -158,6 +189,16 @@ namespace GameController.Services.Services
             _userRepository.Update(currentUser); // updates entity in-place
 
             return currentUser;
+        }
+
+        private static string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashBytes = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hashBytes);
+            }
         }
 
         #endregion

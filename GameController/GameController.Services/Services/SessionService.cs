@@ -3,7 +3,6 @@ using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
-using GameController.Services.Models.Generator;
 using GameController.Services.Models.Message;
 using GameController.Services.Models.Session;
 using GameController.Services.Models.Ship;

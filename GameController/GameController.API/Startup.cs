@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Text;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using GameController.API.Mappers;
 using GameController.API.ServicesExtensions;
@@ -7,9 +8,11 @@ using GameController.Database;
 using GameController.Services;
 using GameController.Services.Services;
 using GameController.Services.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
@@ -151,7 +154,7 @@ namespace GameController
             // Настройка JWT авторизации
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<JwtService>();
-           /* services.AddAuthentication(options =>
+            services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -169,7 +172,7 @@ namespace GameController
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
                         ClockSkew = TimeSpan.Zero
                     };
-                });*/
+                });
 
             // Регистрация сервиса для работы с JWT
             services.AddScoped<JwtService>();

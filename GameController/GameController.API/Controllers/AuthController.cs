@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using GameController.API.Models.Auth;
+using GameController.Services.Interfaces;
 using GameController.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,18 +14,20 @@ namespace GameController.API.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
+        private readonly IUserService _userService;
         private readonly JwtService _jwtService;
 
         // private readonly IConfiguration _configuration;
-        public AuthController(JwtService jwtService)
+        public AuthController(JwtService jwtService, IUserService userService)
         {
             _jwtService = jwtService;
+            _userService = userService;
         }
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel login)
         {
-            if (login.Username == "string" && login.Password == "string")
+            if (_userService.GetUserByName(login.Username, login.Password))
             {
                 var (token, refreshToken, expiresIn) = _jwtService.GenerateTokens(login.Username);
                 var tokenResponse = new TokenResponse
