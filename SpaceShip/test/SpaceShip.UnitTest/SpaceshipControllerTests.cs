@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Moq;
 using NUnit.Framework.Internal;

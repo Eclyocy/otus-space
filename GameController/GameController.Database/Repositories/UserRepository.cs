@@ -19,5 +19,15 @@ namespace GameController.Database.Repositories
         }
 
         #endregion
+
+        #region public methods
+
+        /// <inheritdoc/>
+        public User? GetUserByLogin(string name)
+        {
+            return Context.Set<User>().Where(x => x.Name == name).FirstOrDefault(); // нужно будет изменить на SingleOrDefault как сделаю проверку на одинаковые логины
+        }
+
+        #endregion
     }
 }
