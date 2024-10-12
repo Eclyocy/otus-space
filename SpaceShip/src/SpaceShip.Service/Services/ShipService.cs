@@ -16,6 +16,7 @@ public class ShipService : IShipService
 {
     #region private fields
 
+    private readonly IResourceService _resourceService;
     private readonly IShipRepository _shipRepository;
 
     private readonly IMapper _mapper;
@@ -29,10 +30,12 @@ public class ShipService : IShipService
     /// Конструктор.
     /// </summary>
     public ShipService(
+        IResourceService resourceService,
         IShipRepository shipRepository,
         IMapper mapper,
         ILogger<ShipService> logger)
     {
+        _resourceService = resourceService;
         _shipRepository = shipRepository;
 
         _mapper = mapper;
@@ -117,82 +120,9 @@ public class ShipService : IShipService
 
         Ship ship = GetRepositoryShip(shipId);
 
-        foreach (Resource resource in ship.Resources)
-        {
-            if (resource.RequiredResourceType == null)
-            {
-                _logger.LogInformation(
-                    "Resource {resourceName} of type {resourceType} is self-sufficient.",
-                    resource.Name,
-                    resource.ResourceType);
+        SpendShipResources(ship);
 
-                continue;
-            }
-
-            int requiredAmount = resource.Amount;
-            _logger.LogInformation(
-                "Resource {resourceName} of type {resourceType} requires {requiredAmount} of {requiredResourceType} resource(s).",
-                resource.Name,
-                resource.ResourceType,
-                requiredAmount,
-                resource.RequiredResourceType);
-
-            List<Resource> requiredResources = ship.Resources
-                .Where(x => x.ResourceType == resource.RequiredResourceType.Value)
-                .ToList();
-
-            if (requiredResources.Count == 0)
-            {
-                _logger.LogWarning(
-                    "No resources of type {requiredResourceType} on board. Resource {resourceName} is failed.",
-                    resource.RequiredResourceType,
-                    resource.Name);
-
-                resource.State = ResourceState.Fail;
-
-                continue;
-            }
-
-            if (requiredResources.Select(x => x.Amount).Sum() < requiredAmount)
-            {
-                _logger.LogWarning(
-                    "Insufficient resources of type {requiredResourceType} on board. Resource {resourceName} spends all leftovers and is failed.",
-                    resource.RequiredResourceType,
-                    resource.Name);
-
-                requiredResources.ForEach(x => x.Amount = 0);
-
-                resource.State = ResourceState.Fail;
-
-                continue;
-            }
-
-            _logger.LogInformation(
-                "Spending {requiredAmount} of {requiredResourceType} for {resourceType} life-support.",
-                requiredAmount,
-                resource.RequiredResourceType,
-                resource.ResourceType);
-
-            int leftoverAmount = requiredAmount;
-            foreach (Resource requiredResource in requiredResources)
-            {
-                if (leftoverAmount == 0)
-                {
-                    break;
-                }
-
-                if (requiredResource.Amount <= leftoverAmount)
-                {
-                    leftoverAmount -= requiredResource.Amount;
-                    requiredResource.Amount = 0;
-
-                    continue;
-                }
-
-                requiredResource.Amount -= leftoverAmount;
-                leftoverAmount = 0;
-            }
-        }
+        TryFlyShip(ship);
 
         ship.Step++;
 
@@ -231,6 +161,103 @@ public class ShipService : IShipService
         }
 
         return ship;
+    }
+
+    /// <summary>
+    /// Spend lifesupport for all resources on ship <paramref name="ship"/>.
+    /// </summary>
+    private void SpendShipResources(Ship ship)
+    {
+        foreach (Resource resource in ship.Resources)
+        {
+            ResourceType? requiredResourceType = _resourceService.GetRequiredResourceType(resource);
+
+            if (requiredResourceType == null)
+            {
+                // Already logged.
+                continue;
+            }
+
+            int requiredAmount = _resourceService.GetRequiredResourceAmount(resource);
+
+            if (requiredAmount == 0)
+            {
+                continue;
+            }
+
+            List<Resource> requiredResources = ship.Resources
+                .Where(x => x.ResourceType == requiredResourceType.Value)
+                .ToList();
+
+            if (requiredResources.Count == 0)
+            {
+                _logger.LogWarning(
+                    "No resources of type {requiredResourceType} on board.",
+                    requiredResourceType.Value);
+
+                _resourceService.UpdateResourceState(resource, ResourceState.Fail);
+
+                continue;
+            }
+
+            if (requiredResources.Select(x => x.Amount).Sum() < requiredAmount)
+            {
+                _logger.LogWarning(
+                    "Insufficient resources of type {requiredResourceType} on board. All leftovers are spent.",
+                    requiredResourceType.Value);
+
+                requiredResources.ForEach(requiredResource => _resourceService.UpdateResourceAmount(requiredResource, 0));
+
+                _resourceService.UpdateResourceState(resource, ResourceState.Fail);
+
+                continue;
+            }
+
+            _logger.LogInformation(
+                "Spending {requiredAmount} of {requiredResourceType} for {resourceType} life-support.",
+                requiredAmount,
+                requiredResourceType.Value,
+                resource.ResourceType);
+
+            int leftoverAmount = requiredAmount;
+            foreach (Resource requiredResource in requiredResources)
+            {
+                if (requiredResource.Amount <= leftoverAmount)
+                {
+                    leftoverAmount -= requiredResource.Amount;
+                    _resourceService.UpdateResourceAmount(requiredResource, 0);
+
+                    continue;
+                }
+
+                _resourceService.UpdateResourceAmount(requiredResource, requiredResource.Amount - leftoverAmount);
+
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Try moving the ship in space.
+    /// </summary>
+    private void TryFlyShip(Ship ship)
+    {
+        List<Resource> engines = ship.Resources.Where(x => x.ResourceType == ResourceType.Engine).ToList();
+
+        if (engines.Count == 0 ||
+            engines.All(x => x.State == ResourceState.Fail) ||
+            engines.All(x => x.State == ResourceState.Sleep))
+        {
+            _logger.LogInformation("Ship {shipId} cannot fly without engines.", ship.Id);
+
+            ship.State = ShipState.Adrift;
+
+            return;
+        }
+
+        _logger.LogInformation("Ship flies!");
+
+        ship.State = ShipState.OK;
     }
 
     #endregion

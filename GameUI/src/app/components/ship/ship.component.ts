@@ -29,6 +29,7 @@ export class ShipComponent {
 
   public userName: string = "";
   public ship: Ship | undefined;
+  public shipResources: ShipResource[] | undefined;
 
   public get userId(): string {
     return this._userId;
@@ -116,6 +117,7 @@ export class ShipComponent {
       next: (ship: Ship) => {
         this.ship = ship;
         console.log("Loaded user session ship:", ship);
+        this.orderShipResources(ship);
         this.setupShipSubscription(this.ship.id);
       },
       error: (error) => {
@@ -126,6 +128,12 @@ export class ShipComponent {
         }
       }
     });
+  }
+
+  private orderShipResources(ship: Ship): void {
+    this.shipResources = ship.resources.sort((a, b) =>
+      this.getShipResourceDisplayName(a).localeCompare(this.getShipResourceDisplayName(b))
+    );
   }
 
   private setupShipSubscription(shipId: string)
