@@ -1,0 +1,52 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using SpaceShip.Domain.Enums;
+
+namespace SpaceShip.Domain.Entities;
+
+/// <summary>
+/// Reource entity.
+/// </summary>
+[Table("Resource")]
+public class Resource : BaseEntity
+{
+    /// <summary>
+    /// ID of related space ship entity.
+    /// </summary>
+    [Column("ShipId")]
+    [Required]
+    public Guid ShipId { get; set; }
+
+    /// <summary>
+    /// Resource type.
+    /// </summary>
+    [Column("ResourceType")]
+    [Required]
+    public ResourceType ResourceType { get; set; }
+
+    /// <summary>
+    /// Resource state.
+    /// </summary>
+    [Column("State")]
+    [Required]
+    public ResourceState State { get; set; }
+
+    /// <summary>
+    /// Resource name.
+    /// </summary>
+    [Column("Name")]
+    public string? Name { get; set; }
+
+    /// <summary>
+    /// Resource amount.
+    /// </summary>
+    [Column("Amount")]
+    [Required]
+    public int Amount { get; set; }
+
+    /// <summary>
+    /// Related entity: space ship.
+    /// </summary>
+    [ForeignKey("ShipId")]
+    public virtual Ship Ship { get; set; }
+}

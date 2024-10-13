@@ -1,26 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SpaceShip.Domain.Model;
+using SpaceShip.Domain.Entities;
 
-namespace SpaceShip.Domain.EfCore
+namespace SpaceShip.Domain
 {
     /// <summary>
     /// Database context for space ship application.
     /// </summary>
-    public class EfCoreContext : DbContext
+    public class DatabaseContext : DbContext
     {
         #region constructor
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public EfCoreContext()
+        public DatabaseContext()
         {
         }
 
         /// <summary>
         /// Constructor which ensures that the database is created.
         /// </summary>
-        public EfCoreContext(DbContextOptions<EfCoreContext> options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
         {
             Database.EnsureCreated();
@@ -38,7 +38,7 @@ namespace SpaceShip.Domain.EfCore
         /// <summary>
         /// Space ships.
         /// </summary>
-        public DbSet<Ship> Spaceships { get; set; }
+        public DbSet<Ship> Ships { get; set; }
 
         #endregion
 

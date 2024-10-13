@@ -1,49 +1,34 @@
-﻿using SpaceShip.Domain.Model;
+﻿using SpaceShip.Domain.Enums;
 
 namespace SpaceShip.Service.Contracts;
 
 /// <summary>
-/// Ресурс корабля
+/// Ресурс на корабле.
 /// </summary>
 public class ResourceDTO
 {
     /// <summary>
-    /// Id ресурса
+    /// ID ресурса.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Наименование ресурса
+    /// Наименование ресурса.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
-    /// Количество ресурса
+    /// Количество ресурса.
     /// </summary>
     public int Amount { get; set; }
 
     /// <summary>
-    /// Id корабля
-    /// </summary>
-    public Guid SpaceshipId { get; set; }
-
-    /// <summary>
-    /// Id типа ресурса
-    /// </summary>
-    public Guid? ResourceTypeId { get; set; }
-
-    /// <summary>
-    /// Состояние ресурса (спит, норма, проблема)
-    /// </summary>
-    public required ResourceStateDTO State { get; set; }
-
-    /// <summary>
-    /// Сущность корабля
-    /// </summary>
-    public Ship Spaceship { get; set; }
-
-    /// <summary>
-    /// Сущность типа ресурсов
+    /// Тип ресурса.
     /// </summary>
     public ResourceType ResourceType { get; set; }
+
+    /// <summary>
+    /// Состояние ресурса.
+    /// </summary>
+    public ResourceState State { get; set; }
 }

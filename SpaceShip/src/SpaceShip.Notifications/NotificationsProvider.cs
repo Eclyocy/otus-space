@@ -37,7 +37,7 @@ public class NotificationsProvider : INotificationsProvider
     }
 
     /// <inheritdoc/>
-    public async Task SendAsync(Guid shipId, SpaceShipDTO ship)
+    public async Task SendAsync(Guid shipId, ShipDTO ship)
     {
         _logger.LogInformation("Sending notification to group {id} clients", shipId);
 
@@ -47,7 +47,7 @@ public class NotificationsProvider : INotificationsProvider
     }
 
     /// <inheritdoc/>
-    public async Task SendAllAsync(SpaceShipDTO ship)
+    public async Task SendAllAsync(ShipDTO ship)
     {
         _logger.LogInformation("Sending notification to all clients");
 

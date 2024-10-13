@@ -2,9 +2,8 @@
 using Microsoft.Extensions.Logging;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
-using SpaceShip.Services.Exceptions;
 
-namespace SpaceShip.Service.Implementation;
+namespace SpaceShip.Service.Services;
 
 /// <summary>
 /// Сервис для обработки события нового игрового дня (шага игры).
@@ -17,12 +16,14 @@ public class GameStepService : IGameStepService
     private readonly IShipService _shipService;
 
     private readonly ILogger _logger;
-    private readonly IMapper _mapper;
 
     #endregion
 
     #region constructor
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     public GameStepService(
         IShipService shipService,
         IMapper mapper,
@@ -30,7 +31,6 @@ public class GameStepService : IGameStepService
     {
         _shipService = shipService;
 
-        _mapper = mapper;
         _logger = logger;
     }
 
@@ -40,12 +40,11 @@ public class GameStepService : IGameStepService
     /// Применить новый игровой день (новый шаг)
     /// </summary>
     /// <param name="id">ID корабля</param>
-    public async Task<SpaceShipDTO> ProcessNewDayAsync(Guid id)
+    public ShipDTO ProcessNewDay(Guid id)
     {
         _logger.LogInformation("Process new day for ship with id {id}", id);
 
-        var ship = _shipService.GetShip(id)
-            ?? throw new NotFoundException($"Ship with id {id} not found.");
+        ShipDTO ship = _shipService.GetShip(id);
 
         ship.Step++;
 

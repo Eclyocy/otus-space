@@ -6,6 +6,7 @@ import { User } from '../../models/user';
 import { Ship } from '../../models/ship';
 import { Subscription } from 'rxjs';
 import { ShipSignalRService } from '../../services/ship.signalr.service';
+import { ShipResource } from '../../models/ship.resource';
 
 @Component({
   selector: 'app-ship',
@@ -71,6 +72,22 @@ export class ShipComponent {
         console.error("Error making move:", error);
       }
     });
+  }
+
+  public getShipDisplayName(): string {
+    if (!this.ship) {
+      return ""
+    }
+
+    return this.ship.name
+      ? `${this.ship.name} (${this.ship.id})`
+      : this.ship.id.toString();
+  }
+
+  public getShipResourceDisplayName(shipResource: ShipResource): string {
+    return shipResource.name
+      ? `${shipResource.name} (${shipResource.resourceType})`
+      : shipResource.resourceType;
   }
 
   private fetchValueFromRoute(paramName: string): string {

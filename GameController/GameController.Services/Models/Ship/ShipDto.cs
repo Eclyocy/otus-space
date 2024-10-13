@@ -13,10 +13,20 @@ namespace GameController.Services.Models.Ship
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Space ship name.
+        /// </summary>
+        public string? Name { get; set; }
+
+        /// <summary>
         /// Space ship current day.
         /// </summary>
         [JsonProperty("step")]
-        public int Day { get; set; }
+        public short Day { get; set; }
+
+        /// <summary>
+        /// Space ship state.
+        /// </summary>
+        public string State { get; set; }
 
         /// <summary>
         /// Space ship resources.
