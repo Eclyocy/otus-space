@@ -8,7 +8,6 @@ using EventGenerator.Services.Models.Generator;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NUnit.Framework;
 
 namespace EventGenerator.Tests
 {
