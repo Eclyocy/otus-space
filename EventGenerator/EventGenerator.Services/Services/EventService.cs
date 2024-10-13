@@ -40,5 +40,15 @@ namespace EventGenerator.Services.Services
 
             return _mapper.Map<EventDto>(eventEntity);
         }
+
+        /// <inheritdoc/>
+        public List<EventDto> GetEvents(Guid generatorId)
+        {
+            _logger.LogInformation("Get event of user {userId}", generatorId);
+
+            List<Event> events = _eventRepository.GetAllByGeneratorId(generatorId);
+
+            return _mapper.Map<List<EventDto>>(events);
+        }
     }
 }
