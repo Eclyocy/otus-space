@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
-using EventGenerator.Database.Repository;
 using EventGenerator.Services.Exceptions;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Event;
 using EventGenerator.Services.Models.Generator;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.DataCollection;
 using Moq;
 using NUnit.Framework;
 
