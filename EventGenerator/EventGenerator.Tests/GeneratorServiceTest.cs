@@ -27,7 +27,6 @@ namespace EventGenerator.Tests
         private readonly Guid generatorId = Guid.NewGuid();
         private readonly Guid eventId = Guid.NewGuid();
         private readonly int troubleCoins = new Random().Next(0, 3);
-        private readonly int eventLevelIndex = new Random().Next(3);
 
         #endregion
 
@@ -133,96 +132,9 @@ namespace EventGenerator.Tests
 
         #endregion
 
-        /*
-        #region AddTroubleCoin
+       
+
         
-        [Test]
-        public void AddTroubleCoin_ReturnsGeneratorDto_WhenGeneratorExists()
-        {
-            // Arrange
-            var generatorDto = new Generator { Id = generatorId, ShipId = shipId, TroubleCoins = troubleCoins };
-            var newDayMessage = new NewDayMessageDto { GeneratorId = generatorId, ShipId = shipId };
-            
-            _generatorRepositoryMock.Setup(repo => repo.Get(generatorId, false)).Returns(generatorDto);
-            _mapperMock.Setup(x => x.Map<Generator>(newDayMessage)).Returns(generatorDto);
-            
-            // Act
-            _sessionService.MakeMove(_userId, _sessionId);
-
-            // Assert
-            _mapperMock.Verify(x => x.Map<NewDayMessage>(sessionDto), Times.Once);
-            _mapperMock.Verify(x => x.Map<SessionDto>(session), Times.Once);
-            _mapperMock.VerifyNoOtherCalls();
-
-            _rabbitMQServiceMock.Verify(x => x.SendNewDayMessage(newDayMessage), Times.Once);
-            _rabbitMQServiceMock.VerifyNoOtherCalls();
-
-            Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
-        }
-
-        [Test]
-        public void AddTroubleCoin_ThrowsNotModifiedException_WhenDataIsNotModified()
-        {
-            // Arrange
-            _sessionRepositoryMock
-            .Setup(repo => repo.Get(_sessionId))
-                .Throws(new NotFoundException($"Session with {_sessionId} is not found."));
-
-            // Act & Assert
-            var exception = Assert.Throws<NotFoundException>(() =>
-                _sessionService.MakeMove(_userId, _sessionId));
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(exception.Message, Is.EqualTo($"Session with {_sessionId} is not found."));
-
-                _mapperMock.Verify(x => x.Map<NewDayMessage>(It.IsAny<SessionDto>()), Times.Never);
-                _mapperMock.VerifyNoOtherCalls();
-
-                _rabbitMQServiceMock.Verify(x => x.SendNewDayMessage(It.IsAny<NewDayMessage>()), Times.Never);
-                _rabbitMQServiceMock.VerifyNoOtherCalls();
-
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
-            });
-        }
-
-        #endregion
-        */
-
-        #region CreateEvent
-
-        [Test]
-        public void CreateEvent_ReturnEventDto_WhenGeneratorСorrect()
-        {
-            // Arrange
-            var _event = new Event { Id = eventId, GeneratorId = generatorId, EventLevel = (EventLevel)Enum.GetValues(typeof(EventLevel)).GetValue(eventLevelIndex) }; 
-            var _createEventDto = new CreateEventDto { GeneratorId = generatorId };
-            var _eventDto = new EventDto { GeneratorId = generatorId, EventId = eventId, EventLevel = eventLevelIndex };
-            _mapperMock.Setup(m => m.Map<Event>(_createEventDto)).Returns(_event);
-            _eventRepositoryMock.Setup(repo => repo.Create(_event)).Returns(_event);
-            _mapperMock.Setup(m => m.Map<EventDto>(_event)).Returns(_eventDto);
-
-            // Act
-            var result = _eventService.CreateEvent(_createEventDto);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(result, Is.Not.Null);
-                Assert.That(result, Is.EqualTo(_eventDto));
-                Assert.That(result.GeneratorId, Is.EqualTo(_eventDto.GeneratorId));
-                Assert.That(result.EventId, Is.EqualTo(_eventDto.EventId));
-                Assert.That(result.EventLevel, Is.EqualTo(_eventDto.EventLevel));
-
-                // Verify calls
-                _eventRepositoryMock.Verify(repo => repo.Create(_event), Times.Once);
-                _mapperMock.Verify(m => m.Map<Event>(_createEventDto), Times.Once);
-                _mapperMock.Verify(m => m.Map<EventDto>(_event), Times.Once);
-
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
-            });
-        }
-        #endregion
 
         #region GetGeneratorEvents
 
@@ -287,3 +199,27 @@ namespace EventGenerator.Tests
         #endregion
     }
 }
+
+
+//public GeneratorDto CreateGenerator(CreateGeneratorDto createGeneratorDto)
+
+//public GeneratorDto GetGenerator(Guid generatorId)
+
+//public GeneratorDto AddTroubleCoin(Guid generatorId)
+
+//public List<EventDto> GetEvents(Guid generatorId)
+//{
+
+//public EventDto? GenerateEvent(Guid generatorId)
+
+///// <summary>
+///// Get the generator from the repository.
+///// </summary>
+///// <exception cref="NotFoundException">If generator not found.</exception>
+//private Generator GetGeneratorFromRepository(Guid generatorId, bool includeEvents = false)
+
+///// <summary>
+///// Get maximum level of event the generator can produce.
+///// </summary>
+//private static EventLevelDto? GetMaxEventLevel(int troubleCoins)
+
