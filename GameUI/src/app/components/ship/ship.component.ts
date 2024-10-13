@@ -7,6 +7,8 @@ import { Ship } from '../../models/ship';
 import { Subscription } from 'rxjs';
 import { ShipSignalRService } from '../../services/ship.signalr.service';
 import { ShipResource } from '../../models/ship.resource';
+import { getShipDisplayName, getSortedResources } from '../../utils/ship.utils';
+import { getShipResourceDisplayName } from '../../utils/ship.resource.utils';
 
 @Component({
   selector: 'app-ship',
@@ -76,19 +78,15 @@ export class ShipComponent {
   }
 
   public getShipDisplayName(): string {
-    if (!this.ship) {
-      return ""
-    }
-
-    return this.ship.name
-      ? `${this.ship.name} (${this.ship.id})`
-      : this.ship.id.toString();
+    return getShipDisplayName(this.ship);
   }
 
-  public getShipResourceDisplayName(shipResource: ShipResource): string {
-    return shipResource.name
-      ? `${shipResource.name} (${shipResource.resourceType})`
-      : shipResource.resourceType;
+  public getSortedShipResources(): ShipResource[] {
+    return getSortedResources(this.ship);
+  }
+
+  public getResourceName(resource: ShipResource): string {
+    return getShipResourceDisplayName(resource);
   }
 
   private fetchValueFromRoute(paramName: string): string {
@@ -117,7 +115,6 @@ export class ShipComponent {
       next: (ship: Ship) => {
         this.ship = ship;
         console.log("Loaded user session ship:", ship);
-        this.orderShipResources(ship);
         this.setupShipSubscription(this.ship.id);
       },
       error: (error) => {
@@ -128,12 +125,6 @@ export class ShipComponent {
         }
       }
     });
-  }
-
-  private orderShipResources(ship: Ship): void {
-    this.shipResources = ship.resources.sort((a, b) =>
-      this.getShipResourceDisplayName(a).localeCompare(this.getShipResourceDisplayName(b))
-    );
   }
 
   private setupShipSubscription(shipId: string)
