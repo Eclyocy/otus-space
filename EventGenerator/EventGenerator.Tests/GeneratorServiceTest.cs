@@ -25,8 +25,8 @@ namespace EventGenerator.Tests
         private Mock<IMapper> _mapperMock;
         private readonly Guid shipId = Guid.NewGuid();
         private readonly Guid generatorId = Guid.NewGuid();
-        private readonly Guid eventId = Guid.NewGuid();
         private readonly int troubleCoins = new Random().Next(0, 3);
+        private readonly Guid eventId = Guid.NewGuid();
 
         #endregion
 
@@ -130,16 +130,12 @@ namespace EventGenerator.Tests
             });
         }
 
-        #endregion
-
-       
-
-        
+        #endregion        
 
         #region GetGeneratorEvents
 
         [Test]
-        public void GetGeneratorEvents_WhenGeneratorIdIsValid()
+        public void GetEvents_WhenGeneratorIdIsValid()
         {
             // Arrange
             var events = new List<Event>
@@ -212,14 +208,4 @@ namespace EventGenerator.Tests
 
 //public EventDto? GenerateEvent(Guid generatorId)
 
-///// <summary>
-///// Get the generator from the repository.
-///// </summary>
-///// <exception cref="NotFoundException">If generator not found.</exception>
-//private Generator GetGeneratorFromRepository(Guid generatorId, bool includeEvents = false)
-
-///// <summary>
-///// Get maximum level of event the generator can produce.
-///// </summary>
-//private static EventLevelDto? GetMaxEventLevel(int troubleCoins)
 
