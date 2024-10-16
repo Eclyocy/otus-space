@@ -21,7 +21,8 @@ namespace EventGenerator.Tests
         private Mock<IGeneratorRepository> _generatorRepositoryMock;
         private Mock<IEventRepository> _eventRepositoryMock;
         private Mock<IEventService> _eventServiceMock;
-        private Mock<ILogger<GeneratorService>> _loggerMock;
+        private Mock<ILogger<GeneratorService>> _loggerGeneratorMock;
+        private Mock<ILogger<EventService>> _loggerEventMock;
         private Mock<IMapper> _mapperMock;
         private readonly Guid shipId = Guid.NewGuid();
         private readonly Guid generatorId = Guid.NewGuid();
@@ -36,9 +37,14 @@ namespace EventGenerator.Tests
         {
             _generatorRepositoryMock = new Mock<IGeneratorRepository>();
             _eventServiceMock = new Mock<IEventService>();
-            _loggerMock = new Mock<ILogger<GeneratorService>>();
+            _loggerGeneratorMock = new Mock<ILogger<GeneratorService>>();
             _mapperMock = new Mock<IMapper>();
-            _generatorService = new GeneratorService(_generatorRepositoryMock.Object, _eventServiceMock.Object, _loggerMock.Object, _mapperMock.Object);
+            _generatorService = new GeneratorService(_generatorRepositoryMock.Object, _eventServiceMock.Object, _loggerGeneratorMock.Object, _mapperMock.Object);
+
+            _eventRepositoryMock = new Mock<IEventRepository>();
+            _loggerEventMock = new Mock<ILogger<EventService>>();
+            _mapperMock = new Mock<IMapper>();
+            _eventService = new EventService(_eventRepositoryMock.Object, _loggerEventMock.Object, _mapperMock.Object);
         }
 
         #endregion
@@ -73,7 +79,7 @@ namespace EventGenerator.Tests
                 _mapperMock.Verify(m => m.Map<Generator>(createGeneratorDto), Times.Once);
                 _mapperMock.Verify(m => m.Map<GeneratorDto>(generator), Times.Once);
 
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(1));
             });
         }
 
@@ -88,7 +94,7 @@ namespace EventGenerator.Tests
             var generator = new Generator { Id = generatorId, ShipId = shipId, TroubleCoins = troubleCoins };
             var generatorDto = new GeneratorDto { ShipId = shipId };
             _generatorRepositoryMock.Setup(repo => repo.Get(generatorId, false)).Returns(generator);
-            _mapperMock.Setup(m => m.Map<GeneratorDto>(generator)).Returns(new GeneratorDto { GeneratorId = generatorId, ShipId = generator.ShipId, TroubleCoins = generator.TroubleCoins });
+            _mapperMock.Setup(m => m.Map<GeneratorDto>(generator)).Returns(new GeneratorDto { ShipId = generator.ShipId, GeneratorId = generatorId, TroubleCoins = generator.TroubleCoins });
 
             // Act
             var result = _generatorService.GetGenerator(generatorId);
@@ -106,7 +112,7 @@ namespace EventGenerator.Tests
 
                 _mapperMock.Verify(m => m.Map<GeneratorDto>(generator), Times.Once);
 
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(1));
             });
         }
 
@@ -126,7 +132,7 @@ namespace EventGenerator.Tests
 
                 _mapperMock.Verify(m => m.Map<GeneratorDto>(It.IsAny<Generator>()), Times.Never);
 
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(2));
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(2));
             });
         }
 
@@ -195,17 +201,3 @@ namespace EventGenerator.Tests
         #endregion
     }
 }
-
-
-//public GeneratorDto CreateGenerator(CreateGeneratorDto createGeneratorDto)
-
-//public GeneratorDto GetGenerator(Guid generatorId)
-
-//public GeneratorDto AddTroubleCoin(Guid generatorId)
-
-//public List<EventDto> GetEvents(Guid generatorId)
-//{
-
-//public EventDto? GenerateEvent(Guid generatorId)
-
-
