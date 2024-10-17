@@ -3,7 +3,6 @@ using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
 using EventGenerator.Services.Exceptions;
 using EventGenerator.Services.Interfaces;
-using EventGenerator.Services.Models.Event;
 using EventGenerator.Services.Models.Generator;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
@@ -17,17 +16,13 @@ namespace EventGenerator.Tests
         #region private fields
 
         private GeneratorService _generatorService;
-        private EventService _eventService;
         private Mock<IGeneratorRepository> _generatorRepositoryMock;
-        private Mock<IEventRepository> _eventRepositoryMock;
         private Mock<IEventService> _eventServiceMock;
         private Mock<ILogger<GeneratorService>> _loggerGeneratorMock;
-        private Mock<ILogger<EventService>> _loggerEventMock;
         private Mock<IMapper> _mapperMock;
         private readonly Guid shipId = Guid.NewGuid();
         private readonly Guid generatorId = Guid.NewGuid();
         private readonly int troubleCoins = new Random().Next(0, 3);
-        private readonly Guid eventId = Guid.NewGuid();
 
         #endregion
 
@@ -40,11 +35,6 @@ namespace EventGenerator.Tests
             _loggerGeneratorMock = new Mock<ILogger<GeneratorService>>();
             _mapperMock = new Mock<IMapper>();
             _generatorService = new GeneratorService(_generatorRepositoryMock.Object, _eventServiceMock.Object, _loggerGeneratorMock.Object, _mapperMock.Object);
-
-            _eventRepositoryMock = new Mock<IEventRepository>();
-            _loggerEventMock = new Mock<ILogger<EventService>>();
-            _mapperMock = new Mock<IMapper>();
-            _eventService = new EventService(_eventRepositoryMock.Object, _loggerEventMock.Object, _mapperMock.Object);
         }
 
         #endregion
@@ -52,7 +42,7 @@ namespace EventGenerator.Tests
         #region tests for CreateGenerator
 
         [Test]
-        public void CreateGenerator_ReturnGeneratorDto_WhenGeneratorСorrect()
+        public void CreateGenerator_ReturnGeneratorDto_WhenGeneratorCorrect()
         {
             // Arrange
             var generator = new Generator { Id = generatorId, ShipId = shipId, TroubleCoins = troubleCoins };
@@ -133,68 +123,6 @@ namespace EventGenerator.Tests
                 _mapperMock.Verify(m => m.Map<GeneratorDto>(It.IsAny<Generator>()), Times.Never);
 
                 Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(2));
-            });
-        }
-
-        #endregion        
-
-        #region GetGeneratorEvents
-
-        [Test]
-        public void GetEvents_WhenGeneratorIdIsValid()
-        {
-            // Arrange
-            var events = new List<Event>
-            {
-                new Event { Id = eventId, GeneratorId = generatorId }
-            };
-
-            EventDto eventDto = new EventDto { EventId = eventId, GeneratorId = generatorId };
-
-            _eventRepositoryMock.Setup(repo => repo.GetAllByGeneratorId(generatorId)).Returns(events);
-            _mapperMock
-                .Setup(x => x.Map<List<EventDto>>(It.IsAny<List<Event>>()))
-                .Returns(new List<EventDto>() { eventDto });
-
-            // Act
-            var actualEvents = _eventService.GetEvents(generatorId);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(actualEvents, Is.Not.Null);
-                Assert.That(actualEvents.Count, Is.EqualTo(events.Count));
-
-                foreach (var item in actualEvents)
-                {
-                    Assert.That(item.EventId, Is.EqualTo(eventDto.EventId));
-                    Assert.That(item.GeneratorId, Is.EqualTo(eventDto.GeneratorId));
-                }
-
-                _mapperMock.Verify(x => x.Map<List<EventDto>>(It.IsAny<List<Event>>()), Times.Once);
-                _eventRepositoryMock.Verify(repo => repo.GetAllByGeneratorId(generatorId), Times.Once);
-                _eventRepositoryMock.VerifyNoOtherCalls();
-            });
-        }
-
-        [Test]
-        public void GetGeneratorEvents_WhenGeneratorIdIsInvalid()
-        {
-            // Arrange
-            _eventRepositoryMock.Setup(repo => repo.GetAllByGeneratorId(generatorId)).Returns(new List<Event>());
-            _mapperMock.Setup(x => x.Map<List<EventDto>>(It.IsAny<List<Event>>())).Returns(new List<EventDto>());
-
-            // Act
-            var actualEvents = _eventService.GetEvents(generatorId);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(actualEvents, Is.Not.Null);
-                Assert.That(actualEvents.Count, Is.EqualTo(0));
-                _mapperMock.Verify(x => x.Map<List<EventDto>>(It.IsAny<List<Event>>()), Times.Once);
-                _eventRepositoryMock.Verify(repo => repo.GetAllByGeneratorId(generatorId), Times.Once);
-                _eventRepositoryMock.VerifyNoOtherCalls();
             });
         }
 
