@@ -7,6 +7,8 @@ import { Ship } from '../../models/ship';
 import { Subscription } from 'rxjs';
 import { ShipSignalRService } from '../../services/ship.signalr.service';
 import { ShipResource } from '../../models/ship.resource';
+import { getShipDisplayName, getSortedResources } from '../../utils/ship.utils';
+import { getShipResourceDisplayName } from '../../utils/ship.resource.utils';
 
 @Component({
   selector: 'app-ship',
@@ -29,6 +31,7 @@ export class ShipComponent {
 
   public userName: string = "";
   public ship: Ship | undefined;
+  public shipResources: ShipResource[] | undefined;
 
   public get userId(): string {
     return this._userId;
@@ -75,19 +78,15 @@ export class ShipComponent {
   }
 
   public getShipDisplayName(): string {
-    if (!this.ship) {
-      return ""
-    }
-
-    return this.ship.name
-      ? `${this.ship.name} (${this.ship.id})`
-      : this.ship.id.toString();
+    return getShipDisplayName(this.ship);
   }
 
-  public getShipResourceDisplayName(shipResource: ShipResource): string {
-    return shipResource.name
-      ? `${shipResource.name} (${shipResource.resourceType})`
-      : shipResource.resourceType;
+  public getSortedShipResources(): ShipResource[] {
+    return getSortedResources(this.ship);
+  }
+
+  public getResourceName(resource: ShipResource): string {
+    return getShipResourceDisplayName(resource);
   }
 
   private fetchValueFromRoute(paramName: string): string {

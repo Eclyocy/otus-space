@@ -15,8 +15,8 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let shipResource of ship?.resources">
-      <td>{{getShipResourceDisplayName(shipResource)}}</td>
+    <tr *ngFor="let shipResource of getSortedShipResources()">
+      <td>{{getResourceName(shipResource)}}</td>
       <td>{{shipResource.amount}}</td>
       <td>{{shipResource.state}}</td>
     </tr>

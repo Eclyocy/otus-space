@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SpaceShip.Notifications;
+using SpaceShip.Service.Contracts;
 using SpaceShip.Service.EventsConsumer.Contracts;
 using SpaceShip.Service.Interfaces;
 
@@ -15,12 +16,13 @@ public class StepEventConsumer : EventConsumer
 {
     private readonly IServiceScopeFactory _scopeServiceFactory;
     private readonly INotificationsProvider _notificationsProvider;
+    private readonly ILogger<StepEventConsumer> _logger;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public StepEventConsumer(
-        ILogger<TroubleEventConsumer> logger,
+        ILogger<StepEventConsumer> logger,
         IConfiguration configuration,
         IServiceScopeFactory serviceScopeFactory,
         INotificationsProvider notificationsProvider)
@@ -35,20 +37,39 @@ public class StepEventConsumer : EventConsumer
     /// <inheritdoc/>
     protected override async Task HandleMessageAsync(string message)
     {
-        StepMessageDTO? stepMessage = JsonConvert.DeserializeObject<StepMessageDTO>(message);
+        StepMessageDTO? stepMessage;
+
+        try
+        {
+            stepMessage = JsonConvert.DeserializeObject<StepMessageDTO>(message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to deserialize the message: {message}", message);
+
+            return;
+        }
 
         if (stepMessage == null)
         {
-            throw new Exception("Unable to parse step message.");
+            _logger.LogError("Step message is null.");
+
+            return;
         }
 
-        using (IServiceScope scope = _scopeServiceFactory.CreateScope())
+        try
         {
-            IGameStepService dayServiceScoped =
-                scope.ServiceProvider.GetRequiredService<IGameStepService>();
+            using IServiceScope scope = _scopeServiceFactory.CreateScope();
+            IShipService shipService = scope.ServiceProvider.GetRequiredService<IShipService>();
 
-            var ship = dayServiceScoped.ProcessNewDay(stepMessage.ShipId);
+            ShipDTO ship = shipService.ProcessNewDay(stepMessage.ShipId);
             await _notificationsProvider.SendAsync(stepMessage.ShipId, ship);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(
+                e,
+                "Failed to process new day for ship with id {id}", stepMessage.ShipId);
         }
     }
 }
