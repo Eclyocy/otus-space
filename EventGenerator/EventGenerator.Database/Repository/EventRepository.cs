@@ -8,6 +8,8 @@ namespace EventGenerator.Database.Repository
     /// </summary>
     public class EventRepository : BaseRepository<Event>, IEventRepository
     {
+        #region constructor
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -15,5 +17,19 @@ namespace EventGenerator.Database.Repository
             : base(databaseContext)
         {
         }
+
+        #endregion
+
+        #region public methods
+
+        public List<Event> GetAllByGeneratorId(Guid generatorId)
+        {
+            var res = Context.Set<Event>()
+                .Where(x => x.GeneratorId == generatorId)
+                .ToList();
+            return res;
+        }
+
+        #endregion
     }
 }
