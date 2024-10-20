@@ -51,8 +51,7 @@ namespace GameController.API.Controllers
 
             var newJwtToken = _jwtService.GenerateTokens(principal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            // return Ok(new { token = newJwtToken });
-            return Ok(new { token = newJwtToken.Token, refreshToken = newJwtToken.RefreshToken });
+            return Ok(newJwtToken);
         }
 
         [HttpGet("test")]

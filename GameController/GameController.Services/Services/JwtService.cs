@@ -2,8 +2,10 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using GameController.Services.Models.Auth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+
 namespace GameController.Services.Services
 {
     /// <summary>
@@ -80,7 +82,7 @@ namespace GameController.Services.Services
         /// <summary>
         /// GenerateTokens.
         /// </summary>
-        public (string Token, string RefreshToken, int ExpiresIn) GenerateTokens(string username)
+        public TokenResponseDto GenerateTokens(string username)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -122,7 +124,12 @@ namespace GameController.Services.Services
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             int expiresIn = (int)(token.ValidTo - epoch).TotalSeconds;
 
-            return (new JwtSecurityTokenHandler().WriteToken(token), refreshToken, expiresIn);
+            return new TokenResponseDto
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                RefreshToken = refreshToken,
+                ExpiresIn = expiresIn
+            };
         }
 
         /// <summary>

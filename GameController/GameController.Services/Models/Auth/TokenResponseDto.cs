@@ -1,4 +1,4 @@
-﻿namespace GameController.API.Models.Auth
+﻿namespace GameController.Services.Models.Auth
 {
     /// <summary>
     /// TokenResponseDto.

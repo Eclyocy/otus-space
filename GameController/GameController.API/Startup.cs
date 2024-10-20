@@ -175,9 +175,7 @@ namespace GameController
                     };
                 });
 
-            // Регистрация сервиса для работы с JWT
             services.AddScoped<JwtService>();
-            // Регистрация AuthService
             services.AddScoped<AuthService>();
         }
         #endregion

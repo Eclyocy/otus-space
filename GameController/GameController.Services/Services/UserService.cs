@@ -1,9 +1,7 @@
-﻿using System.Xml.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
-using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
 using Microsoft.Extensions.Logging;
@@ -84,7 +82,7 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
-        public UserDto? GetUserByName(string name)
+        public UserDto GetUserByName(string name)
         {
             _logger.LogInformation("Get user by username {name}", name);
 

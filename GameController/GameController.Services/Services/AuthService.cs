@@ -3,6 +3,7 @@ using GameController.Services.Exceptions;
 using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Auth;
+using GameController.Services.Models.User;
 
 namespace GameController.Services.Services
 {
@@ -26,23 +27,16 @@ namespace GameController.Services.Services
         /// <summary>
         /// AuthorizationService.
         /// </summary>
-        public TokenResponseDto? ValidateUser(LoginDto loginDto)
+        public TokenResponseDto ValidateUser(LoginDto loginDto)
         {
-            var user = _userService.GetUserByName(loginDto.Username);
-            if (HashHelper.HashPassword(loginDto.Password) != user!.PasswordHash)
+            UserDto user = _userService.GetUserByName(loginDto.Username);
+
+            if (HashHelper.HashPassword(loginDto.Password) != user.PasswordHash)
             {
-                throw new NotFoundException("Wrong password!");
+                throw new UnauthorizedException("Wrong password!");
             }
 
-            var (token, refreshToken, expiresIn) = _jwtService.GenerateTokens(user!.Id.ToString());
-            var tokenResponse = new TokenResponseDto
-            {
-                 AccessToken = token,
-                 RefreshToken = refreshToken,
-                 ExpiresIn = expiresIn
-            };
-
-            return tokenResponse;
+            return _jwtService.GenerateTokens(user.Id.ToString());
         }
     }
 }
