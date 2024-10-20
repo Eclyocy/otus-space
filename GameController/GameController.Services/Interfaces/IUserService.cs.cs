@@ -25,7 +25,7 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Method for getting user by name.
         /// </summary>
-        public bool GetUserByName(string name, string password);
+        public UserDto? GetUserByName(string name);
 
         /// <summary>
         /// Update the user with <paramref name="userId"/>.

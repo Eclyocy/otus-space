@@ -1,9 +1,9 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using System.Xml.Linq;
 using AutoMapper;
 using GameController.Database.Interfaces;
 using GameController.Database.Models;
 using GameController.Services.Exceptions;
+using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
 using Microsoft.Extensions.Logging;
@@ -53,7 +53,10 @@ namespace GameController.Services.Services
 
             User userRequest = _mapper.Map<User>(createUserDto);
 
-            userRequest.PasswordHash = HashPassword(userRequest.PasswordHash);
+            if (_userRepository.GetUserByLogin(createUserDto.Name) != null)
+            {
+                throw new ConflictException("The user is already taken");
+            }
 
             User user = _userRepository.Create(userRequest);
 
@@ -81,11 +84,18 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
-        public bool GetUserByName(string name, string password)
+        public UserDto? GetUserByName(string name)
         {
             _logger.LogInformation("Get user by username {name}", name);
 
-            return GetRepositoryUserByName(name, password);
+            User? user = _userRepository.GetUserByLogin(name);
+
+            if (user == null)
+            {
+                throw new NotFoundException($"User with name {name} not found");
+            }
+
+            return _mapper.Map<UserDto>(user);
         }
 
         /// <inheritdoc/>
@@ -133,16 +143,16 @@ namespace GameController.Services.Services
             return user;
         }
 
-        private bool GetRepositoryUserByName(string name, string password)
+  /*      private bool ValidateRepositoryUser(string name, string password) // на уровне авторизации
         {
             User? userFromBd = _userRepository.GetUserByLogin(name);
 
             if (userFromBd == null)
             {
-                return false;
+                return false; // throw new NotFoundException($"User with ID {userId} not found.");
             }
 
-            string hash = HashPassword(password);
+            string hash = HashHelper.HashPassword(password); // это перенести в авторизацию
 
             if (userFromBd.PasswordHash != hash)
             {
@@ -150,7 +160,7 @@ namespace GameController.Services.Services
             }
 
             return true;
-        }
+        }*/
 
         /// <summary>
         /// Update user in repository.
@@ -189,16 +199,6 @@ namespace GameController.Services.Services
             _userRepository.Update(currentUser); // updates entity in-place
 
             return currentUser;
-        }
-
-        private static string HashPassword(string password)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(password);
-                byte[] hashBytes = sha256.ComputeHash(bytes);
-                return Convert.ToBase64String(hashBytes);
-            }
         }
 
         #endregion
