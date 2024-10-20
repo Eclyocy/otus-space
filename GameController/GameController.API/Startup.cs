@@ -175,7 +175,7 @@ namespace GameController
                     };
                 });
 
-            services.AddScoped<JwtService>();
+            /*services.AddScoped<JwtService>();*/
             services.AddScoped<AuthService>();
         }
         #endregion

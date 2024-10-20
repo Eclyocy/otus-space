@@ -1,5 +1,4 @@
-﻿using GameController.API.Models.Auth;
-using GameController.Services.Exceptions;
+﻿using GameController.Services.Exceptions;
 using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Auth;
