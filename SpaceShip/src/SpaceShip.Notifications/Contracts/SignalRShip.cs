@@ -1,4 +1,4 @@
-﻿using SpaceShip.Domain.Enums;
+﻿using Shared.Enums;
 
 namespace SpaceShip.Notifications.Models;
 

@@ -1,5 +1,5 @@
-﻿using SpaceShip.Domain.Entities;
-using SpaceShip.Domain.Enums;
+﻿using Shared.Enums;
+using SpaceShip.Domain.Entities;
 
 namespace SpaceShip.Service.Interfaces
 {

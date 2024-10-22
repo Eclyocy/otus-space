@@ -1,4 +1,6 @@
-﻿namespace GameController.Controllers.Models.Ship
+﻿using Shared.Enums;
+
+namespace GameController.API.Models.Ship
 {
     /// <summary>
     /// Model for space ship resource response.
@@ -18,11 +20,11 @@
         /// <summary>
         /// Resource type.
         /// </summary>
-        public string ResourceType { get; set; }
+        public ResourceType ResourceType { get; set; }
 
         /// <summary>
         /// Resource state.
         /// </summary>
-        public string State { get; set; }
+        public ResourceState State { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpaceShip.Domain.Enums;
+using Shared.Enums;
 
 namespace SpaceShip.WebAPI.Models;
 
