@@ -41,6 +41,7 @@ namespace GameController.Services.Tests
             _userHubContextMock = new Mock<IHubContext<UserHub>>();
             _userHubContextMock.Setup(x => x.Clients).Returns(() => clientsMock.Object);
             clientsMock.Setup(x => x.All).Returns(() => clientsProxyMock.Object);
+            clientsMock.Setup(x => x.User(It.IsAny<string>())).Returns(() => clientsProxyMock.Object);
 
             _userService = new UserService(_userRepositoryMock.Object, _userHubContextMock.Object, _loggerMock.Object, _mapperMock.Object);
 

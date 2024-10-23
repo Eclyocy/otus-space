@@ -113,7 +113,7 @@ namespace GameController.Services.Services
 
             User user = UpdateRepositoryUser(userId, updateUserDto);
 
-            _userHubContext.Clients.All.SendAsync(UserHub.RefreshUserName, userId, user.Name);
+            _userHubContext.Clients.User(userId.ToString()).SendAsync(UserHub.RefreshUserName, userId, user.Name);
 
             return _mapper.Map<UserDto>(user);
         }
@@ -136,7 +136,7 @@ namespace GameController.Services.Services
 
             User user = UpdateRepositoryUser(userId, updateUserDto);
 
-            await _userHubContext.Clients.All.SendAsync(UserHub.RefreshUserName, userId, user.Name);
+            await _userHubContext.Clients.User(userId.ToString()).SendAsync(UserHub.RefreshUserName, userId, user.Name);
 
             return _mapper.Map<UserDto>(user);
         }

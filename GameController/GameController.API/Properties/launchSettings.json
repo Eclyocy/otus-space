@@ -36,7 +36,7 @@
         "Jwt__Key": "MySuperSecretKeyForJwtTokenGeneration",
         "Jwt__Issuer": "GameControllerAPI",
         "Jwt__Audience": "GameControllerUsers",
-        "Jwt__ExpirationMinutes": "1"
+        "Jwt__ExpirationMinutes": "10"
       }
     },
     "IIS Express": {
