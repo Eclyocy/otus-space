@@ -35,8 +35,16 @@ namespace GameController.Services.Tests
             _userRepositoryMock = new Mock<IUserRepository>();
             _loggerMock = new Mock<ILogger<UserService>>();
             _mapperMock = new Mock<IMapper>();
+
+            var clientsMock = new Mock<IHubClients>();
+            var clientsProxyMock = new Mock<IClientProxy>();
             _userHubContextMock = new Mock<IHubContext<UserHub>>();
+            _userHubContextMock.Setup(x => x.Clients).Returns(() => clientsMock.Object);
+            clientsMock.Setup(x => x.All).Returns(() => clientsProxyMock.Object);
+
             _userService = new UserService(_userRepositoryMock.Object, _userHubContextMock.Object, _loggerMock.Object, _mapperMock.Object);
+
+            
         }
 
         #endregion
