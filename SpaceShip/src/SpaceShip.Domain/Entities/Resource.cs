@@ -5,7 +5,7 @@ using Shared.Enums;
 namespace SpaceShip.Domain.Entities;
 
 /// <summary>
-/// Reource entity.
+/// Resource entity.
 /// </summary>
 [Table("Resource")]
 public class Resource : BaseEntity
