@@ -52,7 +52,7 @@ namespace GameController.Services.Tests
         #region tests for CreateUser
 
         [Test]
-        public void CreateUser_ReturnUserDto_WhenUserСorrect()
+        public void CreateUser_ReturnUserDto_WhenUserCorrect()
         {
             // Arrange
             var user = new User { Id = userId, Name = NameUser, PasswordHash = PasswordHashUser };
