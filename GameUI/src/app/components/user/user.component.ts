@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ApiService } from '../../services/api.service';
+import { SignalRService } from '../../services/signalr.service';
 import { Session } from '../../models/session';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
@@ -20,6 +22,8 @@ import { User } from '../../models/user';
 })
 export class UserComponent {
   private readonly apiService = inject(ApiService)
+  private subscription?: Subscription;
+
   private _userId: string
 
   public userName: string = "";
@@ -30,7 +34,8 @@ export class UserComponent {
   }
 
   public constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private signalRService: SignalRService
   ) {
     const id = this.route.snapshot.paramMap.get('userId');
     if (id === null) {
@@ -42,6 +47,22 @@ export class UserComponent {
   public ngOnInit(): void {
     this.loadUser();
     this.loadUserSessions();
+
+    this.subscription = this.signalRService.userUpdated.subscribe(
+      ({userId, userName}) => {
+        console.log("A new SignalR notification:", userId, userName);
+
+        if (this._userId == userId) {
+          this.userName = userName;
+        }
+      }
+    );
+  }
+
+  public ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   public createSession(): void {
