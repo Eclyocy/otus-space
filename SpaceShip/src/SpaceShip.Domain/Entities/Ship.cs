@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using SpaceShip.Domain.Enums;
+using Shared.Enums;
 
 namespace SpaceShip.Domain.Entities;
 

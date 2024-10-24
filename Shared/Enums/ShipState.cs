@@ -1,4 +1,4 @@
-﻿namespace SpaceShip.Domain.Enums;
+﻿namespace Shared.Enums;
 
 /// <summary>
 /// Space ship states.

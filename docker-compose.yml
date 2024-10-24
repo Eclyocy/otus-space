@@ -22,7 +22,9 @@ services:
         condition: service_healthy
       game_controller_db:
         condition: service_healthy
-    build: GameController
+    build:
+      context: .
+      dockerfile: GameController/Dockerfile
     ports:
     - 7070:7196
     environment:
@@ -77,7 +79,9 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    build: SpaceShip
+    build:
+      context: .
+      dockerfile: SpaceShip/Dockerfile
     ports:
     - 5051:5216
     environment:

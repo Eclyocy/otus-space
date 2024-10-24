@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using GameController.Controllers.Models.Ship;
+using GameController.API.Models.Ship;
 using GameController.Services.Models.Ship;
 
 namespace GameController.API.Mappers
