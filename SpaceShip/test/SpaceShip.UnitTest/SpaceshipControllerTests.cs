@@ -75,9 +75,9 @@ public class SpaceShipControllerTests
         Assert.That(response, Is.InstanceOf<NotFound>());
     }
 
-    private static SpaceShipDTO CreateShip(Guid id)
+    private static ShipDTO CreateShip(Guid id)
     {
-        return new SpaceShipDTO
+        return new ShipDTO
         {
             Id = id,
             Step = 0

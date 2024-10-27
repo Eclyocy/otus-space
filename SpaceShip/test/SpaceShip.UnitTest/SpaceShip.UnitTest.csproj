@@ -28,6 +28,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SpaceShip.WebAPI\WebAPI.csproj" />
+    <ProjectReference Include="..\..\src\SpaceShip.Domain\SpaceShip.Domain.csproj" />
+    <ProjectReference Include="..\..\src\SpaceShip.Service\SpaceShip.Service.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
   </ItemGroup>
 
 </Project>

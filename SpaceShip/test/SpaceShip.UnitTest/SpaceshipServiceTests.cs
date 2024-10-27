@@ -2,22 +2,26 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Internal;
+using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
-using SpaceShip.Domain.Mappers;
-using SpaceShip.Domain.Model;
 using SpaceShip.Service.Contracts;
-using SpaceShip.Service.Implementation;
+using SpaceShip.Service.Helpers.Abstractions;
+using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
+using SpaceShip.Service.Services;
 using SpaceShip.Services.Exceptions;
+using SpaceShip.WebAPI.Mappers;
 
 namespace SpaceShip.UnitTest.Services;
 
 public class SpaceShipServiceTests
 {
     private IMapper _mapper;
-    private ISpaceshipRepository _repository;
-    private ILogger<SpaceShipService> _logger;
-    private SpaceShipService _service;
+    private IShipRepository _shipRepository;
+    private IResourceService _resourceService;
+    private INameGenerator _nameGenerator;
+    private ILogger<ShipService> _logger;
+    private ShipService _service;
 
     [OneTimeSetUp]
     public void OneTimeSetup()
@@ -26,36 +30,37 @@ public class SpaceShipServiceTests
             new MapperConfiguration(
                 static cfg =>
                 {
-                    cfg.AddProfile<SpaceShipModelMappingProfile>();
-                    cfg.AddProfile<ProblemModelMappingProfile>();
-                    cfg.AddProfile<ResourceModelMappingProfile>();
-                    cfg.AddProfile<ResourceStateModelMappingProfile>();
-                    cfg.AddProfile<ResourceTypeModelMappingProfile>();
+                    cfg.AddProfile<SpaceShipMappingProfile>();
+                    cfg.AddProfile<ShipMappingProfile>();
+                    cfg.AddProfile<ResourceMappingProfile>();
                 }));
 
-        var mock = new Mock<ISpaceshipRepository>();
-        mock.Setup(repo => repo.Create()).Returns(new Ship());
-        mock.Setup(repo => repo.Get(It.IsAny<Guid>())).Returns<Guid>((id) =>
+        var mock = new Mock<IShipRepository>();
+        mock.Setup(repo => repo.Create(It.IsAny<bool>())).Returns(new Ship());
+        mock.Setup(repo => repo.Create(It.IsAny<Ship>(), It.IsAny<bool>())).Returns((Ship ship, bool saveChanges) => { return ship; });
+        mock.Setup(repo => repo.Get(It.IsAny<Guid>())).Returns<Guid>(static (id) =>
         {
             if (id == Guid.Empty)
             {
                 return null;
             }
 
-            return new Ship
-            {
-                Id = id
-            };
+            Ship ship = new ();
+            ship.Id = id;
+            return ship;
         });
-        _repository = mock.Object;
+        _shipRepository = mock.Object;
 
-        _logger = Mock.Of<ILogger<SpaceShipService>>();
+        _resourceService = new Mock<IResourceService>().Object;
+        _nameGenerator = new Mock<INameGenerator>().Object;
+
+        _logger = Mock.Of<ILogger<ShipService>>();
     }
 
     [SetUp]
     public void Setup()
     {
-        _service = new SpaceShipService(_repository, _mapper, _logger);
+        _service = new ShipService(_resourceService, _shipRepository, _mapper, _logger, _nameGenerator);
     }
 
     [Test]
@@ -78,7 +83,7 @@ public class SpaceShipServiceTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(result, Is.InstanceOf<SpaceShipDTO>());
+            Assert.That(result, Is.InstanceOf<ShipDTO>());
             Assert.That(result.Id, Is.EqualTo(id));
         });
     }
