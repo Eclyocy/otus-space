@@ -14,7 +14,6 @@ namespace GameController.API.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
-        // private readonly IConfiguration _configuration;
         public AuthController(IAuthService authService, IMapper mapper)
         {
             _authService = authService;
@@ -32,7 +31,6 @@ namespace GameController.API.Controllers
         public IActionResult Refresh([FromBody] TokenRequest tokenModel)
         {
             TokenResponseDto result = _authService.RefreshToken(_mapper.Map<TokenDto>(tokenModel));
-
             return Ok(_mapper.Map<TokenRequest>(result));
         }
 
