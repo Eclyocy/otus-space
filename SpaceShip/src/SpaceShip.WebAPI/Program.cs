@@ -12,10 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using SpaceShip.Domain.ServiceCollectionExtensions;
 using SpaceShip.Notifications;
-using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
-using SpaceShip.Service.Services;
 using SpaceShip.WebAPI.ApplicationBuilderExtensions;
 using SpaceShip.WebAPI.LogFormatters;
 using SpaceShip.WebAPI.Mappers;
@@ -63,8 +61,8 @@ builder.Services.AddSwaggerGen(static options =>
 // SpaceShip services registration:
 builder.Services.AddHostedService<TroubleEventConsumer>();
 builder.Services.AddHostedService<StepEventConsumer>();
-builder.Services.AddTransient<IShipService, ShipService>();
-builder.Services.AddTransient<IResourceService, ResourceService>();
+
+builder.Services.RegisterServices();
 
 // Automapper:
 builder.Services.AddSingleton<IMapper>(
