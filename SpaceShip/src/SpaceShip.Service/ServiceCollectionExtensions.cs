@@ -6,29 +6,28 @@ using SpaceShip.Service.Helpers.Abstractions;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Services;
 
-namespace SpaceShip.Domain.ServiceCollectionExtensions
+namespace SpaceShip.Domain.ServiceCollectionExtensions;
+
+/// <summary>
+/// Extensions for <see cref="IServiceCollection"/> for services.
+/// </summary>
+public static class ServiceCollectionExtensions
 {
+    #region public methods
+
     /// <summary>
-    /// Extensions for <see cref="IServiceCollection"/> for database.
+    /// Configure project-specific service collection with DI.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection RegisterServices(
+        this IServiceCollection services)
     {
-        #region public methods
+        services.AddTransient<INameGenerator, RandomNameGenerator>();
+        services.AddTransient<IResourceService, ResourceService>();
+        services.AddTransient<IShipBuilder, ShipBuilder>();
+        services.AddTransient<IShipService, ShipService>();
 
-        /// <summary>
-        /// Configure project-specific service collection with DI.
-        /// </summary>
-        public static IServiceCollection RegisterServices(
-            this IServiceCollection services)
-        {
-            services.AddTransient<IShipService, ShipService>();
-            services.AddTransient<IResourceService, ResourceService>();
-            services.AddTransient<INameGenerator, RandomNameGenerator>();
-            services.AddTransient<IShipBuilder, ShipBuilder>();
-
-            return services;
-        }
-
-        #endregion
+        return services;
     }
+
+    #endregion
 }
