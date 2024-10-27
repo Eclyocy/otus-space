@@ -6,6 +6,7 @@ using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
 using GameController.Database;
 using GameController.Services;
+using GameController.Services.Interfaces;
 using GameController.Services.Services;
 using GameController.Services.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -175,8 +176,7 @@ namespace GameController
                     };
                 });
 
-            /*services.AddScoped<JwtService>();*/
-            services.AddScoped<AuthService>();
+            services.AddScoped<IAuthService, AuthService>();
         }
         #endregion
 

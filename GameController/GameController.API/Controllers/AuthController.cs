@@ -2,7 +2,6 @@
 using GameController.API.Models.Auth;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Auth;
-using GameController.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,16 +11,12 @@ namespace GameController.API.Controllers
     [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly IUserService _userService;
-        private readonly JwtService _jwtService;
-        private readonly AuthService _authService;
+        private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
         // private readonly IConfiguration _configuration;
-        public AuthController(JwtService jwtService, IUserService userService, AuthService authService, IMapper mapper)
+        public AuthController(IAuthService authService, IMapper mapper)
         {
-            _jwtService = jwtService;
-            _userService = userService;
             _authService = authService;
             _mapper = mapper;
         }
