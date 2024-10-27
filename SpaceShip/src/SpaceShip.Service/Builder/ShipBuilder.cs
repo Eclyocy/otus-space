@@ -25,7 +25,9 @@ public class ShipBuilder : IShipBuilder
 
     #region constructor
 
-    public ShipBuilder(IShipRepository repository, ILogger<ShipBuilder> logger)
+    public ShipBuilder(
+        IShipRepository repository,
+        ILogger<ShipBuilder> logger)
     {
         _shipRepository = repository;
         _logger = logger;
@@ -78,70 +80,62 @@ public class ShipBuilder : IShipBuilder
     /// <returns>Ship.</returns>
     public Ship Build()
     {
-        try
+        _logger.LogTrace("[{id}] Trying to create ship.", _requestId);
+        var ship = _shipRepository.Create(new Ship()
         {
-            _logger.LogTrace("[{id}] Trying to create ship.", _requestId);
-            var ship = _shipRepository.Create(new Ship()
-            {
-                Name = Name ?? RandomNameGenerator.Get(),
-                Step = 0,
-                State = ShipState.OK
-            });
+            Name = Name ?? RandomNameGenerator.Get(),
+            Step = 0,
+            State = ShipState.OK
+        });
 
-            _logger.LogTrace("[{id}] Trying to create base resources.", _requestId);
-            ship.Resources = ship.Resources = new List<Resource>()
+        _logger.LogTrace("[{id}] Trying to create base resources.", _requestId);
+        ship.Resources = new List<Resource>()
+        {
+            new Resource()
             {
-                new Resource()
-                {
-                    Name = "Обшивка",
-                    Amount = 1,
-                    State = ResourceState.OK,
-                    ResourceType = ResourceType.Hull
-                },
-                new Resource()
-                {
-                    Name = "Двигатель",
-                    Amount = 1,
-                    State = ResourceState.OK,
-                    ResourceType = ResourceType.Engine
-                },
-                new Resource()
-                {
-                    Name = "Топливо",
-                    Amount = 22,
-                    State = ResourceState.OK,
-                    ResourceType = ResourceType.Fuel
-                }
-            };
-
-            _logger.LogTrace("[{id}] Trying to create additional resources.", _requestId);
-            foreach (var res in _resources)
+                Name = "Обшивка",
+                Amount = 1,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.Hull
+            },
+            new Resource()
             {
-                ship.Resources.Add(
-                    new Resource()
-                    {
-                        Name = res.Name,
-                        Amount = res.Amount,
-                        State = ResourceState.OK,
-                        ResourceType = res.ResourceType
-                    });
+                Name = "Двигатель",
+                Amount = 1,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.Engine
+            },
+            new Resource()
+            {
+                Name = "Топливо",
+                Amount = 22,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.Fuel
             }
+        };
 
-            _logger.LogTrace("[{id}] Saving changes in ship repository.", _requestId);
-            _shipRepository.SaveChanges();
-
-            _logger.LogInformation(
-                "[{id}] Building ship [{shipId}] complete.",
-                _requestId,
-                ship.Id);
-
-            return ship;
-        }
-        catch
+        _logger.LogTrace("[{id}] Trying to create additional resources.", _requestId);
+        foreach (var resource in _resources)
         {
-            _logger.LogError("[{id}] Fail to build new spaceship.", _requestId);
-            throw;
+            ship.Resources.Add(
+                new Resource()
+                {
+                    Name = resource.Name,
+                    Amount = resource.Amount,
+                    State = ResourceState.OK,
+                    ResourceType = resource.ResourceType
+                });
         }
+
+        _logger.LogTrace("[{id}] Saving changes in ship repository.", _requestId);
+        _shipRepository.SaveChanges();
+
+        _logger.LogInformation(
+            "[{id}] Building ship [{shipId}] complete.",
+            _requestId,
+            ship.Id);
+
+        return ship;
     }
 
     #endregion

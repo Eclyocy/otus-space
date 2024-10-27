@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Internal;
@@ -16,11 +16,13 @@ namespace SpaceShip.UnitTest.Services;
 
 public class SpaceShipServiceTests
 {
-    private IMapper _mapper;
-    private IShipRepository _shipRepository;
     private IResourceService _resourceService;
     private IShipBuilder _shipBuilder;
+    private IShipRepository _shipRepository;
+
+    private IMapper _mapper;
     private ILogger<ShipService> _logger;
+
     private ShipService _service;
 
     [OneTimeSetUp]
@@ -45,7 +47,7 @@ public class SpaceShipServiceTests
                 return null;
             }
 
-            Ship ship = new ();
+            Ship ship = new();
             ship.Id = id;
             return ship;
         });
@@ -63,7 +65,7 @@ public class SpaceShipServiceTests
     [SetUp]
     public void Setup()
     {
-        _service = new ShipService(_resourceService, _shipRepository, _mapper, _logger, _shipBuilder);
+        _service = new ShipService(_resourceService, _shipBuilder, _shipRepository, _mapper, _logger);
     }
 
     [Test]

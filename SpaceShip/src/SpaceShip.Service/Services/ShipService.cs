@@ -18,8 +18,8 @@ public class ShipService : IShipService
     #region private fields
 
     private readonly IResourceService _resourceService;
-    private readonly IShipRepository _shipRepository;
     private readonly IShipBuilder _shipBuilder;
+    private readonly IShipRepository _shipRepository;
 
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
@@ -33,14 +33,14 @@ public class ShipService : IShipService
     /// </summary>
     public ShipService(
         IResourceService resourceService,
+        IShipBuilder shipBuilder,
         IShipRepository shipRepository,
         IMapper mapper,
-        ILogger<ShipService> logger,
-        IShipBuilder shipBuilder)
+        ILogger<ShipService> logger)
     {
         _resourceService = resourceService;
-        _shipRepository = shipRepository;
         _shipBuilder = shipBuilder;
+        _shipRepository = shipRepository;
 
         _mapper = mapper;
         _logger = logger;
@@ -54,6 +54,7 @@ public class ShipService : IShipService
     public ShipDTO CreateShip()
     {
         _logger.LogInformation("Create space ship");
+
         Ship ship = _shipBuilder.Build();
 
         return _mapper.Map<ShipDTO>(ship);
