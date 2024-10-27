@@ -8,15 +8,13 @@ using SpaceShip.Service.Helpers;
 
 namespace SpaceShip.Service.Builder;
 
-/// <summary>
-/// Build spaceship with specified resources.
-/// </summary>
+/// <inheritdoc/>
 public class ShipBuilder : IShipBuilder
 {
     #region private fields
 
     private readonly string _requestId = Guid.NewGuid().ToString();
-    private readonly List<ResourceDTO> _resources = new List<ResourceDTO>();
+    private readonly List<ResourceDTO> _resources = new();
 
     private readonly IShipRepository _shipRepository;
     private readonly ILogger _logger;
@@ -35,7 +33,7 @@ public class ShipBuilder : IShipBuilder
 
     #endregion
 
-    #region  public properties
+    #region public properties
 
     /// <summary>
     /// Ship name. If null will be generated.
@@ -56,28 +54,7 @@ public class ShipBuilder : IShipBuilder
 
     #region public methods
 
-    /// <summary>
-    /// Applying new resource to shaceship resource collection.
-    /// </summary>
-    /// <param name="resource">Resource to add.</param>
-    /// <returns>Builder.</returns>
-    public IShipBuilder AddResource(ResourceDTO resource)
-    {
-        _logger.LogInformation(
-            "[{id}] Add new resource to ship creation request. Resource type [{type}], name [{name}], quantity [{quantity}]",
-            _requestId,
-            resource.ResourceType,
-            resource.Name,
-            resource.Amount);
-
-        _resources.Add(resource);
-        return this;
-    }
-
-    /// <summary>
-    /// Create ship with resources by specified builder parameters.
-    /// </summary>
-    /// <returns>Ship.</returns>
+    /// <inheritdoc/>
     public Ship Build()
     {
         _logger.LogTrace("[{id}] Trying to create ship.", _requestId);
@@ -136,6 +113,20 @@ public class ShipBuilder : IShipBuilder
             ship.Id);
 
         return ship;
+    }
+
+    /// <inheritdoc/>
+    public IShipBuilder AddResource(ResourceDTO resource)
+    {
+        _logger.LogInformation(
+            "[{id}] Add new resource to ship creation request. Resource type [{type}], name [{name}], quantity [{quantity}]",
+            _requestId,
+            resource.ResourceType,
+            resource.Name,
+            resource.Amount);
+
+        _resources.Add(resource);
+        return this;
     }
 
     #endregion
