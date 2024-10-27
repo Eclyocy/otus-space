@@ -1,9 +1,10 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Moq;
 using NUnit.Framework.Internal;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Services.Exceptions;
 using SpaceShip.WebAPI.Controllers;
 using SpaceShip.WebAPI.Mappers;
 using SpaceShip.WebAPI.Models;
@@ -67,17 +68,18 @@ public class SpaceShipControllerTests
     [Test]
     public void GetShip_WhenNotFound()
     {
-        _mockService.Setup(svc => svc.GetShip(Guid.Empty)).Throws<KeyNotFoundException>();
+        NotFoundException notFoundException = new NotFoundException("test id not found");
+        _mockService.Setup(svc => svc.GetShip(Guid.Empty)).Throws(notFoundException);
         var controller = new SpaceShipController(_mockService.Object, _mapper);
 
-        var response = controller.Get(Guid.Empty);
-
-        Assert.That(response, Is.InstanceOf<NotFound>());
+        Assert.Throws<NotFoundException>(
+            () => controller.Get(Guid.Empty),
+            notFoundException.Message);
     }
 
-    private static SpaceShipDTO CreateShip(Guid id)
+    private static ShipDTO CreateShip(Guid id)
     {
-        return new SpaceShipDTO
+        return new ShipDTO
         {
             Id = id,
             Step = 0
