@@ -1,10 +1,10 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Shared.Enums;
 using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Contracts;
-using SpaceShip.Service.Helpers.Abstractions;
+using SpaceShip.Service.Helpers;
 
 namespace SpaceShip.Service.Builder;
 
@@ -19,17 +19,15 @@ public class ShipBuilder : IShipBuilder
     private readonly List<ResourceDTO> _resources = new List<ResourceDTO>();
 
     private readonly IShipRepository _shipRepository;
-    private readonly INameGenerator _nameGenerator;
     private readonly ILogger _logger;
 
     #endregion
 
     #region constructor
 
-    public ShipBuilder(IShipRepository repository, INameGenerator nameGenerator, ILogger<ShipBuilder> logger)
+    public ShipBuilder(IShipRepository repository, ILogger<ShipBuilder> logger)
     {
         _shipRepository = repository;
-        _nameGenerator = nameGenerator;
         _logger = logger;
     }
 
@@ -85,7 +83,7 @@ public class ShipBuilder : IShipBuilder
             _logger.LogTrace("[{id}] Trying to create ship.", _requestId);
             var ship = _shipRepository.Create(new Ship()
             {
-                Name = Name ?? _nameGenerator.Get(),
+                Name = Name ?? RandomNameGenerator.Get(),
                 Step = 0,
                 State = ShipState.OK
             });

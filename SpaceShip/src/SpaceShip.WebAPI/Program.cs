@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using SpaceShip.Domain.ServiceCollectionExtensions;
 using SpaceShip.Notifications;
+using SpaceShip.Service.Extensions;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Queue;
 using SpaceShip.WebAPI.ApplicationBuilderExtensions;

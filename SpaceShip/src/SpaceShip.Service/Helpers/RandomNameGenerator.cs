@@ -1,29 +1,51 @@
-using SpaceShip.Service.Helpers.Abstractions;
+﻿using SpaceShip.Service.Extensions;
 
 namespace SpaceShip.Service.Helpers;
 
-/// <inheritdoc/>
-public class RandomNameGenerator : INameGenerator
+/// <summary>
+/// Helper for space ship names generation.
+/// </summary>
+public static class RandomNameGenerator
 {
-    private static readonly List<string> _description = ["Разящий", "Красный", "Решительный", "Благолепный", "Отважный", string.Empty];
-    private static readonly List<string> _species = ["Стриж", "Партизан", "Сокол", "Варяг", string.Empty];
+    #region private fields
 
-    /// <inheritdoc/>
-    public string Get()
+    private const string Delimiter = " ";
+
+    private static readonly List<string> _adjectives = [
+        "Разящий",
+        "Красный",
+        "Решительный",
+        "Благолепный",
+        "Отважный",
+        string.Empty
+    ];
+
+    private static readonly List<string> _nouns = [
+        "Стриж",
+        "Партизан",
+        "Сокол",
+        "Варяг",
+        string.Empty
+    ];
+
+    #endregion
+
+    #region public methods
+
+    /// <summary>
+    /// Generate a space ship name.
+    /// </summary>
+    public static string Get()
     {
-        Random rnd = new();
-        var indx = rnd.Next(_description.Count);
-        var description = _description[indx];
+        string adjective = _adjectives.PickRandom();
+        string noun = _nouns.PickRandom();
 
-        indx = rnd.Next(_description.Count);
-        var species = _species[indx];
+        string delimiter = (!string.IsNullOrEmpty(adjective) && !string.IsNullOrEmpty(noun))
+            ? Delimiter
+            : string.Empty;
 
-        var delimiter = string.Empty;
-        if ((description != string.Empty) || (species != string.Empty))
-        {
-            delimiter = " ";
-        }
-
-        return description + delimiter + species;
+        return adjective + delimiter + noun;
     }
+
+    #endregion
 }

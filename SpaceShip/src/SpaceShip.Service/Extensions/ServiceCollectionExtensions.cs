@@ -1,12 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SpaceShip.Service.Builder;
 using SpaceShip.Service.Builder.Abstractions;
-using SpaceShip.Service.Helpers;
-using SpaceShip.Service.Helpers.Abstractions;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Services;
 
-namespace SpaceShip.Domain.ServiceCollectionExtensions;
+namespace SpaceShip.Service.Extensions;
 
 /// <summary>
 /// Extensions for <see cref="IServiceCollection"/> for services.
@@ -21,7 +19,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection RegisterServices(
         this IServiceCollection services)
     {
-        services.AddTransient<INameGenerator, RandomNameGenerator>();
         services.AddTransient<IResourceService, ResourceService>();
         services.AddTransient<IShipBuilder, ShipBuilder>();
         services.AddTransient<IShipService, ShipService>();
