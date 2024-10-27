@@ -1,14 +1,10 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using GameController.API.Models.Auth;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Auth;
 using GameController.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace GameController.API.Controllers
 {
@@ -40,61 +36,17 @@ namespace GameController.API.Controllers
         [HttpPost("refresh")]
         public IActionResult Refresh([FromBody] TokenRequest tokenModel)
         {
-            Console.WriteLine($"Jwt:Key: {_jwtService.GetConfigurationKey()}");  // Вызов метода для проверки конфигурации
+            TokenResponseDto result = _authService.RefreshToken(_mapper.Map<TokenDto>(tokenModel));
 
-            // Здесь можно добавить логику проверки рефреш токена, например, хранить их в базе данных
-            var principal = GetPrincipalFromExpiredToken(tokenModel.Token);
-            if (principal == null)
-            {
-                return BadRequest("Invalid token");
-            }
-
-            var newJwtToken = _jwtService.GenerateTokens(principal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            return Ok(newJwtToken);
+            return Ok(_mapper.Map<TokenRequest>(result));
         }
 
         [HttpGet("test")]
         [Authorize]
         public IActionResult TestAuth()
         {
-            var username = User.Identity.Name; // Извлечение информации о пользователе из токена
+            var username = User.Identity.Name;
             return Ok($"Welcome {username}, you are authorized to play!");
-        }
-
-        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
-        {
-            var key = _jwtService.GetKey();
-            var issuer = _jwtService.GetIssuer();
-            var audience = _jwtService.GetAudience();
-
-            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
-            {
-                throw new ArgumentException("JWT configuration is missing one or more required values.");
-            }
-
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidIssuer = issuer,
-                ValidAudience = audience,
-                ValidateLifetime = false
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new SecurityTokenException("Invalid token");
-            }
-
-            return principal;
         }
     }
 }
