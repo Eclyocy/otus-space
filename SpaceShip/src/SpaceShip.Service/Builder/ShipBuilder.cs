@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Shared.Enums;
 using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
+using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Helpers.Abstractions;
 
@@ -10,7 +11,7 @@ namespace SpaceShip.Service.Builder;
 /// <summary>
 /// Build spaceship with specified resources.
 /// </summary>
-public class ShipBuilder
+public class ShipBuilder : IShipBuilder
 {
     #region private fields
 
@@ -25,7 +26,7 @@ public class ShipBuilder
 
     #region constructor
 
-    public ShipBuilder(IShipRepository repository, INameGenerator nameGenerator, ILogger logger)
+    public ShipBuilder(IShipRepository repository, INameGenerator nameGenerator, ILogger<ShipBuilder> logger)
     {
         _shipRepository = repository;
         _nameGenerator = nameGenerator;
@@ -60,7 +61,7 @@ public class ShipBuilder
     /// </summary>
     /// <param name="resource">Resource to add.</param>
     /// <returns>Builder.</returns>
-    public ShipBuilder AddResource(ResourceDTO resource)
+    public IShipBuilder AddResource(ResourceDTO resource)
     {
         _logger.LogInformation(
             "[{id}] Add new resource to ship creation request. Resource type [{type}], name [{name}], quantity [{quantity}]",

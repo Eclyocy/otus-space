@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SpaceShip.Service.Builder;
+using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Helpers;
 using SpaceShip.Service.Helpers.Abstractions;
 using SpaceShip.Service.Interfaces;
@@ -22,6 +24,7 @@ namespace SpaceShip.Domain.ServiceCollectionExtensions
             services.AddTransient<IShipService, ShipService>();
             services.AddTransient<IResourceService, ResourceService>();
             services.AddTransient<INameGenerator, RandomNameGenerator>();
+            services.AddTransient<IShipBuilder, ShipBuilder>();
 
             return services;
         }

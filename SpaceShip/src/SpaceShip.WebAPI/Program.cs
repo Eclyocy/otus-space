@@ -58,12 +58,6 @@ builder.Services.AddSwaggerGen(static options =>
     options.IncludeXmlComments(System.IO.Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-// SpaceShip services registration:
-builder.Services.AddHostedService<TroubleEventConsumer>();
-builder.Services.AddHostedService<StepEventConsumer>();
-
-builder.Services.RegisterServices();
-
 // Automapper:
 builder.Services.AddSingleton<IMapper>(
     new Mapper(
@@ -91,6 +85,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddNotifications();
 builder.Services.ConfigureDatabase();
+
+// SpaceShip services registration:
+builder.Services.AddHostedService<TroubleEventConsumer>();
+builder.Services.AddHostedService<StepEventConsumer>();
+builder.Services.RegisterServices();
 
 #endregion
 

@@ -4,8 +4,8 @@ using Moq;
 using NUnit.Framework.Internal;
 using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
+using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Contracts;
-using SpaceShip.Service.Helpers.Abstractions;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Service.Mappers;
 using SpaceShip.Service.Services;
@@ -19,7 +19,7 @@ public class SpaceShipServiceTests
     private IMapper _mapper;
     private IShipRepository _shipRepository;
     private IResourceService _resourceService;
-    private INameGenerator _nameGenerator;
+    private IShipBuilder _shipBuilder;
     private ILogger<ShipService> _logger;
     private ShipService _service;
 
@@ -52,7 +52,10 @@ public class SpaceShipServiceTests
         _shipRepository = mock.Object;
 
         _resourceService = new Mock<IResourceService>().Object;
-        _nameGenerator = new Mock<INameGenerator>().Object;
+
+        var moqShipBuilder = new Mock<IShipBuilder>();
+        moqShipBuilder.Setup(builder => builder.Build()).Returns(new Ship());
+        _shipBuilder = moqShipBuilder.Object;
 
         _logger = Mock.Of<ILogger<ShipService>>();
     }
@@ -60,7 +63,7 @@ public class SpaceShipServiceTests
     [SetUp]
     public void Setup()
     {
-        _service = new ShipService(_resourceService, _shipRepository, _mapper, _logger, _nameGenerator);
+        _service = new ShipService(_resourceService, _shipRepository, _mapper, _logger, _shipBuilder);
     }
 
     [Test]

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -52,16 +51,9 @@ public class SpaceShipController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IResult Get(Guid id)
     {
-        try
-        {
-            ShipDTO spaceShipDTO = _spaceShipService.GetShip(id);
-            SpaceShipMetricResponse response = _mapper.Map<SpaceShipMetricResponse>(spaceShipDTO);
-            return Results.Ok(response);
-        }
-        catch (KeyNotFoundException)
-        {
-            return Results.NotFound();
-        }
+        ShipDTO spaceShipDTO = _spaceShipService.GetShip(id);
+        SpaceShipMetricResponse response = _mapper.Map<SpaceShipMetricResponse>(spaceShipDTO);
+        return Results.Ok(response);
     }
 
     /// <summary>
