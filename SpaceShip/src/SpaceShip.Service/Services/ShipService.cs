@@ -5,6 +5,7 @@ using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Contracts;
+using SpaceShip.Service.Helpers;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
 
@@ -75,6 +76,9 @@ public class ShipService : IShipService
     {
         _logger.LogInformation("Processing new day on board the space ship with id {id}.", shipId);
 
+        _logger.LogInformation("Trying lock to modification ship with id {id}.", shipId);
+        ShipLockingHelper.WaitLockShip(shipId);
+
         Ship ship = GetRepositoryShip(shipId);
 
         SpendShipResources(ship);
@@ -84,6 +88,8 @@ public class ShipService : IShipService
         ship.Step++;
 
         _shipRepository.Update(ship, saveChanges: true);
+
+        ShipLockingHelper.ReleaseShip(shipId);
 
         return GetShip(shipId);
     }
