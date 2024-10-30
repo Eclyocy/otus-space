@@ -1,11 +1,10 @@
-﻿using SpaceShip.Domain.Model;
+﻿using SpaceShip.Domain.Entities;
 
-namespace SpaceShip.Domain.Interfaces
+namespace SpaceShip.Domain.Interfaces;
+
+/// <summary>
+/// Resources repository.
+/// </summary>
+public interface IResourceRepository : IBaseRepository<Resource>
 {
-    /// <summary>
-    /// Интерфейс репозитория ресурсов.
-    /// </summary>
-    public interface IResourceRepository : IRepository<Resource>
-    {
-    }
 }

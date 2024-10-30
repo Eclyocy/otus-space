@@ -6,10 +6,11 @@ RUN apk add --no-cache curl
 RUN mkdir /app
 WORKDIR /app
 
-RUN npm install -g @angular/cli@18
+RUN npm i -g npm@10.8.3
+RUN npm i -g @angular/cli@18 --verbose
 
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --verbose
 
 COPY . .
 CMD ["ng", "serve", "--host", "0.0.0.0"]

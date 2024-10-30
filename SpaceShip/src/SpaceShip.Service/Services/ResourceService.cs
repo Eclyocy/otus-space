@@ -1,144 +1,105 @@
-﻿using AutoMapper;
+﻿using Microsoft.Extensions.Logging;
+using Shared.Enums;
+using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
-using SpaceShip.Domain.Model;
-using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
-using SpaceShip.Services.Exceptions;
 
 namespace SpaceShip.Service.Services
 {
-    /// <summary>
-    /// Сервис для работы с сущностью "Ресурса".
-    /// </summary>
+    /// <inheritdoc/>
     public class ResourceService : IResourceService
     {
         #region private fields
 
         private readonly IResourceRepository _resourceRepository;
-        private readonly IMapper _mapper;
+
+        private readonly ILogger<ResourceService> _logger;
 
         #endregion
 
         #region constructor
 
         /// <summary>
-        /// Конструктор.
+        /// Constructor.
         /// </summary>
-        public ResourceService(IResourceRepository resourceRepository, IMapper mapper)
+        public ResourceService(
+            IResourceRepository resourceRepository,
+            ILoggerFactory loggerFactory)
         {
             _resourceRepository = resourceRepository;
-            _mapper = mapper;
+
+            _logger = loggerFactory.CreateLogger<ResourceService>();
         }
 
         #endregion
 
         #region public methods
 
-        /// <summary>
-        /// Создать новый ресурс.
-        /// </summary>
-        /// <returns>ID ресурса</returns>
-        public ResourceDTO CreateResource()
+        /// <inheritdoc/>
+        public ResourceType? GetRequiredResourceType(Resource resource)
         {
-            Resource resource = _resourceRepository.Create();
-
-            return _mapper.Map<ResourceDTO>(resource);
-        }
-
-        /// <summary>
-        /// Получить ресурс.
-        /// </summary>
-        /// <returns>Метрики ресурса</returns>
-        public ResourceDTO GetResource(Guid resourceId)
-        {
-            Resource resource = GetRepositoryResource(resourceId);
-
-            return _mapper.Map<ResourceDTO>(resource);
-        }
-
-        /// <summary>
-        /// Получить ресурсы.
-        /// </summary>
-        /// <returns>Метрики ресурсов</returns>
-        public ResourceDTO GetResources()
-        {
-            List<Resource> resource = _resourceRepository.GetAll();
-
-            return _mapper.Map<ResourceDTO>(resource);
-        }
-
-        /// <summary>
-        /// Изменение метрик существующего ресурса.
-        /// </summary>
-        /// <returns>Метрики ресурса</returns>
-        public ResourceDTO UpdateResource(Guid resourceId, ResourceDTO resourceDTO)
-        {
-            Resource resource = UpdateRepositoryResource(resourceId, resourceDTO);
-
-            return _mapper.Map<ResourceDTO>(resource);
-        }
-
-        /// <summary>
-        /// Удалить ресурс.
-        /// </summary>
-        public bool DeleteResource(Guid resourceId)
-        {
-            return _resourceRepository.Delete(resourceId);
-        }
-
-        #endregion
-
-        #region private methods
-
-        /// <summary>
-        /// Get resource from repository.
-        /// </summary>
-        /// <exception cref="NotFoundException">
-        /// In case the resource is not found by the repository.
-        /// </exception>
-        private Resource GetRepositoryResource(Guid resourceId)
-        {
-            Resource? resource = _resourceRepository.Get(resourceId);
-
-            if (resource == null)
+            if (resource.State != ResourceState.OK)
             {
-                throw new NotFoundException($"User with ID {resourceId} not found.");
+                _logger.LogInformation(
+                    "Resource {resourceName} of type {resourceType} is in {resourceState} state.",
+                    resource.Name,
+                    resource.ResourceType,
+                    resource.State);
+
+                return null;
             }
 
-            return resource;
+            if (resource.RequiredResourceType == null)
+            {
+                _logger.LogInformation(
+                    "Resource {resourceName} of type {resourceType} is self-sufficient.",
+                    resource.Name,
+                    resource.ResourceType);
+
+                return null;
+            }
+
+            return resource.RequiredResourceType;
         }
 
-        /// <summary>
-        /// Update resource type in repository.
-        /// </summary>
-        /// <exception cref="NotFoundException">
-        /// In case the resource type is not found by the repository.
-        /// </exception>
-        /// <exception cref="NotModifiedException">
-        /// In case no changes are requested.
-        /// </exception>
-        private Resource UpdateRepositoryResource(
-            Guid resourceId,
-            ResourceDTO resourceRequest)
+        /// <inheritdoc/>
+        public int GetRequiredResourceAmount(Resource resource)
         {
-            Resource currentResource = GetRepositoryResource(resourceId);
+            int requiredAmount = resource.Amount;
 
-            bool updateRequested = false;
+            _logger.LogInformation(
+                "Resource {resourceName} of type {resourceType} requires {requiredAmount} resource(s) for lifesupport.",
+                resource.Name,
+                resource.ResourceType,
+                requiredAmount);
 
-            if (resourceRequest.Name != null && resourceRequest.Name != currentResource.Name)
-            {
-                updateRequested = true;
-                currentResource.Name = resourceRequest.Name;
-            }
+            return requiredAmount;
+        }
 
-            if (!updateRequested)
-            {
-                throw new NotModifiedException();
-            }
+        /// <inheritdoc/>
+        public void UpdateResourceState(Resource resource, ResourceState resourceState)
+        {
+            _logger.LogInformation(
+                "Update resource {resourceName} of type {resourceType} state to {resourceState}.",
+                resource.Name,
+                resource.ResourceType,
+                resourceState);
 
-            _resourceRepository.Update(currentResource); // updates entity in-place
+            resource.State = resourceState;
+            _resourceRepository.Update(resource);
+        }
 
-            return currentResource;
+        /// <inheritdoc/>
+        public void UpdateResourceAmount(Resource resource, int amount)
+        {
+            _logger.LogInformation(
+                "Update resource {resourceName} of type {resourceType} amount to {resourceAmount}.",
+                resource.Name,
+                resource.ResourceType,
+                amount);
+
+            resource.Amount = amount;
+            _resourceRepository.Update(resource);
         }
 
         #endregion

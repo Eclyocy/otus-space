@@ -1,22 +1,21 @@
 ﻿using System.Net;
 
-namespace SpaceShip.Services.Exceptions
+namespace SpaceShip.Services.Exceptions;
+
+/// <summary>
+/// Not found (404) exception.
+/// </summary>
+public class NotFoundException : BaseException
 {
+    #region constructor
+
     /// <summary>
-    /// Not found (404) exception.
+    /// Constructor.
     /// </summary>
-    public class NotFoundException : BaseException
+    public NotFoundException(string message)
+        : base(HttpStatusCode.NotFound, message)
     {
-        #region constructor
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public NotFoundException(string message)
-            : base(HttpStatusCode.NotFound, message)
-        {
-        }
-
-        #endregion
     }
+
+    #endregion
 }
