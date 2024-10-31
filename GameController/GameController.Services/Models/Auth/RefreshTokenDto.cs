@@ -1,17 +1,17 @@
 ﻿namespace GameController.Services.Models.Auth
 {
     /// <summary>
-    /// Represents a model for user login.
+    /// Model for token.
     /// </summary>
-    public class TokenDto
+    public class RefreshTokenDto
     {
         /// <summary>
-        /// Represents a model for user login.
+        /// Gets or sets the token.
         /// </summary>
         public string Token { get; set; }
 
         /// <summary>
-        /// Represents a model for user login.
+        /// Gets or sets the refresh token.
         /// </summary>
         public string RefreshToken { get; set; }
     }

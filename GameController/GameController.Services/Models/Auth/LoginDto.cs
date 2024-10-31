@@ -1,17 +1,17 @@
 ﻿namespace GameController.Services.Models.Auth
 {
     /// <summary>
-    /// Represents a model for user login.
+    /// Model for user login.
     /// </summary>
     public class LoginDto
     {
         /// <summary>
-        /// Gets or sets the username of the user.
+        /// Gets or sets the user name.
         /// </summary>
         public string Username { get; set; }
 
         /// <summary>
-        /// Gets or sets the password of the user.
+        /// Gets or sets the user password.
         /// </summary>
         public string Password { get; set; }
     }

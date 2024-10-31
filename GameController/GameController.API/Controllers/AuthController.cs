@@ -59,10 +59,10 @@ namespace GameController.API.Controllers
         [HttpPost]
         [Route("refresh")]
         [SwaggerOperation("Обновление пользовательского токена")]
-        public IActionResult Refresh([FromBody] TokenRequest tokenModel)
+        public IActionResult Refresh(RefreshTokenRequest tokenModel)
         {
-            TokenResponseDto result = _authService.RefreshToken(_mapper.Map<TokenDto>(tokenModel));
-            return Ok(_mapper.Map<TokenRequest>(result));
+            TokenResponseDto result = _authService.RefreshToken(_mapper.Map<RefreshTokenDto>(tokenModel));
+            return Ok(_mapper.Map<TokenResponse>(result));
         }
 
         /// <summary>

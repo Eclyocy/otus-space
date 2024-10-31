@@ -54,7 +54,7 @@ namespace GameController.Services.Services
         /// <summary>
         /// Retrieving refresh token.
         /// </summary>
-        public TokenResponseDto RefreshToken(TokenDto tokenModel)
+        public TokenResponseDto RefreshToken(RefreshTokenDto tokenModel)
         {
             var principal = _jwtService.GetPrincipalFromExpiredToken(tokenModel.Token);
             if (principal == null)

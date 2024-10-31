@@ -15,6 +15,6 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Retrieving refresh token.
         /// </summary>
-        TokenResponseDto RefreshToken(TokenDto tokenModel);
+        TokenResponseDto RefreshToken(RefreshTokenDto tokenModel);
     }
 }
