@@ -3,7 +3,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using GameController.Services.Models.Auth;
-using Microsoft.Extensions.Configuration;
+using GameController.Services.Settings;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GameController.Services.Services
@@ -13,71 +14,26 @@ namespace GameController.Services.Services
     /// </summary>
     public class JwtService
     {
-        private readonly IConfiguration _configuration;
+        #region private fields
+
+        private readonly JwtSettings _jwtSettings;
+
+        #endregion
+
+        #region constructor
 
         /// <summary>
         /// Provides functionality for generating JSON Web Tokens (JWT).
         /// </summary>
-        public JwtService(IConfiguration configuration)
+        public JwtService(
+            IOptions<JwtSettings> options)
         {
-            _configuration = configuration;
+            _jwtSettings = options.Value;
         }
 
-        /// <summary>
-        /// GetConfigurationKey.
-        /// </summary>
-        public string GetConfigurationKey()
-        {
-            var key = _configuration["Jwt:Key"];
-            if (key == null)
-            {
-                throw new ArgumentNullException(nameof(_configuration), "Configuration is not configured.");
-            }
+        #endregion
 
-            return key;
-        }
-
-        /// <summary>
-        /// Метод для получения ключа.
-        /// </summary>
-        public string GetKey()
-        {
-            var key = _configuration["Jwt:Key"];
-            if (key == null)
-            {
-                throw new ArgumentNullException(nameof(_configuration), "Configuration is not configured.");
-            }
-
-            return key;
-        }
-
-        /// <summary>
-        /// Метод для получения издателя.
-        /// </summary>
-        public string GetIssuer()
-        {
-            var issuer = _configuration["Jwt:Issuer"];
-            if (issuer == null)
-            {
-                throw new ArgumentNullException(nameof(_configuration), "Configuration is not configured.");
-            }
-
-            return issuer;
-        }
-
-        /// <summary>
-        /// Метод для получения аудитории.
-        /// </summary>
-        public string GetAudience()
-        {
-            var audience = _configuration["Jwt:Audience"];
-            if (audience == null)
-            {
-                throw new ArgumentNullException(nameof(_configuration), "Configuration is not configured.");
-            }
-
-            return audience;
-        }
+        #region public methods
 
         /// <summary>
         /// GenerateTokens.
@@ -89,22 +45,7 @@ namespace GameController.Services.Services
                 throw new ArgumentNullException(nameof(username), "Username cannot be null or empty.");
             }
 
-            var key = _configuration["Jwt:Key"];
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentException("JWT Key is not configured.");
-            }
-
-            // Читаем время жизни токена из конфигурации
-            var expirationMinutesString = _configuration["Jwt:ExpirationMinutes"];
-            if (string.IsNullOrEmpty(expirationMinutesString))
-            {
-                throw new ArgumentException("JWT ExpirationMinutes is not configured.");
-            }
-
-            var expirationMinutes = int.Parse(expirationMinutesString);
-
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -114,13 +55,13 @@ namespace GameController.Services.Services
             };
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(expirationMinutes),  // Используем время из конфигурации
+                expires: DateTime.Now.AddMinutes(_jwtSettings.ExpirationMinutes),
                 signingCredentials: credentials);
 
-            var refreshToken = GenerateRefreshToken();  // Генерация рефреш токена
+            var refreshToken = GenerateRefreshToken();
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             int expiresIn = (int)(token.ValidTo - epoch).TotalSeconds;
 
@@ -144,5 +85,35 @@ namespace GameController.Services.Services
                 return Convert.ToBase64String(randomNumber);
             }
         }
+
+        /// <summary>
+        /// Get principal from token.
+        /// </summary>
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            TokenValidationParameters tokenValidationParameters = new()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key)),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = _jwtSettings.Issuer,
+                ValidAudience = _jwtSettings.Audience,
+                ValidateLifetime = false
+            };
+
+            JwtSecurityTokenHandler tokenHandler = new();
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+
+            return principal;
+        }
+
+        #endregion
     }
 }

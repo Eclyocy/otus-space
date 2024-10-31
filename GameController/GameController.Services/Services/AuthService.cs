@@ -1,22 +1,25 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Claims;
 using GameController.Services.Exceptions;
 using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Auth;
 using GameController.Services.Models.User;
-using Microsoft.IdentityModel.Tokens;
 
 namespace GameController.Services.Services
 {
     /// <summary>
-    /// AuthorizationService.
+    /// Service supplying authorization logic.
     /// </summary>
     public class AuthService : IAuthService
     {
+        #region private fields
+
         private readonly JwtService _jwtService;
         private readonly IUserService _userService;
+
+        #endregion
+
+        #region constructor
 
         /// <summary>
         /// AuthorizationService.
@@ -26,6 +29,10 @@ namespace GameController.Services.Services
             _jwtService = jwtService;
             _userService = userService;
         }
+
+        #endregion
+
+        #region public methods
 
         /// <summary>
         /// AuthorizationService.
@@ -47,7 +54,7 @@ namespace GameController.Services.Services
         /// </summary>
         public TokenResponseDto RefreshToken(TokenDto tokenModel)
         {
-            var principal = GetPrincipalFromExpiredToken(tokenModel.Token);
+            var principal = _jwtService.GetPrincipalFromExpiredToken(tokenModel.Token);
             if (principal == null)
             {
                throw new UnauthorizedException("Invalid token");
@@ -63,39 +70,6 @@ namespace GameController.Services.Services
             return newJwtToken;
         }
 
-        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
-        {
-            var key = _jwtService.GetKey();
-            var issuer = _jwtService.GetIssuer();
-            var audience = _jwtService.GetAudience();
-
-            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
-            {
-                throw new ArgumentException("JWT configuration is missing one or more required values.");
-            }
-
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidIssuer = issuer,
-                ValidAudience = audience,
-                ValidateLifetime = false
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new SecurityTokenException("Invalid token");
-            }
-
-            return principal;
-        }
+        #endregion
     }
 }
