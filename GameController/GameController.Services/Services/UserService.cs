@@ -51,7 +51,7 @@ namespace GameController.Services.Services
 
             User userRequest = _mapper.Map<User>(createUserDto);
 
-            if (_userRepository.GetUserByLogin(createUserDto.Name) != null)
+            if (_userRepository.GetUserByName(createUserDto.Name) != null)
             {
                 throw new ConflictException("The user is already taken");
             }
@@ -86,7 +86,7 @@ namespace GameController.Services.Services
         {
             _logger.LogInformation("Get user by username {name}", name);
 
-            User? user = _userRepository.GetUserByLogin(name);
+            User? user = _userRepository.GetUserByName(name);
 
             if (user == null)
             {
