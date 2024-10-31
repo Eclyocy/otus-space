@@ -46,10 +46,10 @@ namespace GameController.API.Controllers
         /// </summary>
         [HttpPost]
         [Route("login")]
-        [SwaggerOperation("Авторизация пользователя")]
+        [SwaggerOperation("Аутентификация пользователя")]
         public IActionResult Login(LoginRequest login)
         {
-            TokenDto result = _authService.ValidateUser(_mapper.Map<LoginDto>(login));
+            TokenDto result = _authService.Authenticate(_mapper.Map<LoginDto>(login));
             return Ok(_mapper.Map<TokenResponse>(result));
         }
 

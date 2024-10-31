@@ -8,9 +8,9 @@ namespace GameController.Services.Interfaces
     public interface IAuthService
     {
         /// <summary>
-        /// Validates the user credentials.
+        /// Authenticate the user.
         /// </summary>
-        TokenDto ValidateUser(LoginDto loginDto);
+        TokenDto Authenticate(LoginDto loginDto);
 
         /// <summary>
         /// Retrieving refresh token.

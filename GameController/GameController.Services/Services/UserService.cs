@@ -82,15 +82,17 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
-        public UserDto GetUserByName(string name)
+        public UserDto GetUserByName(string userName)
         {
-            _logger.LogInformation("Get user by username {name}", name);
+            _logger.LogInformation("Get user by name {name}", userName);
 
-            User? user = _userRepository.GetByName(name);
+            User? user = _userRepository.GetByName(userName);
 
             if (user == null)
             {
-                throw new NotFoundException($"User with name {name} not found");
+                _logger.LogInformation("User \"{name}\" is not found.", userName);
+
+                throw new NotFoundException($"User with name \"{userName}\" not found");
             }
 
             return _mapper.Map<UserDto>(user);

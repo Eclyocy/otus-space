@@ -22,7 +22,7 @@ namespace GameController.Services.Services
         #region constructor
 
         /// <summary>
-        /// AuthorizationService.
+        /// Constructor.
         /// </summary>
         public AuthService(
             IJwtService jwtService,
@@ -36,24 +36,20 @@ namespace GameController.Services.Services
 
         #region public methods
 
-        /// <summary>
-        /// AuthorizationService.
-        /// </summary>
-        public TokenDto ValidateUser(LoginDto loginDto)
+        /// <inheritdoc/>
+        public TokenDto Authenticate(LoginDto loginDto)
         {
             UserDto user = _userService.GetUserByName(loginDto.Username);
 
             if (HashHelper.HashPassword(loginDto.Password) != user.PasswordHash)
             {
-                throw new UnauthorizedException("Wrong password!");
+                throw new UnauthorizedException($"Incorrect password supplied for user \"{loginDto.Username}\".");
             }
 
             return _jwtService.GenerateTokens(user.Id.ToString());
         }
 
-        /// <summary>
-        /// Retrieving refresh token.
-        /// </summary>
+        /// <inheritdoc/>
         public TokenDto RefreshToken(RefreshTokenDto tokenModel)
         {
             var principal = _jwtService.GetPrincipalFromExpiredToken(tokenModel.Token);
