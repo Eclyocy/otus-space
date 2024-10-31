@@ -13,7 +13,7 @@ namespace GameController.Services.Interfaces
         TokenDto Authenticate(LoginDto loginDto);
 
         /// <summary>
-        /// Retrieving refresh token.
+        /// Retrieve a refreshed token.
         /// </summary>
         TokenDto RefreshToken(RefreshTokenDto tokenModel);
     }
