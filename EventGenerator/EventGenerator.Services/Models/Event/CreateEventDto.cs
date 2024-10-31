@@ -13,6 +13,6 @@
         /// <summary>
         /// Event level.
         /// </summary>
-        public EventLevelDto EventLevel { get; set; }
+        public int FreeTroubleCoins { get; set; }
     }
 }
