@@ -39,7 +39,7 @@ namespace GameController.Services.Services
         /// <summary>
         /// AuthorizationService.
         /// </summary>
-        public TokenResponseDto ValidateUser(LoginDto loginDto)
+        public TokenDto ValidateUser(LoginDto loginDto)
         {
             UserDto user = _userService.GetUserByName(loginDto.Username);
 
@@ -54,7 +54,7 @@ namespace GameController.Services.Services
         /// <summary>
         /// Retrieving refresh token.
         /// </summary>
-        public TokenResponseDto RefreshToken(RefreshTokenDto tokenModel)
+        public TokenDto RefreshToken(RefreshTokenDto tokenModel)
         {
             var principal = _jwtService.GetPrincipalFromExpiredToken(tokenModel.Token);
             if (principal == null)

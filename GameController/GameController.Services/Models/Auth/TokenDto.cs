@@ -1,9 +1,9 @@
 ﻿namespace GameController.Services.Models.Auth
 {
     /// <summary>
-    /// TokenResponseDto.
+    /// Model for JWT.
     /// </summary>
-    public class TokenResponseDto
+    public class TokenDto
     {
         /// <summary>
         /// Access token.

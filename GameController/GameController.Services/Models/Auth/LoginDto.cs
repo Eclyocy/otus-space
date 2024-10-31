@@ -1,7 +1,7 @@
 ﻿namespace GameController.Services.Models.Auth
 {
     /// <summary>
-    /// Model for user login.
+    /// Model for user login request.
     /// </summary>
     public class LoginDto
     {

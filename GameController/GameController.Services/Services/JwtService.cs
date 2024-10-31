@@ -37,7 +37,7 @@ namespace GameController.Services.Services
         #region public methods
 
         /// <inheritdoc/>
-        public TokenResponseDto GenerateTokens(string username)
+        public TokenDto GenerateTokens(string username)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -64,7 +64,7 @@ namespace GameController.Services.Services
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             int expiresIn = (int)(token.ValidTo - epoch).TotalSeconds;
 
-            return new TokenResponseDto
+            return new TokenDto
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 RefreshToken = refreshToken,

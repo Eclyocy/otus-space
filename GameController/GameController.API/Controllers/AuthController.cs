@@ -49,7 +49,7 @@ namespace GameController.API.Controllers
         [SwaggerOperation("Авторизация пользователя")]
         public IActionResult Login(LoginRequest login)
         {
-            TokenResponseDto result = _authService.ValidateUser(_mapper.Map<LoginDto>(login));
+            TokenDto result = _authService.ValidateUser(_mapper.Map<LoginDto>(login));
             return Ok(_mapper.Map<TokenResponse>(result));
         }
 
@@ -61,7 +61,7 @@ namespace GameController.API.Controllers
         [SwaggerOperation("Обновление пользовательского токена")]
         public IActionResult Refresh(RefreshTokenRequest tokenModel)
         {
-            TokenResponseDto result = _authService.RefreshToken(_mapper.Map<RefreshTokenDto>(tokenModel));
+            TokenDto result = _authService.RefreshToken(_mapper.Map<RefreshTokenDto>(tokenModel));
             return Ok(_mapper.Map<TokenResponse>(result));
         }
 

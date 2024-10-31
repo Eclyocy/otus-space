@@ -1,7 +1,7 @@
 ﻿namespace GameController.Services.Models.Auth
 {
     /// <summary>
-    /// Model for token.
+    /// Model for token refresh request.
     /// </summary>
     public class RefreshTokenDto
     {

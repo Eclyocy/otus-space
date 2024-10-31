@@ -11,7 +11,7 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Generate JWT for the user.
         /// </summary>
-        TokenResponseDto GenerateTokens(string username);
+        TokenDto GenerateTokens(string username);
 
         /// <summary>
         /// Get principal from the token.

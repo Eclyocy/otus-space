@@ -10,11 +10,11 @@ namespace GameController.Services.Interfaces
         /// <summary>
         /// Validates the user credentials.
         /// </summary>
-        TokenResponseDto ValidateUser(LoginDto loginDto);
+        TokenDto ValidateUser(LoginDto loginDto);
 
         /// <summary>
         /// Retrieving refresh token.
         /// </summary>
-        TokenResponseDto RefreshToken(RefreshTokenDto tokenModel);
+        TokenDto RefreshToken(RefreshTokenDto tokenModel);
     }
 }

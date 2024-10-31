@@ -19,7 +19,7 @@ namespace GameController.API.Mappers
             CreateMap<RefreshTokenRequest, RefreshTokenDto>();
 
             // Service models -> Controller models
-            CreateMap<TokenResponseDto, TokenResponse>();
+            CreateMap<TokenDto, TokenResponse>();
         }
     }
 }
