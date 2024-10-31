@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using GameController.API.Extensions;
 using GameController.API.Mappers;
-using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
 using GameController.Database;
 using GameController.Services;
@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
@@ -119,38 +118,7 @@ namespace GameController
                 .AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
 
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc(
-                    name: "v1",
-                    info: new() { Title = "Game Controller API", Version = "v1" });
-                options.EnableAnnotations();
-
-                // Настройка аутентификации через Bearer-токен
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] { }
-                    }
-                });
-            });
+            services.ConfigureSwagger();
 
             services
                 .AddAuthentication(options =>
