@@ -10,6 +10,6 @@ namespace GameController.Database.Interfaces
         /// <summary>
         /// Get user by <see cref="User.Name"/>.
         /// </summary>
-        User? GetUserByName(string name);
+        User? GetByName(string name);
     }
 }

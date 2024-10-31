@@ -23,7 +23,7 @@ namespace GameController.Database.Repositories
         #region public methods
 
         /// <inheritdoc/>
-        public User? GetUserByName(string name)
+        public User? GetByName(string name)
         {
             return Context.Set<User>()
                 .Where(x => x.Name == name)
