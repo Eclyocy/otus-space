@@ -75,19 +75,21 @@ public class ShipService : IShipService
     public ShipDTO ProcessNewDay(Guid shipId)
     {
         _logger.LogInformation("Processing new day on board the space ship with id {id}.", shipId);
+        Ship ship = GetRepositoryShip(shipId);
 
         _logger.LogInformation("Trying lock to modification ship with id {id}.", shipId);
         ShipLockingHelper.WaitLockShip(shipId);
-
-        Ship ship = GetRepositoryShip(shipId);
-
-        SpendShipResources(ship);
-
-        TryFlyShip(ship);
-
-        ship.Step++;
-
-        _shipRepository.Update(ship, saveChanges: true);
+        try
+        {
+            SpendShipResources(ship);
+            TryFlyShip(ship);
+            ship.Step++;
+            _shipRepository.Update(ship, saveChanges: true);
+        }
+        catch
+        {
+            _logger.LogError("Failed to process new day message for ship {id}.", shipId);
+        }
 
         ShipLockingHelper.ReleaseShip(shipId);
 

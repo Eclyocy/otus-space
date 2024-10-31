@@ -1,5 +1,3 @@
-using System.Threading;
-
 namespace SpaceShip.Service.Helpers;
 
 public static class ShipLockingHelper
