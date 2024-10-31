@@ -1,6 +1,7 @@
 ﻿using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
 using EventGenerator.Services.Models.Event;
+using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
 
 namespace EventGenerator.Services.Builder
@@ -9,7 +10,7 @@ namespace EventGenerator.Services.Builder
     {
         private readonly CreateEventDto _createEventDto;
         private readonly IEventRepository _eventRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<EventService> _logger;
 
         /// <summary>
         /// Constructor.
@@ -17,7 +18,7 @@ namespace EventGenerator.Services.Builder
         public EventBuilder(
             CreateEventDto createEventDto,
             IEventRepository eventRepository,
-            ILogger logger)
+            ILogger<EventService> logger)
         {
             _createEventDto = createEventDto;
             _eventRepository = eventRepository;
@@ -34,7 +35,9 @@ namespace EventGenerator.Services.Builder
         /// </summary>
         public Event Build()
         {
-            EventLevelDto? maxEventLevel = GetMaxEventLevel(_createEventDto.FreeTroubleCoins);
+            _logger.LogInformation("Trying to create event for {generatorId} generator an event with.", _createEventDto.GeneratorId);
+
+            EventLevelDto? maxEventLevel = GetMaxEventLevel(_createEventDto.TroubleCoins);
 
             Random random = new();
             EventLevel generatedEventLevel = (EventLevel)random.Next(0, (int)maxEventLevel.Value);
@@ -54,7 +57,6 @@ namespace EventGenerator.Services.Builder
         {
             return troubleCoins switch
             {
-                0 => null,
                 1 => EventLevelDto.Low,
                 2 => EventLevelDto.Medium,
                 _ => EventLevelDto.High
