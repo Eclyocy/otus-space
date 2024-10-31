@@ -143,25 +143,6 @@ namespace GameController.Services.Services
             return user;
         }
 
-  /*      private bool ValidateRepositoryUser(string name, string password) // на уровне авторизации
-        {
-            User? userFromBd = _userRepository.GetUserByLogin(name);
-
-            if (userFromBd == null)
-            {
-                return false; // throw new NotFoundException($"User with ID {userId} not found.");
-            }
-
-            string hash = HashHelper.HashPassword(password); // это перенести в авторизацию
-
-            if (userFromBd.PasswordHash != hash)
-            {
-                return false;
-            }
-
-            return true;
-        }*/
-
         /// <summary>
         /// Update user in repository.
         /// </summary>
