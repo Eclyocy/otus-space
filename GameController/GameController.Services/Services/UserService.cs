@@ -53,7 +53,7 @@ namespace GameController.Services.Services
 
             if (_userRepository.GetByName(createUserDto.Name) != null)
             {
-                throw new ConflictException("The user is already taken");
+                throw new ConflictException($"User name \"{createUserDto.Name}\" is already taken.");
             }
 
             User user = _userRepository.Create(userRequest);
