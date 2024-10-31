@@ -44,9 +44,6 @@ namespace GameController.API.Extensions
 
         #region private methods
 
-        /// <summary>
-        /// Configure swagger documentation.
-        /// </summary>
         private static void ConfigureSwaggerDoc(SwaggerGenOptions options)
         {
             options.SwaggerDoc(
