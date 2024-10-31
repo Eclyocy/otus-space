@@ -25,10 +25,12 @@ namespace GameController.Services
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
 
+            IConfigurationSection jwtConfigurationSection = configuration.GetSection("JWT");
+
             services.Configure<RabbitMQSettings>(x => configuration.GetSection("RabbitMQ").Bind(x));
             services.Configure<SpaceShipApiSettings>(x => configuration.GetSection("SpaceShipApi").Bind(x));
             services.Configure<GeneratorApiSettings>(x => configuration.GetSection("GeneratorApi").Bind(x));
-            services.Configure<JwtSettings>(x => configuration.GetSection("JWT").Bind(x));
+            services.Configure<JwtSettings>(jwtConfigurationSection.Bind);
 
             services.AddTransient<IGeneratorService, GeneratorService>();
             services.AddTransient<IRabbitMQService, RabbitMQService>();

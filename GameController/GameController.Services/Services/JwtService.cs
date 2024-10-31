@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
+using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Auth;
 using GameController.Services.Settings;
@@ -44,7 +44,7 @@ namespace GameController.Services.Services
                 throw new ArgumentNullException(nameof(username), "Username cannot be null or empty.");
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var securityKey = AuthHelper.GetSymmetricSecurityKey(_jwtSettings.Key);
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -78,7 +78,7 @@ namespace GameController.Services.Services
             TokenValidationParameters tokenValidationParameters = new()
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key)),
+                IssuerSigningKey = AuthHelper.GetSymmetricSecurityKey(_jwtSettings.Key),
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidIssuer = _jwtSettings.Issuer,

@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GameController.API.Mappers;
@@ -7,6 +6,7 @@ using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
 using GameController.Database;
 using GameController.Services;
+using GameController.Services.Helpers;
 using GameController.Services.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -89,6 +89,8 @@ namespace GameController
 
             services.ConfigureApplicationServices(Configuration);
 
+            IConfigurationSection jwtConfigurationSection = Configuration.GetSection("JWT");
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -150,15 +152,8 @@ namespace GameController
                 });
             });
 
-            // Проверка наличия ключа JWT
-            var jwtKey = Configuration["Jwt:Key"];
-            if (string.IsNullOrEmpty(jwtKey))
-            {
-                throw new ArgumentNullException("JWT key is not configured.");
-            }
-
-            // Настройка JWT авторизации
-            services.AddAuthentication(options =>
+            services
+                .AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -171,9 +166,9 @@ namespace GameController
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+                        ValidIssuer = jwtConfigurationSection["Issuer"],
+                        ValidAudience = jwtConfigurationSection["Audience"],
+                        IssuerSigningKey = AuthHelper.GetSymmetricSecurityKey(jwtConfigurationSection["Key"]),
                         ClockSkew = TimeSpan.Zero
                     };
                 });
