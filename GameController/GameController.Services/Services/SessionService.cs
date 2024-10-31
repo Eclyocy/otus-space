@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace GameController.Services.Services
 {
     /// <summary>
-    /// Class for working with game sessions.
+    /// Service for working with game sessions.
     /// </summary>
     public class SessionService : ISessionService
     {

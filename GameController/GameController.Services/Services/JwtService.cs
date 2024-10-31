@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using GameController.Services.Interfaces;
 using GameController.Services.Models.Auth;
 using GameController.Services.Settings;
 using Microsoft.Extensions.Options;
@@ -12,7 +13,7 @@ namespace GameController.Services.Services
     /// <summary>
     /// Provides functionality for generating JSON Web Tokens (JWT).
     /// </summary>
-    public class JwtService
+    public class JwtService : IJwtService
     {
         #region private fields
 
@@ -35,9 +36,7 @@ namespace GameController.Services.Services
 
         #region public methods
 
-        /// <summary>
-        /// GenerateTokens.
-        /// </summary>
+        /// <inheritdoc/>
         public TokenResponseDto GenerateTokens(string username)
         {
             if (string.IsNullOrEmpty(username))
@@ -73,22 +72,7 @@ namespace GameController.Services.Services
             };
         }
 
-        /// <summary>
-        /// GenerateRefreshToken.
-        /// </summary>
-        public static string GenerateRefreshToken()
-        {
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
-        }
-
-        /// <summary>
-        /// Get principal from token.
-        /// </summary>
+        /// <inheritdoc/>
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
             TokenValidationParameters tokenValidationParameters = new()
@@ -112,6 +96,23 @@ namespace GameController.Services.Services
             }
 
             return principal;
+        }
+
+        #endregion
+
+        #region private methods
+
+        /// <summary>
+        /// GenerateRefreshToken.
+        /// </summary>
+        private static string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
         }
 
         #endregion

@@ -14,7 +14,7 @@ namespace GameController.Services.Services
     {
         #region private fields
 
-        private readonly JwtService _jwtService;
+        private readonly IJwtService _jwtService;
         private readonly IUserService _userService;
 
         #endregion
@@ -24,7 +24,9 @@ namespace GameController.Services.Services
         /// <summary>
         /// AuthorizationService.
         /// </summary>
-        public AuthService(JwtService jwtService, IUserService userService)
+        public AuthService(
+            IJwtService jwtService,
+            IUserService userService)
         {
             _jwtService = jwtService;
             _userService = userService;

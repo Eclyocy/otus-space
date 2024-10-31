@@ -7,8 +7,6 @@ using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
 using GameController.Database;
 using GameController.Services;
-using GameController.Services.Interfaces;
-using GameController.Services.Services;
 using GameController.Services.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -160,8 +158,6 @@ namespace GameController
             }
 
             // Настройка JWT авторизации
-            services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<JwtService>();
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -181,9 +177,8 @@ namespace GameController
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-
-            services.AddScoped<IAuthService, AuthService>();
         }
+
         #endregion
 
         #region private methods

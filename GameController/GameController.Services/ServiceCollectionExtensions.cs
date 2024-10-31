@@ -36,6 +36,10 @@ namespace GameController.Services
             services.AddTransient<IShipService, ShipService>();
             services.AddTransient<IUserService, UserService>();
 
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddSingleton<IJwtService, JwtService>();
+
             return services;
         }
 

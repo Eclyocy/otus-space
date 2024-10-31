@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace GameController.Services.Services
 {
     /// <summary>
-    /// Class for working with users.
+    /// Service for working with users.
     /// </summary>
     public class UserService : IUserService
     {
