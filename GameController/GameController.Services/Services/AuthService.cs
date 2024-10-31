@@ -1,9 +1,14 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using GameController.Services.Exceptions;
 using GameController.Services.Helpers;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Auth;
 using GameController.Services.Models.User;
+using GameController.Services.Settings;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GameController.Services.Services
 {
@@ -14,8 +19,12 @@ namespace GameController.Services.Services
     {
         #region private fields
 
-        private readonly IJwtService _jwtService;
+        private readonly IClaimsService _claimsService;
         private readonly IUserService _userService;
+
+        private readonly JwtSettings _jwtSettings;
+
+        private static readonly DateTime _epoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         #endregion
 
@@ -25,11 +34,14 @@ namespace GameController.Services.Services
         /// Constructor.
         /// </summary>
         public AuthService(
-            IJwtService jwtService,
-            IUserService userService)
+            IClaimsService claimsService,
+            IUserService userService,
+            IOptions<JwtSettings> options)
         {
-            _jwtService = jwtService;
+            _claimsService = claimsService;
             _userService = userService;
+
+            _jwtSettings = options.Value;
         }
 
         #endregion
@@ -46,26 +58,115 @@ namespace GameController.Services.Services
                 throw new UnauthorizedException($"Incorrect password supplied for user \"{loginDto.Username}\".");
             }
 
-            return _jwtService.GenerateTokens(user.Id.ToString());
+            return GenerateTokens(user);
         }
 
         /// <inheritdoc/>
         public TokenDto RefreshToken(RefreshTokenDto tokenModel)
         {
-            var principal = _jwtService.GetPrincipalFromExpiredToken(tokenModel.Token);
-            if (principal == null)
+            string userName = GetNameClaim(tokenModel.Token);
+
+            UserDto user;
+
+            try
             {
-               throw new UnauthorizedException("Invalid token");
+                user = _userService.GetUserByName(userName);
+            }
+            catch (NotFoundException e)
+            {
+                throw new UnauthorizedException(e.Message);
             }
 
-            if (principal.FindFirst(ClaimTypes.NameIdentifier) == null)
+            return GenerateTokens(user);
+        }
+
+        #endregion
+
+        #region private methods
+
+        /// <summary>
+        /// Generate JWT for the user.
+        /// </summary>
+        private TokenDto GenerateTokens(UserDto user)
+        {
+            JwtSecurityToken token = GenerateToken(user);
+            string refreshToken = GenerateRefreshToken();
+            int expiresIn = (int)(token.ValidTo - _epoch).TotalSeconds;
+
+            return new TokenDto
             {
-                throw new UnauthorizedException("Invalid token");
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                RefreshToken = refreshToken,
+                ExpiresIn = expiresIn
+            };
+        }
+
+        /// <summary>
+        /// Generate the refresh token.
+        /// </summary>
+        private static string GenerateRefreshToken()
+        {
+            byte[] randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
+        /// <summary>
+        /// Generate the token.
+        /// </summary>
+        private JwtSecurityToken GenerateToken(UserDto user)
+        {
+            List<Claim> claims = _claimsService.GetClaims(user);
+
+            SymmetricSecurityKey securityKey = AuthHelper.GetSymmetricSecurityKey(_jwtSettings.Key);
+            SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
+
+            DateTime now = DateTime.Now;
+
+            return new(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                notBefore: now,
+                expires: now.Add(TimeSpan.FromMinutes(_jwtSettings.ExpirationMinutes)),
+                signingCredentials: signingCredentials);
+        }
+
+        /// <summary>
+        /// Get user name from the <see cref="ClaimTypes.Name"/> claim of the access token.
+        /// </summary>
+        private string GetNameClaim(string token)
+        {
+            TokenValidationParameters tokenValidationParameters = new()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = AuthHelper.GetSymmetricSecurityKey(_jwtSettings.Key),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = _jwtSettings.Issuer,
+                ValidAudience = _jwtSettings.Audience,
+                ValidateLifetime = false
+            };
+
+            ClaimsPrincipal claimPrincipal = new JwtSecurityTokenHandler()
+                .ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+
+            if (claimPrincipal == null)
+            {
+                throw new UnauthorizedAccessException(
+                    $"Invalid token: Could not validate or get {nameof(ClaimsPrincipal)} from access token.");
             }
 
-            var newJwtToken = _jwtService.GenerateTokens(principal.FindFirst(ClaimTypes.NameIdentifier)!.Value); // не понятно почему ругается, что может быть null
+            Claim? nameClaim = claimPrincipal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name);
 
-            return newJwtToken;
+            if (nameClaim == null || string.IsNullOrEmpty(nameClaim.Value))
+            {
+                throw new UnauthorizedAccessException(
+                    $"Invalid token: Could not get user name from access token.");
+            }
+
+            return nameClaim.Value;
         }
 
         #endregion

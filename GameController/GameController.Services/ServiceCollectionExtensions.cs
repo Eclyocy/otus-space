@@ -32,6 +32,7 @@ namespace GameController.Services
             services.Configure<GeneratorApiSettings>(x => configuration.GetSection("GeneratorApi").Bind(x));
             services.Configure<JwtSettings>(jwtConfigurationSection.Bind);
 
+            services.AddTransient<IClaimsService, ClaimsService>();
             services.AddTransient<IGeneratorService, GeneratorService>();
             services.AddTransient<IRabbitMQService, RabbitMQService>();
             services.AddTransient<ISessionService, SessionService>();
@@ -39,8 +40,6 @@ namespace GameController.Services
             services.AddTransient<IUserService, UserService>();
 
             services.AddScoped<IAuthService, AuthService>();
-
-            services.AddSingleton<IJwtService, JwtService>();
 
             return services;
         }

@@ -73,8 +73,10 @@ namespace GameController.API.Controllers
         [Authorize]
         public IActionResult TestAuth()
         {
-            var username = User.Identity.Name;
-            return Ok($"Welcome {username}, you are authorized to play!");
+            string? userName = User.Identity?.Name;
+            return Ok(string.Format(
+                "Welcome {0}, you are authorized to play!",
+                string.IsNullOrEmpty(userName) ? "Anonymous" : userName));
         }
 
         #endregion
