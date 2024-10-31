@@ -4,9 +4,9 @@ using System.Text;
 namespace GameController.Services.Helpers
 {
     /// <summary>
-    /// Class containing helper methods for password hashing.
+    /// Helper for password hashing.
     /// </summary>
-    public class HashHelper
+    public static class HashHelper
     {
         #region public methods
 
@@ -17,12 +17,9 @@ namespace GameController.Services.Helpers
         /// <returns>The hashed password in Base64 format.</returns>
         public static string HashPassword(string password)
         {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = Encoding.UTF8.GetBytes(password);
-                byte[] hashBytes = sha256.ComputeHash(bytes);
-                return Convert.ToBase64String(hashBytes);
-            }
+            byte[] bytes = Encoding.UTF8.GetBytes(password);
+            byte[] hashBytes = SHA256.HashData(bytes);
+            return Convert.ToBase64String(hashBytes);
         }
 
         #endregion
