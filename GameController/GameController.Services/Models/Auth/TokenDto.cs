@@ -16,7 +16,7 @@
         public string RefreshToken { get; set; }
 
         /// <summary>
-        /// Type of the token, usually "Bearer".
+        /// Token type.
         /// </summary>
         public string TokenType { get; set; } = "Bearer";
 

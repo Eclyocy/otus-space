@@ -23,7 +23,7 @@ namespace GameController.API.Models.Auth
         /// Token type.
         /// </summary>
         [JsonPropertyName("token_type")]
-        public string TokenType { get; set; } = "Bearer";
+        public string TokenType { get; set; }
 
         /// <summary>
         /// Identifies the token expiration time.
