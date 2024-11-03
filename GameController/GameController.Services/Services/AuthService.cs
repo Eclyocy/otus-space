@@ -64,13 +64,18 @@ namespace GameController.Services.Services
         /// <inheritdoc/>
         public TokenDto RefreshToken(RefreshTokenDto tokenDto)
         {
-            string userName = GetNameClaim(tokenDto.Token);
+            string nameClaim = GetNameClaim(tokenDto.Token);
+
+            if (!Guid.TryParse(nameClaim, out Guid userId))
+            {
+                throw new UnauthorizedException($"Invalid name claim supplied: {nameClaim}");
+            }
 
             UserDto user;
 
             try
             {
-                user = _userService.GetUserByName(userName);
+                user = _userService.GetUser(userId);
             }
             catch (NotFoundException e)
             {
@@ -134,7 +139,7 @@ namespace GameController.Services.Services
         }
 
         /// <summary>
-        /// Get user name from the <see cref="ClaimTypes.Name"/> claim of the access token.
+        /// Get claim value from the <see cref="ClaimTypes.Name"/> claim of the access token.
         /// </summary>
         private string GetNameClaim(string token)
         {

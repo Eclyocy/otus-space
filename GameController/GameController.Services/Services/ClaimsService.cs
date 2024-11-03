@@ -13,7 +13,7 @@ namespace GameController.Services.Services
         public List<Claim> GetClaims(UserDto user)
         {
             return [
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Id.ToString()),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, "User")
             ];
         }
