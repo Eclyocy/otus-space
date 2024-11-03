@@ -62,9 +62,9 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
-        public TokenDto RefreshToken(RefreshTokenDto tokenModel)
+        public TokenDto RefreshToken(RefreshTokenDto tokenDto)
         {
-            string userName = GetNameClaim(tokenModel.Token);
+            string userName = GetNameClaim(tokenDto.Token);
 
             UserDto user;
 
