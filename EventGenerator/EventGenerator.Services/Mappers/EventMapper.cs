@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventGenerator.Database.Models;
+using EventGenerator.Services.Helpers;
 using EventGenerator.Services.Models.Event;
 
 namespace EventGenerator.Services.Mappers
@@ -19,7 +20,10 @@ namespace EventGenerator.Services.Mappers
 
             // Database models -> Service models
             CreateMap<Event, EventDto>()
-                .ForMember(x => x.EventId, opt => opt.MapFrom(x => x.Id));
+                .ForMember(x => x.EventId, opt => opt.MapFrom(x => x.Id))
+                .ForMember(
+                    x => x.EventCost,
+                    opt => opt.MapFrom(x => TroubleCoinsConverter.ConvertEventLevel(x.EventLevel)));
         }
     }
 }

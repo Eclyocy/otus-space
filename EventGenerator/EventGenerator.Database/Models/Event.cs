@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Shared.Enums;
 
 namespace EventGenerator.Database.Models
 {

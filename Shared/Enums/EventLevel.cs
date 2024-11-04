@@ -1,9 +1,9 @@
-﻿namespace EventGenerator.API.Models
+﻿namespace Shared.Enums
 {
     /// <summary>
     /// Enumerator for event levels.
     /// </summary>
-    public enum EventLevelResponse
+    public enum EventLevel : byte
     {
         /// <summary>
         /// Low level event.

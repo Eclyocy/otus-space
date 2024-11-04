@@ -111,7 +111,9 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    build: EventGenerator
+    build:
+      context: .
+      dockerfile: EventGenerator/Dockerfile
     ports:
     - 6061:7161
     environment:

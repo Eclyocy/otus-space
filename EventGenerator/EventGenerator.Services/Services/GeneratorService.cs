@@ -106,28 +106,31 @@ namespace EventGenerator.Services.Services
 
             Generator generator = GetGeneratorFromRepository(generatorId);
 
-            if (generator.TroubleCoins == 0)
-            {
-                _logger.LogInformation("Generator {generatorId} decided to hold onto its trouble coins.", generatorId);
-
-                return null;
-            }
-
-            _logger.LogInformation("Generator {generatorId} has generated an event with.", generatorId);
-
-            EventDto eventEntity = _eventService.CreateEvent(
+            EventDto? eventDto = _eventService.CreateEvent(
                 new()
                 {
                     GeneratorId = generatorId,
                     TroubleCoins = generator.TroubleCoins
                 });
 
-            _logger.LogInformation("Spend a trouble coin to the generator {generatorId} after generated event.", generatorId);
-            generator.TroubleCoins -= generator.TroubleCoins;
+            if (eventDto == null)
+            {
+                _logger.LogInformation("Generator {generatorId} decided to hold onto its trouble coins.", generatorId);
+
+                return null;
+            }
+
+            _logger.LogInformation(
+                "Generator {generatorId} has generated an event: {event}",
+                generatorId,
+                eventDto);
+
+            generator.TroubleCoins -= eventDto.EventCost;
             _generatorRepository.Update(generator);
 
-            return _mapper.Map<EventDto>(eventEntity);
+            return eventDto;
         }
+
         #endregion
 
         #region private methods
@@ -149,6 +152,7 @@ namespace EventGenerator.Services.Services
 
             return generator;
         }
+
         #endregion
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace EventGenerator.API.Models
+﻿using Shared.Enums;
+
+namespace EventGenerator.API.Models
 {
     /// <summary>
     /// Event model.
@@ -18,6 +20,6 @@
         /// <summary>
         /// Event level.
         /// </summary>
-        public EventLevelResponse EventLevel { get; set; }
+        public EventLevel EventLevel { get; set; }
     }
 }

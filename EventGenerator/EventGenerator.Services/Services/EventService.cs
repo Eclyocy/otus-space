@@ -33,12 +33,17 @@ namespace EventGenerator.Services.Services
         }
 
         /// <inheritdoc/>
-        public EventDto CreateEvent(CreateEventDto createEventRequest)
+        public EventDto? CreateEvent(CreateEventDto createEventRequest)
         {
             _logger.LogInformation("Create event by request {request}", createEventRequest);
 
             var eventBuilder = new EventBuilder(createEventRequest, _eventRepository, _logger);
-            Event eventEntity = eventBuilder.Build();
+            Event? eventEntity = eventBuilder.Build();
+
+            if (eventEntity == null)
+            {
+                return null;
+            }
 
             return _mapper.Map<EventDto>(eventEntity);
         }

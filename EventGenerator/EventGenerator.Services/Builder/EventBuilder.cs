@@ -1,8 +1,10 @@
 ﻿using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
+using EventGenerator.Services.Helpers;
 using EventGenerator.Services.Models.Event;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 
 namespace EventGenerator.Services.Builder
 {
@@ -33,34 +35,38 @@ namespace EventGenerator.Services.Builder
         /// <summary>
         /// Create new event.
         /// </summary>
-        public Event Build()
+        public Event? Build()
         {
-            _logger.LogInformation("Trying to create event for {generatorId} generator an event with.", _createEventDto.GeneratorId);
+            _logger.LogInformation(
+                "Trying to create an event for {generatorId} generator an event with {troubleCoins} trouble coins.",
+                _createEventDto.GeneratorId,
+                _createEventDto.TroubleCoins);
 
-            EventLevelDto? maxEventLevel = GetMaxEventLevel(_createEventDto.TroubleCoins);
+            EventLevel? maxEventLevel = TroubleCoinsConverter.ConvertTroubleCoins(_createEventDto.TroubleCoins);
+
+            if (maxEventLevel == null)
+            {
+                _logger.LogInformation("Cannot generate an event.");
+
+                return null;
+            }
 
             Random random = new();
-            EventLevel generatedEventLevel = (EventLevel)random.Next(0, (int)maxEventLevel.Value);
+            int generatedEventLevel = random.Next(0, (int)maxEventLevel.Value + 1);
 
-            var newevent = _eventRepository.Create(new Event()
+            if (generatedEventLevel == 0)
             {
-                EventLevel = generatedEventLevel,
-            });
+                _logger.LogInformation("Decided to skip event generating.");
 
-            return newevent;
-        }
+                return null;
+            }
 
-        /// <summary>
-        /// Get maximum level of event the generator can produce.
-        /// </summary>
-        private static EventLevelDto? GetMaxEventLevel(int troubleCoins)
-        {
-            return troubleCoins switch
-            {
-                1 => EventLevelDto.Low,
-                2 => EventLevelDto.Medium,
-                _ => EventLevelDto.High
-            };
+            return _eventRepository.Create(
+                new()
+                {
+                    GeneratorId = _createEventDto.GeneratorId,
+                    EventLevel = (EventLevel)generatedEventLevel
+                });
         }
     }
 }
