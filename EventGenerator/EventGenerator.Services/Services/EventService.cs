@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
+using EventGenerator.Services.Builder;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Event;
 using Microsoft.Extensions.Logging;
@@ -32,11 +33,17 @@ namespace EventGenerator.Services.Services
         }
 
         /// <inheritdoc/>
-        public EventDto CreateEvent(CreateEventDto createEventRequest)
+        public EventDto? CreateEvent(CreateEventDto createEventRequest)
         {
             _logger.LogInformation("Create event by request {request}", createEventRequest);
 
-            Event eventEntity = _eventRepository.Create(_mapper.Map<Event>(createEventRequest));
+            var eventBuilder = new EventBuilder(createEventRequest, _eventRepository, _logger);
+            Event? eventEntity = eventBuilder.Build();
+
+            if (eventEntity == null)
+            {
+                return null;
+            }
 
             return _mapper.Map<EventDto>(eventEntity);
         }
