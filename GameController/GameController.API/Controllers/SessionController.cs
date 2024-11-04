@@ -51,8 +51,7 @@ namespace GameController.API.Controllers
         public List<SessionResponse> GetUserSessions(Guid userId)
         {
             List<SessionDto> sessionDtos = _sessionService.GetUserSessions(userId);
-            List<SessionResponse> sessionModels = _mapper.Map<List<SessionResponse>>(sessionDtos);
-            return sessionModels;
+            return _mapper.Map<List<SessionResponse>>(sessionDtos);
         }
 
         /// <summary>
@@ -64,7 +63,6 @@ namespace GameController.API.Controllers
         public async Task<SessionResponse> CreateUserSessionAsync(Guid userId)
         {
             SessionDto sessionDto = await _sessionService.CreateUserSessionAsync(userId);
-
             return _mapper.Map<SessionResponse>(sessionDto);
         }
 

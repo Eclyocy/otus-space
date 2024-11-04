@@ -14,5 +14,10 @@
         /// User name.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Password hash.
+        /// </summary>
+        public string PasswordHash { get; set; }
     }
 }

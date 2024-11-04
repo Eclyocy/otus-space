@@ -7,5 +7,9 @@ namespace GameController.Database.Interfaces
     /// </summary>
     public interface IUserRepository : IRepository<User>
     {
+        /// <summary>
+        /// Get user by <see cref="User.Name"/>.
+        /// </summary>
+        User? GetByName(string name);
     }
 }
