@@ -82,7 +82,7 @@ namespace EventGenerator.Tests
         {
             // Arrange
             var generator = new Generator { Id = generatorId, ShipId = shipId, TroubleCoins = troubleCoins };
-            var generatorDto = new GeneratorDto { ShipId = shipId };
+            var generatorDto = new GeneratorDto { ShipId = shipId, GeneratorId = generatorId, TroubleCoins = troubleCoins };
             _generatorRepositoryMock.Setup(repo => repo.Get(generatorId, false)).Returns(generator);
             _mapperMock.Setup(m => m.Map<GeneratorDto>(generator)).Returns(new GeneratorDto { ShipId = generator.ShipId, GeneratorId = generatorId, TroubleCoins = generator.TroubleCoins });
 

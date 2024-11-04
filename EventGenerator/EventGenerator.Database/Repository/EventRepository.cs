@@ -19,17 +19,5 @@ namespace EventGenerator.Database.Repository
         }
 
         #endregion
-
-        #region public methods
-
-        public List<Event> GetAllByGeneratorId(Guid generatorId)
-        {
-            var res = Context.Set<Event>()
-                .Where(x => x.GeneratorId == generatorId)
-                .ToList();
-            return res;
-        }
-
-        #endregion
     }
 }

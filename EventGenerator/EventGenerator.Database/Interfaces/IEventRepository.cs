@@ -7,9 +7,5 @@ namespace EventGenerator.Database.Interfaces
     /// </summary>
     public interface IEventRepository : IRepository<Event>
     {
-        /// <summary>
-        /// Get all event of a generator.
-        /// </summary>
-        List<Event> GetAllByGeneratorId(Guid generatorId);
     }
 }
