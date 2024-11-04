@@ -1,6 +1,6 @@
 ﻿using GameController.API.Middleware;
 
-namespace GameController.API.ServicesExtensions
+namespace GameController.API.Extensions
 {
     /// <summary>
     /// Extensions for application builder.

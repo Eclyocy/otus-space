@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace GameController.Services.Services
 {
     /// <summary>
-    /// Class for working with users.
+    /// Service for working with users.
     /// </summary>
     public class UserService : IUserService
     {
@@ -51,6 +51,11 @@ namespace GameController.Services.Services
 
             User userRequest = _mapper.Map<User>(createUserDto);
 
+            if (_userRepository.GetByName(createUserDto.Name) != null)
+            {
+                throw new ConflictException($"User name \"{createUserDto.Name}\" is already taken.");
+            }
+
             User user = _userRepository.Create(userRequest);
 
             return _mapper.Map<UserDto>(user);
@@ -72,6 +77,23 @@ namespace GameController.Services.Services
             _logger.LogInformation("Get user by ID {userId}", userId);
 
             User user = GetRepositoryUser(userId);
+
+            return _mapper.Map<UserDto>(user);
+        }
+
+        /// <inheritdoc/>
+        public UserDto GetUserByName(string userName)
+        {
+            _logger.LogInformation("Get user by name {name}", userName);
+
+            User? user = _userRepository.GetByName(userName);
+
+            if (user == null)
+            {
+                _logger.LogInformation("User \"{name}\" is not found.", userName);
+
+                throw new NotFoundException($"User with name \"{userName}\" not found");
+            }
 
             return _mapper.Map<UserDto>(user);
         }

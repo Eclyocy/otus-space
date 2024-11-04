@@ -23,6 +23,11 @@ namespace GameController.Services.Interfaces
         UserDto GetUser(Guid userId);
 
         /// <summary>
+        /// Retrieve the user by <paramref name="userName"/>.
+        /// </summary>
+        UserDto GetUserByName(string userName);
+
+        /// <summary>
         /// Update the user with <paramref name="userId"/>.
         /// </summary>
         UserDto UpdateUser(Guid userId, UpdateUserDto updateUserDto);
