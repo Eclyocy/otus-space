@@ -71,7 +71,7 @@ public class RabbitMQService : IHostedService
 
         _channel.ExchangeDeclare(
                     exchange: _eventsExchange,
-                    type: "direct",
+                    type: "topic",
                     durable: true,
                     autoDelete: false);
 

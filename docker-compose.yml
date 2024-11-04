@@ -95,7 +95,9 @@ services:
     - RABBITMQ_USER=space-ship
     - RABBITMQ_PASSWORD=Ss1234
     - RABBITMQ_TROUBLES_QUEUE=q_troubles
+    - RABBITMQ_TROUBLES_EXCHANGE=x_troubles
     - RABBITMQ_STEP_QUEUE=q_new_day_ship
+    - RABBITMQ_STEP_EXCHANGE=x_new_day
     - POSTGRES_HOST=game_controller_db
     - POSTGRES_PORT=5432
     - POSTGRES_DATABASE=spaceship_db

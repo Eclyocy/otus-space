@@ -92,6 +92,19 @@ public class ShipService : IShipService
     }
 
     /// <inheritdoc/>
+    public ShipDTO ApplyFailure(Guid shipId, int problemLevel)
+    {
+        _logger.LogInformation("New failure occur on ship with id: {id}. Updating status.", shipId);
+
+        Ship ship = GetRepositoryShip(shipId);
+        ship.State = ShipState.Crashed;
+        _shipRepository.Update(ship, saveChanges: true);
+
+        _logger.LogInformation("Ship {id} successfully set status to Crashed.", shipId);
+        return GetShip(shipId);
+    }
+
+    /// <inheritdoc/>
     public bool DeleteShip(Guid shipId)
     {
         _logger.LogInformation("Delete space ship with id {id}", shipId);

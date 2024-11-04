@@ -23,6 +23,11 @@ public interface IShipService
     ShipDTO ProcessNewDay(Guid shipId);
 
     /// <summary>
+    /// Process trouble message for SpaceShip/>.
+    /// </summary>
+    ShipDTO ApplyFailure(Guid shipId, int problemLevel);
+
+    /// <summary>
     /// Delete the SpaceShip with <paramref name="shipId"/>.
     /// </summary>
     bool DeleteShip(Guid shipId);
