@@ -1,4 +1,6 @@
-﻿namespace GameController.Services.Models.Ship
+﻿using Shared.Enums;
+
+namespace GameController.Services.Models.Ship
 {
     /// <summary>
     /// Model for resource of <see cref="ShipDto"/>.
@@ -23,11 +25,11 @@
         /// <summary>
         /// Resource type.
         /// </summary>
-        public string ResourceType { get; set; }
+        public ResourceType ResourceType { get; set; }
 
         /// <summary>
         /// Resource state.
         /// </summary>
-        public string State { get; set; }
+        public ResourceState State { get; set; }
     }
 }

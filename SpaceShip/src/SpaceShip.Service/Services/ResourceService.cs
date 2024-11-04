@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Shared.Enums;
 using SpaceShip.Domain.Entities;
-using SpaceShip.Domain.Enums;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Interfaces;
 

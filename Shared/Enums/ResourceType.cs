@@ -1,4 +1,4 @@
-﻿namespace SpaceShip.Domain.Enums;
+﻿namespace Shared.Enums;
 
 /// <summary>
 /// Resource types.

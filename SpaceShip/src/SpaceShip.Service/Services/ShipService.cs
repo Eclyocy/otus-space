@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Shared.Enums;
 using SpaceShip.Domain.Entities;
-using SpaceShip.Domain.Enums;
 using SpaceShip.Domain.Interfaces;
+using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
@@ -17,6 +18,7 @@ public class ShipService : IShipService
     #region private fields
 
     private readonly IResourceService _resourceService;
+    private readonly IShipBuilder _shipBuilder;
     private readonly IShipRepository _shipRepository;
 
     private readonly IMapper _mapper;
@@ -31,11 +33,13 @@ public class ShipService : IShipService
     /// </summary>
     public ShipService(
         IResourceService resourceService,
+        IShipBuilder shipBuilder,
         IShipRepository shipRepository,
         IMapper mapper,
         ILogger<ShipService> logger)
     {
         _resourceService = resourceService;
+        _shipBuilder = shipBuilder;
         _shipRepository = shipRepository;
 
         _mapper = mapper;
@@ -51,54 +55,7 @@ public class ShipService : IShipService
     {
         _logger.LogInformation("Create space ship");
 
-        Ship ship = _shipRepository.Create(
-            new()
-            {
-                Step = 0,
-                State = ShipState.OK,
-            },
-            saveChanges: false);
-
-        ship.Resources = new List<Resource>()
-        {
-            new Resource()
-            {
-                Name = "Обшивка",
-                Amount = 1,
-                State = ResourceState.OK,
-                ResourceType = ResourceType.Hull
-            },
-            new Resource()
-            {
-                Name = "Металлический лом",
-                Amount = 4,
-                State = ResourceState.OK,
-                ResourceType = ResourceType.ScrapMetal
-            },
-            new Resource()
-            {
-                Name = "Двигатель (передний)",
-                Amount = 1,
-                State = ResourceState.OK,
-                ResourceType = ResourceType.Engine
-            },
-            new Resource()
-            {
-                Name = "Двигатель (боковой)",
-                Amount = 2,
-                State = ResourceState.OK,
-                ResourceType = ResourceType.Engine
-            },
-            new Resource()
-            {
-                Name = "Топливо",
-                Amount = 22,
-                State = ResourceState.OK,
-                ResourceType = ResourceType.Fuel
-            }
-        };
-
-        _shipRepository.SaveChanges();
+        Ship ship = _shipBuilder.Build();
 
         return _mapper.Map<ShipDTO>(ship);
     }

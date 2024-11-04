@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using GameController.API.Models.Session;
-using GameController.Controllers.Models.Ship;
+using GameController.API.Models.Ship;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Session;
 using GameController.Services.Models.Ship;

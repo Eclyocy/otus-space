@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Shared.Enums;
 
 namespace GameController.Services.Models.Ship
 {
@@ -26,7 +27,7 @@ namespace GameController.Services.Models.Ship
         /// <summary>
         /// Space ship state.
         /// </summary>
-        public string State { get; set; }
+        public ShipState State { get; set; }
 
         /// <summary>
         /// Space ship resources.
