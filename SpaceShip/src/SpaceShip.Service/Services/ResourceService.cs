@@ -90,6 +90,21 @@ namespace SpaceShip.Service.Services
         }
 
         /// <inheritdoc/>
+        public void UpdateResourceState(Resource resource, ResourceState resourceState, EventLevel criticality)
+        {
+            _logger.LogInformation(
+                "Update resource {resourceName} of type {resourceType} state to {resourceState} with criticality {criticality}.",
+                resource.Name,
+                resource.ResourceType,
+                resourceState,
+                criticality);
+
+            resource.State = resourceState;
+            resource.StateCriticality = criticality;
+            _resourceRepository.Update(resource);
+        }
+
+        /// <inheritdoc/>
         public void UpdateResourceAmount(Resource resource, int amount)
         {
             _logger.LogInformation(

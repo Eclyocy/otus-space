@@ -1,21 +1,21 @@
 using Shared.Enums;
 
-namespace SpaceShip.Service.EventsConsumer.Contracts
+namespace EventGenerator.Services.Models
 {
     /// <summary>
-    /// Message DTO from EventGenerator.
+    /// Model for "New Day" message.
     /// </summary>
-    public class TroubleMessageDTO
+    public record EventMessageDto
     {
         /// <summary>
-        /// Spaceship identifier.
-        /// </summary>
-        public Guid ShipId { get; set; }
-
-        /// <summary>
-        /// Event identifier.
+        /// Ship ID.
         /// </summary>
         public Guid EventId { get; set; }
+
+        /// <summary>
+        /// Ship ID.
+        /// </summary>
+        public Guid ShipId { get; set; }
 
         /// <summary>
         /// Event level.

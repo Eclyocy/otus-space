@@ -6,6 +6,7 @@ using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Service.Models;
 using SpaceShip.Services.Exceptions;
 
 namespace SpaceShip.Service.Services;
@@ -81,27 +82,34 @@ public class ShipService : IShipService
         {
             SpendShipResources(ship);
 
+            TryRepairShip(ship);
+
             TryFlyShip(ship);
         }
 
         ship.Step++;
 
-        _shipRepository.Update(ship, saveChanges: true);
+        UpdateRepositoryShip(ship);
 
         return GetShip(shipId);
     }
 
     /// <inheritdoc/>
-    public ShipDTO ApplyFailure(Guid shipId, int problemLevel)
+    public ShipDTO ApplyFailure(Trouble trouble)
     {
-        _logger.LogInformation("New failure occur on ship with id: {id}. Updating status.", shipId);
+        _logger.LogInformation("New {level} failure occur with {resource} on ship with id: {id}. Updating status.", trouble.Level, trouble.Resource, trouble.ShipId);
 
-        Ship ship = GetRepositoryShip(shipId);
-        ship.State = ShipState.Crashed;
-        _shipRepository.Update(ship, saveChanges: true);
+        Ship ship = GetRepositoryShip(trouble.ShipId);
 
-        _logger.LogInformation("Ship {id} successfully set status to Crashed.", shipId);
-        return GetShip(shipId);
+        Resource component = ship.Resources.Where(x => x.ResourceType == trouble.Resource).OrderBy(x => x.State).First();
+        if (component is not null)
+        {
+            _resourceService.UpdateResourceState(component, ResourceState.Fail, trouble.Level);
+        }
+
+        UpdateRepositoryShip(ship);
+
+        return GetShip(trouble.ShipId);
     }
 
     /// <inheritdoc/>
@@ -231,6 +239,15 @@ public class ShipService : IShipService
             return;
         }
 
+        if (ship.Resources.Where(x => x.ResourceType == ResourceType.Hull && x.State == ResourceState.Fail).Any())
+        {
+            _logger.LogInformation("Ship {shipId} cannot fly with damaged hull.", ship.Id);
+
+            ship.State = ShipState.Crashed;
+
+            return;
+        }
+
         _logger.LogInformation("Ship flies!");
 
         ship.State = ShipState.OK;
@@ -244,6 +261,32 @@ public class ShipService : IShipService
 
             ship.State = ShipState.Arrived;
         }
+    }
+
+    /// <summary>
+    /// Try fix ship troubles
+    /// </summary>
+    private bool TryRepairShip(Ship ship)
+    {
+        ship.Resources.Where(x => x.State == ResourceState.Fail)
+            .ToList<Resource>()
+            .ForEach(x => x.State = ResourceState.OK);
+
+        _logger.LogInformation("Ship repaired successfully!");
+
+        ship.State = ShipState.OK;
+
+        return true;
+    }
+
+    private void UpdateRepositoryShip(Ship ship)
+    {
+        _logger.LogInformation("Saving ship [{id}] to repository", ship.Id);
+
+        // TODO - add interlock
+        _shipRepository.Update(ship, saveChanges: true);
+
+        _logger.LogInformation("Ship [{id}] to repository successfully saved", ship.Id);
     }
 
     #endregion

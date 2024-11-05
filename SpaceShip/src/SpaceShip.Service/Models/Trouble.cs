@@ -1,11 +1,11 @@
 using Shared.Enums;
 
-namespace SpaceShip.Service.EventsConsumer.Contracts
+namespace SpaceShip.Service.Models
 {
     /// <summary>
-    /// Message DTO from EventGenerator.
+    /// Trouble from EventGenerator.
     /// </summary>
-    public class TroubleMessageDTO
+    public class Trouble
     {
         /// <summary>
         /// Spaceship identifier.
@@ -13,13 +13,13 @@ namespace SpaceShip.Service.EventsConsumer.Contracts
         public Guid ShipId { get; set; }
 
         /// <summary>
-        /// Event identifier.
+        /// Failed resource.
         /// </summary>
-        public Guid EventId { get; set; }
+        public ResourceType Resource { get; set; }
 
         /// <summary>
-        /// Event level.
+        /// Failure level.
         /// </summary>
-        public EventLevel EventLevel { get; set; }
+        public EventLevel Level { get; set; }
     }
 }

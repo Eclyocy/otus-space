@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -6,6 +7,7 @@ using SpaceShip.Notifications;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.EventsConsumer.Contracts;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Service.Models;
 
 namespace SpaceShip.Service.Queue;
 
@@ -16,6 +18,7 @@ public class TroubleEventConsumer : EventConsumer
 {
     private readonly IServiceScopeFactory _scopeServiceFactory;
     private readonly INotificationsProvider _notificationsProvider;
+    private readonly IMapper _mapper;
     private readonly ILogger<TroubleEventConsumer> _logger;
 
     /// <summary>
@@ -24,6 +27,7 @@ public class TroubleEventConsumer : EventConsumer
     public TroubleEventConsumer(
         IServiceScopeFactory serviceScopeFactory,
         INotificationsProvider notificationsProvider,
+        IMapper mapper,
         ILogger<TroubleEventConsumer> logger,
         IConfiguration configuration)
         : base(logger, configuration)
@@ -33,18 +37,13 @@ public class TroubleEventConsumer : EventConsumer
         ConsumerName = nameof(TroubleEventConsumer);
         _scopeServiceFactory = serviceScopeFactory;
         _notificationsProvider = notificationsProvider;
+        _mapper = mapper;
         _logger = logger;
     }
 
     protected override async Task HandleMessageAsync(string message, string routingKey)
     {
         TroubleMessageDTO? troubleMessage;
-
-        if (!Guid.TryParse(routingKey, out Guid shipId))
-        {
-            _logger.LogError("Failed to parse message routing key [{routingKey}] to ship identifier", routingKey);
-            return;
-        }
 
         try
         {
@@ -62,19 +61,21 @@ public class TroubleEventConsumer : EventConsumer
             return;
         }
 
+        Trouble trouble = _mapper.Map<Trouble>(troubleMessage);
+
         try
         {
             using IServiceScope scope = _scopeServiceFactory.CreateScope();
             IShipService shipService = scope.ServiceProvider.GetRequiredService<IShipService>();
 
-            ShipDTO ship = shipService.ApplyFailure(shipId, troubleMessage.EventLevel);
-            await _notificationsProvider.SendAsync(shipId, ship);
+            ShipDTO ship = shipService.ApplyFailure(trouble);
+            await _notificationsProvider.SendAsync(trouble.ShipId, ship);
         }
         catch (Exception e)
         {
             _logger.LogError(
                 e,
-                "Failed to process trouble message for ship with id {id}", shipId);
+                "Failed to process trouble message for ship with id {id}", trouble.ShipId);
         }
     }
 }

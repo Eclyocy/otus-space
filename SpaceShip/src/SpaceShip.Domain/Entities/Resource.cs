@@ -32,6 +32,12 @@ public class Resource : BaseEntity
     public ResourceState State { get; set; }
 
     /// <summary>
+    /// State criticality level.
+    /// </summary>
+    [Column("StateCriticality")]
+    public EventLevel? StateCriticality { get; set; }
+
+    /// <summary>
     /// Resource name.
     /// </summary>
     [Column("Name")]
@@ -60,5 +66,19 @@ public class Resource : BaseEntity
         ResourceType.ScrapMetal => null,
         ResourceType.Fuel => null,
         _ => null
+    };
+
+    /// <summary>
+    /// Resource type required for this resource repair.
+    /// </summary>
+    public (ResourceType? ResourceType, int? Amount) SpareResourceType => (ResourceType, StateCriticality) switch
+    {
+        (ResourceType.Hull, EventLevel.Low) => (ResourceType.ScrapMetal, 1),
+        (ResourceType.Hull, EventLevel.Medium) => (ResourceType.ScrapMetal, 2),
+        (ResourceType.Hull, EventLevel.High) => (ResourceType.ScrapMetal, 3),
+        (ResourceType.Engine, _) => (ResourceType.ScrapMetal, 1),
+        (ResourceType.ScrapMetal, _) => (null, null),
+        (ResourceType.Fuel, _) => (null, null),
+        _ => (null, null)
     };
 }

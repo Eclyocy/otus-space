@@ -24,6 +24,11 @@ namespace SpaceShip.Service.Interfaces
         void UpdateResourceState(Resource resource, ResourceState resourceState);
 
         /// <summary>
+        /// Set resource <paramref name="resource"/> state to <paramref name="resourceState"/> with criticality <paramref name="criticality"/>.
+        /// </summary>
+        void UpdateResourceState(Resource resource, ResourceState resourceState, EventLevel criticality);
+
+        /// <summary>
         /// Set resource <paramref name="resource"/> amount to <paramref name="amount"/>.
         /// </summary>
         void UpdateResourceAmount(Resource resource, int amount);
