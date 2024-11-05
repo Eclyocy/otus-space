@@ -19,6 +19,11 @@ namespace SpaceShip.Service.Interfaces
         int GetRequiredResourceAmount(Resource resource);
 
         /// <summary>
+        /// Get resource (type and amount) to repair <paramref name="resource"/>.
+        /// </summary>
+        (ResourceType? ResourceType, int Amount) GetSpareResourceRequirement(Resource resource);
+
+        /// <summary>
         /// Set resource <paramref name="resource"/> state to <paramref name="resourceState"/>.
         /// </summary>
         void UpdateResourceState(Resource resource, ResourceState resourceState);

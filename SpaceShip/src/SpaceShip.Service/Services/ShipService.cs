@@ -268,13 +268,68 @@ public class ShipService : IShipService
     /// </summary>
     private bool TryRepairShip(Ship ship)
     {
-        ship.Resources.Where(x => x.State == ResourceState.Fail)
-            .ToList<Resource>()
-            .ForEach(x => x.State = ResourceState.OK);
+        List<Resource> failedResources = ship.Resources.Where(x => x.State == ResourceState.Fail).ToList();
 
-        _logger.LogInformation("Ship repaired successfully!");
+        foreach (var resource in failedResources)
+        {
+            _logger.LogInformation(
+                "Trying to repair [{resourceName}] of type [{resourceType}]",
+                resource.Name,
+                resource.ResourceType);
+
+            var requirement = _resourceService.GetSpareResourceRequirement(resource);
+
+            if (requirement.ResourceType == null)
+            {
+                _logger.LogInformation(
+                    "Resource [{resourceName}] of type [{resourceType}] not repairable!",
+                    resource.Name,
+                    resource.ResourceType);
+
+                ship.State = ShipState.Crashed;
+
+                return false;
+            }
+
+            if (ship.Resources.Where(x => x.ResourceType == requirement.ResourceType).Select(x => x.Amount).Sum() < requirement.Amount)
+            {
+                _logger.LogInformation(
+                    "Not enough [{required}] to repair [{resourceName}] of type [{resourceType}]",
+                    requirement.ResourceType,
+                    resource.Name,
+                    resource.ResourceType);
+
+                ship.State = ShipState.Crashed;
+
+                return false;
+            }
+
+            int leftoverAmount = requirement.Amount;
+            ship.Resources.Where(x => x.ResourceType == requirement.ResourceType).ToList().ForEach(requiredResource =>
+            {
+                if (requiredResource.Amount <= leftoverAmount)
+                {
+                    _resourceService.UpdateResourceAmount(requiredResource, 0);
+                    leftoverAmount -= requiredResource.Amount;
+                }
+                else
+                {
+                    _resourceService.UpdateResourceAmount(requiredResource, requiredResource.Amount - leftoverAmount);
+                    leftoverAmount = 0;
+                }
+            });
+
+            _resourceService.UpdateResourceState(resource, ResourceState.OK);
+
+            _logger.LogInformation(
+                "Resource [{resourceName}] of type [{resourceType}] repaired successfully!",
+                resource.Name,
+                resource.ResourceType);
+        }
 
         ship.State = ShipState.OK;
+
+        _logger.LogInformation("Ship repaired successfully!");
 
         return true;
     }

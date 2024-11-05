@@ -77,6 +77,23 @@ namespace SpaceShip.Service.Services
         }
 
         /// <inheritdoc/>
+        public (ResourceType? ResourceType, int Amount) GetSpareResourceRequirement(Resource resource)
+        {
+            if (resource.State != ResourceState.Fail)
+            {
+                _logger.LogInformation(
+                    "No needs to repair. Resource {resourceName} of type {resourceType} is in {resourceState} state.",
+                    resource.Name,
+                    resource.ResourceType,
+                    resource.State);
+
+                return (null, 0);
+            }
+
+            return resource.SpareResourceType;
+        }
+
+        /// <inheritdoc/>
         public void UpdateResourceState(Resource resource, ResourceState resourceState)
         {
             _logger.LogInformation(
