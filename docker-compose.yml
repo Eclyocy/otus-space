@@ -50,7 +50,7 @@ services:
     - JWT__KEY=MySuperSecretKeyForJwtTokenGeneration
     - JWT__ISSUER=GameControllerAPI
     - JWT__AUDIENCE=GameControllerUsers
-    - JWT__EXPIRATIONMINUTES=10
+    - JWT__EXPIRATIONMINUTES=1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7196/health"]
       interval: 10s
