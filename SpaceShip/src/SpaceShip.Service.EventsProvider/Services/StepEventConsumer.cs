@@ -29,13 +29,14 @@ public class StepEventConsumer : EventConsumer
         : base(logger, configuration)
     {
         QueueName = configuration["RABBITMQ_STEP_QUEUE"];
+        ExchangeName = configuration["RABBITMQ_STEP_EXCHANGE"];
         ConsumerName = nameof(StepEventConsumer);
         _scopeServiceFactory = serviceScopeFactory;
         _notificationsProvider = notificationsProvider;
     }
 
     /// <inheritdoc/>
-    protected override async Task HandleMessageAsync(string message)
+    protected override async Task HandleMessageAsync(string message, string routingKey = "")
     {
         StepMessageDTO? stepMessage;
 

@@ -24,6 +24,7 @@
     <ProjectReference Include="..\SpaceShip.Service\SpaceShip.Service.csproj" />
     <ProjectReference Include="..\SpaceShip.Domain\SpaceShip.Domain.csproj" />
     <ProjectReference Include="..\SpaceShip.Notifications\SpaceShip.Notifications.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
   </ItemGroup>
 
 </Project>

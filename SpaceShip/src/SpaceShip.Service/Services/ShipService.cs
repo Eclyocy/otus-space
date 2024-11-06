@@ -6,6 +6,7 @@ using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Contracts;
 using SpaceShip.Service.Interfaces;
+using SpaceShip.Service.Models;
 using SpaceShip.Services.Exceptions;
 
 namespace SpaceShip.Service.Services;
@@ -81,14 +82,34 @@ public class ShipService : IShipService
         {
             SpendShipResources(ship);
 
+            TryRepairShip(ship);
+
             TryFlyShip(ship);
         }
 
         ship.Step++;
 
-        _shipRepository.Update(ship, saveChanges: true);
+        UpdateRepositoryShip(ship);
 
         return GetShip(shipId);
+    }
+
+    /// <inheritdoc/>
+    public ShipDTO ApplyFailure(Trouble trouble)
+    {
+        _logger.LogInformation("New {level} failure occur with {resource} on ship with id: {id}. Updating status.", trouble.Level, trouble.Resource, trouble.ShipId);
+
+        Ship ship = GetRepositoryShip(trouble.ShipId);
+
+        Resource component = ship.Resources.Where(x => x.ResourceType == trouble.Resource).OrderBy(x => x.State).First();
+        if (component is not null)
+        {
+            _resourceService.UpdateResourceState(component, ResourceState.Fail, trouble.Level);
+        }
+
+        UpdateRepositoryShip(ship);
+
+        return GetShip(trouble.ShipId);
     }
 
     /// <inheritdoc/>
@@ -128,6 +149,15 @@ public class ShipService : IShipService
     /// </summary>
     private void SpendShipResources(Ship ship)
     {
+        if (ship.State == ShipState.Crashed)
+        {
+            _logger.LogWarning(
+                    "Ship {name} [{id}] is crushed. No need to spent resources",
+                    ship.Name,
+                    ship.Id);
+            return;
+        }
+
         foreach (Resource resource in ship.Resources)
         {
             ResourceType? requiredResourceType = _resourceService.GetRequiredResourceType(resource);
@@ -218,6 +248,15 @@ public class ShipService : IShipService
             return;
         }
 
+        if (ship.Resources.Where(x => x.ResourceType == ResourceType.Hull && x.State == ResourceState.Fail).Any())
+        {
+            _logger.LogInformation("Ship {shipId} cannot fly with damaged hull.", ship.Id);
+
+            ship.State = ShipState.Crashed;
+
+            return;
+        }
+
         _logger.LogInformation("Ship flies!");
 
         ship.State = ShipState.OK;
@@ -231,6 +270,87 @@ public class ShipService : IShipService
 
             ship.State = ShipState.Arrived;
         }
+    }
+
+    /// <summary>
+    /// Try fix ship troubles
+    /// </summary>
+    private bool TryRepairShip(Ship ship)
+    {
+        List<Resource> failedResources = ship.Resources.Where(x => x.State == ResourceState.Fail).ToList();
+
+        foreach (var resource in failedResources)
+        {
+            _logger.LogInformation(
+                "Trying to repair [{resourceName}] of type [{resourceType}]",
+                resource.Name,
+                resource.ResourceType);
+
+            var requirement = _resourceService.GetSpareResourceRequirement(resource);
+
+            if (requirement.ResourceType == null)
+            {
+                _logger.LogInformation(
+                    "Resource [{resourceName}] of type [{resourceType}] not repairable!",
+                    resource.Name,
+                    resource.ResourceType);
+
+                ship.State = ShipState.Crashed;
+
+                return false;
+            }
+
+            if (ship.Resources.Where(x => x.ResourceType == requirement.ResourceType).Select(x => x.Amount).Sum() < requirement.Amount)
+            {
+                _logger.LogInformation(
+                    "Not enough [{required}] to repair [{resourceName}] of type [{resourceType}]",
+                    requirement.ResourceType,
+                    resource.Name,
+                    resource.ResourceType);
+
+                ship.State = ShipState.Crashed;
+
+                return false;
+            }
+
+            int leftoverAmount = requirement.Amount;
+            ship.Resources.Where(x => x.ResourceType == requirement.ResourceType).ToList().ForEach(requiredResource =>
+            {
+                if (requiredResource.Amount <= leftoverAmount)
+                {
+                    _resourceService.UpdateResourceAmount(requiredResource, 0);
+                    leftoverAmount -= requiredResource.Amount;
+                }
+                else
+                {
+                    _resourceService.UpdateResourceAmount(requiredResource, requiredResource.Amount - leftoverAmount);
+                    leftoverAmount = 0;
+                }
+            });
+
+            _resourceService.UpdateResourceState(resource, ResourceState.OK);
+
+            _logger.LogInformation(
+                "Resource [{resourceName}] of type [{resourceType}] repaired successfully!",
+                resource.Name,
+                resource.ResourceType);
+        }
+
+        ship.State = ShipState.OK;
+
+        _logger.LogInformation("Ship repaired successfully!");
+
+        return true;
+    }
+
+    private void UpdateRepositoryShip(Ship ship)
+    {
+        _logger.LogInformation("Saving ship [{id}] to repository", ship.Id);
+
+        // TODO - add interlock
+        _shipRepository.Update(ship, saveChanges: true);
+
+        _logger.LogInformation("Ship [{id}] to repository successfully saved", ship.Id);
     }
 
     #endregion

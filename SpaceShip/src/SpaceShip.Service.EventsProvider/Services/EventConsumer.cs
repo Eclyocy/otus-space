@@ -12,9 +12,9 @@ namespace SpaceShip.Service.Queue;
 /// </summary>
 public abstract class EventConsumer : IHostedService
 {
+    private readonly IModel _channel;
     private readonly ILogger _logger;
     private readonly IConnection _connection;
-    private readonly IModel _channel;
 
     private readonly string _host;
     private readonly string _user;
@@ -65,6 +65,11 @@ public abstract class EventConsumer : IHostedService
     public string QueueName { get; protected set; }
 
     /// <summary>
+    /// Имя exchange в который приходят сообщения.
+    /// </summary>
+    public string ExchangeName { get; protected set; }
+
+    /// <summary>
     /// Название обработчика.
     /// </summary>
     public string ConsumerName { get; protected set; }
@@ -73,6 +78,9 @@ public abstract class EventConsumer : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        CreateQueue(QueueName);
+        BindQueue(QueueName, ExchangeName);
+
         var consumer = new EventingBasicConsumer(_channel);
 
         consumer.Received += async (model, ea) =>
@@ -82,7 +90,7 @@ public abstract class EventConsumer : IHostedService
 
             _logger.LogInformation("{consumer} received new message: {message}", ConsumerName, message);
 
-            await HandleMessageAsync(message);
+            await HandleMessageAsync(message, ea.RoutingKey);
         };
 
         try
@@ -108,5 +116,38 @@ public abstract class EventConsumer : IHostedService
         return Task.CompletedTask;
     }
 
-    protected abstract Task HandleMessageAsync(string message);
+    protected abstract Task HandleMessageAsync(string message, string routingKey = "");
+
+    private void CreateQueue(string queueName)
+    {
+        try
+        {
+            _channel.QueueDeclare(
+                queue: queueName,
+                durable: true,
+                exclusive: false,
+                autoDelete: false);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot create queue {queue}.", queueName);
+            throw;
+        }
+    }
+
+    private void BindQueue(string queueName, string exchangeName, string routingKey = "#")
+    {
+        try
+        {
+            _channel.QueueBind(
+                queue: queueName,
+                exchange: exchangeName,
+                routingKey: routingKey);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Cannot bind queue {queue} to exchange {exchange}", queueName, exchangeName);
+            throw;
+        }
+    }
 }

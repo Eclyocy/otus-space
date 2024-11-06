@@ -71,7 +71,7 @@ public class RabbitMQService : IHostedService
 
         _channel.ExchangeDeclare(
                     exchange: _eventsExchange,
-                    type: "direct",
+                    type: "topic",
                     durable: true,
                     autoDelete: false);
 
@@ -150,7 +150,13 @@ public class RabbitMQService : IHostedService
             return;
         }
 
-        SendMessage(JsonSerializer.Serialize(problem), shipId.ToString());
+        var problemMessage = new EventMessageDto
+        {
+            ShipId = shipId,
+            EventId = problem.EventId,
+            EventLevel = problem.EventLevel
+        };
+        SendMessage(JsonSerializer.Serialize(problemMessage), shipId.ToString());
     }
 
     private void CreateQueue(string queueName)
