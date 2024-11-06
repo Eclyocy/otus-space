@@ -4,6 +4,7 @@ import { ApiService } from '../../services/api.service';
 import { Session } from '../../models/session';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user',
@@ -20,10 +21,12 @@ import { User } from '../../models/user';
 })
 export class UserComponent {
   private readonly apiService = inject(ApiService)
+  private readonly authService = inject(AuthService)
   private _userId: string
 
   public userName: string = "";
   public userSessions: Session[] = [];
+  public isCurrentUser: boolean = false;
 
   public get userId(): string {
     return this._userId;
@@ -60,6 +63,7 @@ export class UserComponent {
     this.apiService.getUser(this.userId).subscribe({
       next: (user: User) => {
         this.userName = user.name;
+        this.isCurrentUser = (this._userId === this.authService.getUserId())
       },
       error: (error) => {
         console.error("Error fetching user:", error);
