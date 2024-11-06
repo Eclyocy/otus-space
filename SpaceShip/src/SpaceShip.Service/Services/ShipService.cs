@@ -5,6 +5,7 @@ using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Builder.Abstractions;
 using SpaceShip.Service.Contracts;
+using SpaceShip.Service.Helpers;
 using SpaceShip.Service.Interfaces;
 using SpaceShip.Services.Exceptions;
 
@@ -74,16 +75,23 @@ public class ShipService : IShipService
     public ShipDTO ProcessNewDay(Guid shipId)
     {
         _logger.LogInformation("Processing new day on board the space ship with id {id}.", shipId);
-
         Ship ship = GetRepositoryShip(shipId);
 
-        SpendShipResources(ship);
+        _logger.LogInformation("Trying lock to modification ship with id {id}.", shipId);
+        ShipLockingHelper.WaitLockShip(shipId);
+        try
+        {
+            SpendShipResources(ship);
+            TryFlyShip(ship);
+            ship.Step++;
+            _shipRepository.Update(ship, saveChanges: true);
+        }
+        catch
+        {
+            _logger.LogError("Failed to process new day message for ship {id}.", shipId);
+        }
 
-        TryFlyShip(ship);
-
-        ship.Step++;
-
-        _shipRepository.Update(ship, saveChanges: true);
+        ShipLockingHelper.ReleaseShip(shipId);
 
         return GetShip(shipId);
     }
