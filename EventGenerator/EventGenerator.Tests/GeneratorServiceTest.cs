@@ -127,5 +127,39 @@ namespace EventGenerator.Tests
         }
 
         #endregion
+
+        #region tests for AddTroubleCoin
+
+        [Test]
+        public void AddTroubleCoin_ReturnsGeneratorDto_WhenGeneratorExists()
+        {
+            // Arrange
+            var generator = new Generator { Id = generatorId, ShipId = shipId, TroubleCoins = troubleCoins };
+            var generatorDto = new GeneratorDto { ShipId = shipId, GeneratorId = generatorId, TroubleCoins = troubleCoins };
+
+            _generatorRepositoryMock.Setup(repo => repo.Get(generatorId, false)).Returns(generator);
+            _generatorRepositoryMock.Setup(repo => repo.Update(generator));
+            _mapperMock.Setup(m => m.Map<GeneratorDto>(generator)).Returns(new GeneratorDto { ShipId = shipId, GeneratorId = generatorId, TroubleCoins = generatorDto.TroubleCoins });
+
+            // Act
+            var result = _generatorService.AddTroubleCoin(generatorId);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.TroubleCoins, Is.EqualTo(generatorDto.TroubleCoins));
+
+                _generatorRepositoryMock.Verify(repo => repo.Get(generatorId, false), Times.Once);
+                _generatorRepositoryMock.Verify(repo => repo.Update(generator), Times.Once);
+                _generatorRepositoryMock.VerifyNoOtherCalls();
+
+                _mapperMock.Verify(m => m.Map<GeneratorDto>(generator), Times.Once);
+
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
+        #endregion
     }
 }
