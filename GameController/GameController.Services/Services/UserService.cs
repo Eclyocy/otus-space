@@ -5,6 +5,7 @@ using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
 using Microsoft.Extensions.Logging;
+using Shared.Utilities;
 
 namespace GameController.Services.Services
 {
@@ -14,6 +15,8 @@ namespace GameController.Services.Services
     public class UserService : IUserService
     {
         #region private fields
+
+        private static readonly KeyBasedLock<Guid> _semaphoreLock = new();
 
         private readonly IUserRepository _userRepository;
 
@@ -99,16 +102,19 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
-        public UserDto UpdateUser(Guid userId, UpdateUserDto updateUserDto)
+        public async Task<UserDto> UpdateUserAsync(Guid userId, UpdateUserDto updateUserDto)
         {
             _logger.LogInformation(
                 "Update user with ID {userId} via request {updateUserDto}",
                 userId,
                 updateUserDto);
 
-            User user = UpdateRepositoryUser(userId, updateUserDto);
+            using (await _semaphoreLock.LockAsync(userId, _logger, CancellationToken.None))
+            {
+                User user = UpdateRepositoryUser(userId, updateUserDto);
 
-            return _mapper.Map<UserDto>(user);
+                return _mapper.Map<UserDto>(user);
+            }
         }
 
         /// <inheritdoc/>
