@@ -77,9 +77,12 @@ public class ShipService : IShipService
 
         Ship ship = GetRepositoryShip(shipId);
 
-        SpendShipResources(ship);
+        if (ship.State != ShipState.Arrived)
+        {
+            SpendShipResources(ship);
 
-        TryFlyShip(ship);
+            TryFlyShip(ship);
+        }
 
         ship.Step++;
 
@@ -199,11 +202,14 @@ public class ShipService : IShipService
     /// </summary>
     private void TryFlyShip(Ship ship)
     {
-        List<Resource> engines = ship.Resources.Where(x => x.ResourceType == ResourceType.Engine).ToList();
+        List<Resource> workingEngines = ship.Resources
+            .Where(x =>
+                x.ResourceType == ResourceType.Engine &&
+                x.State != ResourceState.Fail &&
+                x.State != ResourceState.Sleep)
+            .ToList();
 
-        if (engines.Count == 0 ||
-            engines.All(x => x.State == ResourceState.Fail) ||
-            engines.All(x => x.State == ResourceState.Sleep))
+        if (workingEngines.Count == 0)
         {
             _logger.LogInformation("Ship {shipId} cannot fly without engines.", ship.Id);
 
@@ -215,6 +221,16 @@ public class ShipService : IShipService
         _logger.LogInformation("Ship flies!");
 
         ship.State = ShipState.OK;
+        ship.DistanceTraveled += (byte)workingEngines.Sum(x => x.Amount);
+
+        if (ship.DistanceTraveled >= ship.DistanceTarget)
+        {
+            ship.DistanceTraveled = ship.DistanceTarget;
+
+            _logger.LogInformation("Ship has landed.");
+
+            ship.State = ShipState.Arrived;
+        }
     }
 
     #endregion

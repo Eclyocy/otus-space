@@ -28,6 +28,18 @@ public class Ship : BaseEntity
     public short Step { get; set; }
 
     /// <summary>
+    /// Value indicating the distance the space ship has traveled.
+    /// </summary>
+    [Column("DistanceTraveled")]
+    public byte DistanceTraveled { get; set; }
+
+    /// <summary>
+    /// Value indicating the target distance the space ship has to cover.
+    /// </summary>
+    [Column("DistanceTarget")]
+    public byte DistanceTarget { get; set; }
+
+    /// <summary>
     /// Related resources collection.
     /// </summary>
     public virtual ICollection<Resource> Resources { get; set; }

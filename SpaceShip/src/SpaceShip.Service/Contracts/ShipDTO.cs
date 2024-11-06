@@ -28,6 +28,16 @@ public class ShipDTO
     public ShipState State { get; set; }
 
     /// <summary>
+    /// Дистанция, покрытая кораблём.
+    /// </summary>
+    public byte DistanceTraveled { get; set; }
+
+    /// <summary>
+    /// Дистанция, которую кораблю необходимо покрыть.
+    /// </summary>
+    public byte DistanceTarget { get; set; }
+
+    /// <summary>
     /// Коллекция ресурсов корабля.
     /// </summary>
     public List<ResourceDTO> Resources { get; set; }
