@@ -16,9 +16,9 @@ namespace GameController.Services.Services
     {
         #region private fields
 
-        private readonly IUserRepository _userRepository;
+        private static readonly KeyBasedLock<Guid> _semaphoreLock = new();
 
-        private readonly KeyBasedLock<Guid> _semaphoreLock;
+        private readonly IUserRepository _userRepository;
 
         private readonly ILogger<UserService> _logger;
 
@@ -37,8 +37,6 @@ namespace GameController.Services.Services
             IMapper mapper)
         {
             _userRepository = userRepository;
-
-            _semaphoreLock = new(loggerFactory.CreateLogger<KeyBasedLock<Guid>>());
 
             _logger = loggerFactory.CreateLogger<UserService>();
 
@@ -111,16 +109,14 @@ namespace GameController.Services.Services
                 userId,
                 updateUserDto);
 
-            User user;
-
-            using (await _semaphoreLock.LockAsync(userId, CancellationToken.None))
+            using (await _semaphoreLock.LockAsync(userId, _logger, CancellationToken.None))
             {
                 await Task.Delay(TimeSpan.FromMinutes(1));
 
-                user = UpdateRepositoryUser(userId, updateUserDto);
-            }
+                User user = UpdateRepositoryUser(userId, updateUserDto);
 
-            return _mapper.Map<UserDto>(user);
+                return _mapper.Map<UserDto>(user);
+            }
         }
 
         /// <inheritdoc/>
