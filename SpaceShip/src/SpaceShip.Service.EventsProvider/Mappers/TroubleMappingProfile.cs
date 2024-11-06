@@ -1,5 +1,4 @@
 using AutoMapper;
-using Shared.Enums;
 using SpaceShip.Service.EventsConsumer.Contracts;
 using SpaceShip.Service.Models;
 
@@ -18,6 +17,6 @@ public class TroubleMappingProfile : Profile
         CreateMap<TroubleMessageDTO, Trouble>()
             .ForMember(dest => dest.ShipId, op => op.MapFrom(src => src.ShipId))
             .ForMember(dest => dest.Level, op => op.MapFrom(src => src.EventLevel))
-            .ForMember(dest => dest.Resource, op => op.MapFrom(src => src.Resource ?? ResourceType.Hull));
+            .ForMember(dest => dest.Resource, op => op.MapFrom(src => src.Resource));
     }
 }

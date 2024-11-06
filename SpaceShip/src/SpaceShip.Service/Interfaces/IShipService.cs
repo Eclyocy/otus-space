@@ -24,7 +24,7 @@ public interface IShipService
     ShipDTO ProcessNewDay(Guid shipId);
 
     /// <summary>
-    /// Process trouble message for SpaceShip/>.
+    /// Process trouble message for SpaceShip.
     /// </summary>
     ShipDTO ApplyFailure(Trouble trouble);
 

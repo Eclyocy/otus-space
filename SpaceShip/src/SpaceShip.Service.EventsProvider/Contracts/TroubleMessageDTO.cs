@@ -25,6 +25,6 @@ namespace SpaceShip.Service.EventsConsumer.Contracts
         /// <summary>
         /// Resource type with problem.
         /// </summary>
-        public ResourceType? Resource { get; set; }
+        public ResourceType Resource { get; set; } = ResourceType.Hull;
     }
 }

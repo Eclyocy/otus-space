@@ -24,14 +24,9 @@ namespace SpaceShip.Service.Interfaces
         (ResourceType? ResourceType, int Amount) GetSpareResourceRequirement(Resource resource);
 
         /// <summary>
-        /// Set resource <paramref name="resource"/> state to <paramref name="resourceState"/>.
-        /// </summary>
-        void UpdateResourceState(Resource resource, ResourceState resourceState);
-
-        /// <summary>
         /// Set resource <paramref name="resource"/> state to <paramref name="resourceState"/> with criticality <paramref name="criticality"/>.
         /// </summary>
-        void UpdateResourceState(Resource resource, ResourceState resourceState, EventLevel criticality);
+        void UpdateResourceState(Resource resource, ResourceState resourceState, EventLevel? criticality = null);
 
         /// <summary>
         /// Set resource <paramref name="resource"/> amount to <paramref name="amount"/>.

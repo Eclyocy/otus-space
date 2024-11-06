@@ -3,12 +3,12 @@ using Shared.Enums;
 namespace EventGenerator.Services.Models
 {
     /// <summary>
-    /// Model for "New Day" message.
+    /// Model for trouble event message.
     /// </summary>
     public record EventMessageDto
     {
         /// <summary>
-        /// Ship ID.
+        /// Event ID.
         /// </summary>
         public Guid EventId { get; set; }
 
