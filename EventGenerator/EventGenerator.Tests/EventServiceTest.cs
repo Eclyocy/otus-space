@@ -5,6 +5,7 @@ using EventGenerator.Services.Models.Event;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Shared.Enums;
 
 namespace EventGenerator.Tests
 {
@@ -42,7 +43,7 @@ namespace EventGenerator.Tests
             // Arrange
             var _event = new Event { Id = _eventId, GeneratorId = _generatorId, EventLevel = (EventLevel)Enum.GetValues(typeof(EventLevel)).GetValue(_eventLevelIndex) };
             var _createEventDto = new CreateEventDto { GeneratorId = _generatorId };
-            var _eventDto = new EventDto { GeneratorId = _generatorId, EventId = _eventId, EventLevel = _eventLevelIndex };
+            var _eventDto = new EventDto { GeneratorId = _generatorId, EventId = _eventId, EventLevel = (EventLevel)_eventLevelIndex };
             _mapperMock.Setup(m => m.Map<Event>(_createEventDto)).Returns(_event);
             _eventRepositoryMock.Setup(repo => repo.Create(_event)).Returns(_event);
             _mapperMock.Setup(m => m.Map<EventDto>(_event)).Returns(_eventDto);
