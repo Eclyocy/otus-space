@@ -62,7 +62,9 @@ public class ShipBuilder : IShipBuilder
         {
             Name = Name ?? RandomNameGenerator.Get(),
             Step = 0,
-            State = ShipState.OK
+            State = ShipState.OK,
+            DistanceTraveled = 0,
+            DistanceTarget = 10
         });
 
         _logger.LogTrace("[{id}] Trying to create base resources.", _requestId);
