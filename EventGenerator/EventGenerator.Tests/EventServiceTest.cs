@@ -41,7 +41,7 @@ namespace EventGenerator.Tests
         public void CreateEvent_ReturnEventDto_WhenGeneratorСorrect()
         {
             // Arrange
-            var _event = new Event { Id = _eventId, GeneratorId = _generatorId, EventLevel = (EventLevel)Enum.GetValues(typeof(EventLevel)).GetValue(_eventLevelIndex) };
+            var _event = new Event { Id = _eventId, GeneratorId = _generatorId, EventLevel = (EventLevel)_eventLevelIndex };
             var _createEventDto = new CreateEventDto { GeneratorId = _generatorId };
             var _eventDto = new EventDto { GeneratorId = _generatorId, EventId = _eventId, EventLevel = (EventLevel)_eventLevelIndex };
             _mapperMock.Setup(m => m.Map<Event>(_createEventDto)).Returns(_event);
