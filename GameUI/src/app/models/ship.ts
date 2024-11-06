@@ -5,5 +5,7 @@ export interface Ship {
   name: string | null;
   day: number;
   state: string;
+  distanceTraveled: number;
+  distanceTarget: number;
   resources: ShipResource[]
 }

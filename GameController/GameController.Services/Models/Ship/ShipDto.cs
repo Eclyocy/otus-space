@@ -30,6 +30,16 @@ namespace GameController.Services.Models.Ship
         public ShipState State { get; set; }
 
         /// <summary>
+        /// Value indicating the distance the space ship has traveled.
+        /// </summary>
+        public byte DistanceTraveled { get; set; }
+
+        /// <summary>
+        /// Value indicating the target distance the space ship has to cover.
+        /// </summary>
+        public byte DistanceTarget { get; set; }
+
+        /// <summary>
         /// Space ship resources.
         /// </summary>
         public List<ShipResourceDto> Resources { get; set; }
