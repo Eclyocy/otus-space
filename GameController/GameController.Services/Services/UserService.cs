@@ -33,12 +33,12 @@ namespace GameController.Services.Services
         /// </summary>
         public UserService(
             IUserRepository userRepository,
-            ILoggerFactory loggerFactory,
+            ILogger<UserService> logger,
             IMapper mapper)
         {
             _userRepository = userRepository;
 
-            _logger = loggerFactory.CreateLogger<UserService>();
+            _logger = logger;
 
             _mapper = mapper;
         }
