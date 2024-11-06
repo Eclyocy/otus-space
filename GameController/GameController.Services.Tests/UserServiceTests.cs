@@ -165,7 +165,7 @@ namespace GameController.Services.Tests
         #region tests for UpdateUser
 
         [Test]
-        public void UpdateUser_ReturnsUserDto_WhenUserExists()
+        public async Task UpdateUser_ReturnsUserDto_WhenUserExists()
         {
             // Arrange
             var user = new User { Id = userId, Name = NameUser, PasswordHash = PasswordHashUser };
@@ -176,7 +176,7 @@ namespace GameController.Services.Tests
             _mapperMock.Setup(m => m.Map<UserDto>(user)).Returns(new UserDto { Id = userId, Name = updateUserDto.Name });
 
             // Act
-            var result = _userService.UpdateUser(userId, updateUserDto);
+            var result = await _userService.UpdateUserAsync(userId, updateUserDto);
 
             // Assert
             Assert.Multiple(() =>
@@ -190,7 +190,7 @@ namespace GameController.Services.Tests
 
                 _mapperMock.Verify(m => m.Map<UserDto>(user), Times.Once);
 
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+                Assert.That(_loggerMock.Invocations, Has.Count.GreaterThanOrEqualTo(1));
             });
         }
 
@@ -206,12 +206,12 @@ namespace GameController.Services.Tests
             // Act & Assert
             Assert.Multiple(() =>
             {
-                Assert.Throws<NotModifiedException>(() => _userService.UpdateUser(userId, updateUserDto));
+                Assert.ThrowsAsync<NotModifiedException>(() => _userService.UpdateUserAsync(userId, updateUserDto));
 
                 _userRepositoryMock.Verify(repo => repo.Get(userId), Times.Once);
                 _userRepositoryMock.VerifyNoOtherCalls();
 
-                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+                Assert.That(_loggerMock.Invocations, Has.Count.GreaterThanOrEqualTo(1));
             });
         }
 

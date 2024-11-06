@@ -82,10 +82,10 @@ namespace GameController.API.Controllers
         [HttpPatch]
         [Route("{userId}")]
         [SwaggerOperation("Обновление информации о пользователе")]
-        public UserResponse UpdateUser(Guid userId, UpdateUserRequest updateUserModel)
+        public async Task<UserResponse> UpdateUserAsync(Guid userId, UpdateUserRequest updateUserModel)
         {
             UpdateUserDto updateUserDto = _mapper.Map<UpdateUserDto>(updateUserModel);
-            UserDto userDto = _userService.UpdateUser(userId, updateUserDto);
+            UserDto userDto = await _userService.UpdateUserAsync(userId, updateUserDto);
             return _mapper.Map<UserResponse>(userDto);
         }
 
