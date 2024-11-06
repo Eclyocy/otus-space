@@ -2,6 +2,7 @@
 using GameController.API.Models.User;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,6 +13,7 @@ namespace GameController.API.Controllers
     /// </summary>
     [ApiController]
     [Route("/api/users")]
+    [Authorize]
     public class UserController : Controller
     {
         #region private fields
@@ -82,10 +84,10 @@ namespace GameController.API.Controllers
         [HttpPatch]
         [Route("{userId}")]
         [SwaggerOperation("Обновление информации о пользователе")]
-        public UserResponse UpdateUser(Guid userId, UpdateUserRequest updateUserModel)
+        public async Task<UserResponse> UpdateUserAsync(Guid userId, UpdateUserRequest updateUserModel)
         {
             UpdateUserDto updateUserDto = _mapper.Map<UpdateUserDto>(updateUserModel);
-            UserDto userDto = _userService.UpdateUser(userId, updateUserDto);
+            UserDto userDto = await _userService.UpdateUserAsync(userId, updateUserDto);
             return _mapper.Map<UserResponse>(userDto);
         }
 

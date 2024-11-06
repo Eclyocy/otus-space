@@ -20,6 +20,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +32,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\SpaceShip.WebAPI\WebAPI.csproj" />
+    <ProjectReference Include="..\..\src\SpaceShip.Domain\SpaceShip.Domain.csproj" />
+    <ProjectReference Include="..\..\src\SpaceShip.Service\SpaceShip.Service.csproj" />
+    <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
   </ItemGroup>
 
 </Project>

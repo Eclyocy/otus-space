@@ -11,7 +11,7 @@ using RestSharp.Serializers.NewtonsoftJson;
 namespace GameController.Services.Services
 {
     /// <summary>
-    /// Class for working with space ships.
+    /// Service for working with space ships.
     /// </summary>
     public class ShipService : IShipService
     {

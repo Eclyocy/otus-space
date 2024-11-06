@@ -1,30 +1,36 @@
 # Set the base image to build the app using the SDK
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
-WORKDIR /app
+
+# Copy Shared projects
+WORKDIR /app/Shared
+COPY ./Shared/*.csproj .
 
 # Copy solution and projects files
-COPY *.sln .
-COPY EventGenerator/*.csproj ./EventGenerator/
-COPY EventGenerator.Database/*.csproj ./EventGenerator.Database/
-COPY EventGenerator.Services/*.csproj ./EventGenerator.Services/
-COPY EventGenerator.Services.Tests/*.csproj ./EventGenerator.Services.Tests/
+WORKDIR /app/EventGenerator
+COPY ./EventGenerator/*.sln .
+COPY ./EventGenerator/EventGenerator/*.csproj ./EventGenerator/
+COPY ./EventGenerator/EventGenerator.Database/*.csproj ./EventGenerator.Database/
+COPY ./EventGenerator/EventGenerator.Services/*.csproj ./EventGenerator.Services/
+COPY ./EventGenerator/EventGenerator.Tests/*.csproj ./EventGenerator.Tests/
 
 # Restore packages
 RUN dotnet restore
 
 # Copy the rest of the source files
+WORKDIR /app
 COPY . ./
 
 # Add default developer certificate
 RUN dotnet dev-certs https
 
 # Build and publish the app in Release mode
+WORKDIR /app/EventGenerator
 RUN dotnet publish -c Release -o out EventGenerator/EventGenerator.API.csproj
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build-env /app/out .
+COPY --from=build-env /app/EventGenerator/out .
 COPY --from=build-env /root/.dotnet/corefx/cryptography/x509stores/my/* /root/.dotnet/corefx/cryptography/x509stores/my/
 
 # Get curl for healthcheck

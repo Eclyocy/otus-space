@@ -1,30 +1,31 @@
-﻿using SpaceShip.Service.Contracts;
+﻿using Shared.Enums;
+using SpaceShip.Domain.Entities;
 
 namespace SpaceShip.Service.Interfaces
 {
     /// <summary>
-    /// Interface for working with Resource.
+    /// Interface for working with space ship resources.
     /// </summary>
     public interface IResourceService
     {
         /// <summary>
-        /// Create a Resource.
+        /// Get resource type required for lifesupport of <paramref name="resource"/>.
         /// </summary>
-        ResourceDTO CreateResource();
+        ResourceType? GetRequiredResourceType(Resource resource);
 
         /// <summary>
-        /// Retrieve the Resource by <paramref name="resourceId"/>.
+        /// Get amount of required for lifesupport of <paramref name="resource"/> resource.
         /// </summary>
-        ResourceDTO GetResource(Guid resourceId);
+        int GetRequiredResourceAmount(Resource resource);
 
         /// <summary>
-        /// Update the Resource with <paramref name="resourceId"/>.
+        /// Set resource <paramref name="resource"/> state to <paramref name="resourceState"/>.
         /// </summary>
-        ResourceDTO UpdateResource(Guid resourceId, ResourceDTO resourceDTO);
+        void UpdateResourceState(Resource resource, ResourceState resourceState);
 
         /// <summary>
-        /// Delete the Resource with <paramref name="resourceId"/>.
+        /// Set resource <paramref name="resource"/> amount to <paramref name="amount"/>.
         /// </summary>
-        bool DeleteResource(Guid resourceId);
+        void UpdateResourceAmount(Resource resource, int amount);
     }
 }

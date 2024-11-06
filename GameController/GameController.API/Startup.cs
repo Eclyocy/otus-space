@@ -1,14 +1,18 @@
-﻿using FluentValidation;
+﻿using System.Text.Json.Serialization;
+using FluentValidation;
 using FluentValidation.AspNetCore;
+using GameController.API.Extensions;
 using GameController.API.Mappers;
-using GameController.API.ServicesExtensions;
 using GameController.API.Validators.User;
 using GameController.Database;
 using GameController.Services;
+using GameController.Services.Helpers;
 using GameController.Services.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
@@ -54,6 +58,7 @@ namespace GameController
 
             application.UseRouting();
             application.UseCors();
+            application.UseAuthentication();
             application.UseAuthorization();
 
             application.UseEndpoints(endpoints =>
@@ -83,6 +88,8 @@ namespace GameController
 
             services.ConfigureApplicationServices(Configuration);
 
+            IConfigurationSection jwtConfigurationSection = Configuration.GetSection("JWT");
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -95,8 +102,14 @@ namespace GameController
             services.AddAutoMapper(x => x.AddProfile(typeof(SessionMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(UserMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(ShipMapper)));
+            services.AddAutoMapper(x => x.AddProfile(typeof(AuthMapper)));
 
-            services.AddControllers();
+            services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             services.AddHealthChecks();
 
@@ -105,13 +118,28 @@ namespace GameController
                 .AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
 
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc(
-                    name: "v1",
-                    info: new() { Title = "Game Controller API", Version = "v1" });
-                options.EnableAnnotations();
-            });
+            services.ConfigureSwagger();
+
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtConfigurationSection["Issuer"],
+                        ValidAudience = jwtConfigurationSection["Audience"],
+                        IssuerSigningKey = AuthHelper.GetSymmetricSecurityKey(jwtConfigurationSection["Key"]),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
         }
 
         #endregion

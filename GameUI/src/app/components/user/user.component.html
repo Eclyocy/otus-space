@@ -1,4 +1,4 @@
-<h2>User {{userName}}</h2>
+<h2>User {{userName}}<span *ngIf="isCurrentUser" class="current-user-indicator"> (This is you!)</span></h2>
 
 <h3>Sessions</h3>
 
@@ -17,7 +17,7 @@
       <td>{{userSession.shipId}}</td>
       <td>{{userSession.generatorId}}</td>
       <td>
-        <a [routerLink]="['/users', userId, 'sessions', userSession.sessionId, 'ship']" class="link">View Ship</a>
+        <a [routerLink]="['/users', userId, 'sessions', userSession.sessionId, 'ships', userSession.shipId]" class="link">View Ship</a>
       </td>
     </tr>
   </tbody>

@@ -1,4 +1,6 @@
-﻿namespace EventGenerator.Services.Models.Event
+﻿using Shared.Enums;
+
+namespace EventGenerator.Services.Models.Event
 {
     /// <summary>
     /// Model for event.
@@ -18,6 +20,11 @@
         /// <summary>
         /// Event level.
         /// </summary>
-        public int EventLevel { get; set; }
+        public EventLevel EventLevel { get; set; }
+
+        /// <summary>
+        /// Event cost based on its <see cref="EventLevel"/>.
+        /// </summary>
+        public int EventCost { get; set; }
     }
 }

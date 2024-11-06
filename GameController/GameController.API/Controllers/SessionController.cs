@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using GameController.API.Models.Session;
-using GameController.Controllers.Models.Ship;
+using GameController.API.Models.Ship;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.Session;
 using GameController.Services.Models.Ship;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -14,6 +15,7 @@ namespace GameController.API.Controllers
     /// </summary>
     [ApiController]
     [Route("/api/users/{userId}/sessions")]
+    [Authorize]
     public class SessionController : ControllerBase
     {
         #region private fields
@@ -51,8 +53,7 @@ namespace GameController.API.Controllers
         public List<SessionResponse> GetUserSessions(Guid userId)
         {
             List<SessionDto> sessionDtos = _sessionService.GetUserSessions(userId);
-            List<SessionResponse> sessionModels = _mapper.Map<List<SessionResponse>>(sessionDtos);
-            return sessionModels;
+            return _mapper.Map<List<SessionResponse>>(sessionDtos);
         }
 
         /// <summary>
@@ -64,7 +65,6 @@ namespace GameController.API.Controllers
         public async Task<SessionResponse> CreateUserSessionAsync(Guid userId)
         {
             SessionDto sessionDto = await _sessionService.CreateUserSessionAsync(userId);
-
             return _mapper.Map<SessionResponse>(sessionDto);
         }
 

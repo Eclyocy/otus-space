@@ -1,90 +1,117 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SpaceShip.Domain.EfCore;
+using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
-using SpaceShip.Domain.Model;
 
-namespace SpaceShip.Domain.Implementation
+namespace SpaceShip.Domain.Implementation;
+
+/// <inheritdoc cref="IBaseRepository{T}"/>
+public abstract class BaseRepository<T> : IBaseRepository<T>
+    where T : BaseEntity, new()
 {
+    #region constructor
+
     /// <summary>
-    /// Base repository.
+    /// Constructor.
     /// </summary>
-    /// <typeparam name="T">Repository entity.</typeparam>
-    public abstract class BaseRepository<T> : IRepository<T>
-        where T : BaseEntity, new()
+    protected BaseRepository(DatabaseContext databaseContext)
     {
-        #region constructor
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        protected BaseRepository(EfCoreContext efCoreContext)
-        {
-            Context = efCoreContext;
-            EntitySet = Context.Set<T>();
-        }
-
-        #endregion
-
-        #region protected fields
-
-        /// <summary>
-        /// Context.
-        /// </summary>
-        protected EfCoreContext Context { get; }
-
-        /// <summary>
-        /// EntitySet.
-        /// </summary>
-        protected DbSet<T> EntitySet { get; }
-
-        #endregion
-
-        #region public methods
-
-        /// <inheritdoc/>
-        public virtual T Create()
-        {
-            var entity = new T();
-
-            var entityEntry = EntitySet.Add(entity);
-            Context.SaveChanges();
-
-            return entityEntry.Entity;
-        }
-
-        /// <inheritdoc/>
-        public virtual List<T> GetAll()
-        {
-            return EntitySet.ToList();
-        }
-
-        /// <inheritdoc/>
-        public virtual T? Get(Guid id)
-        {
-            return EntitySet.Find(id);
-        }
-
-        /// <inheritdoc/>
-        public void Update(T entity)
-        {
-            Context.Entry(entity).State = EntityState.Modified;
-            Context.SaveChanges();
-        }
-
-        /// <inheritdoc/>
-        public bool Delete(Guid id)
-        {
-            var obj = EntitySet.Find(id);
-            if (obj == null)
-            {
-                return false;
-            }
-
-            EntitySet.Remove(obj);
-            Context.SaveChanges();
-            return true;
-        }
-
-        #endregion
+        Context = databaseContext;
+        EntitySet = Context.Set<T>();
     }
+
+    #endregion
+
+    #region protected fields
+
+    /// <summary>
+    /// Database context.
+    /// </summary>
+    protected DatabaseContext Context { get; }
+
+    /// <summary>
+    /// Set of specific entities.
+    /// </summary>
+    protected DbSet<T> EntitySet { get; }
+
+    #endregion
+
+    #region public methods
+
+    /// <inheritdoc/>
+    public virtual T Create(bool saveChanges = false)
+    {
+        var entity = new T();
+
+        var entityEntry = EntitySet.Add(entity);
+
+        if (saveChanges)
+        {
+            Context.SaveChanges();
+        }
+
+        return entityEntry.Entity;
+    }
+
+    /// <inheritdoc/>
+    public virtual T Create(T entity, bool saveChanges = false)
+    {
+        var entityEntry = EntitySet.Add(entity);
+
+        if (saveChanges)
+        {
+            Context.SaveChanges();
+        }
+
+        return entityEntry.Entity;
+    }
+
+    /// <inheritdoc/>
+    public virtual List<T> GetAll()
+    {
+        return EntitySet.ToList();
+    }
+
+    /// <inheritdoc/>
+    public virtual T? Get(Guid id)
+    {
+        return EntitySet.Find(id);
+    }
+
+    /// <inheritdoc/>
+    public void Update(T entity, bool saveChanges = false)
+    {
+        Context.Entry(entity).State = EntityState.Modified;
+
+        if (saveChanges)
+        {
+            Context.SaveChanges();
+        }
+    }
+
+    /// <inheritdoc/>
+    public bool Delete(Guid id, bool saveChanges = false)
+    {
+        var obj = EntitySet.Find(id);
+        if (obj == null)
+        {
+            return false;
+        }
+
+        EntitySet.Remove(obj);
+
+        if (saveChanges)
+        {
+            Context.SaveChanges();
+        }
+
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public void SaveChanges()
+    {
+        Context.SaveChanges();
+    }
+
+    #endregion
 }

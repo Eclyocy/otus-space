@@ -21,7 +21,13 @@
         "DATABASE_PORT": "5050",
         "DATABASE_NAME": "event_generator",
         "DATABASE_USER": "postgres",
-        "DATABASE_PASSWORD": "pg_pass"
+        "DATABASE_PASSWORD": "pg_pass",
+        "RABBITMQ_HOST": "localhost",
+        "RABBITMQ_USER": "problem-generator",
+        "RABBITMQ_PASSWORD": "Pg1234",
+        "RABBITMQ_NEW_DAY_EXCHANGE": "x_new_day",
+        "RABBITMQ_NEW_DAY_QUEUE": "q_new_day_generator",
+        "RABBITMQ_EVENTS_EXCHANGE": "x_troubles"
       }
     },
     "IIS Express": {

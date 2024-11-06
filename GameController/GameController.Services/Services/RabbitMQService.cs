@@ -10,7 +10,7 @@ using RabbitMQ.Client;
 namespace GameController.Services.Services
 {
     /// <summary>
-    /// Class for working with Rabbit MQ.
+    /// Service for working with Rabbit MQ.
     /// </summary>
     public class RabbitMQService : IRabbitMQService
     {

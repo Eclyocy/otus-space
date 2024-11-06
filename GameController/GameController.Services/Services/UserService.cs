@@ -5,15 +5,18 @@ using GameController.Services.Exceptions;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
 using Microsoft.Extensions.Logging;
+using Shared.Utilities;
 
 namespace GameController.Services.Services
 {
     /// <summary>
-    /// Class for working with users.
+    /// Service for working with users.
     /// </summary>
     public class UserService : IUserService
     {
         #region private fields
+
+        private static readonly KeyBasedLock<Guid> _semaphoreLock = new();
 
         private readonly IUserRepository _userRepository;
 
@@ -51,6 +54,11 @@ namespace GameController.Services.Services
 
             User userRequest = _mapper.Map<User>(createUserDto);
 
+            if (_userRepository.GetByName(createUserDto.Name) != null)
+            {
+                throw new ConflictException($"User name \"{createUserDto.Name}\" is already taken.");
+            }
+
             User user = _userRepository.Create(userRequest);
 
             return _mapper.Map<UserDto>(user);
@@ -77,16 +85,36 @@ namespace GameController.Services.Services
         }
 
         /// <inheritdoc/>
-        public UserDto UpdateUser(Guid userId, UpdateUserDto updateUserDto)
+        public UserDto GetUserByName(string userName)
+        {
+            _logger.LogInformation("Get user by name {name}", userName);
+
+            User? user = _userRepository.GetByName(userName);
+
+            if (user == null)
+            {
+                _logger.LogInformation("User \"{name}\" is not found.", userName);
+
+                throw new NotFoundException($"User with name \"{userName}\" not found");
+            }
+
+            return _mapper.Map<UserDto>(user);
+        }
+
+        /// <inheritdoc/>
+        public async Task<UserDto> UpdateUserAsync(Guid userId, UpdateUserDto updateUserDto)
         {
             _logger.LogInformation(
                 "Update user with ID {userId} via request {updateUserDto}",
                 userId,
                 updateUserDto);
 
-            User user = UpdateRepositoryUser(userId, updateUserDto);
+            using (await _semaphoreLock.LockAsync(userId, _logger, CancellationToken.None))
+            {
+                User user = UpdateRepositoryUser(userId, updateUserDto);
 
-            return _mapper.Map<UserDto>(user);
+                return _mapper.Map<UserDto>(user);
+            }
         }
 
         /// <inheritdoc/>

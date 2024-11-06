@@ -106,14 +106,14 @@ namespace EventGenerator.Services.Services
 
             Generator generator = GetGeneratorFromRepository(generatorId);
 
-            EventLevelDto? maxEventLevel = GetMaxEventLevel(generator.TroubleCoins);
+            EventDto? eventDto = _eventService.CreateEvent(
+                new()
+                {
+                    GeneratorId = generatorId,
+                    TroubleCoins = generator.TroubleCoins
+                });
 
-            Random random = new();
-            EventLevelDto generatedEventLevel = (EventLevelDto)random.Next(
-                0,
-                maxEventLevel.HasValue ? (int)maxEventLevel.Value : 0);
-
-            if ((int)generatedEventLevel == 0)
+            if (eventDto == null)
             {
                 _logger.LogInformation("Generator {generatorId} decided to hold onto its trouble coins.", generatorId);
 
@@ -121,21 +121,14 @@ namespace EventGenerator.Services.Services
             }
 
             _logger.LogInformation(
-                "Generator {generatorId} has generated an event with level {eventLevel}.",
+                "Generator {generatorId} has generated an event: {event}",
                 generatorId,
-                generatedEventLevel);
+                eventDto);
 
-            EventDto eventEntity = _eventService.CreateEvent(
-                new()
-                {
-                    GeneratorId = generatorId,
-                    EventLevel = generatedEventLevel
-                });
-
-            generator.TroubleCoins -= (int)generatedEventLevel;
+            generator.TroubleCoins -= eventDto.EventCost;
             _generatorRepository.Update(generator);
 
-            return _mapper.Map<EventDto>(eventEntity);
+            return eventDto;
         }
 
         #endregion
@@ -158,20 +151,6 @@ namespace EventGenerator.Services.Services
             }
 
             return generator;
-        }
-
-        /// <summary>
-        /// Get maximum level of event the generator can produce.
-        /// </summary>
-        private static EventLevelDto? GetMaxEventLevel(int troubleCoins)
-        {
-            return troubleCoins switch
-            {
-                0 => null,
-                1 => EventLevelDto.Low,
-                2 => EventLevelDto.Medium,
-                _ => EventLevelDto.High
-            };
         }
 
         #endregion
