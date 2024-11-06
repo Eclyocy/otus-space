@@ -90,6 +90,13 @@ public class ShipBuilder : IShipBuilder
                 Amount = 22,
                 State = ResourceState.OK,
                 ResourceType = ResourceType.Fuel
+            },
+            new Resource()
+            {
+                Name = "Металл",
+                Amount = 10,
+                State = ResourceState.OK,
+                ResourceType = ResourceType.ScrapMetal
             }
         };
 

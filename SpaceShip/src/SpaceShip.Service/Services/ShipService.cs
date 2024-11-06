@@ -149,6 +149,15 @@ public class ShipService : IShipService
     /// </summary>
     private void SpendShipResources(Ship ship)
     {
+        if (ship.State == ShipState.Crashed)
+        {
+            _logger.LogWarning(
+                    "Ship {name} [{id}] is crushed. No need to spent resources",
+                    ship.Name,
+                    ship.Id);
+            return;
+        }
+
         foreach (Resource resource in ship.Resources)
         {
             ResourceType? requiredResourceType = _resourceService.GetRequiredResourceType(resource);
