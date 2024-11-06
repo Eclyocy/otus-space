@@ -8,7 +8,7 @@ namespace Shared.Utilities
     /// allowing only one object per a key to be processed at a time.
     /// </summary>
     /// <typeparam name="TKey">Type of the key to lock.</typeparam>
-    public class KeyBasedLock<TKey>
+    public class KeyBasedLock<TKey>(ILogger<KeyBasedLock<TKey>> logger) : IDisposable
         where TKey : notnull
     {
         #region private fields
@@ -16,23 +16,37 @@ namespace Shared.Utilities
         /// <summary>
         /// Semaphores for processing only one object per a key at a time.
         /// </summary>
-        private readonly ConcurrentDictionary<TKey, SemaphoreSlim> _objects = new();
+        private readonly ConcurrentDictionary<TKey, SemaphoreSlim> _semaphores = new();
+
+        private readonly ILogger<KeyBasedLock<TKey>> _logger = logger;
 
         #endregion
 
         #region public methods
 
-        public async Task<IDisposable> LockAsync(TKey key, ILogger logger, CancellationToken cancellationToken)
+        public async Task<IDisposable> LockAsync(TKey key, CancellationToken cancellationToken)
         {
-            SemaphoreSlim semaphore = _objects.GetOrAdd(key, x => new SemaphoreSlim(1, 1));
+            _logger.LogInformation("Semaphore requested for key: {key}.", key);
+            LogCurrentlyLockedKeys();
+
+            SemaphoreSlim semaphore = _semaphores.GetOrAdd(key, x => new SemaphoreSlim(1, 1));
 
             await semaphore.WaitAsync(cancellationToken);
 
-            logger.LogInformation("Semaphore acquired for key: {key}.", key);
+            _logger.LogInformation("Semaphore acquired for key: {key}.", key);
+            LogCurrentlyLockedKeys();
 
-            LogCurrentlyLockedKeys(logger);
+            return new SemaphoreReleaser(semaphore, key, _logger);
+        }
 
-            return new SemaphoreReleaser(semaphore, key, logger);
+        public void Dispose()
+        {
+            foreach (SemaphoreSlim semaphore in _semaphores.Values)
+            {
+                semaphore.Dispose();
+            }
+
+            _semaphores.Clear();
         }
 
         #endregion
@@ -42,9 +56,9 @@ namespace Shared.Utilities
         /// <summary>
         /// Log information about currently locked objects.
         /// </summary>
-        private void LogCurrentlyLockedKeys(ILogger logger)
+        private void LogCurrentlyLockedKeys()
         {
-            IEnumerable<TKey> currentlyLockedKeys = _objects
+            IEnumerable<TKey> currentlyLockedKeys = _semaphores
                 .Where(x => x.Value.CurrentCount == 0)
                 .Select(x => x.Key);
 
@@ -52,7 +66,7 @@ namespace Shared.Utilities
                 ? string.Join(", ", currentlyLockedKeys)
                 : "none";
 
-            logger.LogInformation("Currently locked keys: {keys}.", currentlyLockedKeysRepresentation);
+            _logger.LogInformation("Currently locked keys: {keys}.", currentlyLockedKeysRepresentation);
         }
 
         #endregion

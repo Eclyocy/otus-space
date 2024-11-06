@@ -18,7 +18,7 @@ namespace GameController.Services.Services
 
         private readonly IUserRepository _userRepository;
 
-        private readonly KeyBasedLock<Guid> _semaphoreLock = new();
+        private readonly KeyBasedLock<Guid> _semaphoreLock;
 
         private readonly ILogger<UserService> _logger;
 
@@ -33,12 +33,14 @@ namespace GameController.Services.Services
         /// </summary>
         public UserService(
             IUserRepository userRepository,
-            ILogger<UserService> logger,
+            ILoggerFactory loggerFactory,
             IMapper mapper)
         {
             _userRepository = userRepository;
 
-            _logger = logger;
+            _semaphoreLock = new(loggerFactory.CreateLogger<KeyBasedLock<Guid>>());
+
+            _logger = loggerFactory.CreateLogger<UserService>();
 
             _mapper = mapper;
         }
@@ -111,8 +113,10 @@ namespace GameController.Services.Services
 
             User user;
 
-            using (await _semaphoreLock.LockAsync(userId, _logger, CancellationToken.None))
+            using (await _semaphoreLock.LockAsync(userId, CancellationToken.None))
             {
+                await Task.Delay(TimeSpan.FromMinutes(1));
+
                 user = UpdateRepositoryUser(userId, updateUserDto);
             }
 
