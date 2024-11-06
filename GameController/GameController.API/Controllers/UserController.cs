@@ -2,6 +2,7 @@
 using GameController.API.Models.User;
 using GameController.Services.Interfaces;
 using GameController.Services.Models.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,6 +13,7 @@ namespace GameController.API.Controllers
     /// </summary>
     [ApiController]
     [Route("/api/users")]
+    [Authorize]
     public class UserController : Controller
     {
         #region private fields
