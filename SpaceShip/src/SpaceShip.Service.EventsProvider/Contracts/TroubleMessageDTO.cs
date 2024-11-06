@@ -21,5 +21,10 @@ namespace SpaceShip.Service.EventsConsumer.Contracts
         /// Event level.
         /// </summary>
         public EventLevel EventLevel { get; set; }
+
+        /// <summary>
+        /// Resource type with problem.
+        /// </summary>
+        public ResourceType? Resource { get; set; }
     }
 }
