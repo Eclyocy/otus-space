@@ -4,6 +4,7 @@ import { environment } from '../environments/environment';
 import { AuthToken } from '../models/auth.token';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,10 @@ export class AuthService {
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
   private readonly EXPIRES_IN_KEY = 'expires_in';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private jwtHelper: JwtHelperService
+  ) {}
 
   login(username: string, password: string): Observable<AuthToken> {
     return this.http
@@ -32,6 +36,17 @@ export class AuthService {
 
   getRefreshToken(): string | null {
     return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+  }
+
+  getUserId(): string | null {
+    const accessToken = this.getAccessToken()
+
+    if (accessToken) {
+      const decodedToken = this.jwtHelper.decodeToken(accessToken);
+      return decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
+    }
+
+    return null;
   }
 
   isLoggedIn(): boolean {
