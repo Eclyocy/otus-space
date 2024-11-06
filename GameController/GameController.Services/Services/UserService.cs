@@ -111,8 +111,6 @@ namespace GameController.Services.Services
 
             using (await _semaphoreLock.LockAsync(userId, _logger, CancellationToken.None))
             {
-                await Task.Delay(TimeSpan.FromMinutes(1));
-
                 User user = UpdateRepositoryUser(userId, updateUserDto);
 
                 return _mapper.Map<UserDto>(user);
