@@ -1,4 +1,3 @@
-// login.component.ts
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -20,14 +19,12 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
-    this.errorMessage = ''; // Clear any previous error messages
+    this.errorMessage = '';
     this.authService.login(this.username, this.password).subscribe({
       next: () => {
-        // Login successful
-        this.router.navigate(['/users']); // Redirect to the users page or any default page after login
+        this.router.navigate(['/users']);
       },
       error: (error) => {
-        // Login failed
         console.error('Login error:', error);
         this.errorMessage = 'Invalid username or password. Please try again.';
       }
