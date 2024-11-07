@@ -340,5 +340,118 @@ namespace EventGenerator.Tests.Services
         }
 
         #endregion
+
+        #region tests for GenerateEvent
+
+        /// <summary>
+        /// Test that <see cref="GeneratorService.GenerateEvent"/>
+        /// updates generator coins correctly when event is generated.
+        /// </summary>
+        [TestCase(1, EventLevel.Low)]
+        [TestCase(2, EventLevel.Low)]
+        [TestCase(2, EventLevel.Medium)]
+        [TestCase(3, EventLevel.Low)]
+        [TestCase(3, EventLevel.Medium)]
+        [TestCase(3, EventLevel.High)]
+        public void Test_GenerateEvent_WhenEventGenerated(
+            int initialTroubleCoins,
+            EventLevel generatedEventLevel)
+        {
+            // Arrange
+            Event generatedEvent = new() { GeneratorId = _generatorId, EventLevel = generatedEventLevel };
+            EventDto generatedEventDto = _mapper.Map<EventDto>(generatedEvent);
+            Generator generator = new() { Id = _generatorId, ShipId = _shipId, TroubleCoins = initialTroubleCoins };
+            int expectedEventCost = (int)generatedEventLevel;
+
+            _generatorRepositoryMock.Setup(repo => repo.Get(_generatorId, It.IsAny<bool>())).Returns(generator);
+            _eventServiceMock
+                .Setup(x => x.CreateEvent(It.IsAny<CreateEventDto>()))
+                .Returns(generatedEventDto);
+
+            // Act
+            EventDto? result = _generatorService.GenerateEvent(_generatorId);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result?.EventCost, Is.EqualTo(expectedEventCost));
+
+                Assert.That(generator.TroubleCoins, Is.EqualTo(initialTroubleCoins - expectedEventCost));
+
+                _generatorRepositoryMock.Verify(repo => repo.Get(_generatorId, It.IsAny<bool>()), Times.Once);
+                _generatorRepositoryMock.Verify(
+                    repo => repo.Update(It.Is<Generator>(g =>
+                        g.Id == _generatorId &&
+                        g.TroubleCoins == initialTroubleCoins - expectedEventCost)),
+                    Times.Once);
+                _generatorRepositoryMock.VerifyNoOtherCalls();
+
+                _eventServiceMock.Verify(x => x.CreateEvent(It.Is<CreateEventDto>(request =>
+                    request.GeneratorId == _generatorId &&
+                    request.TroubleCoins == initialTroubleCoins)));
+                _eventServiceMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(2));
+            });
+        }
+
+        /// <summary>
+        /// Test that <see cref="GeneratorService.GenerateEvent"/>
+        /// does not update generator when event is not generated.
+        /// </summary>
+        [Test]
+        public void Test_GenerateEvent_WhenEventNotGenerated()
+        {
+            // Arrange
+            int troubleCoins = 2;
+            Generator generator = new() { Id = _generatorId, ShipId = _shipId, TroubleCoins = 2 };
+
+            _generatorRepositoryMock.Setup(repo => repo.Get(_generatorId, It.IsAny<bool>())).Returns(generator);
+            _eventServiceMock.Setup(x => x.CreateEvent(It.IsAny<CreateEventDto>())).Returns((EventDto?)null);
+
+            // Act
+            EventDto? eventDto = _generatorService.GenerateEvent(_generatorId);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(eventDto, Is.Null);
+
+                _generatorRepositoryMock.Verify(repo => repo.Get(_generatorId, It.IsAny<bool>()), Times.Once);
+                _generatorRepositoryMock.VerifyNoOtherCalls();
+
+                _eventServiceMock.Verify(x => x.CreateEvent(It.Is<CreateEventDto>(request =>
+                    request.GeneratorId == _generatorId &&
+                    request.TroubleCoins == troubleCoins)));
+                _eventServiceMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(2));
+            });
+        }
+
+        /// <summary>
+        /// Test that <see cref="GeneratorService.GenerateEvent"/>
+        /// throws when generator is not found.
+        /// </summary>
+        [Test]
+        public void Test_GenerateEvent_WhenGeneratorNotFound()
+        {
+            // Arrange
+            _generatorRepositoryMock.Setup(repo => repo.Get(_generatorId, It.IsAny<bool>())).Returns((Generator?)null);
+
+            // Act & Assert
+            Assert.Multiple(() =>
+            {
+                Assert.Throws<NotFoundException>(() => _generatorService.GenerateEvent(_generatorId));
+
+                _generatorRepositoryMock.Verify(repo => repo.Get(_generatorId, It.IsAny<bool>()), Times.Once);
+                _generatorRepositoryMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(2));
+            });
+        }
+
+        #endregion
     }
 }
