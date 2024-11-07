@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Shared.Enums;
 
-namespace EventGenerator.Tests
+namespace EventGenerator.Tests.Services
 {
     [TestFixture]
     public class EventServiceTest
@@ -20,7 +20,7 @@ namespace EventGenerator.Tests
         private Mock<IMapper> _mapperMock;
         private readonly Guid _generatorId = Guid.NewGuid();
         private readonly Guid _eventId = Guid.NewGuid();
-        private readonly int _eventLevelIndex = new Random().Next(1,3);
+        private readonly int _eventLevelIndex = new Random().Next(1, 3);
 
         #endregion
 

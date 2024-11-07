@@ -9,7 +9,7 @@ using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace EventGenerator.Tests
+namespace EventGenerator.Tests.Services
 {
     /// <summary>
     /// Tests for <see cref="GeneratorService"/>.
