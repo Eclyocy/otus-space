@@ -44,6 +44,15 @@ namespace EventGenerator.Tests.Services
             _eventServiceMock = new Mock<IEventService>();
             _loggerGeneratorMock = new Mock<ILogger<GeneratorService>>();
 
+            _generatorRepositoryMock
+                .Setup(x => x.Create(It.IsAny<Generator>()))
+                .Returns((Generator g) => new Generator
+                {
+                    Id = _generatorId,
+                    ShipId = g.ShipId,
+                    TroubleCoins = g.TroubleCoins
+                });
+
             _mapper = new Mapper(
                 new MapperConfiguration(
                     static cfg =>
@@ -82,10 +91,6 @@ namespace EventGenerator.Tests.Services
         {
             // Arrange
             CreateGeneratorDto serviceRequest = new() { ShipId = _shipId };
-
-            _generatorRepositoryMock
-                .Setup(repo => repo.Create(It.IsAny<Generator>()))
-                .Returns(new Generator() { Id = _generatorId, ShipId = _shipId });
 
             // Act
             GeneratorDto result = _generatorService.CreateGenerator(serviceRequest);
@@ -150,6 +155,7 @@ namespace EventGenerator.Tests.Services
         /// Test that <see cref="GeneratorService.GetGenerator"/>
         /// throws when the generator is not found.
         /// </summary>
+        [Test]
         public void Test_GetGenerator_WhenGeneratorNotFound()
         {
             // Arrange
@@ -208,6 +214,7 @@ namespace EventGenerator.Tests.Services
         /// Test that <see cref="GeneratorService.AddTroubleCoin"/>
         /// throws when the generator is not found.
         /// </summary>
+        [Test]
         public void Test_AddTroubleCoin_WhenGeneratorNotFound()
         {
             // Arrange
