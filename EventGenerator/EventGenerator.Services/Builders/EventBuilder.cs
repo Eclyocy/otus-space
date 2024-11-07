@@ -3,11 +3,10 @@ using EventGenerator.Database.Models;
 using EventGenerator.Services.Helpers;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Event;
-using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
 
-namespace EventGenerator.Services.Builder
+namespace EventGenerator.Services.Builders
 {
     /// <summary>
     /// Event builder.
@@ -16,18 +15,22 @@ namespace EventGenerator.Services.Builder
     {
         private readonly IEventRepository _eventRepository;
 
-        private readonly ILogger<EventService> _logger;
+        private readonly ILogger<EventBuilder> _logger;
+
+        private readonly Random _random;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         public EventBuilder(
             IEventRepository eventRepository,
-            ILogger<EventService> logger)
+            ILogger<EventBuilder> logger,
+            Random random)
         {
             _eventRepository = eventRepository;
 
             _logger = logger;
+            _random = random;
         }
 
         /// <inheritdoc/>
@@ -47,8 +50,7 @@ namespace EventGenerator.Services.Builder
                 return null;
             }
 
-            Random random = new();
-            int generatedEventLevel = random.Next(0, (int)maxEventLevel.Value + 1);
+            int generatedEventLevel = _random.Next(0, (int)maxEventLevel.Value + 1);
 
             if (generatedEventLevel == 0)
             {

@@ -1,4 +1,4 @@
-﻿using EventGenerator.Services.Builder;
+﻿using EventGenerator.Services.Builders;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Mappers;
 using EventGenerator.Services.Services;
