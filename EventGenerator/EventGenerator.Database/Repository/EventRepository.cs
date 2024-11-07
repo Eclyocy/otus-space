@@ -8,8 +8,6 @@ namespace EventGenerator.Database.Repository
     /// </summary>
     public class EventRepository : BaseRepository<Event>, IEventRepository
     {
-        #region constructor
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -17,7 +15,5 @@ namespace EventGenerator.Database.Repository
             : base(databaseContext)
         {
         }
-
-        #endregion
     }
 }
