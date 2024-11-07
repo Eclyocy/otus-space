@@ -1,6 +1,7 @@
 ﻿using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
 using EventGenerator.Services.Helpers;
+using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Event;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
@@ -8,41 +9,36 @@ using Shared.Enums;
 
 namespace EventGenerator.Services.Builder
 {
-    public class EventBuilder
+    /// <summary>
+    /// Event builder.
+    /// </summary>
+    public class EventBuilder : IEventBuilder
     {
-        private readonly CreateEventDto _createEventDto;
         private readonly IEventRepository _eventRepository;
+
         private readonly ILogger<EventService> _logger;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         public EventBuilder(
-            CreateEventDto createEventDto,
             IEventRepository eventRepository,
             ILogger<EventService> logger)
         {
-            _createEventDto = createEventDto;
             _eventRepository = eventRepository;
+
             _logger = logger;
         }
 
-        /// <summary>
-        /// Event level.
-        /// </summary>
-        public int Level { get; set; }
-
-        /// <summary>
-        /// Create new event.
-        /// </summary>
-        public Event? Build()
+        /// <inheritdoc/>
+        public Event? Build(CreateEventDto createEventDto)
         {
             _logger.LogInformation(
-                "Trying to create an event for {generatorId} generator an event with {troubleCoins} trouble coins.",
-                _createEventDto.GeneratorId,
-                _createEventDto.TroubleCoins);
+                "Creating an event for generator {generatorId} with {troubleCoins} trouble coins.",
+                createEventDto.GeneratorId,
+                createEventDto.TroubleCoins);
 
-            EventLevel? maxEventLevel = TroubleCoinsConverter.ConvertTroubleCoins(_createEventDto.TroubleCoins);
+            EventLevel? maxEventLevel = TroubleCoinsConverter.ConvertTroubleCoins(createEventDto.TroubleCoins);
 
             if (maxEventLevel == null)
             {
@@ -64,7 +60,7 @@ namespace EventGenerator.Services.Builder
             return _eventRepository.Create(
                 new()
                 {
-                    GeneratorId = _createEventDto.GeneratorId,
+                    GeneratorId = createEventDto.GeneratorId,
                     EventLevel = (EventLevel)generatedEventLevel
                 });
         }
