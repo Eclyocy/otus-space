@@ -77,15 +77,36 @@ namespace SpaceShip.Service.Services
         }
 
         /// <inheritdoc/>
-        public void UpdateResourceState(Resource resource, ResourceState resourceState)
+        public (ResourceType? ResourceType, int Amount) GetSpareResourceRequirement(Resource resource)
         {
+            if (resource.State != ResourceState.Fail)
+            {
+                _logger.LogInformation(
+                    "No needs to repair. Resource {resourceName} of type {resourceType} is in {resourceState} state.",
+                    resource.Name,
+                    resource.ResourceType,
+                    resource.State);
+
+                return (null, 0);
+            }
+
+            return resource.SpareResourceType;
+        }
+
+        /// <inheritdoc/>
+        public void UpdateResourceState(Resource resource, ResourceState resourceState, EventLevel? criticality = null)
+        {
+            criticality = criticality ?? resource.StateCriticality;
+
             _logger.LogInformation(
-                "Update resource {resourceName} of type {resourceType} state to {resourceState}.",
+                "Update resource {resourceName} of type {resourceType} state to {resourceState} with criticality {criticality}.",
                 resource.Name,
                 resource.ResourceType,
-                resourceState);
+                resourceState,
+                criticality);
 
             resource.State = resourceState;
+            resource.StateCriticality = criticality;
             _resourceRepository.Update(resource);
         }
 

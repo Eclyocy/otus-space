@@ -1,4 +1,5 @@
 ﻿using SpaceShip.Service.Contracts;
+using SpaceShip.Service.Models;
 
 namespace SpaceShip.Service.Interfaces;
 
@@ -21,6 +22,11 @@ public interface IShipService
     /// Process new day on board the SpaceShip with <paramref name="shipId"/>.
     /// </summary>
     ShipDTO ProcessNewDay(Guid shipId);
+
+    /// <summary>
+    /// Process trouble message for SpaceShip.
+    /// </summary>
+    ShipDTO ApplyFailure(Trouble trouble);
 
     /// <summary>
     /// Delete the SpaceShip with <paramref name="shipId"/>.

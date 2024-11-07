@@ -68,6 +68,7 @@ builder.Services.AddSingleton<IMapper>(
                 cfg.AddProfile<SpaceShipMappingProfile>();
                 cfg.AddProfile<ShipMappingProfile>();
                 cfg.AddProfile<ResourceMappingProfile>();
+                cfg.AddProfile<TroubleMappingProfile>();
             })));
 
 builder.Services.Configure<JsonOptions>(options =>
