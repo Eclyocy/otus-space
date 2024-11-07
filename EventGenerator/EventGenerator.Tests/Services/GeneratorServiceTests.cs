@@ -4,10 +4,12 @@ using EventGenerator.Database.Models;
 using EventGenerator.Services.Exceptions;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Mappers;
+using EventGenerator.Services.Models.Event;
 using EventGenerator.Services.Models.Generator;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Shared.Enums;
 
 namespace EventGenerator.Tests.Services
 {
@@ -58,6 +60,7 @@ namespace EventGenerator.Tests.Services
                     static cfg =>
                     {
                         cfg.AddProfile<GeneratorMapper>();
+                        cfg.AddProfile<EventMapper>();
                     }));
 
             _generatorService = new GeneratorService(
@@ -226,6 +229,110 @@ namespace EventGenerator.Tests.Services
                 Assert.Throws<NotFoundException>(() => _generatorService.AddTroubleCoin(_generatorId));
 
                 _generatorRepositoryMock.Verify(repo => repo.Get(_generatorId, It.IsAny<bool>()), Times.Once);
+                _generatorRepositoryMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(2));
+            });
+        }
+
+        #endregion
+
+        #region tests for GetEvents
+
+        /// <summary>
+        /// Test that <see cref="GeneratorService.GetEvents"/>
+        /// returns an empty list when generator has generated no events.
+        /// </summary>
+        [Test]
+        public void Test_GetEvents_WhenGeneratorHasEvents()
+        {
+            // Arrange
+            Guid eventId = Guid.NewGuid();
+            EventLevel eventLevel = EventLevel.Low;
+            Event generatedEvent = new Event() { Id = eventId, EventLevel = eventLevel };
+            Generator generator = new()
+            {
+                Id = _generatorId,
+                ShipId = _shipId,
+                TroubleCoins = 0,
+                Events = [generatedEvent]
+            };
+
+            _generatorRepositoryMock.Setup(repo => repo.Get(_generatorId, It.IsAny<bool>())).Returns(generator);
+
+            // Act
+            List<EventDto> actualEvents = _generatorService.GetEvents(_generatorId);
+
+            // Assert (list)
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualEvents, Is.Not.Null);
+                Assert.That(actualEvents, Is.Not.Empty);
+                Assert.That(actualEvents, Has.Count.EqualTo(1));
+            });
+
+            // Assert (event)
+            EventDto actualEvent = actualEvents.Single();
+            Assert.Multiple(() =>
+            {
+                Assert.That(actualEvent.EventId, Is.EqualTo(eventId));
+                Assert.That(actualEvent.EventLevel, Is.EqualTo(eventLevel));
+            });
+
+            // Assert (invocations)
+            Assert.Multiple(() =>
+            {
+                _generatorRepositoryMock.Verify(repo => repo.Get(_generatorId, true), Times.Once);
+                _generatorRepositoryMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
+        /// <summary>
+        /// Test that <see cref="GeneratorService.GetEvents"/>
+        /// returns an empty list when generator has generated no events.
+        /// </summary>
+        [Test]
+        public void Test_GetEvents_WhenGeneratorHasNoEvents()
+        {
+            // Arrange
+            Generator generator = new() { Id = _generatorId, ShipId = _shipId, TroubleCoins = 0, Events = [] };
+
+            _generatorRepositoryMock.Setup(repo => repo.Get(_generatorId, It.IsAny<bool>())).Returns(generator);
+
+            // Act
+            List<EventDto> result = _generatorService.GetEvents(_generatorId);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result, Is.Empty);
+
+                _generatorRepositoryMock.Verify(repo => repo.Get(_generatorId, true), Times.Once);
+                _generatorRepositoryMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
+        /// <summary>
+        /// Test that <see cref="GeneratorService.GetEvents"/>
+        /// throws when generator is not found.
+        /// </summary>
+        [Test]
+        public void Test_GetEvents_WhenGeneratorNotFound()
+        {
+            // Arrange
+            _generatorRepositoryMock.Setup(repo => repo.Get(_generatorId, It.IsAny<bool>())).Returns((Generator?)null);
+
+            // Act & Assert
+            Assert.Multiple(() =>
+            {
+                Assert.Throws<NotFoundException>(() => _generatorService.GetEvents(_generatorId));
+
+                _generatorRepositoryMock.Verify(repo => repo.Get(_generatorId, true), Times.Once);
                 _generatorRepositoryMock.VerifyNoOtherCalls();
 
                 Assert.That(_loggerGeneratorMock.Invocations, Has.Count.EqualTo(2));
