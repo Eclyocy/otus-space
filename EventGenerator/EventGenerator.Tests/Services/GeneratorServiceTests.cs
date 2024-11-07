@@ -15,7 +15,7 @@ namespace EventGenerator.Tests.Services
     /// Tests for <see cref="GeneratorService"/>.
     /// </summary>
     [TestFixture]
-    public class GeneratorServiceTest
+    public class GeneratorServiceTests
     {
         #region private fields
 

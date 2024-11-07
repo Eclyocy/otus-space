@@ -10,7 +10,7 @@ using Shared.Enums;
 namespace EventGenerator.Tests.Services
 {
     [TestFixture]
-    public class EventServiceTest
+    public class EventServiceTests
     {
         #region private fields
 
