@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
+using EventGenerator.Services.Interfaces;
+using EventGenerator.Services.Mappers;
 using EventGenerator.Services.Models.Event;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Logging;
@@ -9,65 +10,124 @@ using Shared.Enums;
 
 namespace EventGenerator.Tests.Services
 {
+    /// <summary>
+    /// Tests for <see cref="EventService"/>.
+    /// </summary>
     [TestFixture]
     public class EventServiceTests
     {
         #region private fields
 
-        private EventService _eventService;
-        private Mock<IEventRepository> _eventRepositoryMock;
-        private Mock<ILogger<EventService>> _loggerMock;
-        private Mock<IMapper> _mapperMock;
         private readonly Guid _generatorId = Guid.NewGuid();
         private readonly Guid _eventId = Guid.NewGuid();
-        private readonly int _eventLevelIndex = new Random().Next(1, 3);
+
+        private Mock<IEventBuilder> _eventBuidlerMock;
+        private Mock<ILogger<EventService>> _loggerMock;
+
+        private IMapper _mapper;
+
+        private EventService _eventService;
 
         #endregion
 
         #region setup
-        [SetUp]
-        public void SetupGeneratorServiceTests()
+
+        /// <summary>
+        /// One-time setup.
+        /// </summary>
+        [OneTimeSetUp]
+        public void OneTimeSetup()
         {
-            _eventRepositoryMock = new Mock<IEventRepository>();
+            _eventBuidlerMock = new Mock<IEventBuilder>();
             _loggerMock = new Mock<ILogger<EventService>>();
-            _mapperMock = new Mock<IMapper>();
-            _eventService = new EventService(_eventRepositoryMock.Object, _loggerMock.Object, _mapperMock.Object);
+
+            _mapper = new Mapper(
+                new MapperConfiguration(
+                    static cfg =>
+                    {
+                        cfg.AddProfile<EventMapper>();
+                    }));
+
+            _eventService = new EventService(
+                _eventBuidlerMock.Object,
+                _loggerMock.Object,
+                _mapper);
         }
+
+        /// <summary>
+        /// Setup for every test.
+        /// </summary>
+        [SetUp]
+        public void Setup()
+        {
+            _eventBuidlerMock.Invocations.Clear();
+            _loggerMock.Invocations.Clear();
+        }
+
         #endregion
 
-        #region CreateEvent
+        #region tests for CreateEvent
 
-        [Test]
-        public void CreateEvent_ReturnEventDto_WhenGeneratorСorrect()
+        /// <summary>
+        /// Test that <see cref="EventService.CreateEvent"/>
+        /// creates an event based on the one provided by builder.
+        /// </summary>
+        [TestCase(EventLevel.Low)]
+        [TestCase(EventLevel.Medium)]
+        [TestCase(EventLevel.High)]
+        public void Test_CreateEvent_WhenBuilt(EventLevel eventLevel)
         {
             // Arrange
-            var _event = new Event { Id = _eventId, GeneratorId = _generatorId, EventLevel = (EventLevel)_eventLevelIndex };
-            var _createEventDto = new CreateEventDto { GeneratorId = _generatorId };
-            var _eventDto = new EventDto { GeneratorId = _generatorId, EventId = _eventId, EventLevel = (EventLevel)_eventLevelIndex };
-            _mapperMock.Setup(m => m.Map<Event>(_createEventDto)).Returns(_event);
-            _eventRepositoryMock.Setup(repo => repo.Create(_event)).Returns(_event);
-            _mapperMock.Setup(m => m.Map<EventDto>(_event)).Returns(_eventDto);
+            CreateEventDto createEventDto = new() { GeneratorId = _generatorId };
+            Event builtEvent = new() { Id = _eventId, GeneratorId = _generatorId, EventLevel = eventLevel };
+
+            _eventBuidlerMock.Setup(x => x.Build(It.IsAny<CreateEventDto>())).Returns(builtEvent);
 
             // Act
-            var result = _eventService.CreateEvent(_createEventDto);
+            EventDto? result = _eventService.CreateEvent(createEventDto);
 
             // Assert
             Assert.Multiple(() =>
             {
-                //Assert.That(result, Is.Not.Null);
-                //Assert.That(result, Is.EqualTo(_eventDto));
-                Assert.That(result.GeneratorId, Is.EqualTo(_eventDto.GeneratorId));
-                Assert.That(result.EventId, Is.EqualTo(_eventDto.EventId));
-                Assert.That(result.EventLevel, Is.EqualTo(_eventDto.EventLevel));
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result?.GeneratorId, Is.EqualTo(_generatorId));
+                Assert.That(result?.EventId, Is.EqualTo(_eventId));
+                Assert.That(result?.EventLevel, Is.EqualTo(eventLevel));
 
-                // Verify calls
-                _eventRepositoryMock.Verify(repo => repo.Create(_event), Times.Once);
-                _mapperMock.Verify(m => m.Map<Event>(_createEventDto), Times.Once);
-                _mapperMock.Verify(m => m.Map<EventDto>(_event), Times.Once);
+                _eventBuidlerMock.Verify(x => x.Build(createEventDto), Times.Once);
+                _eventBuidlerMock.VerifyNoOtherCalls();
 
                 Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
             });
         }
+
+        /// <summary>
+        /// Test that <see cref="EventService.CreateEvent"/>
+        /// does not create an event if the builder does not provide it.
+        /// </summary>
+        [Test]
+        public void Test_CreateEvent_WhenNull()
+        {
+            // Arrange
+            CreateEventDto createEventDto = new() { GeneratorId = _generatorId };
+
+            _eventBuidlerMock.Setup(x => x.Build(It.IsAny<CreateEventDto>())).Returns((Event?)null);
+
+            // Act
+            EventDto? result = _eventService.CreateEvent(createEventDto);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Null);
+
+                _eventBuidlerMock.Verify(x => x.Build(createEventDto), Times.Once);
+                _eventBuidlerMock.VerifyNoOtherCalls();
+
+                Assert.That(_loggerMock.Invocations, Has.Count.EqualTo(1));
+            });
+        }
+
         #endregion
     }
 }
