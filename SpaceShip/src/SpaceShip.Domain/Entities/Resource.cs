@@ -71,14 +71,25 @@ public class Resource : BaseEntity
     /// <summary>
     /// Resource type required for this resource repair.
     /// </summary>
-    public (ResourceType? ResourceType, int Amount) SpareResourceType => (ResourceType, StateCriticality) switch
+    public (ResourceType? ResourceType, int Amount) SpareResourceType
     {
-        (ResourceType.Hull, EventLevel.Low) => (ResourceType.ScrapMetal, 1),
-        (ResourceType.Hull, EventLevel.Medium) => (ResourceType.ScrapMetal, 2),
-        (ResourceType.Hull, EventLevel.High) => (ResourceType.ScrapMetal, 3),
-        (ResourceType.Engine, _) => (ResourceType.ScrapMetal, 1),
-        (ResourceType.ScrapMetal, _) => (null, 0),
-        (ResourceType.Fuel, _) => (null, 0),
-        _ => (null, 0)
-    };
+        get
+        {
+            if (State != ResourceState.Fail)
+            {
+                return (null, 0); // No needs to repair.
+            }
+
+            return (ResourceType, StateCriticality) switch
+            {
+                (ResourceType.Hull, EventLevel.Low) => (ResourceType.ScrapMetal, 1),
+                (ResourceType.Hull, EventLevel.Medium) => (ResourceType.ScrapMetal, 2),
+                (ResourceType.Hull, EventLevel.High) => (ResourceType.ScrapMetal, 3),
+                (ResourceType.Engine, _) => (ResourceType.ScrapMetal, 1),
+                (ResourceType.ScrapMetal, _) => (null, 0),
+                (ResourceType.Fuel, _) => (null, 0),
+                _ => (null, 0)
+            };
+        }
+    }
 }
