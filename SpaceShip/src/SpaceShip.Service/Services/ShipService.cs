@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
+using Shared.Utilities;
 using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Builder.Abstractions;
@@ -24,6 +25,8 @@ public class ShipService : IShipService
 
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
+
+    private static readonly KeyBasedLock<Guid> _shipLock = new();
 
     #endregion
 
@@ -72,7 +75,7 @@ public class ShipService : IShipService
     }
 
     /// <inheritdoc/>
-    public ShipDTO ProcessNewDay(Guid shipId)
+    public async Task<ShipDTO> ProcessNewDay(Guid shipId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Processing new day on board the space ship with id {id}.", shipId);
 
@@ -89,13 +92,13 @@ public class ShipService : IShipService
 
         ship.Step++;
 
-        UpdateRepositoryShip(ship);
+        await UpdateRepositoryShip(ship, cancellationToken);
 
         return GetShip(shipId);
     }
 
     /// <inheritdoc/>
-    public ShipDTO ApplyFailure(Trouble trouble)
+    public async Task<ShipDTO> ApplyFailureAsync(Trouble trouble, CancellationToken cancellationToken)
     {
         _logger.LogInformation("New {level} failure occur with {resource} on ship with id: {id}. Updating status.", trouble.Level, trouble.Resource, trouble.ShipId);
 
@@ -104,10 +107,16 @@ public class ShipService : IShipService
         Resource component = ship.Resources.Where(x => x.ResourceType == trouble.Resource).OrderBy(x => x.State).First();
         if (component is not null)
         {
-            _resourceService.UpdateResourceState(component, ResourceState.Fail, trouble.Level);
+            var troubleLevel = component.StateCriticality ?? trouble.Level;
+            troubleLevel = troubleLevel > trouble.Level ? troubleLevel : trouble.Level;
+
+            _resourceService.UpdateResourceState(
+                component,
+                ResourceState.Fail,
+                troubleLevel);
         }
 
-        UpdateRepositoryShip(ship);
+        await UpdateRepositoryShip(ship, cancellationToken);
 
         return GetShip(trouble.ShipId);
     }
@@ -343,12 +352,14 @@ public class ShipService : IShipService
         return true;
     }
 
-    private void UpdateRepositoryShip(Ship ship)
+    private async Task UpdateRepositoryShip(Ship ship, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Saving ship [{id}] to repository", ship.Id);
 
-        // TODO - add interlock
-        _shipRepository.Update(ship, saveChanges: true);
+        using (await _shipLock.LockAsync(ship.Id, _logger, cancellationToken))
+        {
+            _shipRepository.Update(ship, saveChanges: true);
+        }
 
         _logger.LogInformation("Ship [{id}] to repository successfully saved", ship.Id);
     }

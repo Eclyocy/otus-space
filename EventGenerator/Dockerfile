@@ -11,6 +11,7 @@ COPY ./EventGenerator/*.sln .
 COPY ./EventGenerator/EventGenerator/*.csproj ./EventGenerator/
 COPY ./EventGenerator/EventGenerator.Database/*.csproj ./EventGenerator.Database/
 COPY ./EventGenerator/EventGenerator.Services/*.csproj ./EventGenerator.Services/
+COPY ./EventGenerator/EventGenerator.Tests/*.csproj ./EventGenerator.Tests/
 
 # Restore packages
 RUN dotnet restore

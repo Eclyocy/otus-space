@@ -1,4 +1,5 @@
-﻿using EventGenerator.Services.Interfaces;
+﻿using EventGenerator.Services.Builders;
+using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Mappers;
 using EventGenerator.Services.Services;
 using Microsoft.Extensions.Configuration;
@@ -15,8 +16,11 @@ namespace EventGenerator.Services
             services.AddAutoMapper(x => x.AddProfile(typeof(GeneratorMapper)));
             services.AddAutoMapper(x => x.AddProfile(typeof(EventMapper)));
 
-            services.AddScoped<IGeneratorService, GeneratorService>();
-            services.AddScoped<IEventService, EventService>();
+            services.AddSingleton<Random>();
+            services.AddTransient<IEventBuilder, EventBuilder>();
+
+            services.AddTransient<IGeneratorService, GeneratorService>();
+            services.AddTransient<IEventService, EventService>();
 
             services.AddHostedService<RabbitMQService>();
 

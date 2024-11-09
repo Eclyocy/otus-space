@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using EventGenerator.Database.Interfaces;
 using EventGenerator.Database.Models;
-using EventGenerator.Services.Builder;
 using EventGenerator.Services.Interfaces;
 using EventGenerator.Services.Models.Event;
 using Microsoft.Extensions.Logging;
@@ -13,7 +11,7 @@ namespace EventGenerator.Services.Services
     /// </summary>
     public class EventService : IEventService
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly IEventBuilder _eventBuilder;
 
         private readonly ILogger<EventService> _logger;
         private readonly IMapper _mapper;
@@ -22,11 +20,11 @@ namespace EventGenerator.Services.Services
         /// Constructor.
         /// </summary>
         public EventService(
-            IEventRepository eventRepository,
+            IEventBuilder eventBuilder,
             ILogger<EventService> logger,
             IMapper mapper)
         {
-            _eventRepository = eventRepository;
+            _eventBuilder = eventBuilder;
 
             _logger = logger;
             _mapper = mapper;
@@ -37,15 +35,11 @@ namespace EventGenerator.Services.Services
         {
             _logger.LogInformation("Create event by request {request}", createEventRequest);
 
-            var eventBuilder = new EventBuilder(createEventRequest, _eventRepository, _logger);
-            Event? eventEntity = eventBuilder.Build();
+            Event? eventEntity = _eventBuilder.Build(createEventRequest);
 
-            if (eventEntity == null)
-            {
-                return null;
-            }
-
-            return _mapper.Map<EventDto>(eventEntity);
+            return eventEntity == null
+                ? null
+                : _mapper.Map<EventDto>(eventEntity);
         }
     }
 }
