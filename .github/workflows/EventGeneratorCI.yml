@@ -28,3 +28,6 @@ jobs:
 
     - name: Build
       run: dotnet build EventGenerator/EventGenerator.sln --no-restore
+    
+    - name: Test
+      run: dotnet test EventGenerator/EventGenerator.sln --no-build --verbosity normal

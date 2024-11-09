@@ -9,7 +9,7 @@ namespace EventGenerator.Database.Repository
     /// </summary>
     public class GeneratorRepository : BaseRepository<Generator>, IGeneratorRepository
     {
-        private EventDBContext _dbContext;
+        private readonly EventDBContext _dbContext;
 
         /// <summary>
         /// Constructor.
