@@ -104,7 +104,13 @@ public class ShipService : IShipService
         Resource component = ship.Resources.Where(x => x.ResourceType == trouble.Resource).OrderBy(x => x.State).First();
         if (component is not null)
         {
-            _resourceService.UpdateResourceState(component, ResourceState.Fail, trouble.Level);
+            var troubleLevel = component.StateCriticality ?? trouble.Level;
+            troubleLevel = troubleLevel > trouble.Level ? troubleLevel : trouble.Level;
+
+            _resourceService.UpdateResourceState(
+                component,
+                ResourceState.Fail,
+                troubleLevel);
         }
 
         UpdateRepositoryShip(ship);
