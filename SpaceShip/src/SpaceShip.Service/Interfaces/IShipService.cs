@@ -21,12 +21,12 @@ public interface IShipService
     /// <summary>
     /// Process new day on board the SpaceShip with <paramref name="shipId"/>.
     /// </summary>
-    ShipDTO ProcessNewDay(Guid shipId);
+    Task<ShipDTO> ProcessNewDay(Guid shipId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Process trouble message for SpaceShip.
     /// </summary>
-    Task<ShipDTO> ApplyFailureAsync(Trouble trouble);
+    Task<ShipDTO> ApplyFailureAsync(Trouble trouble, CancellationToken cancellationToken);
 
     /// <summary>
     /// Delete the SpaceShip with <paramref name="shipId"/>.

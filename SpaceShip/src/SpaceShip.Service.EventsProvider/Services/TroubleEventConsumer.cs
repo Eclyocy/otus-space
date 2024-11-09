@@ -41,7 +41,8 @@ public class TroubleEventConsumer : EventConsumer
         _logger = logger;
     }
 
-    protected override async Task HandleMessageAsync(string message, string routingKey)
+    /// <inheritdoc/>
+    protected override async Task HandleMessageAsync(string message, CancellationToken cancellationToken, string routingKey = "")
     {
         TroubleMessageDTO? troubleMessage;
 
@@ -68,7 +69,8 @@ public class TroubleEventConsumer : EventConsumer
             using IServiceScope scope = _scopeServiceFactory.CreateScope();
             IShipService shipService = scope.ServiceProvider.GetRequiredService<IShipService>();
 
-            ShipDTO ship = await shipService.ApplyFailureAsync(trouble);
+            ShipDTO ship = await shipService.ApplyFailureAsync(trouble, cancellationToken);
+
             await _notificationsProvider.SendAsync(trouble.ShipId, ship);
         }
         catch (Exception e)

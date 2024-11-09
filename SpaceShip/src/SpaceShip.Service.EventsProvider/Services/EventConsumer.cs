@@ -76,6 +76,7 @@ public abstract class EventConsumer : IHostedService
 
     #endregion
 
+    /// <inheritdoc/>
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         CreateQueue(QueueName);
@@ -90,7 +91,7 @@ public abstract class EventConsumer : IHostedService
 
             _logger.LogInformation("{consumer} received new message: {message}", ConsumerName, message);
 
-            await HandleMessageAsync(message, ea.RoutingKey);
+            await HandleMessageAsync(message, cancellationToken, routingKey: ea.RoutingKey);
         };
 
         try
@@ -106,6 +107,7 @@ public abstract class EventConsumer : IHostedService
         }
     }
 
+    /// <inheritdoc/>
     public Task StopAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("{consumer} stopping", ConsumerName);
@@ -116,7 +118,13 @@ public abstract class EventConsumer : IHostedService
         return Task.CompletedTask;
     }
 
-    protected abstract Task HandleMessageAsync(string message, string routingKey = "");
+    /// <summary>
+    /// Processing message method.
+    /// </summary>
+    /// <param name="message">Message body.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <param name="routingKey">RabbitMQ routing, normally contains processing entity identifier.</param>
+    protected abstract Task HandleMessageAsync(string message, CancellationToken cancellationToken, string routingKey = "");
 
     private void CreateQueue(string queueName)
     {

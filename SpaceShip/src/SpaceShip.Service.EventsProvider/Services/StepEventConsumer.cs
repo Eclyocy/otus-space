@@ -36,7 +36,7 @@ public class StepEventConsumer : EventConsumer
     }
 
     /// <inheritdoc/>
-    protected override async Task HandleMessageAsync(string message, string routingKey = "")
+    protected override async Task HandleMessageAsync(string message, CancellationToken cancellationToken, string routingKey = "")
     {
         StepMessageDTO? stepMessage;
 
@@ -63,7 +63,8 @@ public class StepEventConsumer : EventConsumer
             using IServiceScope scope = _scopeServiceFactory.CreateScope();
             IShipService shipService = scope.ServiceProvider.GetRequiredService<IShipService>();
 
-            ShipDTO ship = shipService.ProcessNewDay(stepMessage.ShipId);
+            ShipDTO ship = await shipService.ProcessNewDay(stepMessage.ShipId, cancellationToken);
+
             await _notificationsProvider.SendAsync(stepMessage.ShipId, ship);
         }
         catch (Exception e)

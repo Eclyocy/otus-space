@@ -26,7 +26,7 @@ public class ShipService : IShipService
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
 
-    private static KeyBasedLock<Guid> _shipLock = new();
+    private static readonly KeyBasedLock<Guid> _shipLock = new();
 
     #endregion
 
@@ -75,7 +75,7 @@ public class ShipService : IShipService
     }
 
     /// <inheritdoc/>
-    public ShipDTO ProcessNewDay(Guid shipId)
+    public async Task<ShipDTO> ProcessNewDay(Guid shipId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Processing new day on board the space ship with id {id}.", shipId);
 
@@ -92,13 +92,13 @@ public class ShipService : IShipService
 
         ship.Step++;
 
-        UpdateRepositoryShip(ship);
+        await UpdateRepositoryShip(ship, cancellationToken);
 
         return GetShip(shipId);
     }
 
     /// <inheritdoc/>
-    public async Task<ShipDTO> ApplyFailureAsync(Trouble trouble)
+    public async Task<ShipDTO> ApplyFailureAsync(Trouble trouble, CancellationToken cancellationToken)
     {
         _logger.LogInformation("New {level} failure occur with {resource} on ship with id: {id}. Updating status.", trouble.Level, trouble.Resource, trouble.ShipId);
 
@@ -116,7 +116,7 @@ public class ShipService : IShipService
                 troubleLevel);
         }
 
-        await UpdateRepositoryShip(ship);
+        await UpdateRepositoryShip(ship, cancellationToken);
 
         return GetShip(trouble.ShipId);
     }
@@ -352,11 +352,11 @@ public class ShipService : IShipService
         return true;
     }
 
-    private async Task UpdateRepositoryShip(Ship ship)
+    private async Task UpdateRepositoryShip(Ship ship, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Saving ship [{id}] to repository", ship.Id);
 
-        using (await _shipLock.LockAsync(ship.Id, _logger, CancellationToken.None))
+        using (await _shipLock.LockAsync(ship.Id, _logger, cancellationToken))
         {
             _shipRepository.Update(ship, saveChanges: true);
         }
