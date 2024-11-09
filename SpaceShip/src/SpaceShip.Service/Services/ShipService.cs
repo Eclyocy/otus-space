@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Shared.Enums;
+using Shared.Utilities;
 using SpaceShip.Domain.Entities;
 using SpaceShip.Domain.Interfaces;
 using SpaceShip.Service.Builder.Abstractions;
@@ -24,6 +25,8 @@ public class ShipService : IShipService
 
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
+
+    private static KeyBasedLock<Guid> _shipLock = new();
 
     #endregion
 
@@ -95,7 +98,7 @@ public class ShipService : IShipService
     }
 
     /// <inheritdoc/>
-    public ShipDTO ApplyFailure(Trouble trouble)
+    public async Task<ShipDTO> ApplyFailureAsync(Trouble trouble)
     {
         _logger.LogInformation("New {level} failure occur with {resource} on ship with id: {id}. Updating status.", trouble.Level, trouble.Resource, trouble.ShipId);
 
@@ -113,7 +116,7 @@ public class ShipService : IShipService
                 troubleLevel);
         }
 
-        UpdateRepositoryShip(ship);
+        await UpdateRepositoryShip(ship);
 
         return GetShip(trouble.ShipId);
     }
@@ -349,12 +352,14 @@ public class ShipService : IShipService
         return true;
     }
 
-    private void UpdateRepositoryShip(Ship ship)
+    private async Task UpdateRepositoryShip(Ship ship)
     {
         _logger.LogInformation("Saving ship [{id}] to repository", ship.Id);
 
-        // TODO - add interlock
-        _shipRepository.Update(ship, saveChanges: true);
+        using (await _shipLock.LockAsync(ship.Id, _logger, CancellationToken.None))
+        {
+            _shipRepository.Update(ship, saveChanges: true);
+        }
 
         _logger.LogInformation("Ship [{id}] to repository successfully saved", ship.Id);
     }

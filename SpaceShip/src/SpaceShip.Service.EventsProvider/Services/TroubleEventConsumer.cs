@@ -68,7 +68,7 @@ public class TroubleEventConsumer : EventConsumer
             using IServiceScope scope = _scopeServiceFactory.CreateScope();
             IShipService shipService = scope.ServiceProvider.GetRequiredService<IShipService>();
 
-            ShipDTO ship = shipService.ApplyFailure(trouble);
+            ShipDTO ship = await shipService.ApplyFailureAsync(trouble);
             await _notificationsProvider.SendAsync(trouble.ShipId, ship);
         }
         catch (Exception e)

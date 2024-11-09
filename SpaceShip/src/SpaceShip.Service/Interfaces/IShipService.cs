@@ -26,7 +26,7 @@ public interface IShipService
     /// <summary>
     /// Process trouble message for SpaceShip.
     /// </summary>
-    ShipDTO ApplyFailure(Trouble trouble);
+    Task<ShipDTO> ApplyFailureAsync(Trouble trouble);
 
     /// <summary>
     /// Delete the SpaceShip with <paramref name="shipId"/>.
