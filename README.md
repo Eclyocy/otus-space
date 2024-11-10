@@ -16,6 +16,10 @@
 
 [Документация генератора событий](./EventGenerator/README.md)
 
+### Общая библиотека "Shared"
+
+[Документация Shared](./Shared/README.md)
+
 ### RabbitMQ
 
 [Документация RabbitMQ](./RabbitMQ/README.md)
