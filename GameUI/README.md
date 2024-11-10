@@ -1,27 +1,38 @@
 # GameUI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.2.
+Пользовательский интерфейс, написанный при помощи [Angular CLI](https://github.com/angular/angular-cli) 18-ой версии.
 
-## Development server
+## Архитектура
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Состоит из standalone-компонент, подгружаемых в [общий компонент приложения](./src/app/app.component.ts):
+- компонент [для списка пользователей](./src/app/components/users/);
+- компонент [страницы пользователя](./src/app/components/user/);
+- компонент [конкретного корабля](./src/app/components/ship/);
+- компонент [страницы login](./src/app/components/login/).
 
-## Code scaffolding
+### Авторизация
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Для возможности автоматического продления JWT используется [interceptor](./src/app/interceptors/auth.interceptor.ts).
 
-## Build
+JWT хранится в локальном хранилище. Работа с JWT описана в [auth-сервисе](./src/app/services/auth.service.ts).
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### SpaceShip SignalR
 
-## Running unit tests
+Для автоматического обновления метрик космических кораблей используется [SignalR-сервис](./src/app/services/ship.signalr.service.ts).
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### GameController API
 
-## Running end-to-end tests
+Для обращения к эндпоинтам игрового контроллера используется [API-сервис](./src/app/services/api.service.ts).
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Разработка
 
-## Further help
+### Генерация компонентов
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `ng generate component component-name` &mdash; для генерации нового компонента
+- `ng generate directive|pipe|service|class|guard|interface|enum|module` &mdash; для генерации прочих объектов
+
+### Локальный запуск
+
+- `npm install` &mdash; установка зависимостей.
+- `ng build` &mdash; сборка проекта.
+- `ng serve` &mdash; развёртывание сервера, по умолчанию на `http://localhost:4200/`<br/>Приложение автоматически подгружает изменения в исходных файлах.
