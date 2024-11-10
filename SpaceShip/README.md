@@ -31,6 +31,10 @@
 | POSTGRES_USER              | postgres              | Имя пользователя для подключения к БД.                             |
 | POSTGRES_PASSWORD          | pg_pass               | Пароль подключения к БД.                                           |
 
+## Tests
+
+[GitHub action](../.github/workflows/SpaceShipCI.yml)
+
 ## Endpoints
 
 ### Healthcheck

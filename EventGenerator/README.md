@@ -18,6 +18,10 @@
 |-------------------------------|-----------------------|-------------------------------------------------------------|
 %TODO%
 
+## Tests
+
+[GitHub action](../.github/workflows/EventGeneratorCI.yml)
+
 ## Endpoints
 
 ### Healthcheck

@@ -43,6 +43,10 @@
 | JWT__AUDIENCE                      | GameControllerUsers   | Получатели сгенерированных JWT.                                                                                                   |
 | JWT__EXPIRATIONMINUTES             | 1                     | Количество минут после момента генерации JWT, по прошествии которого JWT станет невалидным.                                       |
 
+## Tests
+
+[GitHub action](../.github/workflows/GameControllerCI.yml)
+
 ## Endpoints
 
 ### Healthcheck
