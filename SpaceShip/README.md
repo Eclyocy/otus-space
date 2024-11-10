@@ -35,6 +35,8 @@
 
 ### Методы WebAPI
 
+Более подробно описаны в swagger.
+
 - POST `/api/v1/spaceships` &mdash; создать новый корабль
 - GET `/api/v1/spaceships/{id}` &mdash; получить состояние корабля и его ресурсов
 

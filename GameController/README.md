@@ -47,7 +47,29 @@
 
 ### Методы WebAPI
 
-%TODO%
+Более подробно описаны в swagger.
+
+#### Auth
+
+- POST `/api/auth/login` &mdash; аутентифицировать пользователя
+- POST `/api/auth/refresh` &mdash; обновить JWT
+
+#### User
+
+- POST `/api/users` &mdash; создать пользователя
+- GET `/api/users` &mdash; получить список всех пользователей
+- GET `/api/users/{userId}` &mdash; получить информацию о пользователе
+- PATCH `/api/users/{userId}` &mdash; обновить информацию о пользователе
+- DELETE `/api/users/{userId}` &mdash; удалить пользователя
+
+#### Session
+
+- GET `/api/users/{userId}/sessions` &mdash; получить список всех игровых сессий пользователя
+- POST `/api/users/{userId}/sessions` &mdash; создать пользовательскую игровую сессию
+- GET `/api/users/{userId}/sessions/{sessionId}` &mdash; получить информацию о пользовательской игровой сессии
+- DELETE `/api/users/{userId}/sessions/{sessionId}` &mdash; удалить пользовательскую игровую сессию
+- GET `/api/users/{userId}/sessions/{sessionId}/ship` &mdash; получить информацию о состоянии космического корабля в пользовательской игровой сессии
+- POST `/api/users/{userId}/sessions/{sessionId}/make-move` &mdash; сделать следующий ход в пользовательской игровой сессии
 
 ## Схема БД
 
