@@ -33,6 +33,9 @@ namespace EventGenerator
 
                     logging
                         .AddApplicationInsights();
+
+                    logging.AddFilter("Microsoft.AspNetCore.Diagnostics.HealthChecks", LogLevel.None);
+                    logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.None);
                 });
 
         #endregion

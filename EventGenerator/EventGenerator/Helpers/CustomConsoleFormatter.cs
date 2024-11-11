@@ -31,6 +31,13 @@ namespace EventGenerator.API.Helpers
             IExternalScopeProvider? scopeProvider,
             TextWriter textWriter)
         {
+            string? state = logEntry.State?.ToString();
+
+            if ((bool)state?.Contains("Health checks") || (bool)state?.Contains("/health"))
+            {
+                return;
+            }
+
             // Log timestamp.
             DateTime timestamp = DateTime.UtcNow;
             textWriter.Write(timestamp);
