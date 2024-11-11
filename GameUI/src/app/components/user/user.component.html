@@ -24,3 +24,5 @@
 </table>
 
 <button (click)="createSession()">Create New User Session</button>
+<br/>
+<button *ngIf="isCurrentUser" (click)="logout()">Logout</button>

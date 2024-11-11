@@ -22,7 +22,8 @@ export class LoginComponent {
     this.errorMessage = '';
     this.authService.login(this.username, this.password).subscribe({
       next: () => {
-        this.router.navigate(['/users']);
+        const userId = this.authService.getUserId();
+        this.router.navigate(['/users', userId]);
       },
       error: (error) => {
         console.error('Login error:', error);

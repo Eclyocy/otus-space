@@ -133,6 +133,15 @@ export class ShipComponent {
       (ship: Ship | null) => {
         if (ship) {
           console.log("Received ship update:", ship);
+
+          if (this.ship && this.ship.state !== ship.state) {
+            if (ship.state === "Crashed") {
+              alert("Mission Failed!\nSpace ship crashed.");
+            } else if (ship.state === "Arrived") {
+              alert("Mission Complete!\nSpace ship arrived.");
+            }
+          }
+
           this.ship = ship;
         } else {
           console.log("Received an invalid ship update, unable to process.");

@@ -27,14 +27,7 @@ export class AppComponent implements OnInit {
   }
 
   private redirectBasedOnAuth() {
-    if (this.authService.isLoggedIn()) {
-      const userId = this.authService.getUserId();
-      if (userId) {
-        this.router.navigate(['/users', userId]);
-      } else {
-        this.router.navigate(['/users']);
-      }
-    } else {
+    if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/login']);
     }
   }

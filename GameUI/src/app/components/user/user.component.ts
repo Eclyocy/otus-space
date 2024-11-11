@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { Session } from '../../models/session';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -33,7 +34,8 @@ export class UserComponent {
   }
 
   public constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     const id = this.route.snapshot.paramMap.get('userId');
     if (id === null) {
@@ -57,6 +59,11 @@ export class UserComponent {
         console.error("Error creating new session:", error);
       }
     });
+  }
+
+  public logout(): void {
+    this.authService.logout();
+    this.router.navigate(['login']);
   }
 
   private loadUser(): void {
